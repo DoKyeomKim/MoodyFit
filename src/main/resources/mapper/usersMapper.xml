@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.UsersMapper">
+<select id="findById" parameterType="string" resultType="com.mf.dto.UsersDto">
+	SELECT * FROM USERS WHERE ID = #{id}
+</select>
+<select id="joinProcess">
+INSERT INTO USERS(USER_IDX,ID,PW,TYPE,ROLE)
+VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_USER')
+</select>
+</mapper>
