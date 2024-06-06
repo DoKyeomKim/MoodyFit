@@ -13,8 +13,8 @@
 </head>
 <body>
 	<form action="/loginProcess" method="post" name="loginForm">
-		<input type="text" name="username" id="username">
-		 <input type="text" name="password" id="password">
+		<input type="text" name="id" id="username">
+		 <input type="text" name="pw" id="password">
 		<button type="submit">로그인버튼</button>
 	</form>
 	<div>

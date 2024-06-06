@@ -3,7 +3,6 @@ package com.mf.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -23,18 +22,14 @@ public class SecurityConfig {
 
 	
 	// 비밀번호 암호화
-	/*
-	 * @Bean public BCryptPasswordEncoder bCryptPasswordEncoder() { return new
-	 * BCryptPasswordEncoder(); }
-	 * 
-	 * protected void configure(AuthenticationManagerBuilder auth) throws Exception
-	 * { auth.userDetailsService(userDetailsService).passwordEncoder(
-	 * bCryptPasswordEncoder()); }
-	 */
+	
+
+
 	@Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
                 .requestMatchers("/css/**")
+                .requestMatchers("/js/**")
                 .requestMatchers("/images/**") // /static/**   : .html, .js, .css
                 .requestMatchers("/WEB-INF/**");    // /static/**   : .html, .js, .css
         //.requestMatchers("/static/**") 
@@ -65,6 +60,7 @@ public class SecurityConfig {
 	
 	
 
+	  
 	
 	// "/" 루트 페이지 갈 수 있게 하는 빈 추가
     @Bean

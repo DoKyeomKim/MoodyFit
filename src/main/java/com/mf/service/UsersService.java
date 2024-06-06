@@ -15,16 +15,15 @@ public class UsersService {
 	@Autowired
 	private UsersMapper usersMapper;
 	
-	/*
-	 * @Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	 */
+	
+	  @Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
 
     public void joinProcess(UsersDto usersDto) {
-		/*
-		 * String encodedPassword =
-		 * bCryptPasswordEncoder.encode(usersDto.getPassword());
-		 * usersDto.setPassword(encodedPassword);
-		 */
+		
+		  String encodedPassword = bCryptPasswordEncoder.encode(usersDto.getPw());
+		  usersDto.setPw(encodedPassword);
+		 
         usersMapper.joinProcess(usersDto);
     }
 
