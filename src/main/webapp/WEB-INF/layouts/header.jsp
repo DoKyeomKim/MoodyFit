@@ -68,7 +68,7 @@
 			<c:forEach var="category" items="${category }">
 		      <ul class="navbar-nav">
 		        <li class="nav-item">
-		          <a class="nav-link active" aria-current="page" href="${category.engName }">${category.name }</a>
+		          <a class="nav-link active" aria-current="page" href="${category.engName}">${category.name}</a>
 		        </li>
 		      </ul>
 			</c:forEach>
@@ -76,7 +76,7 @@
 			<div>
 			<a href="/login">로그인</a>			
 			</div>
-		    
+
 		 </div>
 	</nav>
 	
