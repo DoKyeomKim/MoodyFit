@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.mf.dto.PersonDto;
 import com.mf.dto.UsersDto;
 import com.mf.service.UsersService;
 
@@ -19,15 +20,21 @@ public class LoginController {
 		return "/login";
 	}
 	
+	@GetMapping("/totalJoin")
+	public String totalJoin(){
+		
+		return "/totalJoin";
+	}
+	
 	@GetMapping("/join")
 	public String join() {
 		return "/join";
 	}
 	
 	@PostMapping("/joinProcess")
-	public String joinProcess(UsersDto usersDto) {
+	public String joinProcess(UsersDto usersDto,PersonDto personDto) {
 		
-		usersService.joinProcess(usersDto);
+		usersService.joinProcess(usersDto,personDto);
 		
 		return "redirect:/login";
 	}

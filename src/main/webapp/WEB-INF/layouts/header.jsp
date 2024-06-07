@@ -21,6 +21,7 @@
 	outline:none;
 	float:left;
 	padding:0px;
+	padding-left:10px;
 	color:#797979;
 	font-size:16px;
 	line-height:30px;

@@ -1,8 +1,11 @@
 package com.mf.controller;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.securityContext;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,9 +39,11 @@ public class MainController {
 		return mv;
 	}
 	
-	@GetMapping("/category")
+	@GetMapping("/{engName}")
 	public ModelAndView category() {
 	ModelAndView mv = new ModelAndView();
+	
+	mv.setViewName("/main");
 	return mv;
 	}
 	

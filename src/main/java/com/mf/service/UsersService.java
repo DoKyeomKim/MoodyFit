@@ -1,8 +1,10 @@
 package com.mf.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.mf.dto.PersonDto;
 import com.mf.dto.UsersDto;
 import com.mf.mapper.UsersMapper;
 
@@ -16,16 +18,17 @@ public class UsersService {
 	private UsersMapper usersMapper;
 	
 	
-	  //@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	  @Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 
 	@Transactional
-    public void joinProcess(UsersDto usersDto) {
+    public void joinProcess(UsersDto usersDto, PersonDto personDto) {
 		
-		  //String encodedPassword = bCryptPasswordEncoder.encode(usersDto.getPw());
-		 // usersDto.setPw(encodedPassword);
+		  String encodedPassword = bCryptPasswordEncoder.encode(usersDto.getPw());
+		 usersDto.setPw(encodedPassword);
 		 
         usersMapper.joinProcess(usersDto);
+        usersMapper.joinDetailProcess(personDto);
     }
 
     public UsersDto findById(String id) {

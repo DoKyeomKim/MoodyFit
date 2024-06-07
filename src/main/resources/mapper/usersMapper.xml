@@ -4,8 +4,33 @@
 <select id="findById" parameterType="string" resultType="com.mf.dto.UsersDto">
 	SELECT * FROM USERS WHERE ID = #{id}
 </select>
-<select id="joinProcess">
+<insert id="joinProcess">
 INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
-VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_USER')
-</select>
+VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_PERSON')
+</insert>
+
+<insert id="joinDetailProcess">
+INSERT INTO PERSON(
+USER_IDX,
+PERSON_IDX,
+NAME,
+NICK_NAME,
+EMAIL,
+PHONE,
+POST_CODE,
+ADDRESS,
+DETAIL_ADDRESS
+)
+VALUES(
+USER_SEQ.CURRVAL,
+PERSON_SEQ.NEXTVAL,
+#{name},
+#{nickName},
+#{email},
+#{phone},
+#{postCode},
+#{address},
+#{detailAddress}
+)
+</insert>
 </mapper>
