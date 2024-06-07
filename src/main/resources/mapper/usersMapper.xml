@@ -5,7 +5,7 @@
 	SELECT * FROM USERS WHERE ID = #{id}
 </select>
 <select id="joinProcess">
-INSERT INTO USERS(USER_IDX,ID,PW,TYPE,ROLE)
+INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
 VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_USER')
 </select>
 </mapper>

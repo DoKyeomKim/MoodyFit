@@ -11,7 +11,7 @@ public class UsersDto {
 	private Long userIdx;
 	private String id;
 	private String pw;
-	private Long type;
+	private Long state;
 	private String role; 
 	
 	

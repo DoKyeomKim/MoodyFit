@@ -28,13 +28,19 @@ public class MainController {
 		mv.setViewName("/main");
 		return mv; 	
 	}
+	@GetMapping("/search")
+	public ModelAndView search() {
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("/search");
+		return mv;
+	}
 	
 	@GetMapping("/category")
 	public ModelAndView category() {
 	ModelAndView mv = new ModelAndView();
 	return mv;
 	}
-	
 	
 	
 }
