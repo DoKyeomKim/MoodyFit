@@ -75,6 +75,7 @@
 			</c:forEach>
 		
 			<security:authorize access="isAuthenticated()">
+				<div style="margin-right:20px;"><a href="/myPage">마이페이지</a></div>
 			    <a href="<c:url value='/logout' />">로그아웃</a>
 			</security:authorize>
 			<security:authorize access="!isAuthenticated()">

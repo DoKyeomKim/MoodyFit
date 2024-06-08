@@ -20,10 +20,6 @@ html, body {
     padding-bottom: 0.7em;
 }
 
-/* input[type="button"] {
-    font-size: 0.75rem;
-    padding: 5px 10px;
-} */
 
 .login-box {
     position: absolute;
@@ -38,48 +34,75 @@ html, body {
     filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, .5));
 }
 
+.vertical-align {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#login-btn-box {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
 .form-group label {
     font-size: 0.75rem;
     margin: 5px 10px;
 }
 
-/* #login-btn-box {
+/* 새로운 스타일 추가 */
+.flex-container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 15px;
-} */
+    flex-direction: row; /* 자식 요소들을 수평으로 정렬하기 위해 row로 설정 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    width: 100%; /* 부모 요소를 꽉 채우도록 설정 */
+}
 
+.flex-item {
+    width: 100%;
+    margin-bottom: 20px;
+}
 </style>
 </head>
 <body>
 <div id="container">
     <!-- login Box -->
-    <div class="login-box">
+    <div class="login-box vertical-align">
         <div class="headerImg">
             <a href="/">
                 <img alt="Logo" src="/images/logo.png" style="width:70%; height:70%;">
             </a>
         </div>
-		
-		<div class="container-fluid">
-	        <div class="IdPwForm" style="margin-bottom:30px;">
-	            <form action="/loginProcess" method="post" name="loginForm">
-	                <div class="form-group mb-3">
-	                    <input type="text" name="id" id="username" placeholder="아이디" class="form-control" required>
-	                </div>
-	                <div class="form-group">
-	                    <input type="text" name="pw" id="password" placeholder="비밀번호" class="form-control" autocomplete="off" required>
-	                </div>
-	                <div id="login-btn-box" style="text-align:center; margin-bottom:20px;">
-	                    <button type="submit" id="btnLogin" class="btn btn-primary">로그인버튼</button>
-	                </div>
-	            </form>
-	        </div>
-	    </div>
-        <div style="text-align: center; margin-bottom: 30px;">
-            <a href="/totalJoin">회원가입</a>
+        
+        <div class="container-fluid" style="width:400px;">
+            <div class="IdPwForm" style="margin-bottom:10px;">
+                <form action="/loginProcess" method="post" name="loginForm">
+                    <!-- 새로운 부모 요소 추가 -->
+                    <div class="flex-container">
+                        <div class="id-pw-write flex-item" style="margin-right:20px;">
+                            <div class="form-group mb-3">
+                                <input type="text" name="id" id="username" placeholder="아이디" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="pw" id="password" placeholder="비밀번호" class="form-control" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <!-- login-btn-box도 새로운 flex-item으로 감싸줌 -->
+                        <div class="login-btn-box flex-item">
+                            <button type="submit" id="btnLogin" class="btn btn-primary" style="height:90px;">로그인</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="center-align" style="margin-left:100px;">
+                    <a href="/totalJoin">회원가입</a>
+                </div>
+            </div>
         </div>
+                <hr style="width: 80%;">
+        
+
     </div>
 </div>
 
