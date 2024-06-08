@@ -21,19 +21,36 @@ public class UsersService {
 	  @Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 
+	// 개인 회원가입 진행
 	@Transactional
     public void joinProcess(UsersDto usersDto, PersonDto personDto) {
 		
-		  String encodedPassword = bCryptPasswordEncoder.encode(usersDto.getPw());
+		// 비밀번호 암호화
+		 String encodedPassword = bCryptPasswordEncoder.encode(usersDto.getPw());
 		 usersDto.setPw(encodedPassword);
-		 
+		
+		// users에 넣을 정보
         usersMapper.joinProcess(usersDto);
+        // person에 넣을 정보
         usersMapper.joinDetailProcess(personDto);
     }
 
+	// 가맹점 회원 가입 진행
+	public void storeJoinProcess(UsersDto usersDto) {
+		
+		// 비밀번호 암호화
+		 String encodedPassword = bCryptPasswordEncoder.encode(usersDto.getPw());
+		 usersDto.setPw(encodedPassword);
+		 
+		 // users에 넣을 정보
+		 usersMapper.storeJoinProcess(usersDto);
+		
+	}
+	
     public UsersDto findById(String id) {
         return usersMapper.findById(id);
     }
+
 
 }
 

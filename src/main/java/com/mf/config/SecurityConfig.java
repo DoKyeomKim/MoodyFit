@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 
@@ -22,7 +21,10 @@ public class SecurityConfig {
 
 	@Autowired
     private CustomAuthFailureHandler customFailureHandler; // CustomAuthFailureHandler 주입
-
+	
+	@Autowired
+	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+	
 	@Bean
 	public WebSecurityCustomizer configure() {
 		return (web) -> web.ignoring().requestMatchers("/css/**").requestMatchers("/js/**")
@@ -37,8 +39,8 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((auth) -> auth
 				.requestMatchers("/", "/search","/totalJoin","/login", "/loginProcess", "/join", "/joinProcess").permitAll()
-				.requestMatchers("/admin").hasRole("admin")
-				.requestMatchers("/mypage").hasAnyRole("admin", "person")
+				.requestMatchers("/admin").hasRole("ADMIN")
+				.requestMatchers("/myPage").hasAnyRole("ADMIN", "PERSON")
 				.anyRequest().authenticated()
 				);
 
@@ -46,6 +48,7 @@ public class SecurityConfig {
 				.loginProcessingUrl("/loginProcess").permitAll()
 				.usernameParameter("id")
 				.passwordParameter("pw")
+				.successHandler(customAuthenticationSuccessHandler)
 				.failureHandler(customFailureHandler)
 				);
 		

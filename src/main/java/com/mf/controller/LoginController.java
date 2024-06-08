@@ -41,6 +41,13 @@ public class LoginController {
 		return "/join";
 	}
 	
+	// 가맹점 회원가입 페이지이동
+	@GetMapping("/storeJoin")
+	public String storeJoin() {
+		
+		return "/storeJoin";
+	}
+	
 	// 일반유저 회원가입 진행
 	@PostMapping("/joinProcess")
 	public String joinProcess(UsersDto usersDto,PersonDto personDto) {
@@ -50,7 +57,16 @@ public class LoginController {
 		return "redirect:/login";
 	}
 	
-    // 실패 페이지 매핑 추가
+	// 가맹점 회원가입 진행
+	@PostMapping("/storeJoinProcess")
+	public String storeJoinProcess(UsersDto usersDto) {
+		usersService.storeJoinProcess(usersDto);
+		
+		return "redirect:/login";
+	}
+	
+	
+    // 실패 페이지 추가
     @GetMapping("/loginFail")
     public String loginFail() {
         return "/loginFail"; // 실패 시 보여줄 페이지

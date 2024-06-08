@@ -10,8 +10,12 @@ public interface UsersMapper {
 
 	UsersDto findById(String id);
 
+	// 개인 회원가입 진행
 	void joinProcess(UsersDto usersDto);
-
 	void joinDetailProcess(PersonDto personDto);
+	//=========================
+	
+	//가맹점 회원가입 진행
+	void storeJoinProcess(UsersDto usersDto);
 
 }

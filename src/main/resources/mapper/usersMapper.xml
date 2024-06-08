@@ -4,6 +4,7 @@
 <select id="findById" parameterType="string" resultType="com.mf.dto.UsersDto">
 	SELECT * FROM USERS WHERE ID = #{id}
 </select>
+
 <insert id="joinProcess">
 	INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
 	VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_PERSON')
@@ -33,4 +34,10 @@ PERSON_SEQ.NEXTVAL,
 #{detailAddress}
 )
 </insert>
+
+<insert id="storeJoinProcess">
+	INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
+	VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_SHOP')
+</insert>
+
 </mapper>
