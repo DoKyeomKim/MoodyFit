@@ -17,4 +17,6 @@ public class PersonDto {
 	private String postCode;
 	private String address;
 	private String detailAddress;
+	private String social;
+	private String socialRoot;
 }

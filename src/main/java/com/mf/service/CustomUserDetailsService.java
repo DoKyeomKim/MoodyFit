@@ -27,6 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("회원 정보가 없습니다");
 		}
 		GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
-		return new User(user.getId(), user.getPw(), Collections.singletonList(authority));
+	    return new CustomUserDetails(user.getId(), user.getPw(), user.getUserIdx(), Collections.singletonList(authority));
 	}
+	
 }

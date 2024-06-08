@@ -13,7 +13,9 @@
 </head>
 <body>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
-<h2><security:authentication property="name"/></h2>
+    <h1>Login Failed</h1>
+    <p>아이디 또는 비밀번호가 맞지 않습니다. 다시 시도해 주세요.</p>
+    <a href="/login">로그인 페이지로 돌아가기</a>
 <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -7,20 +7,21 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 
 import com.mf.service.CustomUserDetailsService;
 
 @Configuration
-
 @EnableWebSecurity
 public class SecurityConfig {
 
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
 
-// 비밀번호 암호화
+	@Autowired
+    private CustomAuthFailureHandler customFailureHandler; // CustomAuthFailureHandler 주입
 
 	@Bean
 	public WebSecurityCustomizer configure() {
@@ -41,8 +42,11 @@ public class SecurityConfig {
 				.anyRequest().authenticated()
 				);
 
-		http.formLogin((auth) -> auth.loginPage("/login").loginProcessingUrl("/loginProcess").permitAll()
-				.usernameParameter("id").passwordParameter("pw")
+		http.formLogin((auth) -> auth.loginPage("/login")
+				.loginProcessingUrl("/loginProcess").permitAll()
+				.usernameParameter("id")
+				.passwordParameter("pw")
+				.failureHandler(customFailureHandler)
 				);
 		
 		

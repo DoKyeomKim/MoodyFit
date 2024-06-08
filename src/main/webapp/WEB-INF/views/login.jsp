@@ -20,10 +20,10 @@ html, body {
     padding-bottom: 0.7em;
 }
 
-input[type="button"] {
+/* input[type="button"] {
     font-size: 0.75rem;
     padding: 5px 10px;
-}
+} */
 
 .login-box {
     position: absolute;
@@ -43,12 +43,13 @@ input[type="button"] {
     margin: 5px 10px;
 }
 
-#login-btn-box {
+/* #login-btn-box {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 15px;
-}
+} */
+
 </style>
 </head>
 <body>
@@ -60,22 +61,22 @@ input[type="button"] {
                 <img alt="Logo" src="/images/logo.png" style="width:70%; height:70%;">
             </a>
         </div>
-
-        <div class="IdPwForm" style="margin-bottom:30px;">
-            <form action="/loginProcess" method="post" name="loginForm">
-                <div class="form-group mb-3">
-                    <label class="fs-5">아이디</label>
-                    <input type="text" name="id" id="username" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label class="fs-5">비밀번호</label>
-                    <input type="text" name="pw" id="password" class="form-control" value="" autocomplete="off" required>
-                </div>
-                <div id="login-btn-box" style="text-align:center; margin-bottom:20px;">
-                    <button type="submit" id="btnLogin" class="btn btn-primary">로그인버튼</button>
-                </div>
-            </form>
-        </div>
+		
+		<div class="container-fluid">
+	        <div class="IdPwForm" style="margin-bottom:30px;">
+	            <form action="/loginProcess" method="post" name="loginForm">
+	                <div class="form-group mb-3">
+	                    <input type="text" name="id" id="username" placeholder="아이디" class="form-control" required>
+	                </div>
+	                <div class="form-group">
+	                    <input type="text" name="pw" id="password" placeholder="비밀번호" class="form-control" autocomplete="off" required>
+	                </div>
+	                <div id="login-btn-box" style="text-align:center; margin-bottom:20px;">
+	                    <button type="submit" id="btnLogin" class="btn btn-primary">로그인버튼</button>
+	                </div>
+	            </form>
+	        </div>
+	    </div>
         <div style="text-align: center; margin-bottom: 30px;">
             <a href="/totalJoin">회원가입</a>
         </div>
