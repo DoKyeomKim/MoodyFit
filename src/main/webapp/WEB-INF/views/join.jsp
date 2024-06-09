@@ -86,7 +86,7 @@
 	    <tr>
 	      <th>전화번호</th>
 	      <td>
-	        <input type="text" name="phone" id="phone" style="width: 100%;">
+	        <input type="text" name="phone" id="phone" style="width: 100%;"  placeholder=" -를 제외한 번호만 입력해주세요">
 	      </td>
 	    </tr>
 	    <tr>
@@ -126,7 +126,7 @@
 	    </tr>
 	    <tr>
 	      <td colspan="2" style="text-align: center;  border-left:none; border-bottom:none;">
-	        <button type="submit" id="#submitBtn" class="btn btn-primary" style="margin-top: 20px;">회원가입</button>
+	        <button type="submit" id="submitBtn" class="btn btn-primary" style="margin-top: 20px;">회원가입</button>
 	      </td>
 	    </tr>
   </table>
@@ -139,8 +139,13 @@
     var submitBtnEl = document.querySelector('#submitBtn');
     const outputEl = document.querySelector('#output');
     const idInputEl = document.querySelector('[name=id]');
+    
 
     btnIdCheckEl.onclick = function(e) {
+        if (!idInputEl.value.trim()) { // 입력 필드가 비어 있는지 확인
+            outputEl.innerHTML = "<small style='color:red'>아이디를 입력해주세요.</small>";
+            return; // 입력 필드가 비어 있으면 더 이상 진행하지 않음
+        }
         fetch('/IdCheck?id=' + encodeURIComponent(idInputEl.value))
             .then(response => response.text())
             .then((data) => {
@@ -181,6 +186,27 @@
         }
     }
 </script>
+<!-- 전화번호 입력시 - 자동생성 -->
+<script>
+document.getElementById('phone').addEventListener('input', function (e) {
+    // 현재 입력된 값에서 숫자만 추출
+    let numbers = e.target.value.replace(/\D/g, '');
+    
+    // 하이픈(-)을 추가한 전화번호 포맷 생성
+    let formattedNumber = '';
+    if (numbers.length <= 3) {
+        formattedNumber = numbers;
+    } else if (numbers.length <= 7) {
+        formattedNumber = numbers.slice(0, 3) + '-' + numbers.slice(3);
+    } else {
+        formattedNumber = numbers.slice(0, 3) + '-' + numbers.slice(3, 7) + '-' + numbers.slice(7, 11);
+    }
+
+    // 포맷된 번호를 입력 필드에 설정
+    e.target.value = formattedNumber;
+});
+</script>
+
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
     function sample6_execDaumPostcode() {
