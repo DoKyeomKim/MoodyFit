@@ -42,12 +42,17 @@
 	justify-content: center;
 	align-items:center;
 }
+
+#navbarNav{
+	margin:0 50px;
+}
+
 </style>
 </head>
 <body>
 <div class="container-fluid">
     <div class="row align-items-center">
-        <div class="col-md-7">
+        <div class="col-md-8" style="margin-left :15px;">
             <div class="logo-img">
                 <a href="/"><img src="/images/logo.png" style="height: 200px; width:200px;"></a>
             </div>
@@ -64,26 +69,28 @@
 </div>
 
 	
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	    <div class="collapse navbar-collapse" id="navbarNav">
-			<c:forEach var="category" items="${category }">
-		      <ul class="navbar-nav">
-		        <li class="nav-item">
-		          <a class="nav-link active" aria-current="page" href="${category.engName}">${category.korName}</a>
-		        </li>
-		      </ul>
-			</c:forEach>
-		
-			<security:authorize access="isAuthenticated()">
-				<div style="margin-right:20px;"><a href="/myPage">마이페이지</a></div>
-			    <a href="<c:url value='/logout' />">로그아웃</a>
-			</security:authorize>
-			<security:authorize access="!isAuthenticated()">
-			    <a href="<c:url value='/login' />">로그인</a>
-			</security:authorize>
-			
-	 </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
+        <ul class="navbar-nav">
+            <c:forEach var="category" items="${category}">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="${category.engName}">${category.korName}</a>
+                </li>
+            </c:forEach>
+        </ul>
+        
+        <div class="d-flex">
+            <security:authorize access="isAuthenticated()">
+                <div style="margin-right:20px;"><a href="/myPage">마이페이지</a></div>
+                <a href="<c:url value='/logout' />">로그아웃</a>
+            </security:authorize>
+            <security:authorize access="!isAuthenticated()">
+                <a href="<c:url value='/login' />">로그인</a>
+            </security:authorize>
+        </div>
+    </div>
 </nav>
+
 				
 </body>
 </html>
