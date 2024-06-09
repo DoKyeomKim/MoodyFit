@@ -35,6 +35,7 @@ public class MainController {
 		return mv;
 	}
 
+
 	@GetMapping("/search")
 	public ModelAndView search() {
 		ModelAndView mv = new ModelAndView();

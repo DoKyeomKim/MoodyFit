@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>메인 페이지</title>
+<title>로그인 실패</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <style>
 </style>

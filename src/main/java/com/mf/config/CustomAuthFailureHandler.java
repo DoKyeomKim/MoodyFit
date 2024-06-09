@@ -36,11 +36,12 @@ public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHand
            errorMessage = "알 수 없는 이유로 로그인에 실패하였습니다 관리자에게 문의하세요.";
 	   }
        
-       //response.sendRedirect("/loginFail");
+       response.sendRedirect("/loginFail");
 
-       System.out.println("오류발생:" + exception + "\n" + errorMessage); 
-	   super.onAuthenticationFailure(request, response, exception);
-	   
+		/*
+		 * System.out.println("오류발생:" + exception + "\n" + errorMessage);
+		 * super.onAuthenticationFailure(request, response, exception);
+		 */
 	}
 
 }

@@ -20,9 +20,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         
         Long userIdx = userDetails.getUserIdx();
-        
+                
         HttpSession session = request.getSession();
         session.setAttribute("userIdx", userIdx);
+       
 
         response.sendRedirect("/");
     }

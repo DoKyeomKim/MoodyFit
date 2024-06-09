@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>메인 페이지</title>
+<title>회원 선택</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <style>
             
@@ -54,7 +54,7 @@
                         </div>
 
                         <div class="join-box">
-                            <a href="/Users/CLoginForm" style="color: inherit; text-decoration: none; ">
+                            <a href="/storeJoin" style="color: inherit; text-decoration: none; ">
                                 <div class="card" style="width:320px; height: 400px;">
                                     <div class="d-flex align-items-center justify-content-center">
                                         <img src="/images/company.svg" class="card-img-top w-100 h-100">
