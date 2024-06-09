@@ -22,11 +22,13 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         
         Long userIdx = userDetails.getUserIdx();
-        Collection<? extends GrantedAuthority> role = userDetails.getAuthorities();
+        Collection<? extends GrantedAuthority> authorities  = userDetails.getAuthorities();
         
         HttpSession session = request.getSession();
         session.setAttribute("userIdx", userIdx);
-        session.setAttribute("role", role);
+        for (GrantedAuthority authority : authorities) {
+            session.setAttribute("role", authority.getAuthority());
+        }
 
         response.sendRedirect("/");
     }

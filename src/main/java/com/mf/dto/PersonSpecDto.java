@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PersonSpecDto {
 	private Long personSpecIdx;
-	private Long gender;
-	private Long height;
-	private Long weight;
-	private Long foot;
+	private String gender;
+	private String height;
+	private String weight;
+	private String foot;
 	private String top;
 	private String bottom;
 	private Long personIdx;

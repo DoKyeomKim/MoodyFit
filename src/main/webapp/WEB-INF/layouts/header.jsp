@@ -74,20 +74,28 @@
         <ul class="navbar-nav">
             <c:forEach var="category" items="${category}">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="${category.engName}">${category.korName}</a>
+                    <a class="nav-link active" aria-current="page" href="/${category.engName}">${category.korName}</a>
                 </li>
             </c:forEach>
         </ul>
         
-        <div class="d-flex">
-            <security:authorize access="isAuthenticated()">
-                <div style="margin-right:20px;"><a href="/myPage">마이페이지</a></div>
-                <a href="<c:url value='/logout' />">로그아웃</a>
-            </security:authorize>
-            <security:authorize access="!isAuthenticated()">
-                <a href="<c:url value='/login' />">로그인</a>
-            </security:authorize>
-        </div>
+<div class="d-flex">
+    <security:authorize access="isAuthenticated()">
+    <c:choose>
+        <c:when test="${sessionScope.role == 'ROLE_PERSON'}">
+            <div style="margin-right:20px;"><a href="/myPage">마이페이지</a></div>
+            <a href="<c:url value='/logout' />">로그아웃</a>
+        </c:when> 
+        <c:when test="${sessionScope.role == 'ROLE_SHOP'}">
+            <div style="margin-right:20px;"><a href="/shopMyPage">마이페이지</a></div>
+            <a href="<c:url value='/logout' />">로그아웃</a>
+        </c:when>
+    </c:choose>
+    </security:authorize>
+    <security:authorize access="!isAuthenticated()">
+        <a href="<c:url value='/login' />">로그인</a>
+    </security:authorize>
+</div>
     </div>
 </nav>
 

@@ -41,6 +41,7 @@ public class SecurityConfig {
 				.requestMatchers("/", "/search","/totalJoin","/login","/IdCheck", "/loginProcess", "/storeJoin","/storeJoinProcess","/join", "/joinProcess","/error","/loginFail").permitAll()
 				.requestMatchers("/admin").hasRole("ADMIN")
 				.requestMatchers("/myPage").hasAnyRole("ADMIN", "PERSON")
+				.requestMatchers("/shopMyPage").hasAnyRole("ADMIN", "SHOP")
 				.anyRequest().authenticated()
 				);
 
