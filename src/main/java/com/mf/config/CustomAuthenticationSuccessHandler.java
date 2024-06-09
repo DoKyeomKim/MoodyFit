@@ -1,7 +1,9 @@
 package com.mf.config;
 import java.io.IOException;
+import java.util.Collection;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +22,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         
         Long userIdx = userDetails.getUserIdx();
-                
+        Collection<? extends GrantedAuthority> role = userDetails.getAuthorities();
+        
         HttpSession session = request.getSession();
         session.setAttribute("userIdx", userIdx);
-       
+        session.setAttribute("role", role);
 
         response.sendRedirect("/");
     }
