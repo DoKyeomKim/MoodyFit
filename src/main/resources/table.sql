@@ -40,10 +40,10 @@ CREATE TABLE delivery (
 -- 고객 상세 정보(신체)
 CREATE TABLE person_spec (
     person_spec_idx NUMBER PRIMARY KEY,     -- 신체 정보 고유번호
-    gender NUMBER,                          -- 성별
-    height NUMBER,                          -- 키
-    weight NUMBER,                          -- 몸무게
-    foot NUMBER,                            -- 신발 사이즈
+    gender VARCHAR2(20),                          -- 성별
+    height VARCHAR2(20),                          -- 키
+    weight VARCHAR2(20),                          -- 몸무게
+    foot VARCHAR2(20),                            -- 신발 사이즈
     top VARCHAR2(50),                       -- 상의 사이즈
     bottom VARCHAR2(50),                    -- 하의 사이즈
     person_idx NUMBER,                      -- 신체 정보를 저장시킨 일반회원 고유번호
