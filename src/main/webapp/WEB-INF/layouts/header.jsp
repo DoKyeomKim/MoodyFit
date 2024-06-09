@@ -54,7 +54,7 @@
     <div class="row align-items-center">
         <div class="col-md-8" style="margin-left :15px;">
             <div class="logo-img">
-                <a href="/"><img src="/images/logo.png" style="height: 200px; width:200px;"></a>
+                <a href="/"><img src="/images/logo.png" style="height: 150px; width:auto;"></a>
             </div>
         </div>
         <div class="col-md-3">
@@ -79,23 +79,23 @@
             </c:forEach>
         </ul>
         
-<div class="d-flex">
-    <security:authorize access="isAuthenticated()">
-    <c:choose>
-        <c:when test="${sessionScope.role == 'ROLE_PERSON'}">
-            <div style="margin-right:20px;"><a href="/myPage">마이페이지</a></div>
-            <a href="<c:url value='/logout' />">로그아웃</a>
-        </c:when> 
-        <c:when test="${sessionScope.role == 'ROLE_SHOP'}">
-            <div style="margin-right:20px;"><a href="/shopMyPage">마이페이지</a></div>
-            <a href="<c:url value='/logout' />">로그아웃</a>
-        </c:when>
-    </c:choose>
-    </security:authorize>
-    <security:authorize access="!isAuthenticated()">
-        <a href="<c:url value='/login' />">로그인</a>
-    </security:authorize>
-</div>
+		<div class="d-flex">
+		    <security:authorize access="isAuthenticated()">
+		    <c:choose>
+		        <c:when test="${sessionScope.role == 'ROLE_PERSON'}">
+		            <div style="margin-right:20px;"><a href="/myPage">마이페이지</a></div>
+		            <a href="<c:url value='/logout' />">로그아웃</a>
+		        </c:when> 
+		        <c:when test="${sessionScope.role == 'ROLE_SHOP'}">
+		            <div style="margin-right:20px;"><a href="/shopMyPage">마이페이지</a></div>
+		            <a href="<c:url value='/logout' />">로그아웃</a>
+		        </c:when>
+		    </c:choose>
+		    </security:authorize>
+		    <security:authorize access="!isAuthenticated()">
+		        <a href="<c:url value='/login' />">로그인</a>
+		    </security:authorize>
+		</div>
     </div>
 </nav>
 

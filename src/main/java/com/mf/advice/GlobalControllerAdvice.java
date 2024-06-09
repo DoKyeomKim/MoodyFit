@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import com.mf.dto.CategoryDto;
 import com.mf.service.MainService;
 
-// modelAttribute를 컨트롤러 전역에 사용하려는 처리
+// modelAttribute를 컨트롤러 전역에 쓰기위해 사용
 @ControllerAdvice
 public class GlobalControllerAdvice {
 
