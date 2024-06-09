@@ -7,11 +7,15 @@
 <meta charset="UTF-8">
 <title>메인 페이지</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
 <style>
 html, body {
     height: 100%;
     margin: 0;
     background-color: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .headerImg {
@@ -22,10 +26,6 @@ html, body {
 
 
 .login-box {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background-color: rgba(255, 255, 255, 1);
     border-radius: 10px;
     padding: 40px 30px;
@@ -101,6 +101,7 @@ html, body {
             </div>
         </div>
                 <hr style="width: 80%;">
+
         
 
     </div>
