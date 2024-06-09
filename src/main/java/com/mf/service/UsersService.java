@@ -49,6 +49,7 @@ public class UsersService {
 		 
 		 // users에 넣을 정보
 		 usersMapper.storeJoinProcess(usersDto);
+		 // store에 넣을 정보
 		 usersMapper.storeJoinDetailProcess(storeDto);
 		
 	}
@@ -58,11 +59,12 @@ public class UsersService {
         return usersMapper.findById(id);
     }
 
-    // 회원가입 아이디 체크
+    // 회원가입 아이디 중복체크
 	public String getId(String id) {
 		return usersMapper.getId(id);
 	}
 
+	// 회원가입 닉네임 중복체크
 	public String getNickname(String nickName) {
 		return usersMapper.getNickName(nickName);
 	}
