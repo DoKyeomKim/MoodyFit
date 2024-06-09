@@ -48,7 +48,7 @@
   <table>
 	    <tr>
 	      <th>아이디</th>
-	      <td><input type="text" name="id" id="username" style="width: 25%;" placeholder="아이디를 입력해주세요.">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="" value="중복확인" id="btnIdCheck"/><br>
+	      <td><input type="text" name="id" id="username" style="width: 25%;" placeholder="아이디를 입력해주세요.">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnIdCheck"/><br>
 	      	  <span class="col-6" id="output"></span>
 	      </td>
 	    </tr>
@@ -68,7 +68,7 @@
 	    </tr>
 	    <tr>
 	      <th>닉네임</th>
-	      <td><input type="text" name="nickName" id="nickName" style="width: 30%;" placeholder="닉네임을 입력해주세요">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" value="중복확인" id="btnNickNameCheck"/><br>
+	      <td><input type="text" name="nickName" id="nickName" style="width: 30%;" placeholder="닉네임을 입력해주세요">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnNickNameCheck"/><br>
 	      	  <span class="col-6" id="output2"></span>
 	      </td>
 	    </tr>
@@ -109,15 +109,15 @@
 	    </tr>
 	    <tr>
 	      <th>키</th>
-	      <td><input type="password" name="height" id="height" style="width: 20%;">cm</td>
+	      <td><input type="password" name="height" id="height" style="width: 20%;" placeholder="숫자만 입력해주세요">&nbsp;cm</td>
 	    </tr>
 	    <tr>
 	      <th>체중</th>
-	      <td><input type="text" name="weight" id="weight" style="width: 20%;">kg</td>
+	      <td><input type="text" name="weight" id="weight" style="width: 20%;" placeholder="숫자만 입력해주세요">&nbsp;kg</td>
 	    </tr>
 	    <tr>
 	      <th>신발 사이즈</th>
-	      <td><input type="text" name="foot" id="foot" style="width: 20%;"></td>
+	      <td><input type="text" name="foot" id="foot" style="width: 20%;" placeholder="숫자만 입력해주세요"></td>
 	    </tr>
 	    <tr>
 	      <th>상의</th>
