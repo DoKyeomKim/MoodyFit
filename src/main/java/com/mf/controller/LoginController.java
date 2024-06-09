@@ -1,20 +1,16 @@
 package com.mf.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mf.dto.PersonDto;
+import com.mf.dto.StoreDto;
 import com.mf.dto.UsersDto;
 import com.mf.service.UsersService;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -59,9 +55,8 @@ public class LoginController {
 	
 	// 가맹점 회원가입 진행
 	@PostMapping("/storeJoinProcess")
-	public String storeJoinProcess(UsersDto usersDto) {
-		usersService.storeJoinProcess(usersDto);
-		
+	public String storeJoinProcess(UsersDto usersDto,StoreDto storeDto) {
+		usersService.storeJoinProcess(usersDto,storeDto);
 		return "redirect:/login";
 	}
 	
@@ -71,5 +66,19 @@ public class LoginController {
     public String loginFail() {
         return "/loginFail"; // 실패 시 보여줄 페이지
     }
+    
+	// 아이디 중복체크
+	@GetMapping("/IdCheck")
+	@ResponseBody
+	public String IdCheck(@RequestParam("id") String id) {
+		
+		String resultId = usersService.getId(id);
+		if(resultId==null) {
+			return "<small style='color:green'>사용가능한 아이디입니다</small>";
+		}  else {
+		return "<small style='color:red'>사용할 수 없는 아이디입니다</small>";
+		}
+
+	}
 	
 }

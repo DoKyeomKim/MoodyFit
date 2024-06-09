@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>메인 페이지</title>
+<title>마이페이지</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <style>
 </style>

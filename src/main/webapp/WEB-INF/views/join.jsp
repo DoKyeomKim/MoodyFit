@@ -5,19 +5,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>메인 페이지</title>
+<title>개인 회원가입</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
   <style>
-  	
-  	.content-main{
-  	  display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-  	}
+
   
     table {
-      margin-top: 100px;
       margin-bottom:100px;
       width: 60%;
       border-collapse: collapse;
@@ -45,12 +38,18 @@
 <body>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
 
-<main class="content-main">
+<main>
+<form action="/joinProcess" method="post" name="joinForm">
+<div class="required-table">
+	<div class="table-header">
+	<span>필수입력</span>
+	</div>
   <table>
-  	<form action="/joinProcess" method="post" name="joinForm">
 	    <tr>
 	      <th>아이디</th>
-	      <td><input type="text" name="id" id="username" style="width: 100%;"></td>
+	      <td><input type="text" name="id" id="username" style="width: 60%;">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-primary" style="" value="중복확인" id="btnIdCheck"/><br>
+	      	  <span class="col-6" id="output"></span>
+	      </td>
 	    </tr>
 	    <tr>
 	      <th>비밀번호</th>
@@ -92,17 +91,96 @@
 	    </tr>
 	    <tr>
 	      <th>이메일</th>
-	      <td><input type="email" name="email" id="email" style="width: 100%;"></td>
+	      <td><input type="email" name="email" id="email" style="width: 100%;"placeholder="@를 포함한 이메일을 입력해주세요"></td>
+	    </tr>
+  </table>
+</div>
+<div class="options-table">
+	<div class="table-header">
+	<span>선택 입력</span>
+	</div>
+  <table>
+	    <tr>
+	      <th>성별</th>
+	      <td><input type='radio' name='gender' value='1' />남성 &nbsp;&nbsp;<input type='radio' name='gender' value='2' />여성</td>
+	    </tr>
+	    <tr>
+	      <th>키</th>
+	      <td><input type="password" name="height" id="height" style="width: 100%;" required></td>
+	    </tr>
+	    <tr>
+	      <th>체중</th>
+	      <td><input type="text" name="weight" id="weight" style="width: 100%;"></td>
+	    </tr>
+	    <tr>
+	      <th>신발 사이즈</th>
+	      <td><input type="text" name="foot" id="foot" style="width: 100%;"></td>
+	    </tr>
+	    <tr>
+	      <th>상의</th>
+	      <td><input type="text" name="top" id="top" style="width: 100%;"></td>
+	    </tr>
+	    <tr>
+	      <th>하의</th>
+	      <td><input type="text" name="bottom" id="bottom" style="width: 100%;" ></td>
 	    </tr>
 	    <tr>
 	      <td colspan="2" style="text-align: center;  border-left:none; border-bottom:none;">
 	        <button type="submit" id="#submitBtn" class="btn btn-primary" style="margin-top: 20px;">회원가입</button>
 	      </td>
 	    </tr>
-    </form>
   </table>
+  </div>
+</form>
 </main>
+<!-- 아이디 중복확인 -->
+<script>
+    const btnIdCheckEl = document.querySelector('#btnIdCheck');
+    var submitBtnEl = document.querySelector('#submitBtn');
+    const outputEl = document.querySelector('#output');
+    const idInputEl = document.querySelector('[name=id]');
 
+    btnIdCheckEl.onclick = function(e) {
+        fetch('/IdCheck?id=' + encodeURIComponent(idInputEl.value))
+            .then(response => response.text())
+            .then((data) => {
+                console.log(data);
+                outputEl.innerHTML = data;
+
+                if (data.includes('사용가능한 아이디입니다')) {
+                    submitBtnEl.disabled = false; // 제출 버튼 활성화
+                } else {
+                    submitBtnEl.disabled = true;  // 제출 버튼 비활성화
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // 초기에는 제출 버튼을 비활성화
+    submitBtnEl.disabled = true;
+
+    // 아이디 입력 필드가 변경될 때마다 제출 버튼 비활성화
+    idInputEl.oninput = function() {
+        submitBtnEl.disabled = true;
+        outputEl.innerHTML = '';
+    }
+</script>
+<script>
+    function pwCheck() {
+        var pw1 = document.getElementById("password").value;
+        var pw2 = document.getElementById("password2").value;
+        var pwConfirm = document.getElementById("pwConfirm");
+        var submitBtnEl = document.querySelector('#submitBtn');
+
+        if (pw1 != pw2) {
+            pwConfirm.innerHTML = "<small style='color: red;'>비밀번호가 일치하지 않습니다.</small>";
+            submitBtnEl.disabled = true; // 비밀번호 불일치 시 제출 버튼 비활성화
+        } else {
+            pwConfirm.innerHTML = "<small style='color: green;'>비밀번호가 일치합니다.</small>";
+            submitBtnEl.disabled = false; // 비밀번호 일치 시 제출 버튼 활성화
+        }
+    }
+</script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
     function sample6_execDaumPostcode() {
@@ -148,21 +226,6 @@
         }).open();
     }
 </script>
-<script>
-    function pwCheck() {
-        var pw1 = document.getElementById("password").value;
-        var pw2 = document.getElementById("password2").value;
-        var pwConfirm = document.getElementById("pwConfirm");
-        var submitBtnEl = document.querySelector('#submitBtn');
 
-        if (pw1 != pw2) {
-            pwConfirm.innerHTML = "<small style='color: red;'>비밀번호가 일치하지 않습니다.</small>";
-            submitBtnEl.disabled = true; // 비밀번호 불일치 시 제출 버튼 비활성화
-        } else {
-            pwConfirm.innerHTML = "<small style='color: green;'>비밀번호가 일치합니다.</small>";
-            submitBtnEl.disabled = false; // 비밀번호 일치 시 제출 버튼 활성화
-        }
-    }
-</script>
 </body>
 </html>
