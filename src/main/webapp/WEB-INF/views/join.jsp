@@ -149,7 +149,7 @@
             outputEl.innerHTML = "<small style='color:red'>아이디를 입력해주세요.</small>";
             return; // 입력 필드가 비어 있으면 더 이상 진행하지 않음
         }
-        fetch('/IdCheck?id=' + encodeURIComponent(idInputEl.value))
+        fetch('/idCheck?id=' + encodeURIComponent(idInputEl.value))
             .then(response => response.text())
             .then((data) => {
                 console.log(data);

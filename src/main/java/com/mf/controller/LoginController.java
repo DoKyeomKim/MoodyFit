@@ -69,9 +69,9 @@ public class LoginController {
     }
     
 	// 아이디 중복체크
-	@GetMapping("/IdCheck")
+	@GetMapping("/idCheck")
 	@ResponseBody
-	public String IdCheck(@RequestParam("id") String id) {
+	public String idCheck(@RequestParam("id") String id) {
 		
 		String resultId = usersService.getId(id);
 		if(resultId==null) {
