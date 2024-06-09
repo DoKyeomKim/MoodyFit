@@ -22,27 +22,27 @@ public class LoginController {
 	// 로그인 페이지
 	@GetMapping("/login")
 	public String login() {
-		return "/login";
+		return "login/login";
 	}
 	
 	// 회원가입 선택 페이지
 	@GetMapping("/totalJoin")
 	public String totalJoin(){
 		
-		return "/totalJoin";
+		return "login/totalJoin";
 	}
 	
 	// 회원가입 페이지 이동
 	@GetMapping("/join")
 	public String join() {
-		return "/join";
+		return "login/join";
 	}
 	
 	// 가맹점 회원가입 페이지이동
 	@GetMapping("/storeJoin")
 	public String storeJoin() {
 		
-		return "/storeJoin";
+		return "login/storeJoin";
 	}
 	
 	// 일반유저 회원가입 진행
@@ -65,7 +65,7 @@ public class LoginController {
     // 실패 페이지 추가
     @GetMapping("/loginFail")
     public String loginFail() {
-        return "/loginFail"; // 실패 시 보여줄 페이지
+        return "login/loginFail"; // 실패 시 보여줄 페이지
     }
     
 	// 아이디 중복체크
