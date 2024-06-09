@@ -40,6 +40,7 @@
 
 <main>
 <form action="/joinProcess" method="post" name="joinForm">
+<h4  style="text-align:center; margin:20px 0;">회원가입</h4>
 <div class="required-table">
 	<div class="table-header">
 	<span>필수입력</span>
@@ -67,7 +68,9 @@
 	    </tr>
 	    <tr>
 	      <th>닉네임</th>
-	      <td><input type="text" name="nickName" id="nickName" style="width: 30%;" placeholder="닉네임을 입력해주세요"></td>
+	      <td><input type="text" name="nickName" id="nickName" style="width: 30%;" placeholder="닉네임을 입력해주세요">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" value="중복확인" id="btnNickNameCheck"/><br>
+	      	  <span class="col-6" id="output2"></span>
+	      </td>
 	    </tr>
 	    <tr>
 	      <th>우편번호</th>
@@ -106,23 +109,23 @@
 	    </tr>
 	    <tr>
 	      <th>키</th>
-	      <td><input type="password" name="height" id="height" style="width: 100%;"></td>
+	      <td><input type="password" name="height" id="height" style="width: 20%;">cm</td>
 	    </tr>
 	    <tr>
 	      <th>체중</th>
-	      <td><input type="text" name="weight" id="weight" style="width: 100%;"></td>
+	      <td><input type="text" name="weight" id="weight" style="width: 20%;">kg</td>
 	    </tr>
 	    <tr>
 	      <th>신발 사이즈</th>
-	      <td><input type="text" name="foot" id="foot" style="width: 100%;"></td>
+	      <td><input type="text" name="foot" id="foot" style="width: 20%;"></td>
 	    </tr>
 	    <tr>
 	      <th>상의</th>
-	      <td><input type="text" name="top" id="top" style="width: 100%;"></td>
+	      <td><input type="text" name="top" id="top" style="width: 20%;"></td>
 	    </tr>
 	    <tr>
 	      <th>하의</th>
-	      <td><input type="text" name="bottom" id="bottom" style="width: 100%;" ></td>
+	      <td><input type="text" name="bottom" id="bottom" style="width: 20%;" ></td>
 	    </tr>
 	    <tr>
 	      <td colspan="2" style="text-align: center;  border-left:none; border-bottom:none;">
@@ -186,6 +189,43 @@
         }
     }
 </script>
+<!-- 닉네임 중복확인 -->
+<script>
+    const btnNicknameCheckEl = document.querySelector('#btnNickNameCheck');
+    var submitBtnEl = document.querySelector('#submitBtn');
+    const output2El = document.querySelector('#output2');
+    const nickNameInputEl = document.querySelector('[name=nickName]');
+
+    btnNicknameCheckEl.onclick = function(e) {
+        if (!nickNameInputEl.value.trim()) { // 입력 필드가 비어 있는지 확인
+            output2El.innerHTML = "<small style='color:red'>닉네임을 입력해주세요.</small>";
+            return; // 입력 필드가 비어 있으면 더 이상 진행하지 않음
+        }
+        fetch('/nickNameCheck?nickName=' + encodeURIComponent(nickNameInputEl.value))
+            .then(response => response.text())
+            .then((data) => {
+                console.log(data);
+                output2El.innerHTML = data;
+
+                if (data.includes('사용가능한 닉네임입니다')) {
+                    submitBtnEl.disabled = false; // 제출 버튼 활성화
+                } else {
+                    submitBtnEl.disabled = true;  // 제출 버튼 비활성화
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // 초기에는 제출 버튼을 비활성화
+    submitBtnEl.disabled = true;
+
+    // 아이디 입력 필드가 변경될 때마다 제출 버튼 비활성화
+    NicknameInputEl.oninput = function() {
+        submitBtnEl.disabled = true;
+        output2El.innerHTML = '';
+    }
+</script>
+
 <!-- 전화번호 입력시 - 자동생성 -->
 <script>
 document.getElementById('phone').addEventListener('input', function (e) {

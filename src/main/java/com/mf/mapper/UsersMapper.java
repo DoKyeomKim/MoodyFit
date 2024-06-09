@@ -19,11 +19,14 @@ public interface UsersMapper {
 	
 	//아이디 중복 체크
 	String getId(String id);
+	//닉네임 중복 체크
+	String getNickName(String nickName);
 	//=========================
 	
 	//가맹점 회원가입 진행
 	void storeJoinProcess(UsersDto usersDto);
 	void storeJoinDetailProcess(StoreDto storeDto);
+
 
 
 

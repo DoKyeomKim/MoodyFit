@@ -63,6 +63,10 @@ public class UsersService {
 		return usersMapper.getId(id);
 	}
 
+	public String getNickname(String nickName) {
+		return usersMapper.getNickName(nickName);
+	}
+
 
 }
 

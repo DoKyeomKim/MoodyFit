@@ -9,6 +9,9 @@
 <select id="getId">
 SELECT ID FROM USERS WHERE ID = #{id}
 </select>
+<select id="getNickName">
+SELECT NICK_NAME FROM PERSON WHERE nick_name = #{nickName}
+</select>
 
 <insert id="joinProcess">
 	INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)

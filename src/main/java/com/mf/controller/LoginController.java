@@ -82,4 +82,18 @@ public class LoginController {
 
 	}
 	
+	// 닉네임 중복체크
+	@GetMapping("/nickNameCheck")
+	@ResponseBody
+	public String nickNameCheck(@RequestParam("nickName") String nickName) {
+		
+		String resultNickname = usersService.getNickname(nickName);
+		if(resultNickname==null) {
+			return "<small style='color:green'>사용가능한 닉네임입니다</small>";
+		}  else {
+		return "<small style='color:red'>사용할 수 없는 닉네임입니다</small>";
+		}
+
+	}
+	
 }
