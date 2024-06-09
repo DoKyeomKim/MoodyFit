@@ -27,13 +27,10 @@ public class MainController {
 	@GetMapping("/")
 	public ModelAndView main(HttpSession session) {
 		ModelAndView mv = new ModelAndView();
-		// 상단 카테고리 갖고오기
-		List<CategoryDto> category = mainService.getCategory();
 
 		// 시큐리티 로그인하면서 세션에 저장되게 한 userIdx 갖고오기
 		Long userIdx = (Long) session.getAttribute("userIdx");
 
-		mv.addObject("category", category);
 		mv.setViewName("/main");
 		return mv;
 	}
