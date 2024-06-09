@@ -5,6 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mf.dto.PersonDto;
+import com.mf.dto.PersonSpecDto;
 import com.mf.dto.StoreDto;
 import com.mf.dto.UsersDto;
 import com.mf.mapper.UsersMapper;
@@ -24,7 +25,7 @@ public class UsersService {
 
 	// 개인 회원가입 진행
 	@Transactional
-    public void joinProcess(UsersDto usersDto, PersonDto personDto) {
+    public void joinProcess(UsersDto usersDto, PersonDto personDto, PersonSpecDto personSpecDto) {
 		
 		// 비밀번호 암호화
 		 String encodedPassword = bCryptPasswordEncoder.encode(usersDto.getPw());
@@ -34,6 +35,8 @@ public class UsersService {
         usersMapper.joinProcess(usersDto);
         // person에 넣을 정보
         usersMapper.joinDetailProcess(personDto);
+        // person_spec에 넣을 정보
+        usersMapper.specProcess(personSpecDto);
     }
 
 	// 가맹점 회원 가입 진행
@@ -50,10 +53,12 @@ public class UsersService {
 		
 	}
 	
+	// 로그인
     public UsersDto findById(String id) {
         return usersMapper.findById(id);
     }
 
+    // 회원가입 아이디 체크
 	public String getId(String id) {
 		return usersMapper.getId(id);
 	}

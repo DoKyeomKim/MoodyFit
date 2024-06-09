@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mf.dto.PersonDto;
+import com.mf.dto.PersonSpecDto;
 import com.mf.dto.StoreDto;
 import com.mf.dto.UsersDto;
 import com.mf.service.UsersService;
@@ -46,9 +47,9 @@ public class LoginController {
 	
 	// 일반유저 회원가입 진행
 	@PostMapping("/joinProcess")
-	public String joinProcess(UsersDto usersDto,PersonDto personDto) {
+	public String joinProcess(UsersDto usersDto,PersonDto personDto,PersonSpecDto personSpecDto) {
 		
-		usersService.joinProcess(usersDto,personDto);
+		usersService.joinProcess(usersDto,personDto,personSpecDto);
 		
 		return "redirect:/login";
 	}

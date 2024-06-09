@@ -47,27 +47,27 @@
   <table>
 	    <tr>
 	      <th>아이디</th>
-	      <td><input type="text" name="id" id="username" style="width: 60%;">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-primary" style="" value="중복확인" id="btnIdCheck"/><br>
+	      <td><input type="text" name="id" id="username" style="width: 60%;" placeholder="아이디를 입력해주세요.">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="" value="중복확인" id="btnIdCheck"/><br>
 	      	  <span class="col-6" id="output"></span>
 	      </td>
 	    </tr>
 	    <tr>
 	      <th>비밀번호</th>
-	      <td><input type="password" name="pw" id="password" oninput="pwCheck()" style="width: 100%;" required></td>
+	      <td><input type="password" name="pw" id="password" oninput="pwCheck()" style="width: 100%;"placeholder="비밀번호를 입력해주세요" required></td>
 	    </tr>
 	    <tr>
 	      <th>비밀번호 확인</th>
-	      <td><input type="password" id="password2" oninput="pwCheck()" style="width: 100%;" required>
+	      <td><input type="password" id="password2" oninput="pwCheck()" style="width: 100%;" placeholder="비밀번호를 다시 한번 입력해주세요" required>
 	      <span id="pwConfirm" style="display: block;"></span>
 	      </td>
 	    </tr>
 	    <tr>
 	      <th>이름</th>
-	      <td><input type="text" name="name" id="name" style="width: 100%;"></td>
+	      <td><input type="text" name="name" id="name" style="width: 100%;" placeholder="이름을 입력해주세요"></td>
 	    </tr>
 	    <tr>
 	      <th>닉네임</th>
-	      <td><input type="text" name="nickName" id="nickName" style="width: 100%;"></td>
+	      <td><input type="text" name="nickName" id="nickName" style="width: 100%;" placeholder="닉네임을 입력해주세요"></td>
 	    </tr>
 	    <tr>
 	      <th>우편번호</th>

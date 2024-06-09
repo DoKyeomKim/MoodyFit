@@ -72,4 +72,27 @@ USER_SEQ.CURRVAL
 )
 </insert>
 
+<insert id="specProcess">
+INSERT INTO PERSON_SPEC(
+PERSON_SPEC_IDX,
+GENDER,
+HEIGHT,
+WEIGHT,
+FOOT,
+TOP,
+BOTTOM,
+PERSON_IDX
+)
+VALUES(
+PERSON_SPEC_SEQ.NEXTVAL,
+#{gender},
+#{height},
+#{weight},
+#{foot},
+#{top},
+#{bottom},
+PERSON_SEQ.CURRVAL
+)
+</insert>
+
 </mapper>
