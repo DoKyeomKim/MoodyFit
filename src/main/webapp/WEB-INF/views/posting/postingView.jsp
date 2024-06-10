@@ -5,16 +5,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>메인 페이지</title>
+<title>Insert title here</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
-<style>
-</style>
-
 </head>
 <body>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
-<br><br>
-<h2>MainPage</h2>
+
+
 <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -24,16 +24,18 @@
     </div>
 </div>
 
-	
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarNav">
-	<c:forEach var="category" items="${category }">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="${category.engName }">${category.name }</a>
-        </li>
-      </ul>
-	</c:forEach>
+  <c:if test="${not empty categories}"> <!-- 다른 카테고리 이동 후 헤더에 카테고리 출력 안되는 에러 해결 -->
+		<c:forEach var="category" items="${categories }">
+	      <ul class="navbar-nav">
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" href="/category/${category.engName }">${category.engName }</a>
+	        </li>
+	      </ul>
+		</c:forEach>
+	</c:if>
+	<a href="/storeMypage">MyPage</a>
     </div>
 	</nav>
 	
