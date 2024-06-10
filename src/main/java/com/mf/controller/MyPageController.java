@@ -5,10 +5,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mf.dto.PersonDto;
+import com.mf.dto.PersonSpecDto;
 import com.mf.dto.StoreDto;
+import com.mf.dto.UsersDto;
 import com.mf.service.MyPageService;
 
 import jakarta.servlet.http.HttpSession;
@@ -17,6 +20,8 @@ import jakarta.servlet.http.HttpSession;
 public class MyPageController {
 	@Autowired
 	private MyPageService myPageService;
+
+
 
 //===========================================================================
 //================================ 개인 =====================================
@@ -40,12 +45,32 @@ public class MyPageController {
 		return mv;
 	}
 	
-	// 유저 수정페이지
+	// 유저 정보 수정페이지
 	@GetMapping("/personUpdateForm")
 	public ModelAndView personUpdateForm(HttpSession session) {
 		ModelAndView mv = new ModelAndView();
+		// 세션의 userIdx 갖고오기
+		Long userIdx = (Long) session.getAttribute("userIdx");
 		
+		// 마이페이지 로직처리
+		Map<String, Object> result = myPageService.getPersonInfo(userIdx);		
+		
+
+		mv.addObject("result", result);
 		mv.setViewName("myPage/personUpdate");
+		return mv;
+	}
+	
+	// 유저 정보 수정
+	@PostMapping("/personUpdate")
+	public ModelAndView personUpdate( HttpSession session,UsersDto users,PersonDto person,PersonSpecDto personSpec) {
+		ModelAndView mv = new ModelAndView();
+		// 세션의 userIdx 갖고오기
+		Long userIdx = (Long) session.getAttribute("userIdx");
+
+		myPageService.personUpdate(userIdx,users,person,personSpec);
+		
+		mv.setViewName("redirect:/myPage");
 		return mv;
 	}
 	

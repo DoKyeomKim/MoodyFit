@@ -39,61 +39,62 @@
 <%@include file="/WEB-INF/layouts/header.jsp"%>
 
 <main>
-<form action="/#" method="post" name="update">
+<form action="/personUpdate" method="post" name="update">
 <h4  style="text-align:center; margin:20px 0;">정보 수정</h4>
 <div class="required-table">
 	<div class="table-header">
 	<span>필수입력</span>
 	</div>
+	<input type="hidden" value="${result.PERSON_IDX }" name="personIdx">
+	<input type="hidden" value="${result.PERSON_SPEC_IDX }" name="personSpecIdx">
   <table>
 	    <tr>
 	      <th>아이디</th>
-	      <td><input type="text" name="id" id="username" style="width: 25%;" placeholder="아이디를 입력해주세요.">
-	      </td>
+	      <td>${result.ID }</td>
 	    </tr>
 	    <tr>
 	      <th>비밀번호</th>
-	      <td><input type="password" name="pw" id="password" oninput="pwCheck()" style="width: 30%;"placeholder="비밀번호를 입력해주세요" required></td>
+	      <td><input type="password"name="pw" id="password" oninput="pwCheck()" style="width: 30%;"placeholder="변경을 원하실 경우 입력해주세요." ></td>
 	    </tr>
 	    <tr>
 	      <th>비밀번호 확인</th>
-	      <td><input type="password" id="password2" oninput="pwCheck()" style="width: 30%;" placeholder="비밀번호를 다시 한번 입력해주세요" required>
+	      <td><input type="password"id="password2" oninput="pwCheck()" style="width: 30%;" placeholder="비밀번호를 다시 한번 입력해주세요">
 	      <span id="pwConfirm" style="display: block;"></span>
 	      </td>
 	    </tr>
 	    <tr>
 	      <th>이름</th>
-	      <td><input type="text" name="name" id="name" style="width: 30%;" placeholder="이름을 입력해주세요"></td>
+	      <td><input type="text" name="name" id="name" value="${result.NAME }"style="width: 30%;" placeholder="이름을 입력해주세요"></td>
 	    </tr>
 	    <tr>
 	      <th>닉네임</th>
-	      <td><input type="text" name="nickName" id="nickName" style="width: 30%;" placeholder="닉네임을 입력해주세요">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnNickNameCheck"/><br>
+	      <td><input type="text" name="nickName" id="nickName" value="${result.NICK_NAME }" style="width: 30%;" placeholder="닉네임을 입력해주세요">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnNickNameCheck"/><br>
 	      	  <span class="col-6" id="output2"></span>
 	      </td>
 	    </tr>
 	    <tr>
 	      <th>우편번호</th>
-	      <td><input type="text" name="postCode" id="sample6_postcode" placeholder="우편번호" style="margin-right: 30px; width: 20%;"><input type="button" class="btn btn-secondary" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"></td>
+	      <td><input type="text" name="postCode" id="sample6_postcode" value="${result.POST_CODE }" placeholder="우편번호" style="margin-right: 30px; width: 20%;"><input type="button" class="btn btn-secondary" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"></td>
 	    </tr>
 	    <tr>
 	      <th>주소</th>
-	      <td><input type="text" name="address" id="sample6_address" style="width: 60%;" placeholder="주소"></td>
+	      <td><input type="text" name="address" id="sample6_address" value="${result.ADDRESS }"style="width: 60%;" placeholder="주소"></td>
 	    </tr>
 	    <tr>
 	      <th>상세주소</th>
-	      <td><input type="text" name="detailAddress" id="sample6_detailAddress" style="width: 60%;" placeholder="상세주소를 입력해주세요"></td>
+	      <td><input type="text" name="detailAddress" id="sample6_detailAddress" value="${result.DETAIL_ADDRESS }"style="width: 60%;" placeholder="상세주소를 입력해주세요"></td>
 	    </tr>
 
     
 	    <tr>
 	      <th>전화번호</th>
 	      <td>
-	        <input type="text" name="phone" id="phone" style="width: 35%;"  placeholder=" -를 제외한 번호만 입력해주세요">
+	        <input type="text" name="phone" id="phone" style="width: 35%;" value="${result.PHONE }"  placeholder=" -를 제외한 번호만 입력해주세요">
 	      </td>
 	    </tr>
 	    <tr>
 	      <th>이메일</th>
-	      <td><input type="email" name="email" id="email" style="width: 35%;"placeholder="@를 포함한 이메일을 입력해주세요"></td>
+	      <td><input type="email" name="email" id="email" style="width: 35%;" value="${result.EMAIL }" placeholder="@를 포함한 이메일을 입력해주세요"></td>
 	    </tr>
   </table>
 </div>
@@ -104,27 +105,31 @@
   <table>
 	    <tr>
 	      <th>성별</th>
-	      <td><input type='radio' name='gender' value='1' checked/>남성 &nbsp;&nbsp;<input type='radio' name='gender' value='2' />여성</td>
+	    <td>
+			<input type='radio' name='gender' value='1' ${result.GENDER == 1 ? 'checked' : ''}/>남성 &nbsp;&nbsp;
+			<input type='radio' name='gender' value='2' ${result.GENDER == 2 ? 'checked' : ''}/>여성
+		</td>
+
 	    </tr>
 	    <tr>
 	      <th>키</th>
-	      <td><input type="password" name="height" id="height" style="width: 20%;" placeholder="숫자만 입력해주세요">&nbsp;cm</td>
+	      <td><input type="text" name="height" id="height" style="width: 20%;" value="${result.HEIGHT }" placeholder="숫자만 입력해주세요">&nbsp;cm</td>
 	    </tr>
 	    <tr>
 	      <th>체중</th>
-	      <td><input type="text" name="weight" id="weight" style="width: 20%;" placeholder="숫자만 입력해주세요">&nbsp;kg</td>
+	      <td><input type="text" name="weight" id="weight" style="width: 20%;" value="${result.WEIGHT }"placeholder="숫자만 입력해주세요">&nbsp;kg</td>
 	    </tr>
 	    <tr>
 	      <th>신발 사이즈</th>
-	      <td><input type="text" name="foot" id="foot" style="width: 20%;" placeholder="숫자만 입력해주세요"></td>
+	      <td><input type="text" name="foot" id="foot" style="width: 20%;" value="${result.FOOT }" placeholder="숫자만 입력해주세요"></td>
 	    </tr>
 	    <tr>
 	      <th>상의</th>
-	      <td><input type="text" name="top" id="top" style="width: 20%;"></td>
+	      <td><input type="text" name="top" id="top" value="${result.TOP }"style="width: 20%;"></td>
 	    </tr>
 	    <tr>
 	      <th>하의</th>
-	      <td><input type="text" name="bottom" id="bottom" style="width: 20%;" ></td>
+	      <td><input type="text" name="bottom" id="bottom" value="${result.BOTTOM }"style="width: 20%;" ></td>
 	    </tr>
   </table>
   </div>
@@ -135,7 +140,7 @@
 </form>
 </main>
 
-<!-- 패스워드 중복 체크 -->
+<!-- 
 <script>
     function pwCheck() {
         var pw1 = document.getElementById("password").value;
@@ -152,7 +157,8 @@
         }
     }
 </script>
-<!-- 닉네임 중복확인 -->
+-->
+
 <script>
     const btnNicknameCheckEl = document.querySelector('#btnNickNameCheck');
     var submitBtnEl = document.querySelector('#submitBtn');
@@ -182,7 +188,7 @@
     // 초기에는 제출 버튼을 비활성화
     submitBtnEl.disabled = true;
 
-    // 아이디 입력 필드가 변경될 때마다 제출 버튼 비활성화
+    // 닉네임 입력 필드가 변경될 때마다 제출 버튼 비활성화
     NicknameInputEl.oninput = function() {
         submitBtnEl.disabled = true;
         output2El.innerHTML = '';

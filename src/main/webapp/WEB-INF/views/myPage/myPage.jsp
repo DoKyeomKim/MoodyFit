@@ -20,7 +20,7 @@ main{
 		<hr>
 	<%@include file="/WEB-INF/layouts/aside.jsp"%>
 
-	<main style="margin-top:30px;">
+	<main style="margin-top:70px;">
 		<div class="hello-users" style="margin-left:30px;">
 			<h5>${person.nickName} 님 반갑습니다.</h5>
 		</div>

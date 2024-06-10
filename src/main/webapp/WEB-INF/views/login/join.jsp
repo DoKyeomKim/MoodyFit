@@ -109,7 +109,7 @@
 	    </tr>
 	    <tr>
 	      <th>키</th>
-	      <td><input type="password" name="height" id="height" style="width: 20%;" placeholder="숫자만 입력해주세요">&nbsp;cm</td>
+	      <td><input type="text" name="height" id="height" style="width: 20%;" placeholder="숫자만 입력해주세요">&nbsp;cm</td>
 	    </tr>
 	    <tr>
 	      <th>체중</th>

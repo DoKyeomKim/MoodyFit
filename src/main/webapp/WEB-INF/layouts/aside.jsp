@@ -11,6 +11,7 @@
 	width: 200px;
 	height: auto;
 	border: 1px solid gray;
+	margin-top :60px;
 }
 #sidebar nav ul {
     list-style: none;
