@@ -40,8 +40,9 @@ public class SecurityConfig {
 		http.authorizeHttpRequests((auth) -> auth
 				.requestMatchers("/", "/search","/totalJoin","/login","/idCheck","/nickNameCheck","/loginProcess", "/storeJoin","/storeJoinProcess","/join", "/joinProcess","/error","/loginFail").permitAll()
 				.requestMatchers("/admin").hasRole("ADMIN")
-				.requestMatchers("/myPage","/personUpdateForm","/personUpdate").hasAnyRole("ADMIN", "PERSON")
-				.requestMatchers("/storeMyPage").hasAnyRole("ADMIN", "STORE")
+				.requestMatchers("/myPage","/personUpdateForm","/personUpdate").hasAnyRole("ADMIN","PERSON")
+				.requestMatchers("/storeMyPage","/storeUpdateForm").hasAnyRole("ADMIN","STORE")
+				.requestMatchers("/accountDeleteForm").hasAnyRole("PERSON","STORE")
 				.anyRequest().authenticated()
 				);
 

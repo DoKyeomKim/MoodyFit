@@ -110,5 +110,10 @@ public class MyPageService {
 		myPageMapper.storeUpdate(store);
         
 	}
+	
+	//회원탈퇴
+	public void userDelete(Long userIdx) {
+		
+	}
 
 }

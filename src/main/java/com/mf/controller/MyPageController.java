@@ -123,4 +123,29 @@ public class MyPageController {
 		return mv;
 	}
 	
+	
+	//==========================공통============================================
+		// 회원탈퇴 폼으로 이동
+		@GetMapping("/accountDeleteForm")
+		public ModelAndView accountDeleteForm() {
+			ModelAndView mv = new ModelAndView();		
+			
+			mv.setViewName("myPage/accountDelete");
+			return mv;
+		}
+		// 회원탈퇴
+		@PostMapping("/accountDelete")
+		public ModelAndView accountDelete(HttpSession session) {
+			ModelAndView mv = new ModelAndView();		
+			Long userIdx = (Long) session.getAttribute("userIdx");
+
+			myPageService.userDelete(userIdx);
+			
+			mv.setViewName("redirect:/");
+			return mv;
+		}
+	//===========================================================================
+		
+		
+		
 }

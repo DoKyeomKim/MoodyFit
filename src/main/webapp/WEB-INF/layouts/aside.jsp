@@ -35,7 +35,7 @@
 				<li><a href="#">배송지 관리</a></li>
 				<li><a href="#">관심상품</a></li>
 				<li><a href="#">장바구니</a></li>
-				<li><a href="#">회원탈퇴</a></li>
+				<li><a href="/accountDeleteForm">회원탈퇴</a></li>
 			</ul>
 		</nav>
 	</aside>
