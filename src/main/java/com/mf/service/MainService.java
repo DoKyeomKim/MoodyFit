@@ -1,6 +1,7 @@
 package com.mf.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,14 @@ public class MainService {
 	public List<CategoryDto> getCategory() {
 		return mainMapper.getCategory();
 	}
+
+	/*
+	 * public List<Map<String, Object>> getPostingAll() {
+	 * 
+	 * List<Map<String, Object>> result = mainMapper.getPostingAll();
+	 * 
+	 * return result; }
+	 */
 
 
 }

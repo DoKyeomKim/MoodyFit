@@ -4,4 +4,5 @@
 <select id="getCategory" parameterType="com.mf.dto.CategoryDto">
 select * from category
 </select>
+
 </mapper>
