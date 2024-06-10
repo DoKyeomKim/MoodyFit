@@ -40,6 +40,14 @@ public class MyPageController {
 		return mv;
 	}
 	
+	// 유저 수정페이지
+	@GetMapping("/personUpdateForm")
+	public ModelAndView personUpdateForm(HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("myPage/personUpdate");
+		return mv;
+	}
 	
 //===========================================================================
 //================================ 가맹점 ===================================
@@ -60,6 +68,15 @@ public class MyPageController {
 		
 		mv.addObject("store", store);
 		mv.setViewName("myPage/storeMyPage");
+		return mv;
+	}
+	
+	// 가맹점 수정페이지
+	@GetMapping("/storeUpdateForm")
+	public ModelAndView storeUpdateForm(HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("myPage/storeUpdate");
 		return mv;
 	}
 	

@@ -15,6 +15,7 @@ public class MyPageService {
 	@Autowired
 	private MyPageMapper myPageMapper;
 
+	// 개인 마이페이지 서비스 로직
 	public Map<String, Object> getPersonMyPage(Long userIdx) {
 		// 닉네임과 personIdx 갖고오기
 		PersonDto person = myPageMapper.getNickNameByUserIdx(userIdx);
@@ -26,6 +27,9 @@ public class MyPageService {
 		return result;
 	}
 
+//===========================================================================================
+	
+	// 가맹점 마이페이지 서비스 로직
 	public Map<String, Object> getShopMyPage(Long userIdx) {
 		// 상호명과 storeIdx 갖고오기
 		StoreDto store = myPageMapper.getStoreNameByUserIdx(userIdx);

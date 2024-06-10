@@ -40,7 +40,7 @@ public class SecurityConfig {
 		http.authorizeHttpRequests((auth) -> auth
 				.requestMatchers("/", "/search","/totalJoin","/login","/idCheck","/nickNameCheck","/loginProcess", "/storeJoin","/storeJoinProcess","/join", "/joinProcess","/error","/loginFail").permitAll()
 				.requestMatchers("/admin").hasRole("ADMIN")
-				.requestMatchers("/myPage").hasAnyRole("ADMIN", "PERSON")
+				.requestMatchers("/myPage","/personUpdateForm").hasAnyRole("ADMIN", "PERSON")
 				.requestMatchers("/storeMyPage").hasAnyRole("ADMIN", "STORE")
 				.anyRequest().authenticated()
 				);
