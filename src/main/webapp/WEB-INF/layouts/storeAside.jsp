@@ -29,7 +29,7 @@
 	<aside id="sidebar">
 		<nav>
 			<ul>
-				<li><a href="#">정보 수정</a></li>
+				<li><a href="/storeUpdateForm">정보 수정</a></li>
 				<li><a href="#">공고 관리</a></li>
 				<li><a href="#">물품 관리</a></li>
 				<li><a href="#">주문 내역</a></li>

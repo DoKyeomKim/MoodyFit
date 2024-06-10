@@ -195,7 +195,7 @@ CREATE TABLE posting_answer (
 CREATE TABLE cart (  
     cart_idx NUMBER PRIMARY KEY,                 -- 장바구니 고유번호
     cart_quantity NUMBER,                        -- 제품 수량
-    product_info_idx NUMBER,                     -- 제품 정보 고유번호
+    postingIdx  NUMBER,                     -- 제품 정보 고유번호
     FOREIGN KEY (product_info_idx) REFERENCES product_info(product_info_idx),
     person_idx NUMBER,                           -- 장바구니의 주인 고유번호
     FOREIGN KEY (person_idx) REFERENCES person(person_idx)

@@ -96,14 +96,31 @@ public class MyPageController {
 		return mv;
 	}
 	
-	// 가맹점 수정페이지
+	// 가맹점 정보 수정페이지
 	@GetMapping("/storeUpdateForm")
 	public ModelAndView storeUpdateForm(HttpSession session) {
 		ModelAndView mv = new ModelAndView();
-		
+		// 세션의 userIdx 갖고오기
+		Long userIdx = (Long) session.getAttribute("userIdx");
+
+		Map<String, Object> result = myPageService.getStoreInfo(userIdx);		
+
+		mv.addObject("result", result);
 		mv.setViewName("myPage/storeUpdate");
 		return mv;
 	}
 	
+	// 가맹점 정보 수정
+	@PostMapping("/storeUpdate")
+	public ModelAndView storeUpdate( HttpSession session,UsersDto users,StoreDto store) {
+		ModelAndView mv = new ModelAndView();
+		// 세션의 userIdx 갖고오기
+		Long userIdx = (Long) session.getAttribute("userIdx");
+		
+		myPageService.storeUpdate(userIdx,users,store);
+		
+		mv.setViewName("redirect:/storeMyPage");
+		return mv;
+	}
 	
 }
