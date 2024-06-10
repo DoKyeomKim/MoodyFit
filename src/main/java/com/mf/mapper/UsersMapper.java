@@ -27,6 +27,9 @@ public interface UsersMapper {
 	void storeJoinProcess(UsersDto usersDto);
 	void storeJoinDetailProcess(StoreDto storeDto);
 
+	// 상호명 중복체크
+	String getStoreName(String storeName);
+
 
 
 

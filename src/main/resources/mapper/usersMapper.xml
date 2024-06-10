@@ -12,6 +12,9 @@ SELECT ID FROM USERS WHERE ID = #{id}
 <select id="getNickName">
 SELECT NICK_NAME FROM PERSON WHERE nick_name = #{nickName}
 </select>
+<select id="getStoreName">
+SELECT STORE_NAME FROM STORE WHERE STORE_NAME = #{storeName}
+</select>
 
 <insert id="joinProcess">
 	INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
