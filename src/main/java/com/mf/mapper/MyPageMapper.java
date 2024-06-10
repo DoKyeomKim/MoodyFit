@@ -42,6 +42,11 @@ public interface MyPageMapper {
 	// 가맹점 회원 store 수정
 	void storeUpdate(StoreDto store);
 	
+	
+	//======================== 공통 ========================
+	// 회원 탈퇴
+	void userDelete(Long userIdx);
+	
 
 
 

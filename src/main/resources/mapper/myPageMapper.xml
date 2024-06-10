@@ -113,4 +113,11 @@ BOTTOM = #{bottom}
 WHERE PERSON_SPEC_IDX =#{personSpecIdx}
 </update>
 
+<update id="userDelete">
+UPDATE USERS
+SET
+STATE = 2
+WHERE USER_IDX = #{userIdx}
+</update>
+
 </mapper>

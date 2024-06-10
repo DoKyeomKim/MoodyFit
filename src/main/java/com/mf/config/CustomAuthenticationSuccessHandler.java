@@ -20,7 +20,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        
+        String id = userDetails.getUsername();
         Long userIdx = userDetails.getUserIdx();
         Collection<? extends GrantedAuthority> authorities  = userDetails.getAuthorities();
         
@@ -29,7 +29,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         for (GrantedAuthority authority : authorities) {
             session.setAttribute("role", authority.getAuthority());
         }
-
+        session.setAttribute("id", id);
+        
         response.sendRedirect("/");
     }
 }

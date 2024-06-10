@@ -130,6 +130,7 @@ public class MyPageController {
 		public ModelAndView accountDeleteForm() {
 			ModelAndView mv = new ModelAndView();		
 			
+			
 			mv.setViewName("myPage/accountDelete");
 			return mv;
 		}
@@ -141,7 +142,7 @@ public class MyPageController {
 
 			myPageService.userDelete(userIdx);
 			
-			mv.setViewName("redirect:/");
+			mv.setViewName("redirect:/logout");
 			return mv;
 		}
 	//===========================================================================

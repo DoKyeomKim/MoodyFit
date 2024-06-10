@@ -113,7 +113,12 @@ public class MyPageService {
 	
 	//회원탈퇴
 	public void userDelete(Long userIdx) {
+		myPageMapper.userDelete(userIdx);
 		
+		// 나중에 if문 추가해서 가맹점회원 공고 내리기까지 추가
+		// 개인회원은 장바구니 삭제 정도?
+		// 주문(orders) 관련해서는 유지해야할듯
 	}
+
 
 }
