@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mf.dto.CategoryDto;
+import com.mf.dto.PersonDto;
 import com.mf.service.CustomUserDetails;
 import com.mf.service.MainService;
 
@@ -30,7 +31,7 @@ public class MainController {
 
 		// 시큐리티 로그인하면서 세션에 저장되게 한 userIdx 갖고오기
 		Long userIdx = (Long) session.getAttribute("userIdx");
-
+		
 		mv.setViewName("/main");
 		return mv;
 	}
@@ -52,12 +53,5 @@ public class MainController {
 		return mv;
 	}
 
-	@GetMapping("/myPage")
-	public ModelAndView getMethodName() {
-		ModelAndView mv = new ModelAndView();
-
-		mv.setViewName("/myPage");
-		return mv;
-	}
 
 }

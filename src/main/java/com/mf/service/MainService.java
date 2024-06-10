@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mf.dto.CategoryDto;
+import com.mf.dto.PersonDto;
 import com.mf.mapper.MainMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,6 @@ public class MainService {
 	public List<CategoryDto> getCategory() {
 		return mainMapper.getCategory();
 	}
-
 
 
 }
