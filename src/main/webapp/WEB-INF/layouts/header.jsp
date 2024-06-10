@@ -86,8 +86,8 @@
 		            <div style="margin-right:20px;"><a href="/myPage">마이페이지</a></div>
 		            <a href="<c:url value='/logout' />">로그아웃</a>
 		        </c:when> 
-		        <c:when test="${sessionScope.role == 'ROLE_SHOP'}">
-		            <div style="margin-right:20px;"><a href="/shopMyPage">마이페이지</a></div>
+		        <c:when test="${sessionScope.role == 'ROLE_STORE'}">
+		            <div style="margin-right:20px;"><a href="/storeMyPage">마이페이지</a></div>
 		            <a href="<c:url value='/logout' />">로그아웃</a>
 		        </c:when>
 		    </c:choose>

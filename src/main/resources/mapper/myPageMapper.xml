@@ -6,4 +6,9 @@ SELECT PERSON_IDX, NICK_NAME
 FROM PERSON
 WHERE USER_IDX = #{userIdx}
 </select>
+<select id="getStoreNameByUserIdx">
+SELECT STORE_IDX, STORE_NAME
+FROM STORE
+WHERE USER_IDX = #{userIdx}
+</select>
 </mapper>

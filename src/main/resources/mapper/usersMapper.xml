@@ -45,7 +45,7 @@ PERSON_SEQ.NEXTVAL,
 
 <insert id="storeJoinProcess">
 	INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
-	VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_SHOP')
+	VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_STORE')
 </insert>
 
 <insert id="storeJoinDetailProcess">

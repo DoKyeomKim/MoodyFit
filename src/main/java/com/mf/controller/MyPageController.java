@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mf.dto.PersonDto;
+import com.mf.dto.StoreDto;
 import com.mf.service.MyPageService;
 
 import jakarta.servlet.http.HttpSession;
@@ -36,7 +37,22 @@ public class MyPageController {
 		return mv;
 	}
 	
-	
+	@GetMapping("/storeMyPage")
+	public ModelAndView storeMyPage(HttpSession session) {
+		ModelAndView mv = new ModelAndView();		
+		// 세션의 userIdx 갖고오기		
+		Long userIdx = (Long) session.getAttribute("userIdx");
+		
+		// 마이페이지 로직처리
+		Map<String, Object> result = myPageService.getShopMyPage(userIdx);
+		
+		// 서비스에서 넘어온 store안에 들어가 있는 store_idx와 store_name 꺼내기
+		StoreDto store=(StoreDto) result.get("store");
+		
+		mv.addObject("store", store);
+		mv.setViewName("/storeMyPage");
+		return mv;
+	}
 	
 	
 }
