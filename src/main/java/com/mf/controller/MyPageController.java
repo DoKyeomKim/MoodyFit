@@ -17,7 +17,10 @@ import jakarta.servlet.http.HttpSession;
 public class MyPageController {
 	@Autowired
 	private MyPageService myPageService;
-	
+
+//===========================================================================
+//================================ 개인 =====================================
+//===========================================================================
 	
 	// 개인 마이페이지 메인
 	@GetMapping("/myPage")
@@ -33,10 +36,15 @@ public class MyPageController {
 		
 		
 		mv.addObject("person",person);
-		mv.setViewName("/myPage");
+		mv.setViewName("myPage/myPage");
 		return mv;
 	}
 	
+	
+//===========================================================================
+//================================ 가맹점 ===================================
+//===========================================================================
+
 	// 가맹점 마이페이지 메인
 	@GetMapping("/storeMyPage")
 	public ModelAndView storeMyPage(HttpSession session) {
@@ -51,7 +59,7 @@ public class MyPageController {
 		StoreDto store = (StoreDto) result.get("store");
 		
 		mv.addObject("store", store);
-		mv.setViewName("/storeMyPage");
+		mv.setViewName("myPage/storeMyPage");
 		return mv;
 	}
 	
