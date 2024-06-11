@@ -56,13 +56,6 @@ public class MyPageController {
 		// 마이페이지 로직처리
 		Map<String, Object> result = myPageService.getPersonInfo(userIdx);		
 		
-		System.out.println(result);
-		System.out.println(result);
-		System.out.println(result);
-		System.out.println(result);
-		System.out.println(result);
-		System.out.println(result);
-		
 		mv.addObject("result", result);
 		mv.setViewName("myPage/personUpdate");
 		return mv;

@@ -48,6 +48,7 @@
 	<input type="hidden" value="${result.PERSON_IDX }" name="personIdx">
 	<input type="hidden" value="${result.PERSON_SPEC_IDX }" name="personSpecIdx">
   <table>
+  	<c:if test="${result.SOCIAL=='NO'}">
 	    <tr>
 	      <th>아이디</th>
 	      <td>${result.ID }</td>
@@ -62,6 +63,7 @@
 	      <span id="pwConfirm" style="display: block;"></span>
 	      </td>
 	    </tr>
+	</c:if>
 	    <tr>
 	      <th>이름</th>
 	      <td><input type="text" name="name" id="name" value="${result.NAME }"style="width: 30%;" placeholder="이름을 입력해주세요"></td>

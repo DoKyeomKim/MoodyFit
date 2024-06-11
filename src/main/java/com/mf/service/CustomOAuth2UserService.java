@@ -35,7 +35,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
 	        OAuth2User oAuth2User = super.loadUser(userRequest);
-	        System.out.println(oAuth2User.getAttributes());
 
 	        String registrationId = userRequest.getClientRegistration().getRegistrationId();
 	        OAuth2Response oAuth2Response = null;
@@ -68,7 +67,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	        // person에 들어갈 phone
 	        String phone = oAuth2Response.getMobile();
 	        // person에 들어갈 social
-	        String social = "yes";
+	        String social = "YES";
 	        // 중복 방지용 확인
 	        UsersDto existPerson = usersMapper.getIdByEmail(email);
 	        
@@ -95,13 +94,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	        session.setAttribute("id", user_id);
 	        session.setAttribute("userIdx", userIdx);
 	        session.setAttribute("role", user_role);
-	        
-	        
-	        System.out.println(user_id);
-	        System.out.println(user_id);
-	        System.out.println(user_id);
-	        System.out.println(user_id);
-	        System.out.println(user_id);
 	        
 	        return new CustomOAuth2User(oAuth2Response, role);
 	    }

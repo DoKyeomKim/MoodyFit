@@ -60,7 +60,8 @@ EMAIL,
 PHONE,
 POST_CODE,
 ADDRESS,
-DETAIL_ADDRESS
+DETAIL_ADDRESS,
+SOCIAL
 )
 VALUES(
 USER_SEQ.CURRVAL,
@@ -71,7 +72,8 @@ PERSON_SEQ.NEXTVAL,
 #{phone},
 #{postCode},
 #{address},
-#{detailAddress}
+#{detailAddress},
+'NO'
 )
 </insert>
 <insert id="OAuthSpecJoin">

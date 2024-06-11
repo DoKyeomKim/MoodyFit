@@ -26,6 +26,7 @@ SELECT
     p.POST_CODE,
     p.ADDRESS,
     p.DETAIL_ADDRESS,
+    p.SOCIAL,
     PS.PERSON_SPEC_IDX,
     ps.GENDER,
     ps.HEIGHT,
