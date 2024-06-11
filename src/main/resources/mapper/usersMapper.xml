@@ -6,6 +6,35 @@
 	SELECT * FROM USERS WHERE ID = #{id} and state=1
 </select>
 
+<select id="getIdByEmail">
+SELECT * FROM USERS WHERE ID = #{email}
+</select>
+
+<insert id="OAuthJoin">
+INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
+VALUES (USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_PERSON')
+</insert>
+<insert id="OAuthPersonJoin">
+INSERT INTO PERSON(
+USER_IDX,
+PERSON_IDX,
+NAME,
+NICK_NAME,
+EMAIL,
+PHONE,
+social
+)
+VALUES(
+USER_SEQ.CURRVAL,
+PERSON_SEQ.NEXTVAL,
+#{name},
+#{nickName},
+#{email},
+#{phone},
+#{social}
+)
+</insert>
+
 <select id="getId">
 SELECT ID FROM USERS WHERE ID = #{id}
 </select>
@@ -18,7 +47,7 @@ SELECT STORE_NAME FROM STORE WHERE STORE_NAME = #{storeName}
 
 <insert id="joinProcess">
 	INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
-	VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_PERSON')
+	VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,#{role})
 </insert>
 
 <insert id="joinDetailProcess">
@@ -43,6 +72,16 @@ PERSON_SEQ.NEXTVAL,
 #{postCode},
 #{address},
 #{detailAddress}
+)
+</insert>
+<insert id="OAuthSpecJoin">
+INSERT INTO PERSON_SPEC(
+PERSON_SPEC_IDX,
+PERSON_IDX
+)
+VALUES(
+PERSON_SPEC_SEQ.NEXTVAL,
+PERSON_SEQ.CURRVAL
 )
 </insert>
 

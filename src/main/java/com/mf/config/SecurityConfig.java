@@ -10,6 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 
+import com.mf.service.CustomOAuth2UserService;
 import com.mf.service.CustomUserDetailsService;
 
 @Configuration
@@ -25,6 +26,16 @@ public class SecurityConfig {
 	@Autowired
 	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 	
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+
+        this.customOAuth2UserService = customOAuth2UserService;
+    }
+
+
+
+	
 	@Bean
 	public WebSecurityCustomizer configure() {
 		return (web) -> web.ignoring().requestMatchers("/css/**").requestMatchers("/js/**")
@@ -38,7 +49,7 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/", "/search","/totalJoin","/login","/idCheck","/storeNameCheck","/nickNameCheck","/loginProcess", "/storeJoin","/storeJoinProcess","/join", "/joinProcess","/error","/loginFail").permitAll()
+				.requestMatchers("/", "/oauth2/**", "/search","/totalJoin","/login","/idCheck","/storeNameCheck","/nickNameCheck","/loginProcess", "/storeJoin","/storeJoinProcess","/join", "/joinProcess","/error","/loginFail").permitAll()
 				.requestMatchers("/admin").hasRole("ADMIN")
 				.requestMatchers("/myPage","/personUpdateForm","/personUpdate").hasAnyRole("ADMIN","PERSON")
 				.requestMatchers("/storeMyPage","/storeUpdateForm").hasAnyRole("ADMIN","STORE")
@@ -54,7 +65,11 @@ public class SecurityConfig {
 				.failureHandler(customFailureHandler)
 				);
 		
-		
+        http
+        .oauth2Login((oauth2) -> oauth2
+        		.loginPage("/oauth2/authorization/naver")
+                .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig.userService(customOAuth2UserService))
+        		);
 		
 		http.logout((logout)->logout
 				.logoutUrl("/logout")

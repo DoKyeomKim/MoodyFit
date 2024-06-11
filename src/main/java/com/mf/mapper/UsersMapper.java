@@ -30,6 +30,20 @@ public interface UsersMapper {
 	// 상호명 중복체크
 	String getStoreName(String storeName);
 
+	
+	// OAuth 확인용 email
+	UsersDto getIdByEmail(String email);
+
+	// OAuth users 저장
+	void OAuthJoin(UsersDto users);
+	// OAuth person 저장
+	void OAuthPersonJoin(PersonDto person);
+	// OAuth person_spec 저장
+	void OAuthSpecJoin();
+
+
+
+
 
 
 

@@ -52,10 +52,17 @@ public class MyPageController {
 		// 세션의 userIdx 갖고오기
 		Long userIdx = (Long) session.getAttribute("userIdx");
 		
+
 		// 마이페이지 로직처리
 		Map<String, Object> result = myPageService.getPersonInfo(userIdx);		
 		
-
+		System.out.println(result);
+		System.out.println(result);
+		System.out.println(result);
+		System.out.println(result);
+		System.out.println(result);
+		System.out.println(result);
+		
 		mv.addObject("result", result);
 		mv.setViewName("myPage/personUpdate");
 		return mv;
@@ -102,7 +109,7 @@ public class MyPageController {
 		ModelAndView mv = new ModelAndView();
 		// 세션의 userIdx 갖고오기
 		Long userIdx = (Long) session.getAttribute("userIdx");
-
+		// 수정페이지 로직처리
 		Map<String, Object> result = myPageService.getStoreInfo(userIdx);		
 
 		mv.addObject("result", result);
@@ -116,7 +123,7 @@ public class MyPageController {
 		ModelAndView mv = new ModelAndView();
 		// 세션의 userIdx 갖고오기
 		Long userIdx = (Long) session.getAttribute("userIdx");
-		
+		// 정보 수정 로직처리
 		myPageService.storeUpdate(userIdx,users,store);
 		
 		mv.setViewName("redirect:/storeMyPage");
@@ -130,7 +137,6 @@ public class MyPageController {
 		public ModelAndView accountDeleteForm() {
 			ModelAndView mv = new ModelAndView();		
 			
-			
 			mv.setViewName("myPage/accountDelete");
 			return mv;
 		}
@@ -139,7 +145,7 @@ public class MyPageController {
 		public ModelAndView accountDelete(HttpSession session) {
 			ModelAndView mv = new ModelAndView();		
 			Long userIdx = (Long) session.getAttribute("userIdx");
-
+			// 회원탈퇴(state상태 변경) 로직처리
 			myPageService.userDelete(userIdx);
 			
 			mv.setViewName("redirect:/logout");
