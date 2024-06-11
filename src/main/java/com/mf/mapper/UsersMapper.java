@@ -32,7 +32,8 @@ public interface UsersMapper {
 
 	
 	// OAuth 확인용 email
-	UsersDto getIdByEmail(String email);
+	UsersDto getUserById(String id);
+
 
 	// OAuth users 저장
 	void OAuthJoin(UsersDto users);
@@ -41,7 +42,12 @@ public interface UsersMapper {
 	// OAuth person_spec 저장
 	void OAuthSpecJoin();
 
-	UsersDto getIdByEmailAndState(String email);
+	// OAuth 회원탈퇴 후 정보 겹치는거 방지
+	UsersDto getUserByIdAndState(String id);
+
+
+
+
 
 
 

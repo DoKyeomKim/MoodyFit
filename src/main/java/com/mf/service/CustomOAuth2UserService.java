@@ -74,17 +74,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	        // person에 들어갈 social_root	        
 	        String socialRoot = registrationId;
 	      
-	        UsersDto statePerson = usersMapper.getIdByEmailAndState(email);
+	        UsersDto statePerson = usersMapper.getUserByIdAndState(id);
 	        if(statePerson != null) {
 	        	
 	            throw new OAuth2LoginFailException("회원 정보가 존재함");
 	        }
 	        
 	        // 중복 방지용 확인
-	        UsersDto existPerson = usersMapper.getIdByEmail(email);
+	        UsersDto existPerson = usersMapper.getUserById(id);
 	        if(existPerson==null) {
 	        	UsersDto users = new UsersDto();
-	        	users.setId(email);
+	        	users.setId(id);
 	        	users.setPw(pw);
 	        	PersonDto person = new PersonDto();
 	        	person.setName(name);
@@ -99,12 +99,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	        	}
 	        
 	        
-	        UsersDto nowPerson = usersMapper.getIdByEmail(email);
+	        UsersDto nowPerson = usersMapper.getUserById(id);
 	        
 	        String user_role = nowPerson.getRole();	        
-	        String user_id = nowPerson.getId();
 	        Long userIdx = nowPerson.getUserIdx();
-	        session.setAttribute("id", user_id);
 	        session.setAttribute("userIdx", userIdx);
 	        session.setAttribute("role", user_role);
 	        

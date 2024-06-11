@@ -6,11 +6,11 @@
 	SELECT * FROM USERS WHERE ID = #{id} and state=1
 </select>
 
-<select id="getIdByEmail">
-SELECT * FROM USERS WHERE ID = #{email}
+<select id="getUserById">
+SELECT * FROM USERS WHERE ID = #{id}
 </select>
-<select id="getIdByEmailAndState">
-SELECT * FROM USERS WHERE ID = #{email} and state!=1
+<select id="getUserByIdAndState">
+SELECT * FROM USERS WHERE ID = #{id} and state!=1
 </select>
 
 <insert id="OAuthJoin">
