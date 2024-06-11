@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mf.config.OAuth2LoginFailException;
 import com.mf.dto.CustomOAuth2User;
 import com.mf.dto.NaverResponse;
 import com.mf.dto.OAuth2Response;
@@ -41,7 +42,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	        if (registrationId.equals("naver")) {
 
 	            oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
-	            
+
 	        }
 	        else if (registrationId.equals("google")) {
 
@@ -51,6 +52,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	            return null;
 	        }
+	        
+	        
 	        
 	        // users에 들어갈 id
 	        String id = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
@@ -68,9 +71,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	        String phone = oAuth2Response.getMobile();
 	        // person에 들어갈 social
 	        String social = "YES";
+	        // person에 들어갈 social_root	        
+	        String socialRoot = registrationId;
+	      
+	        UsersDto statePerson = usersMapper.getIdByEmailAndState(email);
+	        if(statePerson != null) {
+	        	
+	            throw new OAuth2LoginFailException("회원 정보가 존재함");
+	        }
+	        
 	        // 중복 방지용 확인
 	        UsersDto existPerson = usersMapper.getIdByEmail(email);
-	        
 	        if(existPerson==null) {
 	        	UsersDto users = new UsersDto();
 	        	users.setId(email);
@@ -81,10 +92,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	        	person.setEmail(email);
 	        	person.setPhone(phone);
 	        	person.setSocial(social);
+	        	person.setSocialRoot(socialRoot);
 	        	usersMapper.OAuthJoin(users);
 	        	usersMapper.OAuthPersonJoin(person);
 	        	usersMapper.OAuthSpecJoin();
-	        }
+	        	}
+	        
 	        
 	        UsersDto nowPerson = usersMapper.getIdByEmail(email);
 	        

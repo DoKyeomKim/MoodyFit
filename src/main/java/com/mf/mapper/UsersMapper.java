@@ -41,6 +41,10 @@ public interface UsersMapper {
 	// OAuth person_spec 저장
 	void OAuthSpecJoin();
 
+	UsersDto getIdByEmailAndState(String email);
+
+
+
 
 
 

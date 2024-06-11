@@ -9,6 +9,9 @@
 <select id="getIdByEmail">
 SELECT * FROM USERS WHERE ID = #{email}
 </select>
+<select id="getIdByEmailAndState">
+SELECT * FROM USERS WHERE ID = #{email} and state!=1
+</select>
 
 <insert id="OAuthJoin">
 INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
@@ -22,7 +25,8 @@ NAME,
 NICK_NAME,
 EMAIL,
 PHONE,
-social
+SOCIAL,
+SOCIAL_ROOT
 )
 VALUES(
 USER_SEQ.CURRVAL,
@@ -31,7 +35,8 @@ PERSON_SEQ.NEXTVAL,
 #{nickName},
 #{email},
 #{phone},
-#{social}
+#{social},
+#{socialRoot}
 )
 </insert>
 
@@ -79,10 +84,12 @@ PERSON_SEQ.NEXTVAL,
 <insert id="OAuthSpecJoin">
 INSERT INTO PERSON_SPEC(
 PERSON_SPEC_IDX,
+gender,
 PERSON_IDX
 )
 VALUES(
 PERSON_SPEC_SEQ.NEXTVAL,
+'1',
 PERSON_SEQ.CURRVAL
 )
 </insert>

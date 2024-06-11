@@ -101,7 +101,8 @@ html, body {
             </div>
         </div>
                 <hr style="width: 80%;">
-			<a href="/oauth2/authorization/naver">네이버로그인</a>
+                <div style="margin-bottom : 20px;">소셜 로그인</div>
+			<a href="/oauth2/authorization/naver"><img src="/images/naver.png" style="height:50px; width:50px;"></a>
         
 
     </div>

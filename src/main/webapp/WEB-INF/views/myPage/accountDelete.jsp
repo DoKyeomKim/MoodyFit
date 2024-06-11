@@ -24,14 +24,14 @@
 
 		<div class="delete-btn mt-5" style="text-align: center;">
 			<form id="deleteForm" action="/accountDelete" method="post">
-				<button type="button" class="btn btn-outline-danger"
+				<button type="submit" class="btn btn-outline-danger"
 					onclick="confirmDelete()">회원탈퇴</button>
 			</form>
 		</div>
 
 	</section>
 	<script src="/js/bootstrap.bundle.min.js"></script>
-<script>
+<!-- <script>
 	function confirmDelete() {
 	    const userInput = prompt("정말로 삭제하시겠습니까? 아이디를 입력해 주세요.");
 	    if (userInput === null) { // 사용자가 취소를 누른 경우
@@ -45,6 +45,6 @@
 	        alert("아이디가 일치하지 않습니다. 회원탈퇴가 취소되었습니다.");
 	    }
 	}
-</script> 
+</script>  -->
 </body>
 </html>
