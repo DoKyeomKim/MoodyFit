@@ -347,17 +347,18 @@ CREATE SEQUENCE sub_category_seq
 	START WITH 1
 	INCREMENT BY 1;
     
-    CREATE SEQUENCE product_color 
+    CREATE SEQUENCE product_color_seq
 	START WITH 1
 	INCREMENT BY 1;
     
-    CREATE SEQUENCE product_info 
+    CREATE SEQUENCE product_info_seq 
 	START WITH 1
 	INCREMENT BY 1;
     
     CREATE SEQUENCE product_quantity_seq 
 	START WITH 1
 	INCREMENT BY 1;
+    
     
     CREATE SEQUENCE product_file_seq
 	START WITH 1
@@ -422,6 +423,7 @@ CREATE SEQUENCE sub_category_seq
     CREATE SEQUENCE cs_answer_seq
 	START WITH 1
 	INCREMENT BY 1;
+	
 	
 ------------------------------------------
 임시 더미문(시퀀스 1부터 시작한다는걸 전제하에 만들음. store_idx는 2.)
