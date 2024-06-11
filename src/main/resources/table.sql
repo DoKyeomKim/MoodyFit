@@ -14,9 +14,9 @@ CREATE TABLE person (
     nick_name VARCHAR2(100) NOT NULL,       -- 닉네임
     email VARCHAR2(200) NOT NULL,           -- 이메일
     phone VARCHAR2(20) NOT NULL,            -- 전화번호
-    post_code VARCHAR2(20) NOT NULL,        -- 주소들
-    address VARCHAR2(300) NOT NULL,
-    detail_address VARCHAR2(300) NOT NULL,
+    post_code VARCHAR2(20),        -- 주소들
+    address VARCHAR2(300) ,
+    detail_address VARCHAR2(300),
     social VARCHAR2(10),                    -- 소셜여부
     social_root VARCHAR2(40),               -- 소셜 로그인한 기업(네이버,카카오 등)
     user_idx NUMBER,                        -- 유저 고유번호 외래키 설정
@@ -84,6 +84,9 @@ CREATE TABLE sub_category (
 -- 상품
 CREATE TABLE product (
     product_idx NUMBER PRIMARY KEY,          -- 제품번호
+    manufacture_name VARCHAR2(100) NOT NULL,     -- 제조사 ex) 나이키
+    name VARCHAR2(40) NOT NULL,                  -- 제품 이름
+    price NUMBER NOT NULL,                       -- 제품 가격
     sub_category_idx NUMBER,                 -- 옷 세부 분류
     FOREIGN KEY (sub_category_idx) REFERENCES sub_category(sub_category_idx),
     store_idx NUMBER,                        -- 해당 상품을 올린 가맹점 고유번호
@@ -105,9 +108,6 @@ CREATE TABLE product_color (
 -- 상품 상세 정보
 CREATE TABLE product_info (
     product_info_idx NUMBER PRIMARY KEY,         -- 제품 정보의 고유번호
-    manufacture_name VARCHAR2(100) NOT NULL,     -- 제조사 ex) 나이키
-    name VARCHAR2(40) NOT NULL,                  -- 제품 이름
-    price NUMBER NOT NULL,                       -- 제품 가격
     update_date DATE DEFAULT SYSDATE,            -- 제품 변경 시 변경시점 기록용
     product_color_idx NUMBER,                    -- 색상 번호
     FOREIGN KEY (product_color_idx) REFERENCES product_color(product_color_idx),
@@ -142,14 +142,7 @@ CREATE TABLE posting (
     title VARCHAR2(30) NOT NULL,                 -- 상품 판매글 제목
     content VARCHAR2(3000) NOT NULL,             -- 판매글 내용
     update_date DATE DEFAULT SYSDATE NOT NULL,   -- 등록일
-    state NUMBER NOT NULL                      -- 제품 등록 상태 (0: 등록 심사중, 1: 게시글 등록 완료 2: 게시글 삭제 3: 게시글 수정)
-);
-
--- 판매 공고 제품
-CREATE TABLE posting_product (
-    posting_product_idx NUMBER PRIMARY KEY,      -- 공고에 담을 제품 정보
-    posting_idx NUMBER,                          -- 해당하는 판매글 고유번호
-    FOREIGN KEY (posting_idx) REFERENCES posting(posting_idx),
+    state NUMBER NOT NULL,                       -- 제품 등록 상태 (0: 등록 심사중, 1: 게시글 등록 완료 2: 게시글 삭제 3: 게시글 수정)
     product_info_idx NUMBER,                     -- 갖고 올 해당 제품 정보
     FOREIGN KEY (product_info_idx) REFERENCES product_info(product_info_idx)
 );
@@ -201,48 +194,49 @@ CREATE TABLE posting_answer (
 -- 장바구니
 CREATE TABLE cart (  
     cart_idx NUMBER PRIMARY KEY,                 -- 장바구니 고유번호
-    cart_quantity NUMBER,                        -- 제품 수량
-    posting_idx NUMBER,                          -- 상품문의 고유번호
+    product_idx NUMBER,                    		 -- 제품 정보 고유번호
+    FOREIGN KEY (product_idx) REFERENCES product(product_idx),
+    posting_idx NUMBER,							 -- 상품글의 고유번호
     FOREIGN KEY (posting_idx) REFERENCES posting(posting_idx),
-    product_info_idx  NUMBER,                     -- 제품 정보 고유번호
-    FOREIGN KEY (product_info_idx) REFERENCES product_info(product_info_idx),
     person_idx NUMBER,                           -- 장바구니의 주인 고유번호
-    FOREIGN KEY (person_idx) REFERENCES person(person_idx)
+    FOREIGN KEY (person_idx) REFERENCES person(person_idx),
+    product_info_idx NUMBER,                           -- 제품 상세 고유번호
+    FOREIGN KEY (product_info_idx) REFERENCES product_info(product_info_idx)
+);
+
+-- 주문 상세 정보
+CREATE TABLE order_detail (
+    order_detail_idx NUMBER PRIMARY KEY,        -- 주문 상세 정보 고유번호
+    quantity NUMBER NOT NULL,                   -- 주문 수량
+    price    NUMBER NOT NULL,					-- 가격
+    cart_idx NUMBER,                            -- 장바구니 고유번호
+    FOREIGN KEY (cart_idx) REFERENCES cart(cart_idx)
 );
 
 -- 주문
 CREATE TABLE orders (
     order_idx NUMBER PRIMARY KEY,                -- 주문 고유번호
-    amount NUMBER NOT NULL,                      -- 주문 제품 수량
-    product_price NUMBER,                        -- 주문할 당시 제품 가격
+    amount NUMBER,                        		 -- 주문할 당시 제품 가격(결제내역의 가격이 amount라서 같게 설정함)
+    merchant_uid VARCHAR2(100),					 -- 주문번호(결제내역의 주문번호)
     delivery_price NUMBER,                       -- 배송비
     total_price NUMBER,                          -- 제품 가격+배송비
     order_date DATE DEFAULT SYSDATE,             -- 주문일자
+    imp_uid		VARCHAR2(100) UNIQUE,			 -- 결제시 결제내역 확인하는 번호
     person_idx NUMBER,                           -- 주문한 사람
     FOREIGN KEY (person_idx) REFERENCES person(person_idx),
     delivery_idx NUMBER,                         -- 배송지
-    FOREIGN KEY (delivery_idx) REFERENCES delivery(delivery_idx)
+    FOREIGN KEY (delivery_idx) REFERENCES delivery(delivery_idx),
+    order_detail_idx NUMBER,                         -- 주문상세 물품
+    FOREIGN KEY (order_detail_idx) REFERENCES order_detail(order_detail_idx)
 );
 
--- 주문 상세 정보
-CREATE TABLE order_detail (
-    order_detail_idx NUMBER PRIMARY KEY,         -- 주문 상세 정보 고유번호
-    amount NUMBER NOT NULL,                      -- 주문 수량
-    state NUMBER,                                -- 주문 상태
-    product_price NUMBER NOT NULL,               -- 제품 가격
-    product_idx NUMBER,                          -- 주문한 제품 고유번호
-    FOREIGN KEY (product_idx) REFERENCES product(product_idx),
-    order_idx NUMBER,                            -- 주문 고유번호
-    FOREIGN KEY (order_idx) REFERENCES orders(order_idx)
-);
-
--- 결제
+-- 결제 내역
 CREATE TABLE payment (
-    payment_idx NUMBER PRIMARY KEY,              -- 결제 고유번호
+    payment_idx NUMBER PRIMARY KEY,              -- 결제 내역 고유번호
+    pg VARCHAR2(20) NOT NULL,					 -- 결제 대행사 고유 코드
     pay_method NUMBER NOT NULL,                  -- 결제 수단(0: 카드, 1: 무통장입금, 2: 카카오페이 등)
-    state NUMBER,                                -- 결제 상태 (0: 결제 준비, 1: 결제 완료, 2: 결제 취소 등)
-    order_idx NUMBER,                            -- 주문 고유번호
-    FOREIGN KEY (order_idx) REFERENCES orders(order_idx)
+    imp_uid VARCHAR2(100),						 -- 결제 내역확인하는 고유 코드번호
+    FOREIGN KEY (imp_uid) REFERENCES orders(imp_uid)
 );
 
 -- 고객센터
