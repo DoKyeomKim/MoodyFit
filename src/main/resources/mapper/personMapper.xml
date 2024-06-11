@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.PersonMapper">
+    <select id="getAllPersons" parameterType="com.mf.dto.PersonDto">
+        SELECT PERSON_IDX,
+               NAME,
+               NICK_NAME,
+               PHONE,
+               EMAIL,
+               ADDRESS,
+               DETAIL_ADDRESS
+        FROM   PERSON
+        ORDER BY PERSON_IDX ASC
+               
+    </select>
+    
+   
+</mapper>

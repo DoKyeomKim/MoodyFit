@@ -15,5 +15,6 @@
 <%@include file="/WEB-INF/layouts/header.jsp"%>
 <h2><security:authentication property="name"/></h2>
 <script src="/js/bootstrap.bundle.min.js"></script>
+<%@include file="/WEB-INF/layouts/footer.jsp"%>
 </body>
 </html>

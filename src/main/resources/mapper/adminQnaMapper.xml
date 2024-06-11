@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.AdminQnaMapper">
+    <select id="getAllAdminQnas">
+SELECT 
+    CS_QUESTION.QUESTION_IDX,
+    CS_QUESTION.TITLE,
+    CS_QUESTION.CONTENT,
+    CS_QUESTION.CREATE_DATE,
+    CS_QUESTION.UPDATE_DATE,
+    CS_QUESTION.STATE,
+    USERS.ID
+FROM 
+    CS_QUESTION
+JOIN 
+    USERS ON CS_QUESTION.USER_IDX = USERS.USER_IDX
+    </select>
+    
+   
+</mapper>

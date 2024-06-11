@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryDto {
-	
+public class SubCategoryDto {
 	private Long categoryIdx;
 	private String korName;
 	private String engName;
+	private Long subCategoryIdx;
 	
 }

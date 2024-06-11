@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.FAQMapper">
+    <insert id="addFAQ" parameterType="com.mf.dto.CsFaqDto">
+        INSERT INTO CS_FAQ  (
+        FAQ_IDX,
+        title, 
+        content) 
+        VALUES (
+        cs_faq_seq.NEXTVAL,
+        #{title},
+         #{content})
+    </insert>
+    
+    
+     <select id="getAllFAQs" parameterType="com.mf.dto.CsFaqDto">
+        SELECT FAQ_IDX, title, content
+        FROM CS_FAQ
+        order by faq_idx asc
+    </select>
+    
+     <select id="getFaqById" parameterType="int" resultType="com.mf.dto.CsFaqDto">
+        SELECT * FROM CS_FAQ WHERE faqIdx = #{id}
+    </select>
+    
+     
+</mapper>

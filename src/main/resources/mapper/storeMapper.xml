@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.StoreMapper">
+    <select id="getAllStores" parameterType="com.mf.dto.StoreDto">
+        SELECT STORE_IDX,
+               STORE_NAME,
+               MANAGER_NAME,
+               BUSINESS_NUMBER,
+               EMAIL,
+               PHONE,
+               ADDRESS,
+               DETAIL_ADDRESS
+        FROM   STORE
+        ORDER BY STORE_IDX ASC
+               
+    </select>
+   
+</mapper>
