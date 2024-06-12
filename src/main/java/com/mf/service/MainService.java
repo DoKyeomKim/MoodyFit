@@ -22,13 +22,19 @@ public class MainService {
 		return mainMapper.getCategory();
 	}
 
-	/*
-	 * public List<Map<String, Object>> getPostingAll() {
-	 * 
-	 * List<Map<String, Object>> result = mainMapper.getPostingAll();
-	 * 
-	 * return result; }
-	 */
+	// 임시로 만든 전체 포스팅 관련 내용 갖고오기
+	public List<Map<String, Object>> getPostingAll() {
+			
+		List<Map<String, Object>> result = mainMapper.getPostingAll();
+		
+		return result;
+	}
+
+	// 임시로 만든 검색 결과
+	public List<Map<String, Object>> getSearchResult(String keyword) {
+		List<Map<String,Object>> result = mainMapper.getSearchResult(keyword);
+		return result;
+	}
 
 
 }

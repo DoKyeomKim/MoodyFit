@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mf.service.MainService;
@@ -28,18 +30,25 @@ public class MainController {
 		Long userIdx = (Long) session.getAttribute("userIdx");
 		
 		//임시로 만든 전체 공고 다 들고 오는 거
-		//List<Map<String,Object>> result = mainService.getPostingAll();
+		List<Map<String,Object>> result = mainService.getPostingAll();
 		
+		mv.addObject("result", result);
 		mv.setViewName("/main");
 		return mv;
 	}
 
 
+	// 검색
 	@GetMapping("/search")
-	public ModelAndView search() {
+	public ModelAndView search(@RequestParam("keyword") String keyword) {
 		ModelAndView mv = new ModelAndView();
-
-		mv.setViewName("/search");
+		
+		List<Map<String,Object>> result = mainService.getSearchResult(keyword);
+		
+		
+		mv.addObject("keyword", keyword);
+		mv.addObject("result", result);
+		mv.setViewName("/searchResult");
 		return mv;
 	}
 

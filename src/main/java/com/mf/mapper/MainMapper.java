@@ -12,8 +12,10 @@ import com.mf.dto.PersonDto;
 public interface MainMapper {
 
 	List<CategoryDto> getCategory();
-	/*
-	 * List<Map<String, Object>> getPostingAll();
-	 * 
-	 */
+
+	// 임시로 만든 전체 포스팅 내용 갖고오기
+	List<Map<String, Object>> getPostingAll();
+
+	// 검색결과
+	List<Map<String, Object>> getSearchResult(String keyword);
 }
