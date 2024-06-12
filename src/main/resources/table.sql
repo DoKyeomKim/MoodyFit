@@ -27,7 +27,7 @@ CREATE TABLE person (
 CREATE TABLE delivery (
     delivery_idx NUMBER PRIMARY KEY,        -- 배송지 정보의 고유번호
     name VARCHAR2(100) NOT NULL,            -- 배송 받는 사람의 이름
-    content varchar2(100) 					-- 배송 요청사항
+    content varchar2(100),					-- 배송 요청사항
     delivery_name VARCHAR2(100) NOT NULL,   -- 배송지 설정할 이름 ex) 집,회사 등등
     email VARCHAR2(100) NOT NULL,           -- 배송 받는 사람의 이메일
     phone VARCHAR2(20) NOT NULL,            -- 배송 받는 사람의 전화번호
@@ -195,7 +195,7 @@ CREATE TABLE posting_answer (
 -- 장바구니
 CREATE TABLE cart (  
     cart_idx NUMBER PRIMARY KEY,                 -- 장바구니 고유번호
-    state number varchar2(50) not null default '진행중', -- 장바구니 태
+    state varchar2(50) default '진행중' not null, -- 장바구니 태
     product_idx NUMBER,                    		 -- 제품 정보 고유번호
     FOREIGN KEY (product_idx) REFERENCES product(product_idx),
     posting_idx NUMBER,							 -- 상품글의 고유번호
@@ -208,11 +208,11 @@ CREATE TABLE cart (
 
 -- 주문 상세 정보
 CREATE TABLE order_detail (
-    order_detail_idx NUMBER PRIMARY KEY,        -- 주문 상세 정보 고유번호
-    state number varchar2(50) not null default '진행중', -- 주문 상태
-    quantity NUMBER NOT NULL,                   -- 주문 수량
-    price    NUMBER NOT NULL,					-- 가격
-    cart_idx NUMBER,                            -- 장바구니 고유번호
+    order_detail_idx NUMBER PRIMARY KEY,       -- 주문 상세 정보 고유번호
+    state VARCHAR2(50) DEFAULT '진행중' NOT NULL, -- 주문 상태
+    quantity NUMBER NOT NULL,                  -- 주문 수량
+    price NUMBER NOT NULL,                     -- 가격
+    cart_idx NUMBER,                           -- 장바구니 고유번호
     FOREIGN KEY (cart_idx) REFERENCES cart(cart_idx)
 );
 
@@ -224,7 +224,7 @@ CREATE TABLE orders (
     delivery_price NUMBER,                       -- 배송비
     total_price NUMBER,                          -- 제품 가격+배송비
     order_date DATE DEFAULT SYSDATE,             -- 주문일자
-    imp_uid		VARCHAR2(100) UNIQUE,			 -- 결제시 결제내역 확인하는 번호
+    imp_uid	VARCHAR2(100) UNIQUE,			 -- 결제시 결제내역 확인하는 번호
     person_idx NUMBER,                           -- 주문한 사람
     FOREIGN KEY (person_idx) REFERENCES person(person_idx),
     delivery_idx NUMBER,                         -- 배송지
