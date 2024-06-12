@@ -103,7 +103,7 @@ input[type="button"] {
             </div>
 <main>
     <h2>카테고리 등록</h2>
-    <form action="/admin/adminCategoryWrite" method="GET">
+    <form action="/admin/adminCategoryWrite" method="Post">
         <table>
             <tr>
                 <td>카테고리 소속</td>
@@ -133,7 +133,19 @@ input[type="button"] {
 </main>
 
 <script>
+document.getElementById('categoryType').addEventListener('change', function() {
+    var categoryType = this.value;
+    var categoryFields = document.getElementById('categoryFields');
+    var subCategoryFields = document.getElementById('subCategoryFields');
 
+    if (categoryType === 'category') {
+        categoryFields.style.display = 'block';
+        subCategoryFields.style.display = 'none';
+    } else if (categoryType === 'subcategory') {
+        categoryFields.style.display = 'none';
+        subCategoryFields.style.display = 'block';
+    }
+});
 </script>
 
 </body>

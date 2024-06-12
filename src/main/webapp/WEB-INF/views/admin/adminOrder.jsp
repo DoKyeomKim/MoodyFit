@@ -82,7 +82,7 @@ main {
                         <th>배송비</th>
                         <th>총가격</th>
                         <th>주문일자</th>
-                        <th>상태</th>
+<!--                         <th>상태</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -96,10 +96,10 @@ main {
                             <td>${order.deliveryPrice}</td>
                             <td>${order.totalPrice}</td>
                             <td>${order.orderDate}</td>
-                            <td>
-                                <button class="btn btn-update" onclick="updateStatus(${company.id}, 'approved')">수정</button>
-                                <button class="btn btn-delete" onclick="updateStatus(${company.id}, 'rejected')">삭제</button>
-                            </td>
+<!--                             <td> -->
+<%--                                 <button class="btn btn-update" onclick="updateStatus(${company.id}, 'approved')">수정</button> --%>
+<%--                                 <button class="btn btn-delete" onclick="updateStatus(${company.id}, 'rejected')">삭제</button> --%>
+<!--                             </td> -->
                         </tr>
                      
                    

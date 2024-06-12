@@ -2,17 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.StoreMapper">
     <select id="getAllStores" parameterType="com.mf.dto.StoreDto">
-        SELECT STORE_IDX,
-               STORE_NAME,
-               MANAGER_NAME,
-               BUSINESS_NUMBER,
-               EMAIL,
-               PHONE,
-               ADDRESS,
-               DETAIL_ADDRESS
-        FROM   STORE
-        ORDER BY STORE_IDX ASC
+   SELECT 
+    s.STORE_IDX,
+    s.STORE_NAME,
+    s.MANAGER_NAME,
+    s.BUSINESS_NUMBER,
+    s.EMAIL,
+    s.PHONE,
+    s.ADDRESS,
+    s.DETAIL_ADDRESS,
+    s.user_idx,
+    u.state
+FROM 
+    store s
+JOIN 
+    users u ON s.user_idx = u.USER_IDX
+    
+
                
     </select>
-   
+     <!-- 회원 드롭 -->
+      <update id="dropUser">
+      UPDATE users
+      SET state = 2
+      WHERE user_idx = #{userIdx}
+   </update>
 </mapper>

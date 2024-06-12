@@ -18,4 +18,6 @@ public class StoreDto {
 	private String address;
 	private String detailAddress;
 	private Long userIdx;
+	private int state;
+
 }

@@ -84,12 +84,12 @@ main {
                 </thead>
                 <tbody>
       
-<%--                     <c:forEach var="company" items="${companys}"> --%>
+<%--                     <c:forEach var="sales" items="${salesList}"> --%>
                         <tr>
-                            <td>{company.business_name}</td>
-                            <td>{company.business_number}</td>
-                            <td>{company.email}</td>
-                            <td>{company.phone}</td>
+                            <td>{sales.business_name}</td>
+                            <td>{sales.business_number}</td>
+                            <td>{sales.email}</td>
+                            <td>{sales.phone}</td>
                            
                         </tr>
                         <tr>

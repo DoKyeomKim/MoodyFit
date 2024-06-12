@@ -81,13 +81,15 @@ main {
                         <th >이메일</th>
                         <th >주소</th>
                         <th >상세주소</th>
-                
+                      
+                        <th >상태</th>
                         <th >작업</th>
                     </tr>
                 </thead>
                 <tbody>
               
                     <c:forEach var="person" items="${personList}">
+                      <form id="deleteForm" action="/admin/dropId2?userIdx=${person.userIdx }" method="post">
                         <tr>
                             <td>${person.personIdx}</td>
                             <td>${person.name}</td>
@@ -98,12 +100,18 @@ main {
                             <td>${person.detailAddress}</td>
              
                             <td>
-           
-                                <button class="btn btn-delete" onclick="updateStatus(${company.id}, 'rejected')">탈퇴</button>
-                            </td>
+           <c:choose>
+                    			<c:when test="${person.state==1}">회원</c:when>
+                    			<c:when test="${person.state==2}">탈퇴회원</c:when>
+                    			<c:when test="${person.state==3}">정지회원</c:when>
+                    		</c:choose>
+                    		</td>
                                 
+			  	<td>
+				<button type="submit" class="btn btn-delete"
+					onclick="confirmDelete()">추방</button>
+                </td>
                         </tr>
-                    
                      
                     </c:forEach>
                 </tbody>

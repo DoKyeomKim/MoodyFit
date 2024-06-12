@@ -3,6 +3,7 @@
 <mapper namespace="com.mf.mapper.AdminOrderMapper">
     <select id="getAllAdminOrders">
 SELECT
+    O.ORDER_IDX,
     O.AMOUNT,
     O.DELIVERY_PRICE,
     O.TOTAL_PRICE,

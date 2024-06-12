@@ -12,4 +12,7 @@
         ORDER BY POSTING_REVIEW_IDX ASC
                
     </select>
+    
+
+  
     </mapper>

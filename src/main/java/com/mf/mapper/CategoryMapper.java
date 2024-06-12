@@ -13,4 +13,6 @@ public interface CategoryMapper {
 
 	List<CategoryDto> getAllCategorys();
 
+	void addCategory(CategoryDto categoryDTO);
+
 }

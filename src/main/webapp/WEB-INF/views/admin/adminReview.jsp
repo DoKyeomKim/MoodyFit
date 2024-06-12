@@ -79,8 +79,7 @@ main {
                         <th>내용</th>
                         <th >평점</th>
                         <th >작성일</th>
-                        <th>작업</th>
-               
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -91,13 +90,7 @@ main {
                             <td>${review.title}</td>
                             <td>${review.content}</td>
                             <td>${review.rating}</td>
-                            <td>${review.createDate}</td>
-
-                  
-                             <td>
-  
-                                <button class="btn btn-delete" onclick="updateStatus(${company.id}, 'rejected')">삭제</button>
-                            </td>
+                            <td>${review.createDate}</td>           
                         </tr>
                       
           
@@ -112,6 +105,8 @@ main {
 
 
 <script>
+
+
 </script> 
 
 </body>

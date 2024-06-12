@@ -10,4 +10,17 @@
         ORDER BY CATEGORY_IDX ASC
                
     </select>
+    
+    
+     <insert id="addCategory" parameterType="com.mf.dto.CategoryDto">
+        INSERT INTO CATEGORY  (
+        CATEGORY_IDX,
+        KOR_NAME, 
+        ENG_NAME 
+       ) VALUES (
+        CATEGORY_seq.NEXTVAL,
+        #{korName},
+         #{engName}
+         )
+    </insert>
     </mapper>

@@ -14,4 +14,6 @@ public interface SubCategoryMapper {
 
 	List<SubCategoryDto> getAllSubCategorys();
 
+	void addSubCategory(SubCategoryDto subcategoryDTO);
+
 }

@@ -76,43 +76,49 @@ main {
                 <table class="table table-bordered">
                     <thead class="table-secondary">
                         <tr>
-                          
                             <th>번호</th>
-                            <th>가맹점 이름</th>
-                            <th>공고제목</th>
-                            <th>상품명</th>
-                            <th>가격</th>
+                       
+                            <th>제목</th>
+                            <th>내용</th>                       
                             <th>작성일</th>
+                            <th>상태</th>
                             <th>작업</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="posting" items="${postingList}">
-                        <tr>
-                            <td>${posting.POSTING_IDX}</td>
-                            <td>${posting.STORE_NAME}</td>
-                            <td>${posting.TITLE}</td>
-                            <td>${posting.NAME}</td>
-                            <td>${posting.PRICE}</td>
-                            <td>${posting.UPDATE_DATE}</td>
+                        <c:forEach var="apply" items="${adminApplyList}">
+                          <tr>
+        <td>${apply.postingIdx}</td>
+        <td>${apply.title}</td>
+        <td>${apply.productName}</td>
+        <td>${apply.updateDate}</td>
+ 
+   <td>
+           <c:choose>
+                    			<c:when test="${apply.state==1}">승인</c:when>
+                    			<c:when test="${apply.state==2}">반려</c:when>
+                    		
+                    		</c:choose>
+                    		</td>
                             <td>
-                                <button class="btn btn-success" onclick="updateStatus(${company.id}, 'approved')">승인</button>
-                                <button class="btn btn-danger" onclick="updateStatus(${company.id}, 'rejected')">반려</button>
+                                <form action="/admin/updateStatus" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="${apply.postingIdx}">
+                                    <input type="hidden" name="state" value="1">
+                                    <button class="btn btn-success" type="submit">승인</button>
+                                </form>
+                                <form action="/admin/updateStatus" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="${apply.postingIdx}">
+                                    <input type="hidden" name="state" value="2">
+                                    <button class="btn btn-danger" type="submit">반려</button>
+                                </form>
                             </td>
                         </tr>
                         </c:forEach>
                     </tbody>
                 </table>
-             
             </div>
-         
         </div>
     </div>
 </main>
-
-<script>
-
-</script> 
-
 </body>
 </html>

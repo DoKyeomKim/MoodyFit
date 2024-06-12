@@ -13,4 +13,6 @@ public interface StoreMapper {
 
 	List<StoreDto> getAllStores();
 
+	void dropUser(Long userIdx);
+
 }

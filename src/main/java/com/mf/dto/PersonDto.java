@@ -20,4 +20,5 @@ public class PersonDto {
 	private String detailAddress;
 	private String social;
 	private String socialRoot;
+	private int state;
 }

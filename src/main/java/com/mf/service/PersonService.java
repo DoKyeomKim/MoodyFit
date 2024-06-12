@@ -16,5 +16,10 @@ public class PersonService {
 	        return personMapper.getAllPersons();
 	    }
 
+		public void dropUser(Long userIdx) {
+			personMapper.dropUser(userIdx);
+			
+		}
+
 	
 }

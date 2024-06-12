@@ -2,17 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.PersonMapper">
     <select id="getAllPersons" parameterType="com.mf.dto.PersonDto">
-        SELECT PERSON_IDX,
-               NAME,
-               NICK_NAME,
-               PHONE,
-               EMAIL,
-               ADDRESS,
-               DETAIL_ADDRESS
-        FROM   PERSON
-        ORDER BY PERSON_IDX ASC
+       SELECT 
+    p.PERSON_IDX,
+    p.NAME,
+    p.NICK_NAME,
+    p.PHONE,
+    p.EMAIL,
+    p.ADDRESS,
+    p.DETAIL_ADDRESS,
+    p.user_idx,
+    u.state
+FROM 
+    person p
+JOIN 
+    users u ON p.user_idx = u.USER_IDX
                
     </select>
-    
+     <!-- 회원 드롭 -->
+      <update id="dropUser">
+      UPDATE users
+      SET state = 2
+      WHERE user_idx = #{userIdx}
+   </update>
    
 </mapper>
