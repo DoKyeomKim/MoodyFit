@@ -297,23 +297,15 @@ CREATE TABLE cs_answer (
     FOREIGN KEY (question_idx) REFERENCES cs_question(question_idx)
 );
 
+ALTER TABLE posting
+ADD store_idx NUMBER;
 
+ALTER TABLE posting
+ADD CONSTRAINT fk_posting_store
+FOREIGN KEY (store_idx) REFERENCES store(store_idx);
 
 -----------------------------------------
-관리자
-카테고리 추가/수정/삭제
-서브카테고리 추가/수정/삭제
-회원관리
-판매글게시글관리 - 신청하면 승인/반려 한다
-리뷰관리         - 신청하면 승인/반려 한다
-faq, qna 관리    - 신청하면 승인/반려 한다
-가맹점 관리
 
-통계
- 주문통계
- 판매금액 통계
- 
------------------------------------------
 
 CREATE SEQUENCE user_seq
     START WITH 1
