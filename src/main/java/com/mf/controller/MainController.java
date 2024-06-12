@@ -42,7 +42,7 @@ public class MainController {
 
 	// 검색
 	@GetMapping("/search")
-	public ModelAndView search(@RequestParam("keyword") String keyword) {
+	public ModelAndView search(@RequestParam("keyword") String keyword,@RequestParam(value = "page", defaultValue = "1") int page) {
 		ModelAndView mv = new ModelAndView();
 		
 		List<Map<String,Object>> result = mainService.getSearchResult(keyword);
