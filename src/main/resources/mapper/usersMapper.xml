@@ -50,7 +50,7 @@ SELECT STORE_NAME FROM STORE WHERE STORE_NAME = #{storeName}
 
 <insert id="joinProcess">
 	INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
-	VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,#{role})
+	VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_PERSON')
 </insert>
 
 <insert id="joinDetailProcess">
