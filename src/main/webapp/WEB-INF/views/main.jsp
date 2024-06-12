@@ -55,7 +55,7 @@ main{
   <div class="row">
   <c:forEach var="result" items="${result }">
 	    <div class="col-md-3">
-  	<a href="/#">
+  	<a href="/postingDetail?postingIdx=${result.POSTING_IDX }">
 	      <div class="image-container" data-posting-idx="${result.POSTING_IDX}" data-price="${result.PRICE}" data-title="${result.TITLE}">
 	        <img src="${result.FILE_PATH }" class="img-fluid" alt="Image 1">
 	        <div class="overlay">
