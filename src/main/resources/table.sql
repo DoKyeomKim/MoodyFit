@@ -1,8 +1,8 @@
 -- 유저
 CREATE TABLE users (
     user_idx NUMBER PRIMARY KEY,            -- 유저의 고유번호
-    id VARCHAR2(30) UNIQUE NOT NULL,        -- 유저 아이디
-    pw VARCHAR2(80) NOT NULL,               -- 유저 패스워드
+    id VARCHAR2(100) UNIQUE NOT NULL,        -- 유저 아이디
+    pw VARCHAR2(100) NOT NULL,               -- 유저 패스워드
     state NUMBER NOT NULL,                  -- 1일때 사용가능한 회원, 2가 회원 탈퇴, 3이 회원 정지(관리자)
     role VARCHAR2(50) NOT NULL              -- 스프링 시큐리티 위한 설정 
 );
