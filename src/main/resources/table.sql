@@ -143,7 +143,14 @@ CREATE TABLE posting (
     title VARCHAR2(30) NOT NULL,                 -- 상품 판매글 제목
     content VARCHAR2(3000) NOT NULL,             -- 판매글 내용
     update_date DATE DEFAULT SYSDATE NOT NULL,   -- 등록일
-    state NUMBER NOT NULL,                       -- 제품 등록 상태 (0: 등록 심사중, 1: 게시글 등록 완료 2: 게시글 삭제 3: 게시글 수정)
+    state NUMBER NOT NULL                       -- 제품 등록 상태 (0: 등록 심사중, 1: 게시글 등록 완료 2: 게시글 삭제 3: 게시글 수정)
+);
+
+-- 판매 공고 제품
+CREATE TABLE posting_product (
+    posting_product_idx NUMBER PRIMARY KEY,      -- 공고에 담을 제품 정보
+    posting_idx NUMBER,                          -- 해당하는 판매글 고유번호
+    FOREIGN KEY (posting_idx) REFERENCES posting(posting_idx),
     product_info_idx NUMBER,                     -- 갖고 올 해당 제품 정보
     FOREIGN KEY (product_info_idx) REFERENCES product_info(product_info_idx)
 );
@@ -422,38 +429,3 @@ CREATE SEQUENCE sub_category_seq
 	INCREMENT BY 1;
 	
 	
-------------------------------------------
-임시 더미문(시퀀스 1부터 시작한다는걸 전제하에 만들음. store_idx는 2.)
-
-Insert into MF.CATEGORY (CATEGORY_IDX,KOR_NAME,ENG_NAME) values (category_seq.nextval,'아우터','outer');
-Insert into MF.CATEGORY (CATEGORY_IDX,KOR_NAME,ENG_NAME) values (category_seq.nextval,'셔츠','shirts');
-Insert into MF.CATEGORY (CATEGORY_IDX,KOR_NAME,ENG_NAME) values (category_seq.nextval,'신발','shoes');
-Insert into MF.CATEGORY (CATEGORY_IDX,KOR_NAME,ENG_NAME) values (category_seq.nextval,'가방','bags');
-
-Insert into MF.SUB_CATEGORY (SUB_CATEGORY_IDX,KOR_NAME,ENG_NAME,CATEGORY_IDX) values (sub_category_seq.nextval,'코트','coat',1);
-Insert into MF.SUB_CATEGORY (SUB_CATEGORY_IDX,KOR_NAME,ENG_NAME,CATEGORY_IDX) values (sub_category_seq.nextval,'패딩','padded-coat',1);
-
-Insert into MF.PRODUCT_SIZE (PRODUCT_SIZE_IDX,SIZES) values (product_size_seq.nextval,'95');
-Insert into MF.PRODUCT_SIZE (PRODUCT_SIZE_IDX,SIZES) values (product_size_seq.nextval,'100');
-Insert into MF.PRODUCT_SIZE (PRODUCT_SIZE_IDX,SIZES) values (product_size_seq.nextval,'105');
-Insert into MF.PRODUCT_SIZE (PRODUCT_SIZE_IDX,SIZES) values (product_size_seq.nextval,'110');
-
-Insert into MF.PRODUCT_COLOR (PRODUCT_COLOR_IDX,COLOR) values (product_color_seq.nextval,'red');
-Insert into MF.PRODUCT_COLOR (PRODUCT_COLOR_IDX,COLOR) values (product_color_seq.nextval,'blue');
-Insert into MF.PRODUCT_COLOR (PRODUCT_COLOR_IDX,COLOR) values (product_color_seq.nextval,'black');
-Insert into MF.PRODUCT_COLOR (PRODUCT_COLOR_IDX,COLOR) values (product_color_seq.nextval,'white');
-
-Insert into MF.PRODUCT (PRODUCT_IDX,SUB_CATEGORY_IDX,STORE_IDX) values (product_seq.nextval,1,2);
-
-Insert into MF.PRODUCT_INFO (PRODUCT_INFO_IDX,MANUFACTURE_NAME,NAME,PRICE,UPDATE_DATE,PRODUCT_COLOR_IDX,PRODUCT_SIZE_IDX,PRODUCT_IDX) values (product_info_seq.nextval,'발렌티노','발렌티노 코트',15000,to_date('24/06/10','RR/MM/DD'),1,1,1);
-Insert into MF.PRODUCT_INFO (PRODUCT_INFO_IDX,MANUFACTURE_NAME,NAME,PRICE,UPDATE_DATE,PRODUCT_COLOR_IDX,PRODUCT_SIZE_IDX,PRODUCT_IDX) values (product_info_seq.nextval,'발렌티노','발렌티노 코트',15000,to_date('24/06/10','RR/MM/DD'),2,1,1);
-Insert into MF.PRODUCT_INFO (PRODUCT_INFO_IDX,MANUFACTURE_NAME,NAME,PRICE,UPDATE_DATE,PRODUCT_COLOR_IDX,PRODUCT_SIZE_IDX,PRODUCT_IDX) values (product_info_seq.nextval,'발렌티노','발렌티노 코트',15000,to_date('24/06/10','RR/MM/DD'),2,2,1);
-Insert into MF.PRODUCT_INFO (PRODUCT_INFO_IDX,MANUFACTURE_NAME,NAME,PRICE,UPDATE_DATE,PRODUCT_COLOR_IDX,PRODUCT_SIZE_IDX,PRODUCT_IDX) values (product_info_seq.nextval,'발렌티노','발렌티노 코트',15000,to_date('24/06/10','RR/MM/DD'),3,3,1);
-
-Insert into MF.POSTING (POSTING_IDX,TITLE,CONTENT,UPDATE_DATE,STATE) values (posting_seq.nextval,'발렌티노 코트','개지림',to_date('24/06/10','RR/MM/DD'),1);
-Insert into MF.POSTING (POSTING_IDX,TITLE,CONTENT,UPDATE_DATE,STATE) values (posting_seq.nextval,'엄청난 발렌티노 코트','헉',to_date('24/06/10','RR/MM/DD'),1);
-
-Insert into MF.POSTING_PRODUCT (POSTING_PRODUCT_IDX,POSTING_IDX,PRODUCT_INFO_IDX) values (posting_product_seq.nextval,1,1);
-Insert into MF.POSTING_PRODUCT (POSTING_PRODUCT_IDX,POSTING_IDX,PRODUCT_INFO_IDX) values (posting_product_seq.nextval,1,2);
-Insert into MF.POSTING_PRODUCT (POSTING_PRODUCT_IDX,POSTING_IDX,PRODUCT_INFO_IDX) values (posting_product_seq.nextval,2,3);
-Insert into MF.POSTING_PRODUCT (POSTING_PRODUCT_IDX,POSTING_IDX,PRODUCT_INFO_IDX) values (posting_product_seq.nextval,2,4);
