@@ -10,7 +10,4 @@ public interface OAuth2Response {
 	
 	String getName();
 	
-	String getNickname();
-	
-	String getMobile();
 }

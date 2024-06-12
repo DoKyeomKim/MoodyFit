@@ -103,6 +103,7 @@ html, body {
                 <hr style="width: 80%;">
                 <div style="margin-bottom : 20px;">소셜 로그인</div>
 			<a href="/oauth2/authorization/naver"><img src="/images/naver.png" style="height:50px; width:50px;"></a>
+			<a href="/oauth2/authorization/google">구글로그인</a>
         
 
     </div>

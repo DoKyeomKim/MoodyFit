@@ -13,7 +13,7 @@ CREATE TABLE person (
     name VARCHAR2(100) NOT NULL,            -- 이름
     nick_name VARCHAR2(100) NOT NULL,       -- 닉네임
     email VARCHAR2(200) NOT NULL,           -- 이메일
-    phone VARCHAR2(20) NOT NULL,            -- 전화번호
+    phone VARCHAR2(20),            -- 전화번호
     post_code VARCHAR2(20),        -- 주소들
     address VARCHAR2(300) ,
     detail_address VARCHAR2(300),

@@ -37,6 +37,9 @@ public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHand
 	   }
        
        response.sendRedirect("/loginFail");
+       
+      
+       System.out.println("오류발생:" + exception + "\n" + errorMessage);
 
 		/*
 		 * System.out.println("오류발생:" + exception + "\n" + errorMessage);

@@ -24,7 +24,6 @@ PERSON_IDX,
 NAME,
 NICK_NAME,
 EMAIL,
-PHONE,
 SOCIAL,
 SOCIAL_ROOT
 )
@@ -34,7 +33,6 @@ PERSON_SEQ.NEXTVAL,
 #{name},
 #{nickName},
 #{email},
-#{phone},
 #{social},
 #{socialRoot}
 )

@@ -67,10 +67,15 @@ public class SecurityConfig {
 		
         http
         .oauth2Login((oauth2) -> oauth2
-        		.loginPage("/oauth2/authorization/naver")
+        		.loginPage("/oauth2/authorization/naver") // 네이버 로그인 페이지
                 .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig.userService(customOAuth2UserService))
 				.failureHandler(customFailureHandler)
         		);
+        
+        http.oauth2Login((oauth2) -> oauth2
+                .loginPage("/oauth2/authorization/google") // 구글 로그인 페이지
+                .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig.userService(customOAuth2UserService))
+                .failureHandler(customFailureHandler));
 		
 		http.logout((logout)->logout
 				.logoutUrl("/logout")

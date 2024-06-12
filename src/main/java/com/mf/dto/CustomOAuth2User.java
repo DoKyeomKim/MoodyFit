@@ -13,7 +13,6 @@ public class CustomOAuth2User implements OAuth2User{
 		private Long userIdx;
 
 	    public CustomOAuth2User(OAuth2Response oAuth2Response, String role) {
-
 	        this.oAuth2Response = oAuth2Response;
 	        this.role = role;
 	    }

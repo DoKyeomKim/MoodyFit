@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mf.config.OAuth2LoginFailException;
 import com.mf.dto.CustomOAuth2User;
+import com.mf.dto.GoogleResponse;
 import com.mf.dto.NaverResponse;
 import com.mf.dto.OAuth2Response;
 import com.mf.dto.PersonDto;
@@ -46,7 +47,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	        }
 	        else if (registrationId.equals("google")) {
 
-	            //oAuth2Response = new GoogleReponse(oAuth2User.getAttributes());
+	            oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
 	        }
 	        else {
 
@@ -64,11 +65,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	        // person에 들어갈 이름
 	        String name = oAuth2Response.getName();
 	        // person에 들어갈 nickName
-	        String nickName = oAuth2Response.getNickname();
+	        String nickName = name;
 	        // person에 들어갈 email
 	        String email = oAuth2Response.getEmail();
-	        // person에 들어갈 phone
-	        String phone = oAuth2Response.getMobile();
 	        // person에 들어갈 social
 	        String social = "YES";
 	        // person에 들어갈 social_root	        
@@ -90,7 +89,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	        	person.setName(name);
 	        	person.setNickName(nickName);
 	        	person.setEmail(email);
-	        	person.setPhone(phone);
 	        	person.setSocial(social);
 	        	person.setSocialRoot(socialRoot);
 	        	usersMapper.OAuthJoin(users);
