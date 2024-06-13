@@ -315,20 +315,16 @@
 
 <script>
 document.querySelector('form[name="joinForm"]').onsubmit = function(event) {
-    // Prevent form submission
     event.preventDefault();
 
-    // Initialize flag to track if the form is valid
     let formIsValid = true;
 
-    // Helper function to show alert and focus the corresponding input
     function showAlert(message, inputElement) {
         alert(message);
         inputElement.focus();
         formIsValid = false;
     }
 
-    // Validate each required field
     const idInput = document.getElementById("username");
     if (!idInput.value.trim()) {
         showAlert("아이디를 입력해주세요.", idInput);
