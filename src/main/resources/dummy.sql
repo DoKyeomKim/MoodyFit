@@ -314,7 +314,7 @@ INSERT INTO posting (POSTING_IDX, TITLE, CONTENT, UPDATE_DATE, STATE)
 VALUES (4, '에어 조던 1 한정판', '나이키 조던 한정판입니다', SYSDATE, 1);
 
 INSERT INTO posting (POSTING_IDX, TITLE, CONTENT, UPDATE_DATE, STATE) 
-VALUES (5, '엔엠디 소개', '이 제품은 나이키사의 에어 맥스 90입니다.', SYSDATE, 1);
+VALUES (5, '엔엠디 소개', '이 제품은 아디다스사의 엔엠디입니다.', SYSDATE, 1);
 
 INSERT INTO posting (POSTING_IDX, TITLE, CONTENT, UPDATE_DATE, STATE) 
 VALUES (6, '엔엠디 한정판', '이 제품은 아디다스사의 엔엠디입니다.', SYSDATE, 1);
