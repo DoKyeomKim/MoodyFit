@@ -84,16 +84,16 @@
 		    <security:authorize access="isAuthenticated()">
 		    <c:choose>
 		        <c:when test="${sessionScope.role == 'ROLE_PERSON'}">
-		            <div style="margin-right:20px;"><a href="/myPage">마이페이지</a></div>
+		            <div style="margin-right:20px;"><a href="/myPage" style="text-decoration-line: none;">마이페이지</a></div>
 		        </c:when> 
 		        <c:when test="${sessionScope.role == 'ROLE_STORE'}">
-		            <div style="margin-right:20px;"><a href="/storeMyPage">마이페이지</a></div>
+		            <div style="margin-right:20px;"><a href="/storeMyPage" style="text-decoration-line: none;">마이페이지</a></div>
 		        </c:when>
 		    </c:choose>
-		            <a href="<c:url value='/logout' />">로그아웃</a>
+		            <a href="<c:url value='/logout' />" style="text-decoration-line: none;">로그아웃</a>
 		    </security:authorize>
 		    <security:authorize access="!isAuthenticated()">
-		        <a href="<c:url value='/login' />">로그인</a>
+		        <a href="<c:url value='/login' />" style="text-decoration-line: none;">로그인</a>
 		    </security:authorize>
 		</div>
     </div>

@@ -96,7 +96,7 @@ html, body {
                     </div>
                 </form>
                 <div class="center-align" style="margin-left:100px;">
-                    <a href="/totalJoin">회원가입</a>
+                    <a href="/totalJoin" style="text-decoration-line: none;">회원가입</a>
                 </div>
             </div>
         </div>
