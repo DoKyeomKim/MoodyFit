@@ -54,7 +54,7 @@
 	    </tr>
 	    <tr>
 	      <th>비밀번호</th>
-	      <td><input type="password" name="pw" id="password" oninput="pwCheck()" style="width: 30%;"placeholder="비밀번호를 입력해주세요" required></td>
+	      <td><input type="password" name="pw" id="password" oninput="pwCheck()" style="width: 30%;" placeholder="비밀번호를 입력해주세요" required></td>
 	    </tr>
 	    <tr>
 	      <th>비밀번호 확인</th>
@@ -136,18 +136,36 @@
   </div>
 </form>
 </main>
-<!-- 아이디 중복확인 -->
 <script>
     const btnIdCheckEl = document.querySelector('#btnIdCheck');
+    const btnNicknameCheckEl = document.querySelector('#btnNickNameCheck');
     var submitBtnEl = document.querySelector('#submitBtn');
     const outputEl = document.querySelector('#output');
+    const output2El = document.querySelector('#output2');
     const idInputEl = document.querySelector('[name=id]');
-    
+    const nickNameInputEl = document.querySelector('[name=nickName]');
+    const pw1InputEl = document.getElementById("password");
+    const pw2InputEl = document.getElementById("password2");
+    const pwConfirmEl = document.getElementById("pwConfirm");
+
+    let idCheckPassed = false;
+    let nickNameCheckPassed = false;
+    let pwCheckPassed = false;
+
+    function checkFormValidity() {
+        if (idCheckPassed && nickNameCheckPassed && pwCheckPassed) {
+            submitBtnEl.disabled = false;
+        } else {
+            submitBtnEl.disabled = true;
+        }
+    }
 
     btnIdCheckEl.onclick = function(e) {
-        if (!idInputEl.value.trim()) { // 입력 필드가 비어 있는지 확인
+        if (!idInputEl.value.trim()) {
             outputEl.innerHTML = "<small style='color:red'>아이디를 입력해주세요.</small>";
-            return; // 입력 필드가 비어 있으면 더 이상 진행하지 않음
+            idCheckPassed = false;
+            checkFormValidity();
+            return;
         }
         fetch('/idCheck?id=' + encodeURIComponent(idInputEl.value))
             .then(response => response.text())
@@ -156,50 +174,25 @@
                 outputEl.innerHTML = data;
 
                 if (data.includes('사용가능한 아이디입니다')) {
-                    submitBtnEl.disabled = false; // 제출 버튼 활성화
+                    idCheckPassed = true;
                 } else {
-                    submitBtnEl.disabled = true;  // 제출 버튼 비활성화
+                    idCheckPassed = false;
                 }
+                checkFormValidity();
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                idCheckPassed = false;
+                checkFormValidity();
+            });
     }
-
-    // 초기에는 제출 버튼을 비활성화
-    submitBtnEl.disabled = true;
-
-    // 아이디 입력 필드가 변경될 때마다 제출 버튼 비활성화
-    idInputEl.oninput = function() {
-        submitBtnEl.disabled = true;
-        outputEl.innerHTML = '';
-    }
-</script>
-<script>
-    function pwCheck() {
-        var pw1 = document.getElementById("password").value;
-        var pw2 = document.getElementById("password2").value;
-        var pwConfirm = document.getElementById("pwConfirm");
-        var submitBtnEl = document.querySelector('#submitBtn');
-
-        if (pw1 != pw2) {
-            pwConfirm.innerHTML = "<small style='color: red;'>비밀번호가 일치하지 않습니다.</small>";
-            submitBtnEl.disabled = true; // 비밀번호 불일치 시 제출 버튼 비활성화
-        } else {
-            pwConfirm.innerHTML = "<small style='color: green;'>비밀번호가 일치합니다.</small>";
-            submitBtnEl.disabled = false; // 비밀번호 일치 시 제출 버튼 활성화
-        }
-    }
-</script>
-<!-- 닉네임 중복확인 -->
-<script>
-    const btnNicknameCheckEl = document.querySelector('#btnNickNameCheck');
-    var submitBtnEl = document.querySelector('#submitBtn');
-    const output2El = document.querySelector('#output2');
-    const nickNameInputEl = document.querySelector('[name=nickName]');
 
     btnNicknameCheckEl.onclick = function(e) {
-        if (!nickNameInputEl.value.trim()) { // 입력 필드가 비어 있는지 확인
+        if (!nickNameInputEl.value.trim()) {
             output2El.innerHTML = "<small style='color:red'>닉네임을 입력해주세요.</small>";
-            return; // 입력 필드가 비어 있으면 더 이상 진행하지 않음
+            nickNameCheckPassed = false;
+            checkFormValidity();
+            return;
         }
         fetch('/nickNameCheck?nickName=' + encodeURIComponent(nickNameInputEl.value))
             .then(response => response.text())
@@ -208,23 +201,49 @@
                 output2El.innerHTML = data;
 
                 if (data.includes('사용가능한 닉네임입니다')) {
-                    submitBtnEl.disabled = false; // 제출 버튼 활성화
+                    nickNameCheckPassed = true;
                 } else {
-                    submitBtnEl.disabled = true;  // 제출 버튼 비활성화
+                    nickNameCheckPassed = false;
                 }
+                checkFormValidity();
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                nickNameCheckPassed = false;
+                checkFormValidity();
+            });
+    }
+
+    function pwCheck() {
+        if (pw1InputEl.value !== pw2InputEl.value) {
+            pwConfirmEl.innerHTML = "<small style='color: red;'>비밀번호가 일치하지 않습니다.</small>";
+            pwCheckPassed = false;
+        } else {
+            pwConfirmEl.innerHTML = "<small style='color: green;'>비밀번호가 일치합니다.</small>";
+            pwCheckPassed = true;
+        }
+        checkFormValidity();
     }
 
     // 초기에는 제출 버튼을 비활성화
     submitBtnEl.disabled = true;
 
-    // 아이디 입력 필드가 변경될 때마다 제출 버튼 비활성화
-    NicknameInputEl.oninput = function() {
-        submitBtnEl.disabled = true;
-        output2El.innerHTML = '';
+    // 입력 필드가 변경될 때마다 제출 버튼 비활성화 및 상태 초기화
+    idInputEl.oninput = function() {
+        idCheckPassed = false;
+        outputEl.innerHTML = '';
+        checkFormValidity();
     }
+
+    nickNameInputEl.oninput = function() {
+        nickNameCheckPassed = false;
+        output2El.innerHTML = '';
+        checkFormValidity();
+    }
+
+    pw1InputEl.oninput = pw2InputEl.oninput = pwCheck;
 </script>
+
 
 <!-- 전화번호 입력시 - 자동생성 -->
 <script>
@@ -290,6 +309,83 @@ document.getElementById('phone').addEventListener('input', function (e) {
                 document.getElementById("sample6_detailAddress").focus();
             }
         }).open();
+    }
+</script>
+<script>
+    document.querySelector('form[name="joinForm"]').onsubmit = function(event) {
+        event.preventDefault();
+
+        let formIsValid = true;
+
+        function showAlert(message, inputElement) {
+            alert(message);
+            inputElement.focus();
+            formIsValid = false;
+        }
+
+        const idInput = document.getElementById("username");
+        if (!idInput.value.trim()) {
+            showAlert("아이디를 입력해주세요.", idInput);
+            return;
+        }
+
+        const passwordInput = document.getElementById("password");
+        if (!passwordInput.value.trim()) {
+            showAlert("비밀번호를 입력해주세요.", passwordInput);
+            return;
+        }
+
+        const passwordConfirmInput = document.getElementById("password2");
+        if (!passwordConfirmInput.value.trim()) {
+            showAlert("비밀번호를 다시 한번 입력해주세요.", passwordConfirmInput);
+            return;
+        }
+
+        const nameInput = document.getElementById("name");
+        if (!nameInput.value.trim()) {
+            showAlert("이름을 입력해주세요.", nameInput);
+            return;
+        }
+
+        const nickNameInput = document.getElementById("nickName");
+        if (!nickNameInput.value.trim()) {
+            showAlert("닉네임을 입력해주세요.", nickNameInput);
+            return;
+        }
+
+        const postCodeInput = document.getElementById("sample6_postcode");
+        if (!postCodeInput.value.trim()) {
+            showAlert("우편번호를 입력해주세요.", postCodeInput);
+            return;
+        }
+
+        const addressInput = document.getElementById("sample6_address");
+        if (!addressInput.value.trim()) {
+            showAlert("주소를 입력해주세요.", addressInput);
+            return;
+        }
+
+        const detailAddressInput = document.getElementById("sample6_detailAddress");
+        if (!detailAddressInput.value.trim()) {
+            showAlert("상세주소를 입력해주세요.", detailAddressInput);
+            return;
+        }
+
+        const phoneInput = document.getElementById("phone");
+        if (!phoneInput.value.trim()) {
+            showAlert("전화번호를 입력해주세요.", phoneInput);
+            return;
+        }
+
+        const emailInput = document.getElementById("email");
+        if (!emailInput.value.trim()) {
+            showAlert("이메일을 입력해주세요.", emailInput);
+            return;
+        }
+
+        if (formIsValid) {
+            this.submit();
+        }
     }
 </script>
 
