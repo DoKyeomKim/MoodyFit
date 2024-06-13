@@ -419,5 +419,3 @@ CREATE SEQUENCE sub_category_seq
     CREATE SEQUENCE cs_answer_seq
 	START WITH 1
 	INCREMENT BY 1;
-	
-	
