@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <title>메인 페이지</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 <style>
 body{
 margin : 0 auto;
@@ -82,7 +83,7 @@ main{
 			    </div>
 		    </c:forEach>
 		    
-		    <nav aria-label="Page navigation">
+	<nav aria-label="Page navigation"  style="margin-top:100px;">
 		<ul class="pagination justify-content-center">
         
 			      <c:if test="${prev}">
@@ -111,9 +112,9 @@ main{
 		 				 </li>
 					</c:if>
 
-  </ul>
-</nav>
-	    </c:when>
+			</ul>
+		</nav>
+	</c:when>
 	    
 		<c:otherwise>
 		<div style="text-align:center; margin-top:50px;">
