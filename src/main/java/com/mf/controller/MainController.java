@@ -6,11 +6,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mf.dto.Paging;
 import com.mf.service.MainService;
 
 import jakarta.servlet.http.HttpSession;
@@ -45,11 +44,25 @@ public class MainController {
 	public ModelAndView search(@RequestParam("keyword") String keyword,@RequestParam(value = "page", defaultValue = "1") int page) {
 		ModelAndView mv = new ModelAndView();
 		
-		List<Map<String,Object>> result = mainService.getSearchResult(keyword);
+	    int pageSize = 8; // 한 페이지에 표시할 게시글 수
+	    int startIndex = (page - 1) * pageSize;
 		
+		List<Map<String,Object>> result = mainService.getSearchResult(keyword,startIndex,pageSize);
+
+	    int totalCount = mainService.getPostingCountByKeyword(keyword);
+	    
+	    Paging paging = mainService.calculatePagingInfo(keyword, page, pageSize);
+
+	    mv.addObject("prev", paging.isPrev());
+	    mv.addObject("next", paging.isNext());
+	    mv.addObject("startPageNum", paging.getStartPageNum());
+	    mv.addObject("endPageNum", paging.getEndPageNum());
+	    mv.addObject("totalPages", paging.getTotalPages());
+
 		
 		mv.addObject("keyword", keyword);
 		mv.addObject("result", result);
+	    mv.addObject("currentPage", page);
 		mv.setViewName("/searchResult");
 		return mv;
 	}

@@ -71,19 +71,23 @@ main{
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const imageContainers = document.querySelectorAll('.image-container');
+	  const imageContainers = document.querySelectorAll('.image-container');
 
-  imageContainers.forEach(container => {
-    container.addEventListener('mouseover', function() {
-      const postingIdx = this.dataset.postingIdx;
-      const price = this.dataset.price;
-      const title = this.dataset.title;
-      const infoDiv = this.querySelector('.info');
+	  imageContainers.forEach(container => {
+	    container.addEventListener('mouseover', function() {
+	      const postingIdx = this.dataset.postingIdx;
+	      const price = this.dataset.price;
+	      const title = this.dataset.title;
+	      const infoDiv = this.querySelector('.info');
 
-      infoDiv.innerHTML = '<div>' + title + '</div><div>' + price + '원</div>';
-    });
-  });
-});
+	      // 가격을 파싱하여 포맷팅하는 함수
+	      const formattedPrice = Number(price).toLocaleString();
+
+	      infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + '원</div>';
+	    });
+	  });
+	});
+
 </script>
 </body>
 </html>

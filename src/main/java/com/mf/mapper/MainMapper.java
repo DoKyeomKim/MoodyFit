@@ -17,5 +17,8 @@ public interface MainMapper {
 	List<Map<String, Object>> getPostingAll();
 
 	// 검색결과
-	List<Map<String, Object>> getSearchResult(String keyword);
+	List<Map<String, Object>> getSearchResult(Map<String, Object> params);
+
+	// 총 검색 결과량
+	int getPostingCountByKeyword(String keyword);
 }
