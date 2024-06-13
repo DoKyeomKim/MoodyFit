@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.ProductMapper">
 
+<select id="getStoreIdxByUserIdx">
+select store_idx
+from store
+where user_idx=#{userIdx}
+</select>
+
 <!-- 상품 정보 삽입 -->
 <insert id="insertProduct" parameterType="com.mf.dto.ProductDetailsDto">
     <selectKey keyProperty="productIdx" resultType="long" order="AFTER">
@@ -75,6 +81,7 @@
      LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
      LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
      LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+     where p.store_idx=#{storeIdx}
 </select>
 
 </mapper>

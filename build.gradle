@@ -37,6 +37,11 @@ dependencies {
 	// JSON Parser
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	
+	// 하세연 추가
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
 	
 	// 수동 추가
@@ -52,9 +57,11 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     
     // 시큐리티 관련 설정 현재 주석처리. 로그인 구현되면 풀 것
-	// implementation 'org.springframework.boot:spring-boot-starter-security'
-	// implementation 'org.springframework.security:spring-security-test'
-	
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'	
+	implementation 'org.springframework.security:spring-security-taglibs'
+	// oauth2 사용
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'	
 	
 	// 이미지 파일 관련
 	implementation 'commons-fileupload:commons-fileupload:1.4'

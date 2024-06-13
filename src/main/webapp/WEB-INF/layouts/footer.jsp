@@ -7,7 +7,7 @@
 <body>
  <footer class="bg-body-tertiary">
     <div class="container">
-      <a href="#" class="text-dark" style="text-decoration: none;">고객센터</a>
+      <a href=/faq class="text-dark" style="text-decoration: none;">고객센터</a>
     </div>
   </footer>
 </body>

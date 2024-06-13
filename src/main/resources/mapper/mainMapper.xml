@@ -60,5 +60,58 @@ SELECT category_idx AS categoryIdx, kor_name AS korName, eng_name AS engName
 		WHERE product_idx = #{productIdx}
 </select>
 
+<select id="getPostingAll">
+SELECT DISTINCT a.posting_idx AS posting_idx,
+                a.title AS title,
+                d.price AS price,
+                e.file_path AS file_path
+FROM posting a
+JOIN posting_product b ON a.posting_idx = b.posting_idx
+JOIN product_info c ON b.product_info_idx = c.product_info_idx
+JOIN product d ON c.product_idx = d.product_idx
+join product_file e on e.product_info_idx = b.product_info_idx
+ORDER BY a.posting_idx ASC
+</select>
+
+<select id="getSearchResult">
+SELECT posting_idx, title, price, file_path
+FROM (
+    SELECT 
+        a.posting_idx,
+        a.title,
+        d.price,
+        f.file_path,
+        ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY a.posting_idx DESC) AS row_num
+    FROM posting a
+    JOIN posting_product b ON a.posting_idx = b.posting_idx
+    JOIN product_info c ON b.product_info_idx = c.product_info_idx
+    JOIN product d ON c.product_idx = d.product_idx
+    JOIN product_color e ON c.product_color_idx = e.product_color_idx
+    JOIN product_file f ON f.product_info_idx = b.product_info_idx
+    WHERE REPLACE(a.title, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+       OR REPLACE(a.content, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+       OR REPLACE(d.manufacture_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+       OR REPLACE(d.name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+       OR REPLACE(e.color, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+) sub
+WHERE sub.row_num = 1
+ORDER BY posting_idx DESC
+</select>
+
+<select id="getPostingCountByKeyword">
+SELECT count(DISTINCT a.posting_idx)
+FROM posting a
+JOIN posting_product b ON a.posting_idx = b.posting_idx
+JOIN product_info c ON b.product_info_idx = c.product_info_idx
+JOIN product d ON c.product_idx = d.product_idx
+JOIN product_color e ON c.product_color_idx = e.product_color_idx
+JOIN product_file f ON f.product_info_idx = b.product_info_idx
+WHERE REPLACE(a.title, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+   OR REPLACE(a.content, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+   OR REPLACE(d.manufacture_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+   OR REPLACE(d.name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+   OR REPLACE(e.color, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+ORDER BY a.posting_idx DESC
+</select>
 
 </mapper>

@@ -35,12 +35,14 @@ public interface ProductMapper {
 	
 	List<ProductSizeDto> getAllSizes();
 
-	List<ProductDetailsDto> getAllProductDetails();
+	List<ProductDetailsDto> getAllProductDetails(Long storeIdx);
 
 
 	Long getProductIdx();
 	
 	Long getProductInfoIdx();
+
+	Long getStoreIdxByUserIdx(Long userIdx);
 
 	
 }

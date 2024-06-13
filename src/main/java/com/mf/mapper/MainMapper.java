@@ -1,6 +1,7 @@
 package com.mf.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -23,9 +24,20 @@ public interface MainMapper {
     SubCategoryDto getSubCategoryByNameAndCategoryEngName(@Param("subCategoryName") String subCategoryName,
                                                           @Param("categoryEngName") String categoryEngName);
 
+
 	List<CategoryDto> getCategoriesByKeyword(String keyword);
 	
 	List<SubCategoryDto> getSubCategoriesByCategoryCode(@Param("categoryCode") String categoryCode);
 	
 	List<CategoryDto> searchCategoriesAndSubCategories(@Param("keyword") String keyword);
+
+
+	// 임시로 만든 전체 포스팅 내용 갖고오기
+	List<Map<String, Object>> getPostingAll();
+
+	// 검색결과
+	List<Map<String, Object>> getSearchResult(Map<String, Object> params);
+
+	// 총 검색 결과량
+	int getPostingCountByKeyword(String keyword);
 }

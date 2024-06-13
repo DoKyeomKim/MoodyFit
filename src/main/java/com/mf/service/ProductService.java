@@ -58,8 +58,9 @@ public class ProductService {
     
     
  // 모든 상품 정보 가져오기
-    public List<ProductDetailsDto> getAllProductDetails() {
-    	return productMapper.getAllProductDetails();
+    public List<ProductDetailsDto> getAllProductDetails(Long storeIdx) {
+    	List<ProductDetailsDto> products = productMapper.getAllProductDetails(storeIdx);
+    	return products;
     }
     
     
@@ -81,6 +82,12 @@ public class ProductService {
 
 	public void addProductInfo(ProductInfoDto productInfoDto) {
 		
+	}
+
+
+	public Long getStoreIdxByUserIdx(Long userIdx) {
+		
+		return productMapper.getStoreIdxByUserIdx(userIdx);
 	}
 
 }

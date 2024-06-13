@@ -1,5 +1,6 @@
 package com.mf.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import com.mf.dto.ProductSizeDto;
 import com.mf.service.MainService;
 import com.mf.service.ProductService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -45,10 +47,13 @@ public class ProductController {
                              @RequestParam("menufecturer") String manufactureName,
                              @RequestParam("colorIdx") Long colorIdx,
                              @RequestParam("sizeIdx") Long sizeIdx,
-                             @RequestParam("quantity") int quantity) {
+                             @RequestParam("quantity") int quantity,
+                             HttpSession session) {
     	
+    	Long userIdx = (Long) session.getAttribute("userIdx");
+    	Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
     	log.info("Received subCategoryIdx: {}, storeIdx: {}", subCategoryIdx, 1L);
-    	
+
     	// 통합된 ProductDetailsDto 설정
     	
     	ProductDetailsDto productDetailsDto = new ProductDetailsDto();
@@ -56,7 +61,7 @@ public class ProductController {
         productDetailsDto.setPrice(price);
         productDetailsDto.setManufactureName(manufactureName);
         productDetailsDto.setSubCategoryIdx(subCategoryIdx);
-        productDetailsDto.setStoreIdx(1L); // 예시로 고정된 store_idx 설정
+        productDetailsDto.setStoreIdx(storeIdx);
         productDetailsDto.setProductColorIdx(colorIdx);
         productDetailsDto.setProductSizeIdx(sizeIdx);
         productDetailsDto.setQuantity(quantity);
@@ -68,10 +73,21 @@ public class ProductController {
     }
 
     @GetMapping("/productList")
-    public ModelAndView productList() {
+    public ModelAndView productList(HttpSession session,ProductDetailsDto product) {
         ModelAndView mv = new ModelAndView();
+    	Long userIdx = (Long) session.getAttribute("userIdx");
+    	Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
+    	System.out.println(storeIdx);
+    	System.out.println(storeIdx);
         // mv.addObject("productInfo", productService.getAllProductInfo());
-        mv.addObject("products", productService.getAllProductDetails());
+    	
+    	 List<ProductDetailsDto> products = productService.getAllProductDetails(storeIdx);
+    	
+    	System.out.println(products);
+    	System.out.println(products);
+    	System.out.println(products);
+    	
+        mv.addObject("products", products);
         mv.setViewName("product/productlist");
         return mv;
     }
