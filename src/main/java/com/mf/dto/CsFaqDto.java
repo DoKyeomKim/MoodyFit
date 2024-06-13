@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CsFaqDto {
        private Long faqIdx;
-	    private String title;
-	    private String content;
-
+	   private String title;
+	   private String content;
+	   private Long cs_idx;
 }

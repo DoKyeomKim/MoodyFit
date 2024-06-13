@@ -103,14 +103,14 @@ input[type="button"] {
             </div>
 <main>
     <h2>카테고리 등록</h2>
-    <form action="/admin/adminCategoryWrite" method="Post">
+    <form action="/admin/adminCategoryWrite2" method="Post">
         <table>
             <tr>
                 <td>카테고리 소속</td>
                 <td>
-                    <select onchange="navigateToPage(this)">
-		       <option value="/adminCategoryWrite">상위 카테고리</option>
+                   <select onchange="navigateToPage(this)">
 		       <option value="/adminCategoryWrite2">하위 카테고리</option>                      
+		       <option value="/adminCategoryWrite">상위 카테고리</option>
 		   </select>
                 </td>
             </tr>

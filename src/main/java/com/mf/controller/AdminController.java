@@ -3,18 +3,20 @@ package com.mf.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mf.dto.AdminAnswerDto;
 import com.mf.dto.AdminApplyDto;
 import com.mf.dto.AdminOrderDto;
 import com.mf.dto.AdminReviewDto;
@@ -33,11 +35,11 @@ import com.mf.service.PersonService;
 import com.mf.service.StoreService;
 import com.mf.service.SubCategoryService;
 
-import ch.qos.logback.core.model.Model;
-import jakarta.servlet.http.HttpSession;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Controller
 public class AdminController {
+	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 	@Autowired
 	private SubCategoryService SubcategoryService;
     @Autowired
@@ -75,17 +77,58 @@ public class AdminController {
 		return mv;
 
 }
+	//상위 카테고리 수정
+	 @PostMapping("/updateCategory")
+	    public String updateCategory(CategoryDto category) {
+	        categoryService.updateCategory(category);
+	        return "redirect:/adminCategoryUpdate";
+	    }
+    
+	//상위 카테고리 삭제
+	 @GetMapping("/deleteCategory")
+	    public String deleteCategory(@RequestParam("categoryIdx") Long categoryIdx) {
+	        categoryService.deleteCategory(categoryIdx);
+	        return "redirect:/adminCategoryUpdate";
+	    }
+	//하위 카테고리 수정
+		 @PostMapping("/updateCategory2")
+		    public String SubupdateCategory(SubCategoryDto Subcategory) {
+			 SubcategoryService.updateSubCategory(Subcategory);
+		        return "redirect:/adminCategoryUpdate2";
+		    }
+	    
+		//하위 카테고리 삭제
+		 @GetMapping("/deleteCategory2")
+		    public String SubdeleteCategory(@RequestParam("SubcategoryIdx") Long SubcategoryIdx) {
+			 SubcategoryService.deleteSubCategory(SubcategoryIdx);
+		        return "redirect:/adminCategoryUpdate2";
+		    }
+	
+	//카테고리 등록 페이지
+		@GetMapping("/adminCategoryWrite2")
+		public  ModelAndView   adminCategoryWrite2() {
+			ModelAndView    mv    = new ModelAndView("adminCategoryWrite2");
+			
+			mv.setViewName("/admin/adminCategoryWrite2");
+			return mv;
+		}
 	//카테고리 등록
 	 @PostMapping("/admin/adminCategoryWrite")
-	    public String addCategory(@ModelAttribute("categoryDTO") CategoryDto categoryDTO, @ModelAttribute("subCategoryDTO") SubCategoryDto subCategoryDTO) {
-	        if (subCategoryDTO.getCategoryIdx() == null) {
+	    public String addCategory(@ModelAttribute("categoryDTO") CategoryDto categoryDTO) {
 	            categoryService.addCategory(categoryDTO);
-	        } else {
-	            SubcategoryService.addSubCategory(subCategoryDTO);
-	        }
+	       
 	        return "redirect:/adminCategoryUpdate"; 
 	    }
 	 
+	//카테고리 등록
+		 @PostMapping("/admin/adminCategoryWrite2")
+		    public String addCategory(@ModelAttribute("subcategoryDTO") SubCategoryDto subcategoryDTO) {
+		            SubcategoryService.addSubCategory(subcategoryDTO);
+		       
+		        return "redirect:/adminCategoryUpdate"; 
+		    }
+
+		
 
 	   
 	 //가맹점 회원 탈퇴
@@ -137,12 +180,7 @@ public class AdminController {
 	        return mv;
 	    }
 	
-	    @GetMapping("/admin/faqDetail/{id}")
-	    public String faqDetail(@PathVariable("id") int id, Model model) {
-	        CsFaqDto faqDTO = faqService.getFaqById(id);
-	        model.addAttribute("faq", faqDTO);
-	        return "admin/faqDetail"; // 뷰 이름 수정
-	    }
+	 
 	    
 	    //FAQ 게시판
 	    @GetMapping("/faq")
@@ -163,7 +201,29 @@ public class AdminController {
 	    	mv.setViewName("/admin/adminFAQUpdate");
 	    	return mv;
 	    }
+	    
+	    @PostMapping("/updateFaq")
+	    public String updateFAQ(CsFaqDto faq) {
+	        faqService.updateFAQ(faq);
+	        return "redirect:/adminFAQUpdate";
+	    }
 
+	    @GetMapping("/deleteFaq")
+	    public String deleteFAQ(@RequestParam("faqIdx") Long faqIdx) {
+	        faqService.deleteFAQ(faqIdx);
+	        return "redirect:/adminFAQUpdate";
+	    }
+	    
+		/*
+		 * //faq상세페이지
+		 * 
+		 * @GetMapping("/admin/faqDetail") public String
+		 * getFaqDetail(@RequestParam("id") int id, Model model) {
+		 * model.addAttribute("faq", faqService.getFaqById(id)); return "faqDetail"; //
+		 * faqDetail.jsp 페이지로 이동 }
+		 */
+	    
+	   
 
 	 //개인회원 페이지
 	    @GetMapping("/adminPuser")

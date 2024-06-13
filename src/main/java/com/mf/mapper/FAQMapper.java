@@ -11,5 +11,9 @@ public interface FAQMapper {
 	void addFAQ(CsFaqDto faqDTO);
 	 List<CsFaqDto> getAllFAQs();
 	 
-	  CsFaqDto getFaqById(@Param("id") int id);
+	 CsFaqDto getFAQById(@Param("faqIdx") Long faqIdx);
+
+	
+		void updateFAQ(CsFaqDto faq);
+		void deleteFAQ(Long faqIdx);
 }

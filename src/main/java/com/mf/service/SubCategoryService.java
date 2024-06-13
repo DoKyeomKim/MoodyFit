@@ -27,6 +27,14 @@ public class SubCategoryService {
 	            log.error("Error adding FAQ: " + e.getMessage());
 	        }
 	    }
+	    public void updateSubCategory(SubCategoryDto Subcategory) {
+	        SubcategoryMapper.updateSubCategory(Subcategory);
+	    }
+
+	    public void deleteSubCategory(Long SubcategoryIdx) {
+	    	SubcategoryMapper.deleteSubCategory(SubcategoryIdx);
+	    }
 	
+
 	
 }

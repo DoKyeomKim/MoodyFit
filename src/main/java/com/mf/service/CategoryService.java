@@ -1,7 +1,5 @@
 package com.mf.service;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,22 @@ public class CategoryService {
 	            log.error("Error adding FAQ: " + e.getMessage());
 	        }
 	    }
+		 
+		 
+		 
+		 
+		 
+		 
+		 public void updateCategory(CategoryDto category) {
+		        categoryMapper.updateCategory(category);
+		    }
+
+		    public void deleteCategory(Long categoryIdx) {
+		        categoryMapper.deleteCategory(categoryIdx);
+		    }
+
+			
+		
 
 		}
 

@@ -16,4 +16,8 @@ public interface SubCategoryMapper {
 
 	void addSubCategory(SubCategoryDto subcategoryDTO);
 
+	void updateSubCategory(SubCategoryDto subcategory);
+
+	void deleteSubCategory(Long subcategoryIdx);
+
 }

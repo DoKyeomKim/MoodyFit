@@ -14,5 +14,6 @@ public interface CategoryMapper {
 	List<CategoryDto> getAllCategorys();
 
 	void addCategory(CategoryDto categoryDTO);
-
+	  void updateCategory(CategoryDto category);
+	    void deleteCategory(Long categoryIdx);
 }

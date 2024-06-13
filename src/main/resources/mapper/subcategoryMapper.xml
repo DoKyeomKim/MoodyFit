@@ -21,4 +21,15 @@
          #{engName}
          )
          </insert>
+         
+         <update id="updateSubCategory">
+        UPDATE sub_category
+        SET kor_name = #{korName}, eng_name = #{engName}
+        WHERE sub_category_idx = #{subCategoryIdx}
+    </update>
+
+    <delete id="deleteSubCategory">
+        DELETE FROM sub_category
+        WHERE sub_category_idx = #{subCategoryIdx}
+    </delete>
     </mapper>
