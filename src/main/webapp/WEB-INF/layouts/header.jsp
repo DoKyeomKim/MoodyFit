@@ -75,7 +75,7 @@
         <ul class="navbar-nav">
             <c:forEach var="category" items="${category}">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/${category.engName}">${category.korName}</a>
+                    <a class="nav-link active" aria-current="page" href="/category/${category.engName}">${category.korName}</a>
                 </li>
             </c:forEach>
         </ul>
