@@ -1,4 +1,4 @@
-package com.mf.wish.contoller;
+package com.mf.controller;
 
 import java.util.List;
 

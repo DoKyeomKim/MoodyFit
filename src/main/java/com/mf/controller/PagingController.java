@@ -1,4 +1,4 @@
-package com.mf.paging.controller;
+package com.mf.controller;
 
 public class PagingController {
 

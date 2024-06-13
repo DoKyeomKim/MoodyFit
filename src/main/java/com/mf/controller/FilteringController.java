@@ -1,4 +1,4 @@
-package com.mf.filtering.contoller;
+package com.mf.controller;
 
 public class FilteringController {
 

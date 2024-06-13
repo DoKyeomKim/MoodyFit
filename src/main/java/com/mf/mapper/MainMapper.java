@@ -12,6 +12,7 @@ import com.mf.dto.SubCategoryDto;
 public interface MainMapper {
     List<CategoryDto> getCategory();
     
+    
     List<CategoryDto> getCategoriesByKeyWord(@Param("keyword") String keyword);
     
     List<SubCategoryDto> getSubCategoriesByCategoryEngName(@Param("categoryEngName") String categoryEngName);
@@ -25,4 +26,6 @@ public interface MainMapper {
 	List<CategoryDto> getCategoriesByKeyword(String keyword);
 	
 	List<SubCategoryDto> getSubCategoriesByCategoryCode(@Param("categoryCode") String categoryCode);
+	
+	List<CategoryDto> searchCategoriesAndSubCategories(@Param("keyword") String keyword);
 }

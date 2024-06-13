@@ -2,12 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.MainMapper">
 
-<select id="getCategory" parameterType="com.mf.dto.CategoryDto">
-	select * from category
+<select id="getCategory" resultType="com.mf.dto.CategoryDto">
+SELECT category_idx AS categoryIdx, kor_name AS korName, eng_name AS engName
+        FROM category
 </select>
 
 <select id="getSubCategoriesByCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
-	select sc. *
+	select sc.*
 		from  sub_category sc
 		join  category c on sc.category_idx = c.category_idx
 		where c.eng_name = #{categoryEngName} 
@@ -25,6 +26,7 @@
 <select id="getAllSubCategories" resultType="com.mf.dto.SubCategoryDto">
     select * from sub_category
 </select>
+
 
 <select id="getSubCategoryById" resultType="com.mf.dto.SubCategoryDto">
   select *
@@ -44,7 +46,7 @@
   select sc.*
   	from sub_category sc
   	join category c on sc.category_idx = c.category_idx
-  	where c.eng_name = #{categoryCode}
+  	where c.kor_name = #{categoryCode}
 </select>
 
 <select id="getCategoriesByKeyword" resultType="com.mf.dto.CategoryDto">
@@ -53,6 +55,10 @@
 </select>
 
 
+<select id="getAllProducts" resultType="com.mf.dto.ProductDto">
+	SELECT * form PRODUCT
+		WHERE product_idx = #{productIdx}
+</select>
 
 
 </mapper>
