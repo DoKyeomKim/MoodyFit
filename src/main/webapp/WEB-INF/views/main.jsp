@@ -68,7 +68,9 @@ main{
   </div>
 </div>
 </main>
+<%@include file="/WEB-INF/layouts/footer.jsp"%>
 <script src="/js/bootstrap.bundle.min.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 	  const imageContainers = document.querySelectorAll('.image-container');
@@ -89,5 +91,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 
 </script>
+
 </body>
 </html>

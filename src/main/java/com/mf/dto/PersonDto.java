@@ -1,6 +1,7 @@
 package com.mf.dto;
 
 import lombok.AllArgsConstructor;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,4 +20,5 @@ public class PersonDto {
 	private String detailAddress;
 	private String social;
 	private String socialRoot;
+	private int state;
 }
