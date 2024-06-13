@@ -83,10 +83,10 @@ html, body {
                     <div class="flex-container">
                         <div class="id-pw-write flex-item" style="margin-right:20px;">
                             <div class="form-group mb-3">
-                                <input type="text" name="id" value="aa1234" id="username" placeholder="아이디" class="form-control" required>
+                                <input type="text" name="id" id="username" placeholder="아이디" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <input type="text" name="pw" value="1234" id="password" placeholder="비밀번호" class="form-control" autocomplete="off" required>
+                                <input type="text" name="pw" id="password" placeholder="비밀번호" class="form-control" autocomplete="off" required>
                             </div>
                         </div>
                         <!-- login-btn-box도 새로운 flex-item으로 감싸줌 -->
