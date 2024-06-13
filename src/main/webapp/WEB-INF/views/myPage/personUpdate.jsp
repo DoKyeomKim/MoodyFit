@@ -48,6 +48,7 @@
 	<input type="hidden" value="${result.PERSON_IDX }" name="personIdx">
 	<input type="hidden" value="${result.PERSON_SPEC_IDX }" name="personSpecIdx">
   <table>
+  	<c:if test="${result.SOCIAL=='NO'}">
 	    <tr>
 	      <th>아이디</th>
 	      <td>${result.ID }</td>
@@ -62,6 +63,7 @@
 	      <span id="pwConfirm" style="display: block;"></span>
 	      </td>
 	    </tr>
+	</c:if>
 	    <tr>
 	      <th>이름</th>
 	      <td><input type="text" name="name" id="name" value="${result.NAME }"style="width: 30%;" placeholder="이름을 입력해주세요"></td>
@@ -161,38 +163,52 @@
 
 <script>
     const btnNicknameCheckEl = document.querySelector('#btnNickNameCheck');
-    var submitBtnEl = document.querySelector('#submitBtn');
+    const submitBtnEl = document.querySelector('#submitBtn');
     const output2El = document.querySelector('#output2');
     const nickNameInputEl = document.querySelector('[name=nickName]');
+    const originalNickName = '${result.NICK_NAME}';
+
+    // 초기 상태 설정
+    function initialize() {
+        if (nickNameInputEl.value === originalNickName) {
+            btnNicknameCheckEl.disabled = true;
+        } else {
+            btnNicknameCheckEl.disabled = false;
+        }
+    }
+
+    nickNameInputEl.addEventListener('input', function() {
+        if (nickNameInputEl.value === originalNickName) {
+            btnNicknameCheckEl.disabled = true;
+            submitBtnEl.disabled = false;
+        } else {
+            btnNicknameCheckEl.disabled = false;
+            submitBtnEl.disabled = true;
+        }
+        output2El.innerHTML = '';
+    });
 
     btnNicknameCheckEl.onclick = function(e) {
-        if (!nickNameInputEl.value.trim()) { // 입력 필드가 비어 있는지 확인
+        if (!nickNameInputEl.value.trim()) {
             output2El.innerHTML = "<small style='color:red'>닉네임을 입력해주세요.</small>";
-            return; // 입력 필드가 비어 있으면 더 이상 진행하지 않음
+            return;
         }
         fetch('/nickNameCheck?nickName=' + encodeURIComponent(nickNameInputEl.value))
             .then(response => response.text())
             .then((data) => {
                 console.log(data);
                 output2El.innerHTML = data;
-
                 if (data.includes('사용가능한 닉네임입니다')) {
-                    submitBtnEl.disabled = false; // 제출 버튼 활성화
+                    submitBtnEl.disabled = false;
                 } else {
-                    submitBtnEl.disabled = true;  // 제출 버튼 비활성화
+                    submitBtnEl.disabled = true;
                 }
             })
             .catch(error => console.error('Error:', error));
     }
 
-    // 초기에는 제출 버튼을 비활성화
-    submitBtnEl.disabled = true;
-
-    // 닉네임 입력 필드가 변경될 때마다 제출 버튼 비활성화
-    NicknameInputEl.oninput = function() {
-        submitBtnEl.disabled = true;
-        output2El.innerHTML = '';
-    }
+    // 페이지가 로드되었을 때 초기 상태 설정
+    window.onload = initialize;
 </script>
 
 <!-- 전화번호 입력시 - 자동생성 -->

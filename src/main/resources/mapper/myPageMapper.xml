@@ -26,6 +26,7 @@ SELECT
     p.POST_CODE,
     p.ADDRESS,
     p.DETAIL_ADDRESS,
+    p.SOCIAL,
     PS.PERSON_SPEC_IDX,
     ps.GENDER,
     ps.HEIGHT,
@@ -43,11 +44,30 @@ WHERE
     u.USER_IDX = #{userIdx}
 </select>
 
+<select id="getStoreInfo">
+SELECT 
+U.ID,
+U.PW,
+S.STORE_IDX,
+S.STORE_NAME,
+S.MANAGER_NAME,
+S.BUSINESS_NUMBER,
+S.EMAIL,
+S.PHONE,
+S.POST_CODE,
+S.ADDRESS,
+S.DETAIL_ADDRESS
+FROM USERS U
+JOIN STORE S ON U.USER_IDX = S.USER_IDX
+WHERE
+U.USER_IDX=#{userIdx}
+</select>
+
 <select id="getUserById">
     SELECT * FROM USERS WHERE USER_IDX = #{userIdx}
 </select>
 
-<update id="personUsersUpdate">
+<update id="usersUpdate">
 UPDATE USERS
  SET PW = #{pw}
  WHERE USER_IDX = #{userIdx}
@@ -63,7 +83,23 @@ PHONE=#{phone},
 POST_CODE=#{postCode},
 ADDRESS=#{address},
 DETAIL_ADDRESS=#{detailAddress}
-WHERE PERSON_IDX = #{personIdx}
+WHERE 
+PERSON_IDX = #{personIdx}
+</update>
+
+<update id="storeUpdate">
+UPDATE STORE
+SET 
+STORE_NAME=#{storeName},
+MANAGER_NAME=#{managerName},
+BUSINESS_NUMBER=#{businessNumber},
+EMAIL=#{email},
+PHONE=#{phone},
+POST_CODE=#{postCode},
+ADDRESS=#{address},
+DETAIL_ADDRESS=#{detailAddress}
+WHERE 
+STORE_IDX = #{storeIdx}
 </update>
 
 <update id="personSpecUpdate">
@@ -76,6 +112,13 @@ FOOT = #{foot},
 TOP = #{top},
 BOTTOM = #{bottom}
 WHERE PERSON_SPEC_IDX =#{personSpecIdx}
+</update>
+
+<update id="userDelete">
+UPDATE USERS
+SET
+STATE = 2
+WHERE USER_IDX = #{userIdx}
 </update>
 
 </mapper>

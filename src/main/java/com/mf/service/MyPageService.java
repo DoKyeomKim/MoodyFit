@@ -60,7 +60,7 @@ public class MyPageService {
         users.setUserIdx(userIdx);
         
         // users 수정
-		myPageMapper.personUsersUpdate(users);
+		myPageMapper.usersUpdate(users);
 		// person 수정
 		myPageMapper.personUpdate(person);
 		// person_spec 수정
@@ -81,5 +81,44 @@ public class MyPageService {
 		
 		return result;
 	}
+	
+	// 가맹점 정보 수정용 정보 들고오기
+	public Map<String, Object> getStoreInfo(Long userIdx) {
+		Map<String,Object> result = myPageMapper.getStoreInfo(userIdx);
+		return result;
+	}
+
+	// 가맹점 정보수정
+	@Transactional
+	public void storeUpdate(Long userIdx, UsersDto users, StoreDto store) {
+		UsersDto existingUser = myPageMapper.getUserById(userIdx);
+		
+        // 사용자가 비밀번호를 변경하려고 하는지 확인
+        if (users.getPw() != null && !users.getPw().isEmpty()) {
+            // 새로운 비밀번호를 암호화하여 설정
+            String encodedPassword = bCryptPasswordEncoder.encode(users.getPw());
+            users.setPw(encodedPassword);
+        } else {
+            // 비밀번호를 변경하지 않으므로 기존 비밀번호 유지
+            users.setPw(existingUser.getPw());
+        }
+        // userIdx 미리 입력
+        users.setUserIdx(userIdx);
+        // users 수정
+		myPageMapper.usersUpdate(users);
+		// store 수정
+		myPageMapper.storeUpdate(store);
+        
+	}
+	
+	//회원탈퇴
+	public void userDelete(Long userIdx) {
+		myPageMapper.userDelete(userIdx);
+		
+		// 나중에 if문 추가해서 가맹점회원 공고 내리기까지 추가
+		// 개인회원은 장바구니 삭제 정도?
+		// 주문(orders) 관련해서는 유지해야할듯
+	}
+
 
 }

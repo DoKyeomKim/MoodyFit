@@ -95,5 +95,18 @@ public class LoginController {
 		}
 
 	}
+	// 상호명 중복체크
+	@GetMapping("/storeNameCheck")
+	@ResponseBody
+	public String storeNameCheck(@RequestParam("storeName") String storeName) {
+		
+		String resultNickname = usersService.getStoreName(storeName);
+		if(resultNickname==null) {
+			return "<small style='color:green'>사용가능한 상호명입니다</small>";
+		}  else {
+			return "<small style='color:red'>사용할 수 없는 상호명입니다</small>";
+		}
+		
+	}
 	
 }

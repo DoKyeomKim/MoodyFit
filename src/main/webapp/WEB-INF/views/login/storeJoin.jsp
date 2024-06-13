@@ -50,7 +50,8 @@
   	<form action="/storeJoinProcess" method="post" name="joinForm">
 	    <tr>
 	      <th>아이디</th>
-	      <td><input type="text" name="id" id="username" style="width: 100%;"></td>
+	      <td><input type="text" name="id" id="username" style="width: 25%;">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnIdCheck"/><br>
+	      	  <span class="col-6" id="output"></span></td>
 	    </tr>
 	    <tr>
 	      <th>비밀번호</th>
@@ -63,8 +64,9 @@
 	      </td>
 	    </tr>
 	    <tr>
-	      <th>가맹점명</th>
-	      <td><input type="text" name="storeName" id="name" style="width: 100%;"></td>
+	      <th>상호명</th>
+	      <td><input type="text" name="storeName" id="name" style="width: 30%;">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnStoreNameCheck"/><br>
+	      	  <span class="col-6" id="output2"></span></td>
 	    </tr>
 	    <tr>
 	      <th>담당자명</th>
@@ -100,7 +102,7 @@
 	    </tr>
 	    <tr>
 	      <td colspan="2" style="text-align: center;  border-left:none; border-bottom:none;">
-	        <button type="submit" id="#submitBtn" class="btn btn-primary" style="margin-top: 20px;">회원가입</button>
+	        <button type="submit" id="submitBtn" class="btn btn-primary" style="margin-top: 20px;">회원가입</button>
 	      </td>
 	    </tr>
     </form>
@@ -108,6 +110,79 @@
 </main>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- 아이디 중복확인 -->
+<script>
+    const btnIdCheckEl = document.querySelector('#btnIdCheck');
+    var submitBtnEl = document.querySelector('#submitBtn');
+    const outputEl = document.querySelector('#output');
+    const idInputEl = document.querySelector('[name=id]');
+    
+
+    btnIdCheckEl.onclick = function(e) {
+        if (!idInputEl.value.trim()) { // 입력 필드가 비어 있는지 확인
+            outputEl.innerHTML = "<small style='color:red'>아이디를 입력해주세요.</small>";
+            return; // 입력 필드가 비어 있으면 더 이상 진행하지 않음
+        }
+        fetch('/idCheck?id=' + encodeURIComponent(idInputEl.value))
+            .then(response => response.text())
+            .then((data) => {
+                console.log(data);
+                outputEl.innerHTML = data;
+
+                if (data.includes('사용가능한 아이디입니다')) {
+                    submitBtnEl.disabled = false; // 제출 버튼 활성화
+                } else {
+                    submitBtnEl.disabled = true;  // 제출 버튼 비활성화
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // 초기에는 제출 버튼을 비활성화
+    submitBtnEl.disabled = true;
+
+    // 아이디 입력 필드가 변경될 때마다 제출 버튼 비활성화
+    idInputEl.oninput = function() {
+        submitBtnEl.disabled = true;
+        outputEl.innerHTML = '';
+    }
+</script>
+<!-- 상호명 중복체크  -->
+<script>
+    const btnStoreNameCheckEl = document.querySelector('#btnStoreNameCheck');
+    var submitBtnEl = document.querySelector('#submitBtn');
+    const output2El = document.querySelector('#output2');
+    const storeNameInputEl = document.querySelector('[name=storeName]');
+
+    btnStoreNameCheckEl.onclick = function(e) {
+        if (!storeNameInputEl.value.trim()) { // 입력 필드가 비어 있는지 확인
+            output2El.innerHTML = "<small style='color:red'>상호명을 입력해주세요.</small>";
+            return; // 입력 필드가 비어 있으면 더 이상 진행하지 않음
+        }
+        fetch('/storeNameCheck?storeName=' + encodeURIComponent(storeNameInputEl.value))
+            .then(response => response.text())
+            .then((data) => {
+                console.log(data);
+                output2El.innerHTML = data;
+
+                if (data.includes('사용가능한 상호명입니다')) {
+                    submitBtnEl.disabled = false; // 제출 버튼 활성화
+                } else {
+                    submitBtnEl.disabled = true;  // 제출 버튼 비활성화
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // 초기에는 제출 버튼을 비활성화
+    submitBtnEl.disabled = true;
+
+    // 아이디 입력 필드가 변경될 때마다 제출 버튼 비활성화
+    NicknameInputEl.oninput = function() {
+        submitBtnEl.disabled = true;
+        output2El.innerHTML = '';
+    }
+</script>
 <script>
     function sample6_execDaumPostcode() {
         new daum.Postcode({

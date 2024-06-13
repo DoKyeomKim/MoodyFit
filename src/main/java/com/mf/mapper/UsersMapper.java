@@ -27,6 +27,33 @@ public interface UsersMapper {
 	void storeJoinProcess(UsersDto usersDto);
 	void storeJoinDetailProcess(StoreDto storeDto);
 
+	// 상호명 중복체크
+	String getStoreName(String storeName);
+
+	
+	// OAuth 확인용 email
+	UsersDto getUserById(String id);
+
+
+	// OAuth users 저장
+	void OAuthJoin(UsersDto users);
+	// OAuth person 저장
+	void OAuthPersonJoin(PersonDto person);
+	// OAuth person_spec 저장
+	void OAuthSpecJoin();
+
+	// OAuth 회원탈퇴 후 정보 겹치는거 방지
+	UsersDto getUserByIdAndState(String id);
+
+
+
+
+
+
+
+
+
+
 
 
 

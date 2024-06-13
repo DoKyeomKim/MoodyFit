@@ -69,6 +69,11 @@ public class UsersService {
 		return usersMapper.getNickName(nickName);
 	}
 
+	// 상호명 중복 체크
+	public String getStoreName(String storeName) {
+		return usersMapper.getStoreName(storeName);
+	}
+
 
 }
 

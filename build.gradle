@@ -34,6 +34,12 @@ dependencies {
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 	
+	// 하세연 추가
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	
 	
 	// 수동 추가
 	// jdk 17, jsp , jstl
@@ -51,6 +57,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.security:spring-security-test'	
 	implementation 'org.springframework.security:spring-security-taglibs'
+	// oauth2 사용
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'	
 	
 	// 이미지 파일 관련
 	implementation 'commons-fileupload:commons-fileupload:1.4'

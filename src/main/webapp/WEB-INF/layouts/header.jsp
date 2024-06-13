@@ -58,8 +58,8 @@
             </div>
         </div>
         <div class="col-md-3">
-                <form class="search-box" action="/search" method="GET">
-                    <input class="search-txt" type="search" placeholder="검색할 내용을 입력해주세요.">
+                <form class="search-box" action="/search?keyword=${keyword}" method="GET">
+                    <input class="search-txt" id="search-txt" type="keyword" name="keyword"placeholder="검색할 내용을 입력해주세요.">
                     <button class="search-btn" type="submit">
                     	<i class="fa-solid fa-magnifying-glass"></i>
                     </button>
@@ -84,13 +84,12 @@
 		    <c:choose>
 		        <c:when test="${sessionScope.role == 'ROLE_PERSON'}">
 		            <div style="margin-right:20px;"><a href="/myPage">마이페이지</a></div>
-		            <a href="<c:url value='/logout' />">로그아웃</a>
 		        </c:when> 
 		        <c:when test="${sessionScope.role == 'ROLE_STORE'}">
 		            <div style="margin-right:20px;"><a href="/storeMyPage">마이페이지</a></div>
-		            <a href="<c:url value='/logout' />">로그아웃</a>
 		        </c:when>
 		    </c:choose>
+		            <a href="<c:url value='/logout' />">로그아웃</a>
 		    </security:authorize>
 		    <security:authorize access="!isAuthenticated()">
 		        <a href="<c:url value='/login' />">로그인</a>
@@ -99,6 +98,14 @@
     </div>
 </nav>
 
-				
+    <script>
+    document.querySelector('.search-box').addEventListener('submit', function(event) {
+        var searchInput = document.getElementById('search-txt').value;
+        if (!searchInput) {
+            alert('검색할 내용을 입력해주세요!');
+            event.preventDefault(); // 폼 제출을 막음
+        }
+    });
+    </script>				
 </body>
 </html>

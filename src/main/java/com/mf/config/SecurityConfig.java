@@ -10,6 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
 
+import com.mf.service.CustomOAuth2UserService;
 import com.mf.service.CustomUserDetailsService;
 
 @Configuration
@@ -25,6 +26,16 @@ public class SecurityConfig {
 	@Autowired
 	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 	
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+
+        this.customOAuth2UserService = customOAuth2UserService;
+    }
+
+
+
+	
 	@Bean
 	public WebSecurityCustomizer configure() {
 		return (web) -> web.ignoring().requestMatchers("/css/**").requestMatchers("/js/**")
@@ -38,10 +49,11 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/", "/search","/totalJoin","/login","/idCheck","/nickNameCheck","/loginProcess", "/storeJoin","/storeJoinProcess","/join", "/joinProcess","/error","/loginFail").permitAll()
-				.requestMatchers("/admin/admin**","/admin").hasRole("ADMIN")
-				.requestMatchers("/myPage","/personUpdateForm","/personUpdate").hasAnyRole("ADMIN", "PERSON")
-				.requestMatchers("/storeMyPage").hasAnyRole("ADMIN", "STORE")
+				.requestMatchers("/","/category/**", "/oauth2/**","/postingDetail","/search**","/totalJoin","/login","/idCheck","/storeNameCheck","/nickNameCheck","/loginProcess", "/storeJoin","/storeJoinProcess","/join", "/joinProcess","/error","/loginFail").permitAll()
+				.requestMatchers("/admin/admin**","/admin**").hasRole("ADMIN")
+				.requestMatchers("/myPage","/personUpdateForm","/personUpdate").hasAnyRole("ADMIN","PERSON")
+				.requestMatchers("/storeMyPage","/storeUpdateForm").hasAnyRole("ADMIN","STORE")
+				.requestMatchers("/accountDeleteForm").hasAnyRole("PERSON","STORE")
 				.anyRequest().authenticated()
 				);
 
@@ -53,7 +65,17 @@ public class SecurityConfig {
 				.failureHandler(customFailureHandler)
 				);
 		
-		
+        http
+        .oauth2Login((oauth2) -> oauth2
+        		.loginPage("/oauth2/authorization/naver") // 네이버 로그인 페이지
+                .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig.userService(customOAuth2UserService))
+				.failureHandler(customFailureHandler)
+        		);
+        
+        http.oauth2Login((oauth2) -> oauth2
+                .loginPage("/oauth2/authorization/google") // 구글 로그인 페이지
+                .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig.userService(customOAuth2UserService))
+                .failureHandler(customFailureHandler));
 		
 		http.logout((logout)->logout
 				.logoutUrl("/logout")
