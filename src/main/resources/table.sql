@@ -203,10 +203,8 @@ CREATE TABLE posting_answer (
 CREATE TABLE cart (  
     cart_idx NUMBER PRIMARY KEY,                 -- 장바구니 고유번호
     state varchar2(50) default '진행중' not null, -- 장바구니 태
-    product_idx NUMBER,                    		 -- 제품 정보 고유번호
-    FOREIGN KEY (product_idx) REFERENCES product(product_idx),
-    posting_idx NUMBER,							 -- 상품글의 고유번호
-    FOREIGN KEY (posting_idx) REFERENCES posting(posting_idx),
+    posting_product_idx NUMBER,                    		 -- 제품 정보 고유번호
+    FOREIGN KEY (posting_product_idx) REFERENCES posting_product(posting_product_idx),
     person_idx NUMBER,                           -- 장바구니의 주인 고유번호
     FOREIGN KEY (person_idx) REFERENCES person(person_idx),
     product_info_idx NUMBER,                           -- 제품 상세 고유번호

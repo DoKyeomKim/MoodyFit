@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.ProductMapper">
+
+<select id="getStoreIdxByUserIdx">
+select store_idx
+from store
+where user_idx=#{userIdx}
+</select>
+
+<!-- 상품 정보 삽입 -->
+<insert id="insertProduct" parameterType="com.mf.dto.ProductDetailsDto">
+    <selectKey keyProperty="productIdx" resultType="long" order="AFTER">
+        SELECT product_seq.CURRVAL FROM DUAL
+    </selectKey>
+    INSERT INTO product (product_idx, name, manufacture_name, price, sub_category_idx, store_idx)
+    VALUES (product_seq.NEXTVAL, #{name, jdbcType=VARCHAR}, #{manufactureName, jdbcType=VARCHAR}, #{price, jdbcType=INTEGER}, #{subCategoryIdx, jdbcType=BIGINT}, #{storeIdx, jdbcType=BIGINT})
+</insert>
+
+<!-- 상품 상세 정보 삽입 -->
+<insert id="insertProductInfo" parameterType="com.mf.dto.ProductDetailsDto">
+    <selectKey keyProperty="productInfoIdx" resultType="long" order="AFTER">
+        SELECT product_info_seq.CURRVAL FROM DUAL
+    </selectKey>
+    INSERT INTO product_info (product_info_idx, product_color_idx, product_size_idx, product_idx)
+    VALUES (product_info_seq.NEXTVAL, #{productColorIdx, jdbcType=BIGINT}, #{productSizeIdx, jdbcType=BIGINT}, #{productIdx, jdbcType=BIGINT})
+</insert>
+
+<!-- 재고 정보 삽입 -->
+<insert id="insertProductQuantity">
+    INSERT INTO product_quantity (product_quantity_idx, product_info_idx, quantity, update_date)
+    VALUES (product_quantity_seq.NEXTVAL, #{productInfoIdx, jdbcType=BIGINT}, #{quantity, jdbcType=INTEGER}, SYSDATE)
+</insert>
+
+
+<!-- 새로운 Product ID를 가져옴 -->
+<select id="getProductIdx" resultType="long">
+    SELECT product_seq.CURRVAL FROM DUAL
+</select>
+
+
+
+<!-- 카테고리 목록 가져오기 -->
+<select id="getCategoryList" resultType="com.mf.dto.CategoryDto">
+    SELECT * FROM category
+</select>
+
+<!-- 특정 카테고리의 서브 카테고리 목록 가져오기 -->
+<select id="getSubCategoryList" resultType="com.mf.dto.SubCategoryDto">
+    SELECT * FROM sub_category WHERE category_idx = #{categoryIdx}
+</select>
+
+
+<!-- 모든 색상 정보 가져오기 -->
+<select id="getAllColors" resultType="com.mf.dto.ProductColorDto">
+    SELECT product_color_idx AS productColorIdx, color FROM product_color
+</select>
+
+<!-- 모든 사이즈 정보 가져오기 -->
+<select id="getAllSizes" resultType="com.mf.dto.ProductSizeDto">
+    SELECT product_size_idx AS productSizeIdx, sizes FROM product_size
+</select>
+
+<!-- 전체 상품 정보 -->
+<select id="getAllProductDetails" resultType="com.mf.dto.ProductDetailsDto">
+    SELECT 
+        pi.product_info_idx AS productInfoIdx,
+        p.name,
+        p.price,
+        p.manufacture_name AS manufactureName,
+        pc.color,
+        ps.sizes AS sizes,
+        c.kor_name AS category,
+        sc.kor_name AS subCategory,
+        pq.quantity,
+        TO_CHAR(pi.update_date, 'YYYY.MM.DD') AS updateDate
+     FROM product_info pi
+     JOIN product p ON pi.product_idx = p.product_idx
+     JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
+     JOIN category c ON sc.category_idx = c.category_idx
+     LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+     LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+     LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+     where p.store_idx=#{storeIdx}
+</select>
+
+</mapper>

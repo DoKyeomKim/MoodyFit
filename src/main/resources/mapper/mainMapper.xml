@@ -1,8 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.MainMapper">
-<select id="getCategory" parameterType="com.mf.dto.CategoryDto">
-select * from category
+
+<select id="getCategory" resultType="com.mf.dto.CategoryDto">
+SELECT category_idx AS categoryIdx, kor_name AS korName, eng_name AS engName
+        FROM category
+</select>
+
+<select id="getSubCategoriesByCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
+	select sc.*
+		from  sub_category sc
+		join  category c on sc.category_idx = c.category_idx
+		where c.eng_name = #{categoryEngName} 
+</select>
+
+ <!-- 카테고리 첫 페이지가 All로 출력되게끔 -->
+<select id="getAllSubCategoryByCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
+	select sc.*
+		from sub_category sc
+		join category c on sc.category_idx = c.category_idx
+		where c.eng_name = #{categoryEngName}
+  		and sc.kor_name = '전체'
+</select>
+
+<select id="getAllSubCategories" resultType="com.mf.dto.SubCategoryDto">
+    select * from sub_category
+</select>
+
+
+<select id="getSubCategoryById" resultType="com.mf.dto.SubCategoryDto">
+  select *
+  	from sub_category
+  	where sub_category_idx = #{subCategoryId}
+</select>
+
+<select id="getSubCategoryByNameAndCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
+	select sc.*
+		from sub_category sc
+		join category c on sc.category_idx = c.category_idx
+		where c.eng_name = #{categoryEngName}
+			and sc.eng_name = #{subCategoryName}
+</select>
+
+<select id="getSubCategoriesByCategoryCode" resultType="com.mf.dto.SubCategoryDto">
+  select sc.*
+  	from sub_category sc
+  	join category c on sc.category_idx = c.category_idx
+  	where c.kor_name = #{categoryCode}
+</select>
+
+<select id="getCategoriesByKeyword" resultType="com.mf.dto.CategoryDto">
+  select * from category
+ 		where kor_name like '%' || #{keyword} || '%'
+</select>
+
+
+<select id="getAllProducts" resultType="com.mf.dto.ProductDto">
+	SELECT * form PRODUCT
+		WHERE product_idx = #{productIdx}
 </select>
 
 <select id="getPostingAll">

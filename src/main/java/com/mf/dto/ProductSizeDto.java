@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubCategoryDto {
-	private Long subCategoryIdx;
-	private String korName;
-	private String engName;
-	private Long categoryIdx;
+public class ProductSizeDto {
+    private Long productSizeIdx;
+    private String sizes;      
 }
