@@ -16,11 +16,11 @@ main{
 </head>
 <body>
 	<%@include file="/WEB-INF/layouts/header.jsp"%>
-		<h2 style="text-align:center; margin-top:30px;"> my page</h2>
-		<hr>
 	<%@include file="/WEB-INF/layouts/storeAside.jsp"%>
 
 	<main style="margin-top:30px;">
+		<h2 style="text-align:center; margin-top:30px;"> my page</h2>
+		<hr>
 		<div class="hello-users" style="margin-left:30px;">
 			<h5>${store.storeName} 님 반갑습니다.</h5>
 		</div>

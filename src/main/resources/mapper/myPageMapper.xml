@@ -92,7 +92,6 @@ UPDATE STORE
 SET 
 STORE_NAME=#{storeName},
 MANAGER_NAME=#{managerName},
-BUSINESS_NUMBER=#{businessNumber},
 EMAIL=#{email},
 PHONE=#{phone},
 POST_CODE=#{postCode},

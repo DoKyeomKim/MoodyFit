@@ -45,9 +45,9 @@
 <body>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
 
+<form action="/storeUpdate" method="post" name="joinForm">
 <main class="content-main">
   <table>
-  	<form action="/storeUpdate" method="post" name="joinForm">
   	<input type="hidden" value="${result.STORE_IDX }" name="storeIdx">
 	    <tr>
 	      <th>아이디</th>
@@ -55,25 +55,25 @@
 	    </tr>
 	    <tr>
 	      <th>비밀번호</th>
-	      <td><input type="password" name="pw" id="password" oninput="pwCheck()" style="width: 100%;" placeholder="변경을 원하실 경우 입력해주세요." ></td>
+	      <td><input type="password" name="pw" id="password" oninput="pwCheck()" style="width: 50%;" placeholder="변경을 원하실 경우 입력해주세요." ></td>
 	    </tr>
 	    <tr>
 	      <th>비밀번호 확인</th>
-	      <td><input type="password" id="password2" oninput="pwCheck()" style="width: 100%;" placeholder="비밀번호를 다시 한번 입력해주세요">
+	      <td><input type="password" id="password2" oninput="pwCheck()" style="width: 50%;" placeholder="비밀번호를 다시 한번 입력해주세요">
 	      <span id="pwConfirm" style="display: block;"></span>
 	      </td>
 	    </tr>
 	    <tr>
 	      <th>가맹점명</th>
-	      <td><input type="text" name="storeName" id="name" value="${result.STORE_NAME }" style="width: 100%;"></td>
+	      <td><input type="text" name="storeName" id="name" value="${result.STORE_NAME }" style="width: 30%;"></td>
 	    </tr>
 	    <tr>
 	      <th>담당자명</th>
-	      <td><input type="text" name="managerName" id="nickName" value="${result.MANAGER_NAME }" style="width: 100%;"></td>
+	      <td><input type="text" name="managerName" id="nickName" value="${result.MANAGER_NAME }" style="width: 30%;"></td>
 	    </tr>
 	    <tr>
 	      <th>사업자 등록번호</th>
-	      <td><input type="text" name="businessNumber" id="businessNumber" value="${result.BUSINESS_NUMBER }" style="width: 100%;"></td>
+	      <td>${result.BUSINESS_NUMBER }</td>
 	    </tr>
 	    <tr>
 	      <th>우편번호</th>
@@ -81,31 +81,31 @@
 	    </tr>
 	    <tr>
 	      <th>주소</th>
-	      <td><input type="text" name="address" id="sample6_address" value="${result.ADDRESS }" style="width: 100%;" placeholder="주소"></td>
+	      <td><input type="text" name="address" id="sample6_address" value="${result.ADDRESS }" style="width: 40%;" placeholder="주소"></td>
 	    </tr>
 	    <tr>
 	      <th>상세주소</th>
-	      <td><input type="text" name="detailAddress" id="sample6_detailAddress" value="${result.DETAIL_ADDRESS }" style="width: 100%;" placeholder="상세주소를 입력해주세요"></td>
+	      <td><input type="text" name="detailAddress" id="sample6_detailAddress" value="${result.DETAIL_ADDRESS }" style="width: 50%;" placeholder="상세주소를 입력해주세요"></td>
 	    </tr>
 
     
 	    <tr>
 	      <th>전화번호</th>
 	      <td>
-	        <input type="text" name="phone" id="phone" value="${result.PHONE }" style="width: 100%;">
+	        <input type="text" name="phone" id="phone" value="${result.PHONE }" style="width: 30%;">
 	      </td>
 	    </tr>
 	    <tr>
 	      <th>이메일</th>
-	      <td><input type="email" name="email" id="email" value="${result.EMAIL }" style="width: 100%;"></td>
+	      <td><input type="email" name="email" id="email" value="${result.EMAIL }" style="width: 30%;"></td>
 	    </tr>
+  </table>
+</main>
   <div style="margin-bottom:30px; text-align:center;">
 	  <button type="submit" id="submitBtn" class="btn btn-primary">정보 수정</button>
 	  <a href="/storeMyPage" class="btn btn-secondary">취소하기</a>
   </div>
-    </form>
-  </table>
-</main>
+</form>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
