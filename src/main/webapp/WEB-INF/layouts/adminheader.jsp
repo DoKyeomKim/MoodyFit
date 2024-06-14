@@ -25,7 +25,7 @@
 </head>
 <body>
 <div id="gnb">
-    <a href="/adminMain">
+    <a href="/admin">
         <img src="/images/logo.png" alt="Logo" class="logo">
     </a>
     <div class="text-right">

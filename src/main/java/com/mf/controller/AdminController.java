@@ -7,27 +7,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mf.dto.AdminApplyDto;
 import com.mf.dto.AdminOrderDto;
+import com.mf.dto.AdminQuestionDto;
 import com.mf.dto.AdminReviewDto;
 import com.mf.dto.CategoryDto;
 import com.mf.dto.CsFaqDto;
+import com.mf.dto.CsQnaDto;
 import com.mf.dto.PersonDto;
 import com.mf.dto.StoreDto;
 import com.mf.dto.SubCategoryDto;
 import com.mf.service.AdminApplyService;
 import com.mf.service.AdminOrderService;
-import com.mf.service.AdminQnaServiceImpl;
+import com.mf.service.AdminQnaService;
 import com.mf.service.AdminReviewService;
 import com.mf.service.CategoryService;
 import com.mf.service.FAQService;
@@ -35,6 +35,7 @@ import com.mf.service.PersonService;
 import com.mf.service.StoreService;
 import com.mf.service.SubCategoryService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
@@ -53,7 +54,7 @@ public class AdminController {
     @Autowired
     private StoreService storeService;
 	@Autowired
-	private AdminQnaServiceImpl adminQnaService;
+	private AdminQnaService adminQnaService;
 	@Autowired
 	private AdminOrderService adminOrderService;
 	@Autowired
@@ -214,15 +215,22 @@ public class AdminController {
 	        return "redirect:/adminFAQUpdate";
 	    }
 	    
-		/*
-		 * //faq상세페이지
-		 * 
-		 * @GetMapping("/admin/faqDetail") public String
-		 * getFaqDetail(@RequestParam("id") int id, Model model) {
-		 * model.addAttribute("faq", faqService.getFaqById(id)); return "faqDetail"; //
-		 * faqDetail.jsp 페이지로 이동 }
-		 */
-	    
+	    @GetMapping("/faqDetail")
+	    public String getFaqDetail(@RequestParam("faqIdx") Long faqIdx, Model model) {
+	        // faqIdx 값 로그 출력
+	        System.out.println("Received faqIdx: " + faqIdx);
+	        
+	        // FAQ 객체를 가져와서 모델에 추가
+	        CsFaqDto faq = faqService.getFaqByFaqIdx(faqIdx);
+	        if (faq == null) {
+	            // faqIdx로 FAQ를 찾지 못한 경우 처리
+	            System.out.println("FAQ not found for faqIdx: " + faqIdx);
+	            return "errorPage"; // errorPage.jsp로 이동 (필요에 따라 수정)
+	        }
+	        model.addAttribute("faq", faq);
+	        
+	        return "admin/faqDetail"; // faqDetail.jsp 페이지로 이동
+	    }
 	   
 
 	 //개인회원 페이지
@@ -307,6 +315,32 @@ public class AdminController {
 		   return mv;
 	   
 }
+	   
+	   @RequestMapping("/qna")
+		public  ModelAndView   qna() {
+			ModelAndView    mv    = new ModelAndView("qna");
+			
+			mv.setViewName("/admin/qna");
+			return mv;
+		}
+	   
+	   
+	   @GetMapping("/qnaWrite")
+			public  ModelAndView   qnaWrite() {
+				ModelAndView    mv    = new ModelAndView("qnaWrite");
+				
+				mv.setViewName("/admin/qnaWrite");
+				return mv;
+			}
+	   
+	 //qna작성 페이지
+	    @PostMapping("/admin/qnaWrite")
+	    public String addQuestion(@ModelAttribute("qnaDTO") AdminQuestionDto qnaDTO,HttpSession session,CsQnaDto csQna) {
+	        Long userIdx= (Long) session.getAttribute("userIdx");
+	        
+	    	adminQnaService.addQuestion(qnaDTO,userIdx,csQna); //
+	        return "redirect:/qna"; // qna 목록 페이지로 리다이렉트 
+	    }
 	   
 	   //주문 내역 페이지
 	   @GetMapping("/adminOrder")

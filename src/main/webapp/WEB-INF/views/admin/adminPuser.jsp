@@ -89,7 +89,8 @@ main {
                 <tbody>
               
                     <c:forEach var="person" items="${personList}">
-                      <form id="deleteForm" action="/admin/dropId2?userIdx=${person.userIdx }" method="post">
+                   <form id="deleteForm" action="/admin/dropId2?userIdx=${person.userIdx}" method="post">
+                      <input type="hidden" name="userIdx" value="${person.userIdx}">
                         <tr>
                             <td>${person.personIdx}</td>
                             <td>${person.name}</td>
@@ -98,21 +99,21 @@ main {
                             <td>${person.email}</td>
                             <td>${person.address}</td>
                             <td>${person.detailAddress}</td>
-             
                             <td>
-           <c:choose>
+           					<c:choose>
                     			<c:when test="${person.state==1}">회원</c:when>
                     			<c:when test="${person.state==2}">탈퇴회원</c:when>
-                    			<c:when test="${person.state==3}">정지회원</c:when>
+                    			<c:when test="${person.state==3}">추방회원</c:when>
                     		</c:choose>
                     		</td>
                                 
-			  	<td>
-				<button type="submit" class="btn btn-delete"
-					onclick="confirmDelete()">추방</button>
-                </td>
+			  			<td>
+							<button type="submit" class="btn btn-delete"
+								onclick="confirmDelete()">추방</button>
+		                </td>
                         </tr>
                      
+                   </form>
                     </c:forEach>
                 </tbody>
             </table>

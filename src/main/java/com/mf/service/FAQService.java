@@ -31,8 +31,8 @@ public class FAQService {
 	  public List<CsFaqDto> getAllFAQs() {
 	        return faqMapper.getAllFAQs();
 	    }
-	  public CsFaqDto getFAQById(Long faqIdx) {
-	        return faqMapper.getFAQById(faqIdx);
+	  public CsFaqDto getFaqByFaqIdx(Long faqIdx) {
+	        return faqMapper.getFaqByFaqIdx(faqIdx);
 	    }
 
 	  public void updateFAQ(CsFaqDto faq) {

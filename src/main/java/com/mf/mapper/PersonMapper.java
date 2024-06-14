@@ -10,5 +10,5 @@ public interface PersonMapper {
     List<PersonDto> getAllPersons();
 
 	void dropUser(Long userIdx);
-    
+
 }

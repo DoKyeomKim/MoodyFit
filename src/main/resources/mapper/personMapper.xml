@@ -16,13 +16,11 @@ FROM
     person p
 JOIN 
     users u ON p.user_idx = u.USER_IDX
-               
     </select>
      <!-- 회원 드롭 -->
       <update id="dropUser">
       UPDATE users
-      SET state = 2
+      SET state = 3
       WHERE user_idx = #{userIdx}
    </update>
-   
 </mapper>

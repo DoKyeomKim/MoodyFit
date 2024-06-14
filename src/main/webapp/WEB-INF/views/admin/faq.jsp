@@ -64,12 +64,10 @@ a {
 </head>
 <body>
 <%@include file="/WEB-INF/layouts/adminheader.jsp"%> 
-   <div class="col-sidebar">
-                <%@include file="/WEB-INF/layouts/adminsidebar.jsp"%>
-            </div>
-
+<div class="col-sidebar">
+<%@include file="/WEB-INF/layouts/adminsidebar.jsp"%>
+</div>
 <main>
-
 <input type="hidden" value="{user_idx}" id="userIdx">
 <h3 class="mt-3 text-center">쇼핑몰 이용안내(FAQ)</h3>
 <hr class="mb-3">
@@ -82,30 +80,21 @@ a {
                         <th class="col-2">번호</th>
                         <th class="col-4">제목</th>
                         <th class="col-2">작성자</th>
-                        
                     </tr>
                 </thead>
                 <tbody>
-      
                     <c:forEach var="faq" items="${faqList}">
                         <tr>
                             <td>${faq.faqIdx}</td>
-                            <td><a href="/admin/faqDetail?id=${faq.faqIdx}">${faq.title }</a></td>
+                            <td><a href="/faqDetail?faqIdx=${faq.faqIdx}">${faq.title}</a></td>
                             <td>관리자</td>                                                      
                         </tr>
-                       
                     </c:forEach>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
 </main>
-
-
-<script>
-</script> 
-
 </body>
 </html>

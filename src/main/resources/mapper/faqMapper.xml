@@ -13,15 +13,16 @@
     </insert>
     
     
-     <select id="getAllFAQs" parameterType="com.mf.dto.CsFaqDto">
+    <select id="getAllFAQs" parameterType="com.mf.dto.CsFaqDto">
         SELECT FAQ_IDX, title, content
         FROM CS_FAQ
         order by faq_idx asc
     </select>
     
-     <select id="getFAQById" parameterType="long" resultType="com.mf.dto.CsFaqDto">
-        SELECT * FROM cs_faq WHERE faqIdx = #{faqIdx}
-    </select>
+    <!-- 특정 FAQ 항목 가져오기 -->
+   <select id="getFaqByFaqIdx">
+    SELECT * FROM cs_faq WHERE faq_idx = #{faqIdx}
+</select>
 
     <update id="updateFAQ" >
     UPDATE cs_faq
