@@ -3,6 +3,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+footer{
+    margin-top: 300px;
+    text-align: center;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>
 </head>
 <body>
  <footer class="bg-body-tertiary">

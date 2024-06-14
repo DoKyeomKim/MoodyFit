@@ -24,7 +24,7 @@
       border-collapse: collapse;
     }
     th{
-      width: 7%;
+      width: 9%;
       padding: 10px;
       text-align: left;
       border: 1px solid #ddd;
@@ -38,7 +38,10 @@
       border: 1px solid #ddd;
       border-right:none;
     }
-
+	.required:after {
+	    content: ' *';
+	    color: red;
+	}
     
   </style>
 
@@ -50,57 +53,57 @@
   <table>
   	<form action="/storeJoinProcess" method="post" name="joinForm">
 	    <tr>
-	      <th>아이디</th>
+	      <th class="required">아이디</th>
 	      <td><input type="text" name="id" id="username" style="width: 25%;" placeholder="아이디를 입력해주세요.">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnIdCheck"/><br>
 	      	  <span class="col-6" id="output"></span></td>
 	    </tr>
 	    <tr>
-	      <th>비밀번호</th>
+	      <th class="required">비밀번호</th>
 	      <td><input type="password" name="pw" id="password" oninput="pwCheck()" style="width: 50%;" placeholder="비밀번호를 입력해주세요" required></td>
 	    </tr>
 	    <tr>
-	      <th>비밀번호 확인</th>
+	      <th class="required">비밀번호 확인</th>
 	      <td><input type="password" id="password2" oninput="pwCheck()" style="width: 50%;" placeholder="비밀번호를 다시 한번 입력해주세요" required>
 	      <span id="pwConfirm" style="display: block;"></span>
 	      </td>
 	    </tr>
 	    <tr>
-	      <th>상호명</th>
+	      <th class="required">상호명</th>
 	      <td><input type="text" name="storeName" id="name" style="width: 30%;" placeholder="상호명을 입력해주세요.">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnStoreNameCheck"/><br>
 	      	  <small class="col-6" id="output2"></small></td>
 	    </tr>
 	    <tr>
-	      <th>담당자명</th>
+	      <th class="required">담당자명</th>
 	      <td><input type="text" name="managerName" id="nickName" style="width: 30%;" placeholder="담당자 실명을 입력해주세요."></td>
 	    </tr>
 		    <tr>
-		      <th>사업자 등록번호</th>
-		      <td><input type="text" name="businessNumber"  id="corp_reg" style="width: 30%;" placeholder="사업자등록번호 10자리를 입력해주세요">&nbsp;&nbsp;
-		      <input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" name="corp_button" id="corp_button" value="확 인" onclick="corp_chk();"><br>
+		      <th class="required">사업자 등록번호</th>
+		      <td><input type="text" name="businessNumber"  id="corp_reg" style="width: 35%;" placeholder="사업자등록번호 10자리를 입력해주세요">&nbsp;&nbsp;
+		      <input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" name="corp_button" id="corp_button" value="인증하기" onclick="corp_chk();"><br>
 		      <small class="col-6" id="output3"></small></td>
 		    </tr>
 	    <tr>
-	      <th>우편번호</th>
+	      <th class="required">우편번호</th>
 	      <td><input type="text" name="postCode" id="sample6_postcode" placeholder="우편번호" style="margin-right: 30px; width: 20%;"><input type="button" class="btn btn-secondary" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"></td>
 	    </tr>
 	    <tr>
-	      <th>주소</th>
+	      <th class="required">주소</th>
 	      <td><input type="text" name="address" id="sample6_address" style="width: 40%;" placeholder="주소"></td>
 	    </tr>
 	    <tr>
-	      <th>상세주소</th>
+	      <th class="required">상세주소</th>
 	      <td><input type="text" name="detailAddress" id="sample6_detailAddress" style="width: 50%;" placeholder="상세주소를 입력해주세요"></td>
 	    </tr>
 
     
 	    <tr>
-	      <th>전화번호</th>
+	      <th class="required">전화번호</th>
 	      <td>
 	        <input type="text" name="phone" id="phone" style="width: 30%;"  placeholder="전화번호를 입력해주세요">
 	      </td>
 	    </tr>
 	    <tr>
-	      <th>이메일</th>
+	      <th class="required">이메일</th>
 	      <td><input type="email" name="email" id="email" style="width: 30%;"  placeholder="이메일을 입력해주세요"></td>
 	    </tr>
 	    <tr>

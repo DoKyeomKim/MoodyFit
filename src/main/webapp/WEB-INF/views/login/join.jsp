@@ -30,8 +30,11 @@
       border: 1px solid #ddd;
       border-right:none;
     }
-
-    
+	.required:after {
+	    content: '*';
+	    color: red;
+	}
+	    
   </style>
 
 </head>
@@ -47,53 +50,53 @@
 	</div>
   <table>
 	    <tr>
-	      <th>아이디</th>
+	      <th class="required">아이디</th>
 	      <td><input type="text" name="id" id="username" style="width: 25%;" placeholder="아이디를 입력해주세요.">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnIdCheck"/><br>
 	      	  <span class="col-6" id="output"></span>
 	      </td>
 	    </tr>
 	    <tr>
-	      <th>비밀번호</th>
+	      <th class="required">비밀번호</th>
 	      <td><input type="password" name="pw" id="password" oninput="pwCheck()" style="width: 30%;" placeholder="비밀번호를 입력해주세요" required></td>
 	    </tr>
 	    <tr>
-	      <th>비밀번호 확인</th>
+	      <th class="required">비밀번호 확인</th>
 	      <td><input type="password" id="password2" oninput="pwCheck()" style="width: 30%;" placeholder="비밀번호를 다시 한번 입력해주세요" required>
 	      <span id="pwConfirm" style="display: block;"></span>
 	      </td>
 	    </tr>
 	    <tr>
-	      <th>이름</th>
+	      <th class="required">이름</th>
 	      <td><input type="text" name="name" id="name" style="width: 30%;" placeholder="이름을 입력해주세요"></td>
 	    </tr>
 	    <tr>
-	      <th>닉네임</th>
+	      <th class="required">닉네임</th>
 	      <td><input type="text" name="nickName" id="nickName" style="width: 30%;" placeholder="닉네임을 입력해주세요">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnNickNameCheck"/><br>
 	      	  <span class="col-6" id="output2"></span>
 	      </td>
 	    </tr>
 	    <tr>
-	      <th>우편번호</th>
+	      <th class="required">우편번호</th>
 	      <td><input type="text" name="postCode" id="sample6_postcode" placeholder="우편번호" style="margin-right: 30px; width: 20%;"><input type="button" class="btn btn-secondary" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"></td>
 	    </tr>
 	    <tr>
-	      <th>주소</th>
+	      <th class="required">주소</th>
 	      <td><input type="text" name="address" id="sample6_address" style="width: 60%;" placeholder="주소"></td>
 	    </tr>
 	    <tr>
-	      <th>상세주소</th>
+	      <th class="required">상세주소</th>
 	      <td><input type="text" name="detailAddress" id="sample6_detailAddress" style="width: 60%;" placeholder="상세주소를 입력해주세요"></td>
 	    </tr>
 
     
 	    <tr>
-	      <th>전화번호</th>
+	      <th class="required">전화번호</th>
 	      <td>
 	        <input type="text" name="phone" id="phone" style="width: 35%;"  placeholder=" -를 제외한 번호만 입력해주세요">
 	      </td>
 	    </tr>
 	    <tr>
-	      <th>이메일</th>
+	      <th class="required">이메일</th>
 	      <td><input type="email" name="email" id="email" style="width: 35%;"placeholder="@를 포함한 이메일을 입력해주세요"></td>
 	    </tr>
   </table>
