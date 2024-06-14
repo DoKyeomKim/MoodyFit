@@ -97,7 +97,11 @@ main {
                             <td>${qna.CONTENT}</td>
                             <td>${qna.CREATE_DATE}</td>
                             <td>${qna.UPDATE_DATE}</td>
-                            <td>${qna.STATE}</td>
+                            <td>
+           <c:choose>
+                    			<c:when test="${qna.state==1}"></c:when>
+                    			<c:when test="${qna.state==2}"></c:when>
+                    		</c:choose>
                             <td>
   
                                 <button class="btn btn-delete" onclick="updateStatus(${company.id}, 'rejected')">답변</button>

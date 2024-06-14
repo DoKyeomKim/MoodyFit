@@ -6,6 +6,7 @@
 <html>
 <head>
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
 <style>
 .search-box {
 	height:50px;

@@ -15,6 +15,29 @@ FROM
 JOIN 
     USERS ON CS_QUESTION.USER_IDX = USERS.USER_IDX
     </select>
+    <insert id="setCsQna">
+    insert into cs_qna(QNA_IDX,CS_IDX)
+    values(cs_qna_seq.nextval,1)
+    </insert>
     
+    <insert id="addQuestion">
+    
+        INSERT INTO CS_QUESTION  (
+        QUESTION_IDX,
+        title, 
+        content,
+        STATE,
+        qna_idx,
+        user_idx
+        ) 
+        VALUES (
+        cs_question_seq.NEXTVAL,
+        #{title},
+        #{content},
+		1,
+		CS_QNA_SEQ.CURRVAL,
+		#{userIdx}		
+         )
+    </insert>
    
 </mapper>
