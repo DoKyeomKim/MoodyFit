@@ -2,6 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.MainMapper">
 
+<select id="getRecentPosting">
+<![CDATA[
+SELECT * FROM (
+    SELECT a.posting_idx AS posting_idx,
+    	   a.update_date,
+           a.title AS title,
+           d.price AS price,
+           e.file_path AS file_path,
+           ROW_NUMBER() OVER (ORDER BY a.update_date DESC) AS rnum
+    FROM posting a
+    JOIN posting_product b ON a.posting_idx = b.posting_idx
+    JOIN product_info c ON b.product_info_idx = c.product_info_idx
+    JOIN product d ON c.product_idx = d.product_idx
+    JOIN product_file e ON e.product_info_idx = b.product_info_idx
+    GROUP BY a.posting_idx, a.title, d.price, e.file_path, a.update_date
+) subquery
+WHERE rnum <= 8
+]]>
+</select>
+
 <select id="getCategory" resultType="com.mf.dto.CategoryDto">
 SELECT category_idx AS categoryIdx, kor_name AS korName, eng_name AS engName
         FROM category

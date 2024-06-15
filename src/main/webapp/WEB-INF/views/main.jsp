@@ -8,8 +8,15 @@
 <title>메인 페이지</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <style>
-body{
-margin : 0;
+body {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 1s ease;
+    margin : 0;
+}
+body.loaded {
+    visibility: visible;
+    opacity: 1;
 }
 main{
 	margin-top :50px;
@@ -18,6 +25,12 @@ main{
 .image-container {
   position: relative;
   display: inline-block;
+}
+
+.top-cards{
+  background-color : #D4E1A2;
+  width: 100%;
+  height : auto;
 }
 
 .overlay {
@@ -51,13 +64,14 @@ main{
 <body>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
 <main>
-<div class="container">
+<div class="container-fluid top-cards" id="editor-picks">
+<h2>에디터 픽 영역</h2>
   <div class="row">
-  <c:forEach var="result" items="${result }">
-	    <div class="col-md-3">
-		  	<a href="/postingDetail?postingIdx=${result.POSTING_IDX }">
-			      <div class="image-container" data-posting-idx="${result.POSTING_IDX}" data-price="${result.PRICE}" data-title="${result.TITLE}">
-			        <img src="${result.FILE_PATH }" class="img-fluid" alt="Image 1">
+  <c:forEach var="all" items="${all }">
+	    <div class="col-md-3 mt-5 mb-5" style="text-align:center;">
+		  	<a href="/postingDetail?postingIdx=${all.POSTING_IDX }">
+			      <div class="image-container" data-posting-idx="${all.POSTING_IDX}" data-price="${all.PRICE}" data-title="${all.TITLE}">
+			        <img src="${all.FILE_PATH }" class="img-fluid" alt="Image 1" style="height: 300px; width:auto;">
 			        <div class="overlay">
 			          <div class="info"></div>
 			        </div>
@@ -67,6 +81,30 @@ main{
     </c:forEach>
   </div>
 </div>
+
+<div class="container">
+	<h2>매출 상위</h2>
+
+</div>
+
+<div class="container">
+	<h2>신상품</h2>
+	  <div class="row">
+  <c:forEach var="recent" items="${recent }">
+	    <div class="col-md-3 mt-5 mb-5" style="text-align:center;">
+		  	<a href="/postingDetail?postingIdx=${recent.POSTING_IDX }">
+			      <div class="image-container" data-posting-idx="${recent.POSTING_IDX}" data-price="${recent.PRICE}" data-title="${recent.TITLE}" data-date="${recent.UPDATE_DATE }">
+			        <img src="${recent.FILE_PATH }" class="img-fluid" alt="Image 1" style="height: 300px; width:auto;">
+			        <div class="overlay">
+			          <div class="info"></div>
+			        </div>
+			      </div>
+		    </a>
+	    </div>
+    </c:forEach>
+  </div>
+</div>
+
 </main>
 <%@include file="/WEB-INF/layouts/footer.jsp"%>
 <script src="/js/bootstrap.bundle.min.js"></script>
@@ -80,17 +118,22 @@ document.addEventListener('DOMContentLoaded', function() {
 	      const postingIdx = this.dataset.postingIdx;
 	      const price = this.dataset.price;
 	      const title = this.dataset.title;
+	      const updateDate = this.dataset.date
 	      const infoDiv = this.querySelector('.info');
 
 	      // 가격을 파싱하여 포맷팅하는 함수
 	      const formattedPrice = Number(price).toLocaleString();
 
-	      infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + '원</div>';
+	      infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + '원</div><div>'+updateDate+'일 출시</div>';
 	    });
 	  });
 	});
 
 </script>
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('loaded');
+});
+</script>
 </body>
 </html>

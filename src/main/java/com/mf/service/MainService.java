@@ -1,5 +1,6 @@
 package com.mf.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,9 +31,19 @@ public class MainService {
 		}
 
 		// 임시로 만든 전체 포스팅 관련 내용 갖고오기
-	public List<Map<String, Object>> getPostingAll() {
-			
-		List<Map<String, Object>> result = mainMapper.getPostingAll();
+	public Map<String, List<Map<String, Object>>> getPostingAll() {
+		// 리턴을 위한 객체 선언.
+        Map<String, List<Map<String, Object>>> result = new HashMap<>();
+		
+		// 전체 포스팅 갖고오기(임시)
+        // 후에는 editor's pick 뭐 이런걸로 변경예정
+		List<Map<String, Object>> all = mainMapper.getPostingAll();
+		// 최신 포스팅 8개 갖고오기
+		List<Map<String, Object>> recent = mainMapper.getRecentPosting();
+
+		
+        result.put("all", all);
+        result.put("recent", recent);
 		
 		return result;
 	}
