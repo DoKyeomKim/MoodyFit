@@ -7,136 +7,205 @@
 <meta charset="UTF-8">
 <title>개인 회원가입</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
-  <style>
-
-  
-    table {
-      margin-bottom:100px;
-      width: 60%;
-      border-collapse: collapse;
+<style>
+    body {
+        background-color: #f8f9fa;
     }
-    th{
-      width: 7%;
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #ddd;
-      border-left:none;
-      background-color: #FBFAFA;
+    main {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h4 {
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+    .required-table-header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .required-table{
+        margin-bottom: 30px;
+    }
+    .required-table table{
+        width: 100%;
+    }
+    th {
+        width: 20%;
+        padding: 10px;
+        text-align: left;
+        background-color: #f1f1f1;
     }
     td {
-      width: 50%;
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #ddd;
-      border-right:none;
+        padding: 10px;
     }
-	.required:after {
-	    content: '*';
-	    color: red;
+    .form-control {
+        width: 100%;
+    }
+    .form-inline .form-control {
+        width: auto;
+    }
+    .btn {
+        margin-top: 10px;
+    }
+    .btn-outline-secondary {
+        margin-left: 10px;
+    }
+    .flex-container {
+        display: flex;
+        align-items: center;
+    }
+    .flex-container input, .flex-container button {
+        margin-right: 10px;
+    }
+    #btnIdCheck{
+    	margin-top: -1px;
+        height : 36px;
+    }
+    #btnNickNameCheck{
+        margin-top: -1px;
+        height : 36px;
+    }
+    #btnPostCode{
+        margin-top: -1px;
+        height : 36px;
+    }
+    th.required::after {
+    content: " *";
+    color: red;
 	}
-	    
-  </style>
-
+</style>
 </head>
 <body>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
 
 <main>
 <form action="/joinProcess" method="post" name="joinForm">
-<h4  style="text-align:center; margin:20px 0;">회원가입</h4>
+<h4 class="text-center">개인 회원가입</h4>
 <div class="required-table">
-	<div class="table-header">
-	<span>필수입력</span>
-	</div>
-  <table>
-	    <tr>
-	      <th class="required">아이디</th>
-	      <td><input type="text" name="id" id="username" style="width: 25%;" placeholder="아이디를 입력해주세요.">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnIdCheck"/><br>
-	      	  <span class="col-6" id="output"></span>
-	      </td>
-	    </tr>
-	    <tr>
-	      <th class="required">비밀번호</th>
-	      <td><input type="password" name="pw" id="password" oninput="pwCheck()" style="width: 30%;" placeholder="비밀번호를 입력해주세요" required></td>
-	    </tr>
-	    <tr>
-	      <th class="required">비밀번호 확인</th>
-	      <td><input type="password" id="password2" oninput="pwCheck()" style="width: 30%;" placeholder="비밀번호를 다시 한번 입력해주세요" required>
-	      <span id="pwConfirm" style="display: block;"></span>
-	      </td>
-	    </tr>
-	    <tr>
-	      <th class="required">이름</th>
-	      <td><input type="text" name="name" id="name" style="width: 30%;" placeholder="이름을 입력해주세요"></td>
-	    </tr>
-	    <tr>
-	      <th class="required">닉네임</th>
-	      <td><input type="text" name="nickName" id="nickName" style="width: 30%;" placeholder="닉네임을 입력해주세요">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnNickNameCheck"/><br>
-	      	  <span class="col-6" id="output2"></span>
-	      </td>
-	    </tr>
-	    <tr>
-	      <th class="required">우편번호</th>
-	      <td><input type="text" name="postCode" id="sample6_postcode" placeholder="우편번호" style="margin-right: 30px; width: 20%;"><input type="button" class="btn btn-secondary" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"></td>
-	    </tr>
-	    <tr>
-	      <th class="required">주소</th>
-	      <td><input type="text" name="address" id="sample6_address" style="width: 60%;" placeholder="주소"></td>
-	    </tr>
-	    <tr>
-	      <th class="required">상세주소</th>
-	      <td><input type="text" name="detailAddress" id="sample6_detailAddress" style="width: 60%;" placeholder="상세주소를 입력해주세요"></td>
-	    </tr>
-
-    
-	    <tr>
-	      <th class="required">전화번호</th>
-	      <td>
-	        <input type="text" name="phone" id="phone" style="width: 35%;"  placeholder=" -를 제외한 번호만 입력해주세요">
-	      </td>
-	    </tr>
-	    <tr>
-	      <th class="required">이메일</th>
-	      <td><input type="email" name="email" id="email" style="width: 35%;"placeholder="@를 포함한 이메일을 입력해주세요"></td>
-	    </tr>
-  </table>
+    <div class="required-table-header">필수입력</div>
+    <table class="table table-bordered">
+        <tr>
+            <th class="required">아이디</th>
+            <td>
+                <div class="form-inline flex-container">
+                    <input type="text" name="id" id="username" class="form-control" placeholder="아이디를 입력해주세요.">
+                    <input type="button" class="btn btn-sm btn-outline-secondary" value="중복확인" id="btnIdCheck"/>
+                </div>
+                <span id="output"></span>
+            </td>
+        </tr>
+        <tr>
+            <th class="required">비밀번호</th>
+            <td><input type="password" name="pw" id="password" oninput="pwCheck()" class="form-control" placeholder="비밀번호를 입력해주세요" required></td>
+        </tr>
+        <tr>
+            <th class="required">비밀번호 확인</th>
+            <td>
+                <input type="password" id="password2" oninput="pwCheck()" class="form-control" placeholder="비밀번호를 다시 한번 입력해주세요" required>
+                <span id="pwConfirm" style="display: block;"></span>
+            </td>
+        </tr>
+        <tr>
+            <th class="required">이름</th>
+            <td><input type="text" name="name" id="name" class="form-control" placeholder="이름을 입력해주세요"></td>
+        </tr>
+        <tr>
+            <th class="required">닉네임</th>
+            <td>
+                <div class="form-inline flex-container">
+                    <input type="text" name="nickName" id="nickName" class="form-control" placeholder="닉네임을 입력해주세요">
+                    <input type="button" class="btn btn-sm btn-outline-secondary" value="중복확인" id="btnNickNameCheck"/>
+                </div>
+                <span id="output2"></span>
+            </td>
+        </tr>
+        <tr>
+            <th class="required">우편번호</th>
+            <td>
+                <div class="form-inline flex-container">
+                    <input type="text" name="postCode" id="sample6_postcode" class="form-control" placeholder="우편번호">
+                    <input type="button" class="btn btn-sm btn-secondary" onclick="sample6_execDaumPostcode()" id="btnPostCode" value="우편번호 찾기">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th class="required">주소</th>
+            <td><input type="text" name="address" id="sample6_address" class="form-control" placeholder="주소"></td>
+        </tr>
+        <tr>
+            <th class="required">상세주소</th>
+            <td><input type="text" name="detailAddress" id="sample6_detailAddress" class="form-control" placeholder="상세주소를 입력해주세요"></td>
+        </tr>
+        <tr>
+            <th class="required">전화번호</th>
+            <td><input type="text" name="phone" id="phone" class="form-control" placeholder="-를 제외한 번호만 입력해주세요"></td>
+        </tr>
+        <tr>
+            <th class="required">이메일</th>
+            <td><input type="email" name="email" id="email" class="form-control" placeholder="@를 포함한 이메일을 입력해주세요"></td>
+        </tr>
+    </table>
 </div>
 <div class="options-table">
-	<div class="table-header">
-	<span>선택 입력</span>
-	</div>
-  <table>
-	    <tr>
-	      <th>성별</th>
-	      <td><input type='radio' name='gender' value='1' checked/>남성 &nbsp;&nbsp;<input type='radio' name='gender' value='2' />여성</td>
-	    </tr>
-	    <tr>
-	      <th>키</th>
-	      <td><input type="text" name="height" id="height" style="width: 20%;" placeholder="숫자만 입력해주세요">&nbsp;cm</td>
-	    </tr>
-	    <tr>
-	      <th>체중</th>
-	      <td><input type="text" name="weight" id="weight" style="width: 20%;" placeholder="숫자만 입력해주세요">&nbsp;kg</td>
-	    </tr>
-	    <tr>
-	      <th>신발 사이즈</th>
-	      <td><input type="text" name="foot" id="foot" style="width: 20%;" placeholder="숫자만 입력해주세요"></td>
-	    </tr>
-	    <tr>
-	      <th>상의</th>
-	      <td><input type="text" name="top" id="top" style="width: 20%;"></td>
-	    </tr>
-	    <tr>
-	      <th>하의</th>
-	      <td><input type="text" name="bottom" id="bottom" style="width: 20%;" ></td>
-	    </tr>
-	    <tr>
-	      <td colspan="2" style="text-align: center;  border-left:none; border-bottom:none;">
-	        <button type="submit" id="submitBtn" class="btn btn-primary" style="margin-top: 20px;">회원가입</button>
-	      </td>
-	    </tr>
-  </table>
-  </div>
+    <div class="options-table-header">선택 입력</div>
+    <table class="table table-bordered">
+        <tr>
+            <th>성별</th>
+            <td>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="gender" value="1" class="form-check-input" checked/>
+                    <label class="form-check-label">남성</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="gender" value="2" class="form-check-input"/>
+                    <label class="form-check-label">여성</label>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>키</th>
+            <td>
+                <div class="form-inline flex-container">
+                    <input type="text" name="height" id="height" class="form-control" style="width: 30%;" placeholder="숫자만 입력해주세요">
+                    <span>cm</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>체중</th>
+            <td>
+                <div class="form-inline flex-container">
+                    <input type="text" name="weight" id="weight" class="form-control" style="width: 30%;" placeholder="숫자만 입력해주세요">
+                    <span>kg</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>신발 사이즈</th>
+            <td><input type="text" name="foot" id="foot" class="form-control" placeholder="숫자만 입력해주세요"></td>
+        </tr>
+        <tr>
+            <th>상의</th>
+            <td><input type="text" name="top" id="top" class="form-control"></td>
+        </tr>
+        <tr>
+            <th>하의</th>
+            <td><input type="text" name="bottom" id="bottom" class="form-control"></td>
+        </tr>
+        <tr>
+            <td colspan="2" class="text-center">
+                <button type="submit" id="submitBtn" class="btn btn-primary">회원가입</button>
+            </td>
+        </tr>
+    </table>
+</div>
 </form>
 </main>
 <script>

@@ -7,142 +7,202 @@
 <meta charset="UTF-8">
 <title>개인 회원가입</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
-  <style>
-
-  
-    table {
-      margin-bottom:100px;
-      width: 60%;
-      border-collapse: collapse;
+<style>
+    body {
+        background-color: #f8f9fa;
     }
-    th{
-      width: 7%;
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #ddd;
-      border-left:none;
-      background-color: #FBFAFA;
+    main {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h4 {
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+    .required-table-header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        border-radius: 8px 8px 0 0;
+    }
+    .options-table-header {
+        background-color: #ccc;
+        color: #4d4d4d ;
+        padding: 10px;
+        border-radius: 8px 8px 0 0;
+    }
+    .required-table, .options-table {
+        margin-bottom: 30px;
+    }
+    .required-table table, .options-table table {
+        width: 100%;
+    }
+    th {
+        width: 20%;
+        padding: 10px;
+        text-align: left;
+        background-color: #f1f1f1;
     }
     td {
-      width: 50%;
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #ddd;
-      border-right:none;
+        padding: 10px;
     }
-
-    
-  </style>
-
+    .form-control {
+        width: 100%;
+    }
+    .form-inline .form-control {
+        width: auto;
+    }
+    .btn {
+        margin-top: 10px;
+    }
+    .btn-outline-secondary {
+        margin-left: 10px;
+    }
+    .flex-container {
+        display: flex;
+        align-items: center;
+    }
+    .flex-container input, .flex-container button {
+        margin-right: 10px;
+    }
+    #btnNickNameCheck{
+        margin-top: -1px;
+        height : 36px;
+    }
+    #btnPostCode{
+        margin-top: -1px;
+        height : 36px;
+    }
+</style>
 </head>
 <body>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
 
 <main>
 <form action="/personUpdate" method="post" name="update">
-<h4  style="text-align:center; margin:20px 0;">정보 수정</h4>
+<h4 class="text-center">정보 수정</h4>
 <div class="required-table">
-	<div class="table-header">
-	<span>필수입력</span>
-	</div>
-	<input type="hidden" value="${result.PERSON_IDX }" name="personIdx">
-	<input type="hidden" value="${result.PERSON_SPEC_IDX }" name="personSpecIdx">
-  <table>
-  	<c:if test="${result.SOCIAL=='NO'}">
-	    <tr>
-	      <th>아이디</th>
-	      <td>${result.ID }</td>
-	    </tr>
-	    <tr>
-	      <th>비밀번호</th>
-	      <td><input type="password"name="pw" id="password" oninput="pwCheck()" style="width: 30%;"placeholder="변경을 원하실 경우 입력해주세요." ></td>
-	    </tr>
-	    <tr>
-	      <th>비밀번호 확인</th>
-	      <td><input type="password"id="password2" oninput="pwCheck()" style="width: 30%;" placeholder="비밀번호를 다시 한번 입력해주세요">
-	      <span id="pwConfirm" style="display: block;"></span>
-	      </td>
-	    </tr>
-	</c:if>
-	    <tr>
-	      <th>이름</th>
-	      <td><input type="text" name="name" id="name" value="${result.NAME }"style="width: 30%;" placeholder="이름을 입력해주세요"></td>
-	    </tr>
-	    <tr>
-	      <th>닉네임</th>
-	      <td><input type="text" name="nickName" id="nickName" value="${result.NICK_NAME }" style="width: 30%;" placeholder="닉네임을 입력해주세요">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnNickNameCheck"/><br>
-	      	  <span class="col-6" id="output2"></span>
-	      </td>
-	    </tr>
-	    <tr>
-	      <th>우편번호</th>
-	      <td><input type="text" name="postCode" id="sample6_postcode" value="${result.POST_CODE }" placeholder="우편번호" style="margin-right: 30px; width: 20%;"><input type="button" class="btn btn-secondary" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"></td>
-	    </tr>
-	    <tr>
-	      <th>주소</th>
-	      <td><input type="text" name="address" id="sample6_address" value="${result.ADDRESS }"style="width: 60%;" placeholder="주소"></td>
-	    </tr>
-	    <tr>
-	      <th>상세주소</th>
-	      <td><input type="text" name="detailAddress" id="sample6_detailAddress" value="${result.DETAIL_ADDRESS }"style="width: 60%;" placeholder="상세주소를 입력해주세요"></td>
-	    </tr>
-
-    
-	    <tr>
-	      <th>전화번호</th>
-	      <td>
-	        <input type="text" name="phone" id="phone" style="width: 35%;" value="${result.PHONE }"  placeholder=" -를 제외한 번호만 입력해주세요">
-	      </td>
-	    </tr>
-	    <tr>
-	      <th>이메일</th>
-	      <td><input type="email" name="email" id="email" style="width: 35%;" value="${result.EMAIL }" placeholder="@를 포함한 이메일을 입력해주세요"></td>
-	    </tr>
-  </table>
+    <div class="required-table-header">필수입력</div>
+    <input type="hidden" value="${result.PERSON_IDX}" name="personIdx">
+    <input type="hidden" value="${result.PERSON_SPEC_IDX}" name="personSpecIdx">
+    <table class="table table-bordered">
+        <c:if test="${result.SOCIAL=='NO'}">
+            <tr>
+                <th>아이디</th>
+                <td style="padding-left:21px">${result.ID}</td>
+            </tr>
+            <tr>
+                <th>비밀번호</th>
+                <td><input type="password" name="pw" id="password" oninput="pwCheck()" class="form-control" style="width: 60%;"placeholder="변경을 원하실 경우 입력해주세요."></td>
+            </tr>
+            <tr>
+                <th>비밀번호 확인</th>
+                <td>
+                    <input type="password" id="password2" oninput="pwCheck()" class="form-control" style="width: 60%;"placeholder="비밀번호를 다시 한번 입력해주세요">
+                    <span id="pwConfirm" style="display: block;"></span>
+                </td>
+            </tr>
+        </c:if>
+        <tr>
+            <th>이름</th>
+            <td><input type="text" name="name" id="name" value="${result.NAME}" class="form-control" style="width: 60%;" placeholder="이름을 입력해주세요"></td>
+        </tr>
+        <tr>
+            <th>닉네임</th>
+            <td>
+                <div class="form-inline flex-container">
+                    <input type="text" name="nickName" id="nickName" value="${result.NICK_NAME}" class="form-control" placeholder="닉네임을 입력해주세요">
+                    <input type="button" class="btn btn-sm btn-outline-secondary" value="중복확인" id="btnNickNameCheck"/>
+                </div>
+                <span id="output2"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>우편번호</th>
+            <td>
+                <div class="form-inline flex-container">
+                    <input type="text" name="postCode" id="sample6_postcode" value="${result.POST_CODE}" class="form-control" placeholder="우편번호">
+                    <input type="button" class="btn btn-sm btn-secondary" onclick="sample6_execDaumPostcode()" id="btnPostCode" value="우편번호 찾기">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td><input type="text" name="address" id="sample6_address" value="${result.ADDRESS}" class="form-control" placeholder="주소"></td>
+        </tr>
+        <tr>
+            <th>상세주소</th>
+            <td><input type="text" name="detailAddress" id="sample6_detailAddress" value="${result.DETAIL_ADDRESS}" class="form-control" placeholder="상세주소를 입력해주세요"></td>
+        </tr>
+        <tr>
+            <th>전화번호</th>
+            <td><input type="text" name="phone" id="phone" value="${result.PHONE}" class="form-control" placeholder="-를 제외한 번호만 입력해주세요"></td>
+        </tr>
+        <tr>
+            <th>이메일</th>
+            <td><input type="email" name="email" id="email" value="${result.EMAIL}" class="form-control" placeholder="@를 포함한 이메일을 입력해주세요"></td>
+        </tr>
+    </table>
 </div>
 <div class="options-table">
-	<div class="table-header">
-	<span>선택 입력</span>
-	</div>
-  <table>
-	    <tr>
-	      <th>성별</th>
-	    <td>
-			<input type='radio' name='gender' value='1' ${result.GENDER == 1 ? 'checked' : ''}/>남성 &nbsp;&nbsp;
-			<input type='radio' name='gender' value='2' ${result.GENDER == 2 ? 'checked' : ''}/>여성
-		</td>
-
-	    </tr>
-	    <tr>
-	      <th>키</th>
-	      <td><input type="text" name="height" id="height" style="width: 20%;" value="${result.HEIGHT }" placeholder="숫자만 입력해주세요">&nbsp;cm</td>
-	    </tr>
-	    <tr>
-	      <th>체중</th>
-	      <td><input type="text" name="weight" id="weight" style="width: 20%;" value="${result.WEIGHT }"placeholder="숫자만 입력해주세요">&nbsp;kg</td>
-	    </tr>
-	    <tr>
-	      <th>신발 사이즈</th>
-	      <td><input type="text" name="foot" id="foot" style="width: 20%;" value="${result.FOOT }" placeholder="숫자만 입력해주세요"></td>
-	    </tr>
-	    <tr>
-	      <th>상의</th>
-	      <td><input type="text" name="top" id="top" value="${result.TOP }"style="width: 20%;"></td>
-	    </tr>
-	    <tr>
-	      <th>하의</th>
-	      <td><input type="text" name="bottom" id="bottom" value="${result.BOTTOM }"style="width: 20%;" ></td>
-	    </tr>
-  </table>
-  </div>
-  <div style="margin-bottom:30px; text-align:center;">
-	  <button type="submit" id="submitBtn" class="btn btn-primary">정보 수정</button>
-	  <a href="/myPage" class="btn btn-secondary">취소하기</a>
-  </div>
+    <div class="options-table-header">선택 입력</div>
+    <table class="table table-bordered">
+        <tr>
+            <th>성별</th>
+            <td>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="gender" value="1" class="form-check-input" ${result.GENDER == 1 ? 'checked' : ''}/>
+                    <label class="form-check-label">남성</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="radio" name="gender" value="2" class="form-check-input" ${result.GENDER == 2 ? 'checked' : ''}/>
+                    <label class="form-check-label">여성</label>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>키</th>
+            <td>
+                <div class="form-inline flex-container">
+                    <input type="text" name="height" id="height" value="${result.HEIGHT}" class="form-control" style="width: 30%;" placeholder="숫자만 입력해주세요">
+                    <span>cm</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>체중</th>
+            <td>
+                <div class="form-inline flex-container">
+                    <input type="text" name="weight" id="weight" value="${result.WEIGHT}" class="form-control" style="width: 30%;" placeholder="숫자만 입력해주세요">
+                    <span>kg</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>신발 사이즈</th>
+            <td><input type="text" name="foot" id="foot" value="${result.FOOT}" class="form-control" placeholder="숫자만 입력해주세요"></td>
+        </tr>
+        <tr>
+            <th>상의</th>
+            <td><input type="text" name="top" id="top" value="${result.TOP}" class="form-control"></td>
+        </tr>
+        <tr>
+            <th>하의</th>
+            <td><input type="text" name="bottom" id="bottom" value="${result.BOTTOM}" class="form-control"></td>
+        </tr>
+    </table>
+</div>
+<div class="text-center">
+    <button type="submit" id="submitBtn" class="btn btn-primary">정보 수정</button>
+    <a href="/myPage" class="btn btn-secondary">취소하기</a>
+</div>
 </form>
 </main>
 
-<!-- 
 <script>
     function pwCheck() {
         var pw1 = document.getElementById("password").value;
@@ -159,7 +219,7 @@
         }
     }
 </script>
--->
+
 
 <script>
     const btnNicknameCheckEl = document.querySelector('#btnNickNameCheck');

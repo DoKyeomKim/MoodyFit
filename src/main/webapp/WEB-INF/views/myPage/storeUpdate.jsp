@@ -8,104 +8,138 @@
 <title>가맹점 정보수정</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
   <style>
-  	
-  	.content-main{
-  	  display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-  	}
-  
-    table {
-      margin-top: 100px;
-      margin-bottom:100px;
-      width: 60%;
-      border-collapse: collapse;
+    body {
+        background-color: #f8f9fa;
     }
-    th{
-      width: 7%;
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #ddd;
-      border-left:none;
-      background-color: #FBFAFA;
+    main {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h4 {
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+    .required-table-header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        border-radius: 8px 8px 0 0;
+    }
+    .required-table, .options-table {
+        margin-bottom: 30px;
+    }
+    .required-table table, .options-table table {
+        width: 100%;
+    }
+    th {
+        width: 20%;
+        padding: 10px;
+        text-align: left;
+        background-color: #f1f1f1;
     }
     td {
-      width: 50%;
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #ddd;
-      border-right:none;
+        padding: 10px;
     }
-
-    
+    .form-control {
+        width: 100%;
+    }
+    .form-inline .form-control {
+        width: auto;
+    }
+    .btn {
+        margin-top: 10px;
+    }
+    .btn-outline-secondary {
+        margin-left: 10px;
+    }
+    .flex-container {
+        display: flex;
+        align-items: center;
+    }
+    .flex-container input, .flex-container button {
+        margin-right: 10px;
+    }
+    th.required::after {
+        content: " *";
+        color: red;
+    }
   </style>
-
 </head>
 <body>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
 
-<form action="/storeUpdate" method="post" name="joinForm">
-<main class="content-main">
-  <table>
-  	<input type="hidden" value="${result.STORE_IDX }" name="storeIdx">
-	    <tr>
-	      <th>아이디</th>
-	      <td>${result.ID }</td>
-	    </tr>
-	    <tr>
-	      <th>비밀번호</th>
-	      <td><input type="password" name="pw" id="password" oninput="pwCheck()" style="width: 50%;" placeholder="변경을 원하실 경우 입력해주세요." ></td>
-	    </tr>
-	    <tr>
-	      <th>비밀번호 확인</th>
-	      <td><input type="password" id="password2" oninput="pwCheck()" style="width: 50%;" placeholder="비밀번호를 다시 한번 입력해주세요">
-	      <span id="pwConfirm" style="display: block;"></span>
-	      </td>
-	    </tr>
-	    <tr>
-	      <th>가맹점명</th>
-	      <td><input type="text" name="storeName" id="name" value="${result.STORE_NAME }" style="width: 30%;"></td>
-	    </tr>
-	    <tr>
-	      <th>담당자명</th>
-	      <td><input type="text" name="managerName" id="nickName" value="${result.MANAGER_NAME }" style="width: 30%;"></td>
-	    </tr>
-	    <tr>
-	      <th>사업자 등록번호</th>
-	      <td>${result.BUSINESS_NUMBER }</td>
-	    </tr>
-	    <tr>
-	      <th>우편번호</th>
-	      <td><input type="text" name="postCode" id="sample6_postcode" value="${result.POST_CODE }" placeholder="우편번호" style="margin-right: 30px; width: 20%;"><input type="button" class="btn btn-secondary" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"></td>
-	    </tr>
-	    <tr>
-	      <th>주소</th>
-	      <td><input type="text" name="address" id="sample6_address" value="${result.ADDRESS }" style="width: 40%;" placeholder="주소"></td>
-	    </tr>
-	    <tr>
-	      <th>상세주소</th>
-	      <td><input type="text" name="detailAddress" id="sample6_detailAddress" value="${result.DETAIL_ADDRESS }" style="width: 50%;" placeholder="상세주소를 입력해주세요"></td>
-	    </tr>
-
-    
-	    <tr>
-	      <th>전화번호</th>
-	      <td>
-	        <input type="text" name="phone" id="phone" value="${result.PHONE }" style="width: 30%;">
-	      </td>
-	    </tr>
-	    <tr>
-	      <th>이메일</th>
-	      <td><input type="email" name="email" id="email" value="${result.EMAIL }" style="width: 30%;"></td>
-	    </tr>
-  </table>
-</main>
-  <div style="margin-bottom:30px; text-align:center;">
-	  <button type="submit" id="submitBtn" class="btn btn-primary">정보 수정</button>
-	  <a href="/storeMyPage" class="btn btn-secondary">취소하기</a>
-  </div>
+<main>
+<form action="/storeUpdate" method="post" name="updateForm">
+<h4 class="text-center">가맹점 정보수정</h4>
+<div class="required-table">
+    <div class="required-table-header">필수입력</div>
+    <table class="table table-bordered">
+        <input type="hidden" value="${result.STORE_IDX}" name="storeIdx">
+        <tr>
+          <th>아이디</th>
+          <td style="padding-left:21px;">${result.ID}</td>
+        </tr>
+        <tr>
+          <th>비밀번호</th>
+          <td><input type="password" class="form-control" name="pw" id="password" oninput="pwCheck()" placeholder="변경을 원하실 경우 입력해주세요."></td>
+        </tr>
+        <tr>
+          <th>비밀번호 확인</th>
+          <td><input type="password" class="form-control" id="password2" oninput="pwCheck()" placeholder="비밀번호를 다시 한번 입력해주세요">
+          <span id="pwConfirm" style="display: block;"></span>
+          </td>
+        </tr>
+        <tr>
+          <th>가맹점명</th>
+          <td><input type="text" class="form-control" name="storeName" id="name" value="${result.STORE_NAME}"></td>
+        </tr>
+        <tr>
+          <th>담당자명</th>
+          <td><input type="text" class="form-control" name="managerName" id="nickName" value="${result.MANAGER_NAME}"></td>
+        </tr>
+        <tr>
+          <th>사업자 등록번호</th>
+          <td style="padding-left:21px;">${result.BUSINESS_NUMBER}</td>
+        </tr>
+        <tr>
+          <th>우편번호</th>
+          <td>
+          <div class="form-inline flex-container">
+            <input type="text" name="postCode" class="form-control" id="sample6_postcode" value="${result.POST_CODE}" placeholder="우편번호">
+            <input type="button" class="btn btn-sm btn-secondary" onclick="sample6_execDaumPostcode()" value="우편번호 찾기">
+          </div>
+          </td>
+        </tr>
+        <tr>
+          <th>주소</th>
+          <td><input type="text" name="address" class="form-control" id="sample6_address" value="${result.ADDRESS}" placeholder="주소"></td>
+        </tr>
+        <tr>
+          <th>상세주소</th>
+          <td><input type="text" name="detailAddress" class="form-control" id="sample6_detailAddress" value="${result.DETAIL_ADDRESS}" placeholder="상세주소를 입력해주세요"></td>
+        </tr>
+        <tr>
+          <th>전화번호</th>
+          <td><input type="text" name="phone" class="form-control" id="phone" value="${result.PHONE}"></td>
+        </tr>
+        <tr>
+          <th>이메일</th>
+          <td><input type="email" name="email" class="form-control" id="email" value="${result.EMAIL}"></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="text-center">
+            <button type="submit" id="submitBtn" class="btn btn-primary">정보 수정</button>
+            <a href="/storeMyPage" class="btn btn-secondary">취소하기</a>
+          </td>
+        </tr>
+    </table>
+</div>
 </form>
+</main>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>

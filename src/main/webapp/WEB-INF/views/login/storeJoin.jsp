@@ -9,110 +9,180 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
-  	
-  	.content-main{
-  	  display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-  	}
-  
-    table {
-      margin-top: 100px;
-      margin-bottom:100px;
-      width: 60%;
-      border-collapse: collapse;
+    body {
+        background-color: #f8f9fa;
     }
-    th{
-      width: 9%;
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #ddd;
-      border-left:none;
-      background-color: #FBFAFA;
+    main {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h4 {
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+    .required-table-header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        border-radius: 8px 8px 0 0;
+    }
+    .options-table-header {
+        background-color: #ccc;
+        color: #4d4d4d ;
+        padding: 10px;
+        border-radius: 8px 8px 0 0;
+    }
+    .required-table, .options-table {
+        margin-bottom: 30px;
+    }
+    .required-table table, .options-table table {
+        width: 100%;
+    }
+    th {
+        width: 20%;
+        padding: 10px;
+        text-align: left;
+        background-color: #f1f1f1;
     }
     td {
-      width: 50%;
-      padding: 10px;
-      text-align: left;
-      border: 1px solid #ddd;
-      border-right:none;
+        padding: 10px;
     }
-	.required:after {
-	    content: ' *';
-	    color: red;
-	}
+    .form-control {
+        width: 100%;
+    }
+    .form-inline .form-control {
+        width: auto;
+    }
+    .btn {
+        margin-top: 10px;
+    }
+    .btn-outline-secondary {
+        margin-left: 10px;
+    }
+    .flex-container {
+        display: flex;
+        align-items: center;
+    }
+    .flex-container input, .flex-container button {
+        margin-right: 10px;
+    }
+    #btnIdCheck{
+    	margin-top: -1px;
+        height : 36px;
+    }
+    #btnStoreNameCheck{
+        margin-top: -1px;
+        height : 36px;
+    }
+    #btnPostCode{
+        margin-top: -1px;
+        height : 36px;
+    }
     
+    #corp_button{
+        margin-top: -1px;
+        height : 36px;
+    }
+    th.required::after {
+    content: " *";
+    color: red;
+	}
   </style>
 
 </head>
 <body>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
 
-<main class="content-main">
-  <table>
-  	<form action="/storeJoinProcess" method="post" name="joinForm">
+<main>
+<form action="/storeJoinProcess" method="post" name="joinForm">
+<h4 class="text-center">가맹점 회원가입</h4>
+<div class="required-table">
+    <div class="required-table-header">필수입력</div>
+    <table class="table table-bordered">  	
 	    <tr>
 	      <th class="required">아이디</th>
-	      <td><input type="text" name="id" id="username" style="width: 25%;" placeholder="아이디를 입력해주세요.">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnIdCheck"/><br>
-	      	  <span class="col-6" id="output"></span></td>
+	      <td>
+	      	<div class="form-inline flex-container">
+		      <input type="text" name="id" class="form-control" id="username" placeholder="아이디를 입력해주세요.">
+		      <input type="button" class="btn btn-sm btn-outline-secondary" value="중복확인" id="btnIdCheck"/>
+	      	</div>
+		    <span id="output"></span>
+	      </td>
 	    </tr>
 	    <tr>
 	      <th class="required">비밀번호</th>
-	      <td><input type="password" name="pw" id="password" oninput="pwCheck()" style="width: 50%;" placeholder="비밀번호를 입력해주세요" required></td>
+	      <td><input type="password" class="form-control" name="pw" id="password" oninput="pwCheck()"  placeholder="비밀번호를 입력해주세요" required></td>
 	    </tr>
 	    <tr>
 	      <th class="required">비밀번호 확인</th>
-	      <td><input type="password" id="password2" oninput="pwCheck()" style="width: 50%;" placeholder="비밀번호를 다시 한번 입력해주세요" required>
+	      <td><input type="password" class="form-control" id="password2" oninput="pwCheck()" placeholder="비밀번호를 다시 한번 입력해주세요" required>
 	      <span id="pwConfirm" style="display: block;"></span>
 	      </td>
 	    </tr>
 	    <tr>
 	      <th class="required">상호명</th>
-	      <td><input type="text" name="storeName" id="name" style="width: 30%;" placeholder="상호명을 입력해주세요.">&nbsp;&nbsp;<input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" value="중복확인" id="btnStoreNameCheck"/><br>
-	      	  <small class="col-6" id="output2"></small></td>
+	      <td>
+		      <div class="form-inline flex-container">
+			      <input type="text" class="form-control" name="storeName" id="name" placeholder="상호명을 입력해주세요.">
+			      <input type="button" class="btn btn-sm btn-outline-secondary" value="중복확인" id="btnStoreNameCheck"/>
+		      </div>
+		      <small id="output2"></small>
+		  </td>
 	    </tr>
 	    <tr>
 	      <th class="required">담당자명</th>
-	      <td><input type="text" name="managerName" id="nickName" style="width: 30%;" placeholder="담당자 실명을 입력해주세요."></td>
+	      <td><input type="text" class="form-control" name="managerName" id="nickName"  placeholder="담당자 실명을 입력해주세요."></td>
 	    </tr>
 		    <tr>
 		      <th class="required">사업자 등록번호</th>
-		      <td><input type="text" name="businessNumber"  id="corp_reg" style="width: 35%;" placeholder="사업자등록번호 10자리를 입력해주세요">&nbsp;&nbsp;
-		      <input type="button" class="btn btn-sm btn-outline-secondary" style="margin-bottom:5px;" name="corp_button" id="corp_button" value="인증하기" onclick="corp_chk();"><br>
-		      <small class="col-6" id="output3"></small></td>
+		      <td>
+		      <div class="form-inline flex-container">
+			      <input type="text" class="form-control" name="businessNumber"  id="corp_reg" placeholder="10자리를 입력해주세요">
+			      <input type="button" class="btn btn-sm btn-outline-secondary" name="corp_button" id="corp_button" value="인증하기" onclick="corp_chk();">
+		      </div>
+		      <small id="output3"></small></td>
 		    </tr>
 	    <tr>
 	      <th class="required">우편번호</th>
-	      <td><input type="text" name="postCode" id="sample6_postcode" placeholder="우편번호" style="margin-right: 30px; width: 20%;"><input type="button" class="btn btn-secondary" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"></td>
+	      <td>
+	      <div class="form-inline flex-container">
+	      	<input type="text" name="postCode" class="form-control" id="sample6_postcode" placeholder="우편번호">
+	      	<input type="button" class="btn btn-sm btn-secondary" onclick="sample6_execDaumPostcode()" id="btnPostCode" value="우편번호 찾기">
+	      </div>
+	      </td>
 	    </tr>
 	    <tr>
 	      <th class="required">주소</th>
-	      <td><input type="text" name="address" id="sample6_address" style="width: 40%;" placeholder="주소"></td>
+	      <td><input type="text" name="address" class="form-control" id="sample6_address"  placeholder="주소"></td>
 	    </tr>
 	    <tr>
 	      <th class="required">상세주소</th>
-	      <td><input type="text" name="detailAddress" id="sample6_detailAddress" style="width: 50%;" placeholder="상세주소를 입력해주세요"></td>
+	      <td><input type="text" name="detailAddress" class="form-control" id="sample6_detailAddress" placeholder="상세주소를 입력해주세요"></td>
 	    </tr>
 
     
 	    <tr>
 	      <th class="required">전화번호</th>
 	      <td>
-	        <input type="text" name="phone" id="phone" style="width: 30%;"  placeholder="전화번호를 입력해주세요">
+	        <input type="text" name="phone" class="form-control" id="phone"  placeholder="전화번호를 입력해주세요">
 	      </td>
 	    </tr>
 	    <tr>
 	      <th class="required">이메일</th>
-	      <td><input type="email" name="email" id="email" style="width: 30%;"  placeholder="이메일을 입력해주세요"></td>
+	      <td><input type="email" name="email" class="form-control" id="email" placeholder="이메일을 입력해주세요"></td>
 	    </tr>
 	    <tr>
-	      <td colspan="2" style="text-align: center;  border-left:none; border-bottom:none;">
-	        <button type="submit" id="submitBtn" class="btn btn-primary" style="margin-top: 20px;">회원가입</button>
+	      <td colspan="2" class="text-center">
+	        <button type="submit" id="submitBtn" class="btn btn-primary">회원가입</button>
 	      </td>
 	    </tr>
-    </form>
-  </table>
+    </table>
+</div>
+</form>
 </main>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
