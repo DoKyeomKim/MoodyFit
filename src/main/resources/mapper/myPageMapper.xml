@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.MyPageMapper">
 
+<select id="getOrderNow">
+select count(o.order_idx)
+from orders o
+join order_detail ot on o.order_detail_idx = ot.order_detail_idx
+join person p on p.user_idx = #{userIdx}
+</select>
+
 <select id="getNickNameByUserIdx">
 SELECT PERSON_IDX, NICK_NAME
 FROM PERSON

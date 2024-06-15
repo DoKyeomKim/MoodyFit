@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +28,13 @@ public class MyPageService {
 		// 닉네임과 personIdx 갖고오기
 		PersonDto person = myPageMapper.getNickNameByUserIdx(userIdx);
 		
+		// 메인에 갖고올 주문 목록 현황 갖고오기(현재는 전부 다)
+		OrderDto order = myPageMapper.getOrderNow(userIdx);
+		
 		Map<String,Object> result = new HashMap<>();
 		
 		result.put("person", person);
-		
+		result.put("order", order);
 		return result;
 	}
 	

@@ -84,14 +84,22 @@ main {
 </head>
 <body>
     <%@include file="/WEB-INF/layouts/header.jsp"%>
-    <h2 style="text-align: center; margin-top: 50px;">${person.nickName}님반갑습니다.</h2>
+    <h2 style="text-align: center; margin-top: 50px;">${person.nickName}님 반갑습니다.</h2>
     <hr>
     <%@include file="/WEB-INF/layouts/aside.jsp"%>
 
     <main style="margin-top: 70px;">
         <div class="status">
             <div class="status-box">
-                <h3>0</h3>
+                <h3><c:choose>
+						<c:when test="${empty order}">
+							0
+						</c:when>
+						<c:otherwise>
+							${order}
+						</c:otherwise>
+					</c:choose>
+				</h3>
                 <p>배송준비중</p>
             </div>
             <div class="status-box">
