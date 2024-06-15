@@ -69,7 +69,7 @@
 			<div class="col">
 				<div class="logo-img">
 					<a href="/"><img src="/images/logo.png"
-						style="height: 150px; width: auto;"></a>
+						style="height: 100px; width: auto;"></a>
 				</div>
 			</div>
 			<div class="col-md-8 search-cols">
@@ -95,8 +95,7 @@
 					<a href="<c:url value='/logout' />" style="text-decoration-line: none;">로그아웃</a>
 				</security:authorize>
 				<security:authorize access="!isAuthenticated()">
-					<a href="<c:url value='/login' />"
-						style="text-decoration-line: none;">로그인</a>
+					<a href="<c:url value='/login' />" style="text-decoration-line: none;">로그인</a>
 				</security:authorize>
 			</div>
 		</div>

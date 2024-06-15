@@ -28,7 +28,7 @@ main{
 }
 
 .top-cards{
-  background-color : #D4E1A2;
+  background-color :#A9DF79;
   width: 100%;
   height : auto;
 }
