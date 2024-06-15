@@ -37,10 +37,16 @@ public class MainController {
 		// 시큐리티 로그인하면서 세션에 저장되게 한 userIdx 갖고오기
 		Long userIdx = (Long) session.getAttribute("userIdx");
 		
-		//임시로 만든 전체 공고 다 들고 오는 거
-		List<Map<String,Object>> result = mainService.getPostingAll();
+		// 비즈니스 로직 처리하기 위해서 넘김
+		// 여러개를 처리하기 위해서 map을 썼고,
+		// 그 안에서 서로다른 DTO를 가진 것들을 결과를 받고 List형태로 반환 하기위해 또 Map을 씀
+		Map<String, List<Map<String, Object>>> result = mainService.getPostingAll();
 		
-		mv.addObject("result", result);
+        List<Map<String, Object>> all = result.get("all");
+        List<Map<String, Object>> recent = result.get("recent");
+		
+		mv.addObject("all", all);
+		mv.addObject("recent", recent);
 		mv.setViewName("/main");
 		return mv;
 	}

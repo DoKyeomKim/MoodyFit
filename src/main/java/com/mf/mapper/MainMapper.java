@@ -40,4 +40,8 @@ public interface MainMapper {
 
 	// 총 검색 결과량
 	int getPostingCountByKeyword(String keyword);
+
+
+	// 최근 공고 갖고오기
+	List<Map<String, Object>> getRecentPosting();
 }
