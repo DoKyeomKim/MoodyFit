@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 <style>
 #sidebar {
+	position:fixed;
 	float: left;
 	width: 200px;
 	height: auto;

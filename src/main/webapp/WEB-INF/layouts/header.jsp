@@ -12,7 +12,7 @@
 	justify-content: center;
 	align-items: center;
 }
-.search-box {
+.header-search-box {
 	height: 50px;
 	width: 700px;
 	background: white;
@@ -21,7 +21,7 @@
 	border: 1px solid #ccc;
 }
 
-.search-txt {
+.header-search-txt {
 	border: none;
 	background: none;
 	outline: none;
@@ -34,7 +34,7 @@
 	width: 600px;
 }
 
-.search-btn {
+.header-search-btn {
 	color: black;
 	float: right;
 	width: 40px;
@@ -73,11 +73,11 @@
 				</div>
 			</div>
 			<div class="col-md-8 search-cols">
-				<form class="search-box" action="/search?keyword=${keyword}"
+				<form class="search-box header-search-box" action="/search?keyword=${keyword}"
 					method="GET">
-					<input class="search-txt" id="search-txt" type="keyword"
+					<input class="search-txt header-search-txt" id="search-txt" type="keyword"
 						name="keyword" placeholder="검색할 내용을 입력해주세요.">
-					<button class="search-btn" type="submit">
+					<button class="search-btn header-search-btn" type="submit">
 						<i class="fa-solid fa-magnifying-glass"></i>
 					</button>
 				</form>
