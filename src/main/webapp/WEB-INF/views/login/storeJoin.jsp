@@ -30,16 +30,10 @@
         padding: 10px;
         border-radius: 8px 8px 0 0;
     }
-    .options-table-header {
-        background-color: #ccc;
-        color: #4d4d4d ;
-        padding: 10px;
-        border-radius: 8px 8px 0 0;
-    }
-    .required-table, .options-table {
+    .required-table{
         margin-bottom: 30px;
     }
-    .required-table table, .options-table table {
+    .required-table table{
         width: 100%;
     }
     th {

@@ -8,6 +8,7 @@
 <title>개인 회원가입</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <style>
+  <style>
     body {
         background-color: #f8f9fa;
     }
@@ -29,11 +30,16 @@
         padding: 10px;
         border-radius: 8px 8px 0 0;
     }
-
-    .required-table{
+    .options-table-header {
+        background-color: #ccc;
+        color: #4d4d4d ;
+        padding: 10px;
+        border-radius: 8px 8px 0 0;
+    }
+    .required-table, .options-table {
         margin-bottom: 30px;
     }
-    .required-table table{
+    .required-table table, .options-table table {
         width: 100%;
     }
     th {
