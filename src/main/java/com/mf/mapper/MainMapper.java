@@ -44,4 +44,12 @@ public interface MainMapper {
 
 	// 최근 공고 갖고오기
 	List<Map<String, Object>> getRecentPosting();
+
+	// Category로 모든 공고 갖고오기(All페이지에 들어갈 공고)
+	List<Map<String, Object>> getAllPostingByCategory(String categoryEngName);
+
+
+	// 카테고리가 같은 공고 중 서브카테리가 같은 공고 갖고오기
+	List<Map<String, Object>> getSelectedPostingBySubCategory(String subCategoryName);
+	
 }

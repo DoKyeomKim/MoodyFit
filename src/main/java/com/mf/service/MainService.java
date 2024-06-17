@@ -115,4 +115,14 @@ public class MainService {
 	public List<CategoryDto> searchCategoriesAndSubCategories(String keyword) {
 		return mainMapper.searchCategoriesAndSubCategories(keyword);
 	}
+
+	// 카테고리 같은 공고 전체 갖고 오기(All)
+	public List<Map<String, Object>> getAllPostingByCategory(String categoryEngName) {
+		return mainMapper.getAllPostingByCategory(categoryEngName);
+	}
+
+	// 카테고리가 같은 공고 중 서브카테리가 같은 공고 갖고오기
+	public List<Map<String, Object>> getSelectedPostingBySubCategory(String subCategoryName) {
+		return mainMapper.getSelectedPostingBySubCategory(subCategoryName);
+	}
 }

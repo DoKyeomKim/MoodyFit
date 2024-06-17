@@ -147,6 +147,16 @@ CREATE TABLE posting (
     state NUMBER NOT NULL                       -- 제품 등록 상태 (0: 등록 심사중, 1: 게시글 등록 완료 2: 게시글 삭제 3: 게시글 수정)
 );
 
+-- 상품 공고 이미지
+create table posting_file(
+	posting_file_idx NUMBER PRIMARY KEY,
+	original_name VARCHAR2(100) NOT NULL, 
+	file_path VARCHAR2(100) NOT NULL, 
+	file_size VARCHAR2(100) NOT NULL, 
+	posting_idx NUMBER,    
+    FOREIGN KEY (posting_idx) REFERENCES posting(posting_idx)
+    );
+	
 -- 판매 공고 제품
 CREATE TABLE posting_product (
     posting_product_idx NUMBER PRIMARY KEY,      -- 공고에 담을 제품 정보
@@ -427,3 +437,6 @@ CREATE SEQUENCE sub_category_seq
 	INCREMENT BY 1
 	NOCACHE;
 	
+    CREATE SEQUENCE posting_file_seq
+	START WITH 1
+	INCREMENT BY 1;

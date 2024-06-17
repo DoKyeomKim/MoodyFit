@@ -123,25 +123,6 @@ main {
 <%@include file="/WEB-INF/layouts/footer.jsp"%>
 <script src="/js/bootstrap.bundle.min.js"></script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const swiper = new Swiper('.swiper-container', {
-    slidesPerView: 1,
-    spaceBetween: 30,
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-    loop: true,
-    loopAdditionalSlides: 1
-    
-  });
-});
-</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -168,7 +149,27 @@ document.addEventListener('DOMContentLoaded', function() {
 	  });
 	});
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	  const imageContainers = document.querySelectorAll('.image-container');
 
+	  imageContainers.forEach(container => {
+	    container.addEventListener('mouseover', function() {
+	      const postingIdx = this.dataset.postingIdx;
+	      const price = this.dataset.price;
+	      const title = this.dataset.title;
+	      const updateDate = this.dataset.date
+	      const infoDiv = this.querySelector('.info');
+
+	      // 가격을 파싱하여 포맷팅하는 함수
+	      const formattedPrice = Number(price).toLocaleString();
+
+	      infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + '원</div><div>'+updateDate+'일 출시</div>';
+	    });
+	  });
+	});
+
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.add('loaded');
