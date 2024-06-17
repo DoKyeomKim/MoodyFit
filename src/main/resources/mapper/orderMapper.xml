@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.OrderMapper">
+
+<select id="selectCart" >
+
+select 	posting.title,
+        product.name,
+        product_file.file_path,
+        person.person_idx,
+        cart.cart_idx,
+        cart.price,
+        cart.quantity,
+        product_info.product_info_idx,
+        users.user_idx
+from 	users 
+	join person on users.user_idx = person.user_idx
+	join cart on person.person_idx = cart.person_idx
+	join posting_product on cart.posting_product_idx = posting_product.posting_product_idx
+    join posting on posting_product.posting_idx = posting.posting_idx
+	join product_info on cart.product_info_idx = product_info.product_info_idx
+    join product on product.product_idx = product_info.product_idx
+	join product_file on product_info.product_info_idx = product_file.product_info_idx
+where	users.user_idx = #{ userIdx }
+and		cart.state = '진행중'
+
+
+</select>
+
+<select id="selectCart2" >
+
+select 	posting.title,
+        product.name,
+        product_file.file_path,
+        person.person_idx,
+        cart.cart_idx,
+        cart.price,
+        cart.quantity,
+        product_info.product_info_idx,
+        users.user_idx
+from 	users 
+	join person on users.user_idx = person.user_idx
+	join cart on person.person_idx = cart.person_idx
+	join posting_product on cart.posting_product_idx = posting_product.posting_product_idx
+    join posting on posting_product.posting_idx = posting.posting_idx
+	join product_info on cart.product_info_idx = product_info.product_info_idx
+    join product on product.product_idx = product_info.product_idx
+	join product_file on product_info.product_info_idx = product_file.product_info_idx
+where	users.user_idx = #{ userIdx }
+and		cart.state = '결제중'
+
+
+</select>
+
+<select id="selectDelivery">
+
+select	d.delivery_idx,
+        d.name,
+        d.delivery_name,
+        d.email,
+        d.phone,
+        d.post_code,
+        d.address,
+        d.detail_address,
+        d.person_idx,
+        d.content
+from	delivery d
+        join person p on d.person_idx = p.person_idx
+        join users u on p.user_idx = u.user_idx
+where	u.user_idx = #{ userIdx }
+
+</select>
+
+<select id="selectDelivery2">
+
+select	d.delivery_idx,
+        d.name,
+        d.delivery_name,
+        d.email,
+        d.phone,
+        d.post_code,
+        d.address,
+        d.detail_address,
+        d.person_idx,
+        d.content
+from	delivery d
+        join person p on d.person_idx = p.person_idx
+        join users u on p.user_idx = u.user_idx
+where	u.user_idx = #{ userIdx }
+and 	d.is_default = 1
+
+</select>
+
+<select id="selectOrder">
+
+
+select	orders.order_idx,
+		orders.amount,
+		orders.merchant_uid,
+		orders.delivery_price,
+		orders.total_price,
+		orders.order_date,
+		orders.imp_uid,
+		orders.person_idx,
+		orders.delivery_idx,
+        posting.title,
+        product.name,
+        product_file.file_path
+from orders
+    join person on orders.person_idx = person.person_idx
+    join users on person.user_idx = users.user_idx
+    join order_cart on order_cart.order_idx = orders.order_idx
+    join cart on order_cart.cart_idx = cart.cart_idx
+	join posting_product on cart.posting_product_idx = posting_product.posting_product_idx
+	join product_info on cart.product_info_idx = product_info.product_info_idx
+	join product_file on product_info.product_info_idx = product_file.product_info_idx
+    join product on product.product_idx = product_info.product_idx
+    join posting on posting.posting_idx = posting_product.posting_idx
+where users.user_idx = #{ userIdx }
+and		cart.state = '결제중'
+
+</select>
+
+<select id="selectPersonIdx">
+
+select person_idx
+from person
+where user_idx = #{ userIdx }
+
+</select>
+
+<select id="selectTotalPrice">
+
+
+
+</select>
+
+<insert id="insertDelivery">
+
+insert into delivery (
+						delivery_idx,
+						name,
+						delivery_name,
+						email,
+						phone,
+						post_code,
+						address,
+						detail_address,
+						person_idx,
+						content
+						)
+				values (
+						(select nvl(max(delivery_idx), 0) + 1 from delivery),
+						#{ name },
+						#{ deliveryName },
+						#{ email },
+						#{ phone },
+						#{ postCode },
+						#{ address },
+						#{ detailAddress },
+						#{ personIdx },
+						#{ content }
+				)
+				
+</insert>
+
+</mapper>

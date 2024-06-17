@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.AdminReviewMapper">
+    <select id="getAllAdminReviews" parameterType="com.mf.dto.AdminReviewDto">
+        SELECT POSTING_REVIEW_IDX,
+               TITLE,
+               CONTENT,
+               RATING,
+               CREATE_DATE
+           
+        FROM   POSTING_REVIEW
+        ORDER BY POSTING_REVIEW_IDX ASC
+               
+    </select>
+    
+
+  
+    </mapper>

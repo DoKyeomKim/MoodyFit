@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.SubCategoryMapper">
+    <select id="getAllSubCategorys" parameterType="com.mf.dto.SubCategoryDto">
+        SELECT SUB_CATEGORY_IDX,       
+               KOR_NAME,
+               ENG_NAME
+           
+        FROM   SUB_CATEGORY
+        ORDER BY SUB_CATEGORY_IDX ASC
+               
+    </select>
+     <insert id="addSubCategory" parameterType="com.mf.dto.SubCategoryDto">
+     INSERT INTO SUB_CATEGORY  (
+        sub_CATEGORY_IDX,
+        KOR_NAME, 
+        ENG_NAME 
+       ) VALUES (
+        SUB_CATEGORY_seq.NEXTVAL,
+        #{korName},
+         #{engName}
+         )
+         </insert>
+         
+         <update id="updateSubCategory">
+        UPDATE sub_category
+        SET kor_name = #{korName}, eng_name = #{engName}
+        WHERE sub_category_idx = #{subCategoryIdx}
+    </update>
+
+    <delete id="deleteSubCategory">
+        DELETE FROM sub_category
+        WHERE sub_category_idx = #{subCategoryIdx}
+    </delete>
+    </mapper>

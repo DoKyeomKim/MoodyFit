@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.MyPageMapper">
+
+<select id="getNickNameByUserIdx">
+SELECT PERSON_IDX, NICK_NAME
+FROM PERSON
+WHERE USER_IDX = #{userIdx}
+</select>
+
+<select id="getStoreNameByUserIdx">
+SELECT STORE_IDX, STORE_NAME
+FROM STORE
+WHERE USER_IDX = #{userIdx}
+</select>
+
+<select id="getPersonInfo">
+SELECT 
+    u.ID,
+    u.PW,
+    P.PERSON_IDX,
+    p.NAME,
+    p.NICK_NAME,
+    p.EMAIL,
+    p.PHONE,
+    p.POST_CODE,
+    p.ADDRESS,
+    p.DETAIL_ADDRESS,
+    p.SOCIAL,
+    PS.PERSON_SPEC_IDX,
+    ps.GENDER,
+    ps.HEIGHT,
+    ps.WEIGHT,
+    ps.FOOT,
+    ps.TOP,
+    ps.BOTTOM
+FROM 
+    users u
+JOIN 
+    person p ON u.USER_IDX = p.USER_IDX
+JOIN 
+    person_spec ps ON p.PERSON_IDX = ps.PERSON_IDX
+WHERE 
+    u.USER_IDX = #{userIdx}
+</select>
+
+<select id="getStoreInfo">
+SELECT 
+U.ID,
+U.PW,
+S.STORE_IDX,
+S.STORE_NAME,
+S.MANAGER_NAME,
+S.BUSINESS_NUMBER,
+S.EMAIL,
+S.PHONE,
+S.POST_CODE,
+S.ADDRESS,
+S.DETAIL_ADDRESS
+FROM USERS U
+JOIN STORE S ON U.USER_IDX = S.USER_IDX
+WHERE
+U.USER_IDX=#{userIdx}
+</select>
+
+<select id="getUserById">
+    SELECT * FROM USERS WHERE USER_IDX = #{userIdx}
+</select>
+
+<update id="usersUpdate">
+UPDATE USERS
+ SET PW = #{pw}
+ WHERE USER_IDX = #{userIdx}
+</update>
+
+<update id="personUpdate">
+UPDATE PERSON
+SET 
+NAME=#{name},
+NICK_NAME=#{nickName},
+EMAIL=#{email},
+PHONE=#{phone},
+POST_CODE=#{postCode},
+ADDRESS=#{address},
+DETAIL_ADDRESS=#{detailAddress}
+WHERE 
+PERSON_IDX = #{personIdx}
+</update>
+
+<update id="storeUpdate">
+UPDATE STORE
+SET 
+STORE_NAME=#{storeName},
+MANAGER_NAME=#{managerName},
+BUSINESS_NUMBER=#{businessNumber},
+EMAIL=#{email},
+PHONE=#{phone},
+POST_CODE=#{postCode},
+ADDRESS=#{address},
+DETAIL_ADDRESS=#{detailAddress}
+WHERE 
+STORE_IDX = #{storeIdx}
+</update>
+
+<update id="personSpecUpdate">
+UPDATE PERSON_SPEC
+SET
+GENDER = #{gender},
+HEIGHT = #{height},
+WEIGHT = #{weight},
+FOOT = #{foot},
+TOP = #{top},
+BOTTOM = #{bottom}
+WHERE PERSON_SPEC_IDX =#{personSpecIdx}
+</update>
+
+<update id="userDelete">
+UPDATE USERS
+SET
+STATE = 2
+WHERE USER_IDX = #{userIdx}
+</update>
+
+</mapper>
