@@ -144,7 +144,9 @@ ORDER BY a.posting_idx DESC
 </select>
 
 <select id="getAllPostingByCategory">
-SELECT posting_idx, title, price,manufacture_name, file_path
+SELECT posting_idx, title, price,manufacture_name, file_path 
+FROM (
+SELECT posting_idx, title, price,manufacture_name, file_path, ROWNUM AS rnum
 FROM
 (
 SELECT DISTINCT a.posting_idx AS posting_idx,
@@ -153,16 +155,18 @@ SELECT DISTINCT a.posting_idx AS posting_idx,
                 d.MANUFACTURE_NAME,
                 e.file_path AS file_path,
                 ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY a.posting_idx DESC) AS row_num
-FROM posting a
-JOIN posting_product b ON a.posting_idx = b.posting_idx
-JOIN product_info c ON b.product_info_idx = c.product_info_idx
-JOIN product d ON c.product_idx = d.product_idx
-join product_file e on e.product_info_idx = b.product_info_idx
-join sub_category f on d.sub_category_idx = f.sub_category_idx
-join category g on g.category_idx = f.category_idx
-where g.eng_name = #{categoryEngName}
-)sub
-WHERE sub.row_num = 1
+		FROM posting a
+		JOIN posting_product b ON a.posting_idx = b.posting_idx
+		JOIN product_info c ON b.product_info_idx = c.product_info_idx
+		JOIN product d ON c.product_idx = d.product_idx
+		join product_file e on e.product_info_idx = b.product_info_idx
+		join sub_category f on d.sub_category_idx = f.sub_category_idx
+		join category g on g.category_idx = f.category_idx
+		where g.eng_name = #{categoryEngName}
+	)inner_sub
+	WHERE inner_sub.row_num = 1
+)outer_sub
+WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
 ORDER BY posting_idx DESC
 </select>
 
