@@ -15,5 +15,6 @@ public class AdminAnswerDto {
 	private String content;
 	private Date createDate;
 	private Date updateDate;
+	private Long questionIdx;
 	
 }

@@ -54,8 +54,11 @@ main {
 
 /* 반려 버튼 스타일 */
 .btn-delete {
-     background-color: #111111;
+        background-color: #111111;
     color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -79,7 +82,7 @@ main {
                         <th >번호</th>
                         <th >아이디</th>
                         <th >제목</th>
-                        <th >내용</th>
+                    
                         <th >작성일</th>
                         <th >수정일</th>
                         <th >상태</th>
@@ -94,7 +97,7 @@ main {
                             <td>${qna.QUESTION_IDX}</td>
                             <td>${qna.ID}</td>
                             <td>${qna.TITLE}</td>
-                            <td>${qna.CONTENT}</td>
+                      
                             <td>${qna.CREATE_DATE}</td>
                             <td>${qna.UPDATE_DATE}</td>
                             <td>
@@ -103,9 +106,8 @@ main {
                     			<c:when test="${qna.state==2}"></c:when>
                     		</c:choose>
                             <td>
-  
-                                <button class="btn btn-delete" onclick="updateStatus(${company.id}, 'rejected')">답변</button>
-                            </td>
+                                    <button class="btn btn-delete" onclick="location.href='/qnaDetail?questionIdx=${qna.QUESTION_IDX}'">답변</button>
+                                </td>
                         </tr>
                        
                     </c:forEach>

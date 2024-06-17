@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mf.dto.AdminAnswerDto;
 import com.mf.dto.AdminQuestionDto;
 import com.mf.dto.CsFaqDto;
 import com.mf.dto.CsQnaDto;
@@ -31,4 +32,16 @@ public class AdminQnaService {
 		adminQnaMapper.addQuestion(qnaDTO);
 	}
 
+	public AdminQuestionDto getQnaByquestionIdx(Long questionIdx) {
+
+		return adminQnaMapper.getQnaByquestionIdx(questionIdx);
+	}
+	
+	 public void addAnswer(AdminAnswerDto answerDto) {
+	        adminQnaMapper.insertAnswer(answerDto);
+	    }
+
+	    public List<AdminAnswerDto> getAnswersByQuestionIdx(Long questionIdx) {
+	        return adminQnaMapper.getAnswersByQuestionIdx(questionIdx);
+	    }
 }

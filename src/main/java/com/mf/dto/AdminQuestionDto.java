@@ -14,4 +14,5 @@ public class AdminQuestionDto {
 		private int state;
 		private Long qnaIdx;
 		private Long userIdx;
+		private String id;
 }

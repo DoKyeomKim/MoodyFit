@@ -70,27 +70,23 @@ button {
                     <th>제목</th>
                     <th>작성자</th>
                     <th>작성일</th>
+                    <th>수정일</th>
+                    
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="qa" items="${qaList}">
+                <c:forEach var="qna" items="${AdminqnaList}">
                     <tr>
-                        <td>${qa.id}</td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${qa.secret}">
-                                    <span class="secret">비밀글</span>
-                                </c:when>
-                                <c:otherwise>
-                                    <a href="qaDetail.jsp?id=${qa.id}">${qa.title}</a>
-                                </c:otherwise>
-                            </c:choose>
-                        </td>
-                        <td>${qa.author}</td>
-                        <td>${qa.date}</td>
-                    </tr>
-                </c:forEach>
-            </tbody>
+                        <td>${qna.QUESTION_IDX}</td>                     
+                       <td><a href="/qnaDetail?questionIdx=${qna.QUESTION_IDX}">${qna.TITLE}</a></td>            
+                        <td>${qna.ID}</td>                     
+                        <td>${qna.CREATE_DATE}</td>                                             
+                        <td>${qna.UPDATE_DATE}</td>                                                                                                                                                    
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+            
         </table>
         <div class="button-container">
             <button onclick="window.location.href='qnaWrite'">새 질문 작성</button>

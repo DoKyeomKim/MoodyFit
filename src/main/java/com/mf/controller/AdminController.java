@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mf.dto.AdminAnswerDto;
 import com.mf.dto.AdminApplyDto;
 import com.mf.dto.AdminOrderDto;
 import com.mf.dto.AdminQuestionDto;
@@ -145,12 +146,11 @@ public class AdminController {
 			return "redirect:/adminPuser";
 		}
 	
-		 //공고 승인 반려
-		@PostMapping("/admin/updateStatus")
-		public String updateStatus(@RequestParam Long postingIdx, @RequestParam String state) {
-			adminApplyService.updateStatus(postingIdx, state);
-			return "redirect:/adminApply";
-		}
+		 @PostMapping("/admin/updateStatus")
+		    public String updateStatus(@RequestParam("id") Long postingIdx, @RequestParam("state") String state) {
+		        adminApplyService.updateStatus(postingIdx, state);
+		        return "redirect:/adminApply";
+		    }
 		
 		
 		
@@ -316,13 +316,17 @@ public class AdminController {
 	   
 }
 	   
-	   @RequestMapping("/qna")
-		public  ModelAndView   qna() {
-			ModelAndView    mv    = new ModelAndView("qna");
-			
-			mv.setViewName("/admin/qna");
-			return mv;
-		}
+	
+	   
+	    //qna 게시판
+	    @GetMapping("/qna")
+	    public ModelAndView qna() {
+	    	ModelAndView mv = new ModelAndView("qna");
+	    	List<Map<String,Object>>  AdminQnaList = adminQnaService.getAllAdminQnas();
+	    	mv.addObject("AdminqnaList",AdminQnaList);
+	    	mv.setViewName("/admin/qna");
+	    	return mv;
+	    }
 	   
 	   
 	   @GetMapping("/qnaWrite")
@@ -342,6 +346,38 @@ public class AdminController {
 	        return "redirect:/qna"; // qna 목록 페이지로 리다이렉트 
 	    }
 	   
+	    //QNA상세 페이지
+	    @GetMapping("/qnaDetail")
+	    public String getQnaDetail(@RequestParam("questionIdx") Long questionIdx, Model model) {
+	        System.out.println("Received questionIdx: " + questionIdx);
+	        
+	        // FAQ 객체를 가져와서 모델에 추가
+	        AdminQuestionDto qnaDTO = adminQnaService.getQnaByquestionIdx(questionIdx);
+	        if (qnaDTO == null) {
+	            // questionIdx로 FAQ를 찾지 못한 경우 처리
+	            System.out.println("QnA not found for questionIdx: " + questionIdx);
+	            return "errorPage"; // errorPage.jsp로 이동 (필요에 따라 수정)
+	        }
+	        model.addAttribute("qna", qnaDTO);
+	        
+	        // 해당 QnA의 답변 리스트를 가져와서 모델에 추가
+	        List<AdminAnswerDto> answers = adminQnaService.getAnswersByQuestionIdx(questionIdx);
+	        model.addAttribute("answers", answers);
+	        
+	        return "admin/qnaDetail"; // qnaDetail.jsp 페이지로 이동
+	    }
+	    
+	    @PostMapping("/submitAnswer")
+	    public String submitAnswer(@RequestParam("questionIdx") Long questionIdx, @RequestParam("title") String title, @RequestParam("content") String content) {
+	        AdminAnswerDto answerDto = new AdminAnswerDto();
+	        answerDto.setQuestionIdx(questionIdx);
+	        answerDto.setTitle(title);
+	        answerDto.setContent(content);
+	        
+	        adminQnaService.addAnswer(answerDto);
+	        
+	        return "redirect:/qnaDetail?questionIdx=" + questionIdx;
+	    }
 	   //주문 내역 페이지
 	   @GetMapping("/adminOrder")
 	   public ModelAndView adminOrder() {

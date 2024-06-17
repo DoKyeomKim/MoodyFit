@@ -53,8 +53,11 @@ main {
 
 /* 반려 버튼 스타일 */
 .btn-delete {
-  background-color: #111111;
+      background-color: #111111;
     color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 a {
     color: black; /* 링크 색상을 검정색으로 변경 */

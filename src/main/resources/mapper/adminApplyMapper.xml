@@ -12,9 +12,9 @@ FROM
     posting 
 
     </select>
-  <update id="updateStatus" parameterType="map">
-      UPDATE posting
-      SET state = #{state}
-      WHERE posting_idx = #{postingIdx}
-   </update>
+     <update id="updateStatus">
+        UPDATE posting
+        SET state = #{state}
+        WHERE posting_idx = #{postingIdx}
+    </update>
 </mapper>
