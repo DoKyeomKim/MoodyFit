@@ -5,23 +5,20 @@
 <select id="getOrderPrePare">
 select count(o.order_idx)
 from orders o
-join order_detail ot on o.order_detail_idx = ot.order_detail_idx
 join person p on p.user_idx = #{userIdx}
-where ot.state = 1
+where o.state = 1
 </select>
 <select id="getOrderIng">
 select count(o.order_idx)
 from orders o
-join order_detail ot on o.order_detail_idx = ot.order_detail_idx
 join person p on p.user_idx = #{userIdx}
-where ot.state = 2
+where o.state = 2
 </select>
 <select id="getOrderDone">
 select count(o.order_idx)
 from orders o
-join order_detail ot on o.order_detail_idx = ot.order_detail_idx
 join person p on p.user_idx = #{userIdx}
-where ot.state = 3
+where o.state = 3
 </select>
 
 <select id="getNickNameByUserIdx">
