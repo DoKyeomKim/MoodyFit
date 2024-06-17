@@ -56,8 +56,7 @@
 			<div class="row">
 				<c:choose>
 					<c:when test="${not empty allPosting}">
-						<c:forEach var="allPosting" items="${allPosting}" begin="0"
-							end="3">
+						<c:forEach var="allPosting" items="${allPosting}">
 							<div class="col-3">
 								<div class="card">
 									<img src="${allPosting.FILE_PATH}" class="img-fluid">
@@ -95,8 +94,7 @@
 						</nav>
 					</c:when>
 					<c:when test="${not empty selectedPosting}">
-						<c:forEach var="selectedPosting" items="${selectedPosting}"
-							begin="0" end="3">
+						<c:forEach var="selectedPosting" items="${selectedPosting}">
 							<div class="col-3">
 								<div class="card">
 									<img src="${selectedPosting.FILE_PATH}" class="img-fluid">
