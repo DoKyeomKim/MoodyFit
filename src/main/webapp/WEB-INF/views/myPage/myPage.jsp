@@ -53,7 +53,7 @@ main {
 }
 
 .status-box:last-child {
-  border-right: none; /* 마지막 요소의 우측 테두리를 제거합니다. */
+  border-right: none;
 }
 
 .status-box h3 {
@@ -137,9 +137,14 @@ main {
             	</ul>
             </div>
         </div>
+        
+        <div class="recent-post mt-5" >
+        	<h2>최근 본 공고 영역</h2>
+        </div>
     </main>
-    <script src="/js/bootstrap.bundle.min.js"></script>
-    <script>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script>
 document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.add('loaded');
 });
