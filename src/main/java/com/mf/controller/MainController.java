@@ -57,9 +57,10 @@ public class MainController {
 	public ModelAndView search(@RequestParam("keyword") String keyword,@RequestParam(value = "page", defaultValue = "1") int page) {
 		ModelAndView mv = new ModelAndView();
 		
-	    int pageSize = 8; // 한 페이지에 표시할 게시글 수
+	    int pageSize = 2; // 한 페이지에 표시할 게시글 수 지금은 확인용으로 2개만 해둠.
 	    int startIndex = (page - 1) * pageSize;
-		
+
+	    
 	    // 검색 결과 비즈니스 로직 처리
 		List<Map<String,Object>> result = mainService.getSearchResult(keyword,startIndex,pageSize);
 		
