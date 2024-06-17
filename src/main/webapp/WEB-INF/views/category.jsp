@@ -70,7 +70,7 @@
                             </div>
                         </div>
                     </c:forEach>
-                         <nav aria-label="Page navigation"  style="margin-top:100px;">
+     <nav aria-label="Page navigation"  style="margin-top:100px;">
 		<ul class="pagination justify-content-center">
 			      <c:if test="${prev}">
 			        <li class="page-item">
@@ -114,6 +114,36 @@
                             </div>
                         </div>
                     </c:forEach>
+                    
+       <nav aria-label="Page navigation"  style="margin-top:100px;">
+		<ul class="pagination justify-content-center">
+			      <c:if test="${prev}">
+			        <li class="page-item">
+			          <a class="page-link" href="?page=${startPageNum - 1}" aria-label="Previous">
+			            <span aria-hidden="true"  class="fas fa-angle-left"></span>
+			          </a>
+			        </li>
+			      </c:if>
+        
+
+					<c:forEach begin="${startPageNum}" end="${endPageNum}" var="page">
+		                    <li class="page-item ${currentPage == page ? 'active' : ''}">
+					   			<a class="page-link"  href="?page=${page}">${page}</a> 
+							</li>
+					</c:forEach>
+					
+
+					
+					
+					<c:if test="${next}">
+		 				 <li class="page-item">
+		 				 	<a class="page-link" href="?page=${endPageNum + 1}">
+		 				 	    <span aria-hidden="true"  class="fas fa-angle-right"></span> 				 	
+		 				 	</a> 
+		 				 </li>
+					</c:if>
+			</ul>
+		</nav>
                 </c:when>
                 <c:otherwise>
                     <h3 style="text-align: center; margin-top:50px;">상품 공고가 없습니다!!</h3>
@@ -124,6 +154,7 @@
         </div>
     </div>
 </main>
+
 
 
 	<script src="/js/bootstrap.bundle.min.js"></script>

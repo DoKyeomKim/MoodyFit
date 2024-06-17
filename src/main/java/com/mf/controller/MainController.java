@@ -104,7 +104,7 @@ public class MainController {
         // 해당 카테고리의 모든 서브 카테고리 목록을 가져옴
         List<SubCategoryDto> subCategories = mainService.getSubCategoriesByCategoryEngName(categoryEngName);
         
-	    int pageSize = 2; // 한 페이지에 표시할 게시글 수
+	    int pageSize = 1; // 한 페이지에 표시할 게시글 수
 	    int startIndex = (page - 1) * pageSize;
         
         // 서브 카테고리 이름이 All인 경우 해당 카테고리의 All 서브 카테고리 정보 가져옴
@@ -114,7 +114,7 @@ public class MainController {
             
             // 같은 카테고리 안의 전체 공고 들고 오는 로직처리
             List<Map<String,Object>> allPosting = mainService.getAllPostingByCategory(categoryEngName,pageSize,startIndex);
-            // 페이징
+            // 페이징 처리
             Paging paging = mainService.calculatePagingInfoByCategory(categoryEngName, page, pageSize);
             
     	    mv.addObject("prev", paging.isPrev());
@@ -126,11 +126,22 @@ public class MainController {
         } else {
             // 서브 카테고리 이름으로 해당 서브 카테고리를 찾음
             selectedSubCategory = mainService.getSubCategoryByNameAndCategoryEngName(subCategoryName, categoryEngName);
-            List<Map<String,Object>> selectedPosting = mainService.getSelectedPostingBySubCategory(subCategoryName);
             
+            // 같은 세부 카테고리 안의 공고 들고 오는 로직 처리
+            List<Map<String,Object>> selectedPosting = mainService.getSelectedPostingBySubCategory(subCategoryName,pageSize,startIndex);
+            
+            // 페이징 처리
+            Paging paging = mainService.calculatePagingInfoBySubCategory(subCategoryName, page, pageSize);
+            
+    	    mv.addObject("prev", paging.isPrev());
+    	    mv.addObject("next", paging.isNext());
+    	    mv.addObject("startPageNum", paging.getStartPageNum());
+    	    mv.addObject("endPageNum", paging.getEndPageNum());
+    	    mv.addObject("totalPages", paging.getTotalPages());
             mv.addObject("selectedPosting", selectedPosting);
         }
         
+	    mv.addObject("currentPage", page);
         mv.addObject("subCategories", subCategories);
         mv.addObject("categoryEngName", categoryEngName);
         mv.addObject("selectedSubCategory", selectedSubCategory);

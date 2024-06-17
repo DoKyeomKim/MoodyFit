@@ -50,9 +50,12 @@ public interface MainMapper {
 
 
 	// 카테고리가 같은 공고 중 서브카테리가 같은 공고 갖고오기
-	List<Map<String, Object>> getSelectedPostingBySubCategory(String subCategoryName);
+	List<Map<String, Object>> getSelectedPostingBySubCategory(Map<String, Object> params);
 
 	// 카테고리별 all posting 페이징
 	int getPostingCountBycategoryEngName(String categoryEngName);
+
+	// 서브 카테고리별 posting 페이징
+	int getPostingCountBysubCategoryName(String subCategoryName);
 	
 }
