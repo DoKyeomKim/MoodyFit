@@ -60,10 +60,10 @@ public class MainController {
 	    int pageSize = 8; // 한 페이지에 표시할 게시글 수
 	    int startIndex = (page - 1) * pageSize;
 		
+	    // 검색 결과 비즈니스 로직 처리
 		List<Map<String,Object>> result = mainService.getSearchResult(keyword,startIndex,pageSize);
-
-	    int totalCount = mainService.getPostingCountByKeyword(keyword);
-	    
+		
+	    // 페이징 된 로직 처리
 	    Paging paging = mainService.calculatePagingInfo(keyword, page, pageSize);
 
 	    mv.addObject("prev", paging.isPrev());
@@ -96,17 +96,24 @@ public class MainController {
     // 특정 카테고리와 서브 카테고리 이름으로 페이지 로드
     @GetMapping("/category/{categoryEngName}/{subCategoryName}")
     public ModelAndView category(@PathVariable("categoryEngName") String categoryEngName,
-                                 @PathVariable("subCategoryName") String subCategoryName) {
+                                 @PathVariable("subCategoryName") String subCategoryName,
+                                 @RequestParam(value = "page", defaultValue = "1") int page) {
         ModelAndView mv = new ModelAndView();
         
         // 해당 카테고리의 모든 서브 카테고리 목록을 가져옴
         List<SubCategoryDto> subCategories = mainService.getSubCategoriesByCategoryEngName(categoryEngName);
         
+	    int pageSize = 8; // 한 페이지에 표시할 게시글 수
+	    int startIndex = (page - 1) * pageSize;
+        
         // 서브 카테고리 이름이 All인 경우 해당 카테고리의 All 서브 카테고리 정보 가져옴
         SubCategoryDto selectedSubCategory = new SubCategoryDto();
         if ("all".equalsIgnoreCase(subCategoryName)) {
             selectedSubCategory = mainService.getAllSubCategoryByCategoryEngName(categoryEngName);
-            List<Map<String,Object>> allPosting = mainService.getAllPostingByCategory(categoryEngName);
+            
+            List<Map<String,Object>> allPosting = mainService.getAllPostingByCategory(categoryEngName,pageSize,startIndex);
+            Paging paging = mainService.calculatePagingInfoByCategory(categoryEngName, page, pageSize);
+            
             
             mv.addObject("allPosting", allPosting);
         } else {
@@ -115,7 +122,6 @@ public class MainController {
             List<Map<String,Object>> selectedPosting = mainService.getSelectedPostingBySubCategory(subCategoryName);
             
             mv.addObject("selectedPosting", selectedPosting);
-            System.out.println(selectedPosting);
         }
         
         mv.addObject("subCategories", subCategories);
