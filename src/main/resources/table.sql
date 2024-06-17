@@ -34,6 +34,7 @@ CREATE TABLE delivery (
     post_code VARCHAR2(20) NOT NULL,        -- 주소들
     address VARCHAR2(200) NOT NULL,
     detail_address VARCHAR2(200) NOT NULL,
+    is_default number(1) NOT NULL DEFAULT '0', -- 기본 배송지 설정
     person_idx NUMBER,                      -- 배송지 정보를 저장시킨 일반 회원의 고유번호
     FOREIGN KEY (person_idx) REFERENCES person(person_idx)
 );
@@ -199,32 +200,11 @@ CREATE TABLE posting_answer (
     FOREIGN KEY (posting_question_idx) REFERENCES posting_question(posting_question_idx)
 );
 
--- 장바구니
-CREATE TABLE cart (  
-    cart_idx NUMBER PRIMARY KEY,                 -- 장바구니 고유번호
-    state varchar2(50) default '진행중' not null, -- 장바구니 태
-    posting_product_idx NUMBER,                    		 -- 제품 정보 고유번호
-    FOREIGN KEY (posting_product_idx) REFERENCES posting_product(posting_product_idx),
-    person_idx NUMBER,                           -- 장바구니의 주인 고유번호
-    FOREIGN KEY (person_idx) REFERENCES person(person_idx),
-    product_info_idx NUMBER,                           -- 제품 상세 고유번호
-    FOREIGN KEY (product_info_idx) REFERENCES product_info(product_info_idx)
-);
-
--- 주문 상세 정보
-CREATE TABLE order_detail (
-    order_detail_idx NUMBER PRIMARY KEY,       -- 주문 상세 정보 고유번호
-    state VARCHAR2(50) DEFAULT '진행중' NOT NULL, -- 주문 상태
-    quantity NUMBER NOT NULL,                  -- 주문 수량
-    price NUMBER NOT NULL,                     -- 가격
-    cart_idx NUMBER,                           -- 장바구니 고유번호
-    FOREIGN KEY (cart_idx) REFERENCES cart(cart_idx)
-);
-
 -- 주문
 CREATE TABLE orders (
     order_idx NUMBER PRIMARY KEY,                -- 주문 고유번호
-    amount NUMBER,                        		 -- 주문할 당시 제품 가격(결제내역의 가격이 amount라서 같게 설정함)
+    price number,								 -- 제품 가격
+    quantity NUMBER,                        	 -- 제품 총 수량
     merchant_uid VARCHAR2(100),					 -- 주문번호(결제내역의 주문번호)
     delivery_price NUMBER,                       -- 배송비
     total_price NUMBER,                          -- 제품 가격+배송비
@@ -233,9 +213,7 @@ CREATE TABLE orders (
     person_idx NUMBER,                           -- 주문한 사람
     FOREIGN KEY (person_idx) REFERENCES person(person_idx),
     delivery_idx NUMBER,                         -- 배송지
-    FOREIGN KEY (delivery_idx) REFERENCES delivery(delivery_idx),
-    order_detail_idx NUMBER,                         -- 주문상세 물품
-    FOREIGN KEY (order_detail_idx) REFERENCES order_detail(order_detail_idx)
+    FOREIGN KEY (delivery_idx) REFERENCES delivery(delivery_idx)
 );
 
 -- 결제 내역
@@ -245,6 +223,31 @@ CREATE TABLE payment (
     pay_method NUMBER NOT NULL,                  -- 결제 수단(0: 카드, 1: 무통장입금, 2: 카카오페이 등)
     imp_uid VARCHAR2(100),						 -- 결제 내역확인하는 고유 코드번호
     FOREIGN KEY (imp_uid) REFERENCES orders(imp_uid)
+);
+
+-- 장바구니
+CREATE TABLE cart (  
+    cart_idx NUMBER PRIMARY KEY,                		 -- 장바구니 고유번호
+    state varchar2(50) default '진행중' not null,		 -- 장바구니 상태
+    price number,										 -- 제품 가격
+    quantity number,									 -- 제품 수량
+    posting_product_idx NUMBER,                    		 -- 제품 정보 고유번호
+    FOREIGN KEY (posting_product_idx) REFERENCES posting_product(posting_product_idx),
+    person_idx NUMBER,                         			 -- 장바구니의 주인 고유번호
+    FOREIGN KEY (person_idx) REFERENCES person(person_idx),
+    product_info_idx NUMBER,                      	     -- 제품 상세 고유번호
+    FOREIGN KEY (product_info_idx) REFERENCES product_info(product_info_idx),
+    order_idx number,									 -- 주문 시 생성되는 주문 고유번호
+    FOREIGN KEY (order_idx) REFERENCES orders(order_idx)
+);
+
+-- 장바구니, 주문 테이블 결합
+CREATE TABLE order_cart (
+    order_idx NUMBER,
+    cart_idx NUMBER,
+    PRIMARY KEY (order_idx, cart_idx),
+    FOREIGN KEY (order_idx) REFERENCES orders(order_idx),
+    FOREIGN KEY (cart_idx) REFERENCES cart(cart_idx)
 );
 
 -- 고객센터
@@ -417,3 +420,4 @@ CREATE SEQUENCE sub_category_seq
     CREATE SEQUENCE cs_answer_seq
 	START WITH 1
 	INCREMENT BY 1;
+	
