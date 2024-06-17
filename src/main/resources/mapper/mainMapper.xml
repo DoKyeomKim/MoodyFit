@@ -222,9 +222,10 @@ where f.eng_name = #{subCategoryName}
 </select>
 
 <select id="checkWish">
-select count(*)
-from wish
-where posting_idx=#{postingIdx} and person_idx = #{personIdx}
+select count(wish_idx)
+from wish w
+join person p on p.person_idx = w.person_idx
+where posting_idx=#{postingIdx} and p.user_idx=#{userIdx}
 </select>
 
 <select id="getPersonIdxByUserIdx">
@@ -235,13 +236,14 @@ where user_idx = #{userIdx}
 
 
 <insert id="insertWish">
-insert into wish (wish_idx,person_idx,posting_idx)
-values(wish_seq.nextval,#{personIdx},#{postingIdx})
+  insert into wish (wish_idx, person_idx, posting_idx)
+  values (wish_seq.nextval, (select person_idx from person where user_idx = #{userIdx}), #{postingIdx})
 </insert>
 
-<delete id="deleteWish">
-	delete from wish
-	where person_idx=#{personIdx} and posting_idx=#{postingIdx}
-</delete>
 
+<delete id="deleteWish">
+  delete from wish
+  where person_idx = (select person_idx from person where user_idx = #{userIdx})
+  and posting_idx = #{postingIdx}
+</delete>
 </mapper>

@@ -60,16 +60,13 @@ public interface MainMapper {
 	int getPostingCountBysubCategoryName(String subCategoryName);
 
 
-	// 위시리스트 상태확인
-	int checkWish(Long postingIdx, Long personIdx);
+	// 찜 상태확인
+	int checkWish(Long postingIdx, Long userIdx);
 
+	// 찜 추가
+	void insertWish(Long postingIdx, Long userIdx);
 
-	void insertWish(WishDto wish);
-
-
-	void deleteWish(WishDto wish);
-
-
-	Long getPersonIdxByUserIdx(Long userIdx);
+	// 찜 삭제
+	void deleteWish(Long postingIdx, Long userIdx);
 	
 }

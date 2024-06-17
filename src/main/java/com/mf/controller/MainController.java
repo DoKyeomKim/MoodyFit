@@ -103,14 +103,10 @@ public class MainController {
     @GetMapping("/category/{categoryEngName}/{subCategoryName}")
     public ModelAndView category(@PathVariable("categoryEngName") String categoryEngName,
                                  @PathVariable("subCategoryName") String subCategoryName,
-                                 @RequestParam(value = "page", defaultValue = "1") int page,
-                                 HttpSession session) {
+                                 @RequestParam(value = "page", defaultValue = "1") int page) {
     	
         ModelAndView mv = new ModelAndView();
         
-        // 찜 때문에 추가
-        Long userIdx = (Long) session.getAttribute("userIdx");
-        Long personIdx = mainService.getPersonIdxByUserIdx(userIdx);
         
         // 해당 카테고리의 모든 서브 카테고리 목록을 가져옴
         List<SubCategoryDto> subCategories = mainService.getSubCategoriesByCategoryEngName(categoryEngName);
@@ -152,7 +148,6 @@ public class MainController {
             mv.addObject("selectedPosting", selectedPosting);
         }
         
-        mv.addObject("personIdx", personIdx);
 	    mv.addObject("currentPage", page);
         mv.addObject("subCategories", subCategories);
         mv.addObject("categoryEngName", categoryEngName);
@@ -163,20 +158,26 @@ public class MainController {
     }
 
     // 찜 목록 체크
-	@GetMapping("checkWish")
-	public ResponseEntity<Boolean> checkWish(@RequestParam("postingIdx") Long postingIdx,  @RequestParam("personIdx") Long personIdx){
-		boolean isWish = mainService.checkWish(postingIdx,personIdx);
+	@GetMapping("/checkWish")
+	public ResponseEntity<Boolean> checkWish(@RequestParam("postingIdx") Long postingIdx,  @RequestParam("userIdx") Long userIdx){
+		boolean isWish = mainService.checkWish(postingIdx,userIdx);
 		return ResponseEntity.ok(isWish);
 	}
 	
 	// 게시글 찜 하기
-	@PostMapping("addWish")
+	@PostMapping("/addWish")
 	@ResponseBody
-	public Map<String, Object> addWish(@RequestBody WishDto wish){
+	public Map<String, Object> addWish(@RequestBody Map<String, Long> request){
 		Map<String,Object> response = new HashMap<>();
 		
+		// 맞는 DTO가 없기때문에 Map 사용했고
+		// Map에서 postingIdx userIdx 꺼내기.
+		Long postingIdx = request.get("postingIdx");
+		Long userIdx = request.get("userIdx");
+		
+		
 	try {
-		mainService.addWish(wish);
+		mainService.addWish(postingIdx,userIdx);
         response.put("success", true);
 		
 	}catch (Exception e) {
@@ -192,10 +193,17 @@ public class MainController {
 	// 게시글 찜 삭제
 	@DeleteMapping("/deleteWish")
 	@ResponseBody
-	public Map<String, Object> deleteWish(@RequestBody WishDto wish){
-		 Map<String, Object> response = new HashMap<>();
+	public Map<String, Object> deleteWish(@RequestBody Map<String, Long> request){
+		Map<String, Object> response = new HashMap<>();
+		 
+		// 맞는 DTO가 없기때문에 Map 사용했고
+		// Map에서 postingIdx userIdx 꺼내기.
+		Long postingIdx = request.get("postingIdx");
+		Long userIdx = request.get("userIdx");
+			
+
 	        try {
-	        	mainService.deleteWish(wish);
+	        	mainService.deleteWish(postingIdx,userIdx);
 	            response.put("success", true);
 	        } catch (Exception e) {
 	            response.put("success", false);

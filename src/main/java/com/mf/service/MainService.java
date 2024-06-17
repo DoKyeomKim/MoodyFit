@@ -1,6 +1,5 @@
 package com.mf.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.mf.dto.CategoryDto;
 import com.mf.dto.Paging;
 import com.mf.dto.SubCategoryDto;
-import com.mf.dto.WishDto;
 import com.mf.mapper.MainMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -187,21 +185,19 @@ public class MainService {
 	}
 
 	// 현재 찜 목록 상태 확인
-	public boolean checkWish(Long postingIdx, Long personIdx) {
-		return mainMapper.checkWish(postingIdx,personIdx) > 0;
+	public boolean checkWish(Long postingIdx, Long userIdx) {
+		return mainMapper.checkWish(postingIdx,userIdx) > 0;
 	}
 
 	// 찜 목록 추가
-	public void addWish(WishDto wish) {
-		mainMapper.insertWish(wish);
+	public void addWish(Long postingIdx, Long userIdx) {
+		mainMapper.insertWish(postingIdx,userIdx);
 	}
-	// 찜 삭제
-	public void deleteWish(WishDto wish) {
-		mainMapper.deleteWish(wish);
-	}
+	
 
-	public Long getPersonIdxByUserIdx(Long userIdx) {
-		return mainMapper.getPersonIdxByUserIdx(userIdx);
+	// 찜 목록 삭제
+	public void deleteWish(Long postingIdx, Long userIdx) {
+		mainMapper.deleteWish(postingIdx,userIdx);
 	}
 
 	
