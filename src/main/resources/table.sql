@@ -34,7 +34,7 @@ CREATE TABLE delivery (
     post_code VARCHAR2(20) NOT NULL,        -- 주소들
     address VARCHAR2(200) NOT NULL,
     detail_address VARCHAR2(200) NOT NULL,
-    is_default number(1) NOT NULL DEFAULT '0', -- 기본 배송지 설정
+    is_default number(1) DEFAULT '0' NOT NULL , -- 기본 배송지 설정
     person_idx NUMBER,                      -- 배송지 정보를 저장시킨 일반 회원의 고유번호
     FOREIGN KEY (person_idx) REFERENCES person(person_idx)
 );
@@ -203,16 +203,17 @@ CREATE TABLE posting_answer (
 -- 주문
 CREATE TABLE orders (
     order_idx NUMBER PRIMARY KEY,                -- 주문 고유번호
-    price number,								 -- 제품 가격
-    quantity NUMBER,                        	 -- 제품 총 수량
-    merchant_uid VARCHAR2(100),					 -- 주문번호(결제내역의 주문번호)
+    price NUMBER,                                -- 제품 가격
+    quantity NUMBER,                             -- 제품 총 수량
+    merchant_uid VARCHAR2(100),                  -- 주문번호(결제내역의 주문번호)
     delivery_price NUMBER,                       -- 배송비
     total_price NUMBER,                          -- 제품 가격+배송비
     order_date DATE DEFAULT SYSDATE,             -- 주문일자
-    imp_uid	VARCHAR2(100) UNIQUE,			 -- 결제시 결제내역 확인하는 번호
+    imp_uid VARCHAR2(100) UNIQUE,                -- 결제시 결제내역 확인하는 번호
     person_idx NUMBER,                           -- 주문한 사람
-    FOREIGN KEY (person_idx) REFERENCES person(person_idx),
+    state VARCHAR2(100) DEFAULT '배송준비중' NOT NULL, -- 상품 배송 상태
     delivery_idx NUMBER,                         -- 배송지
+    FOREIGN KEY (person_idx) REFERENCES person(person_idx),
     FOREIGN KEY (delivery_idx) REFERENCES delivery(delivery_idx)
 );
 
@@ -420,4 +421,9 @@ CREATE SEQUENCE sub_category_seq
     CREATE SEQUENCE cs_answer_seq
 	START WITH 1
 	INCREMENT BY 1;
+
+	CREATE SEQUENCE order_seq
+	START WITH 1
+	INCREMENT BY 1
+	NOCACHE;
 	

@@ -28,7 +28,7 @@ main {
     display: inline-block;
 }
 .top-cards {
-    background-color: #A9DF79;
+    background-color: white;
     position: relative;
     height: 400px;
     overflow: hidden;
@@ -138,29 +138,35 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     loop: true,
     loopAdditionalSlides: 1
+    
   });
 });
 </script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const imageContainers = document.querySelectorAll('.image-container');
-
-  imageContainers.forEach(container => {
-    container.addEventListener('mouseover', function() {
-      const postingIdx = this.dataset.postingIdx;
-      const price = this.dataset.price;
-      const title = this.dataset.title;
-      const updateDate = this.dataset.date;
-      const infoDiv = this.querySelector('.info');
-
-      // 가격을 파싱하여 포맷팅하는 함수
-      const formattedPrice = Number(price).toLocaleString();
-
-      infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + '원</div><div>' + updateDate + '일 출시</div>';
-    });
-  });
-});
+	  const swiper = new Swiper('.swiper-container', {
+	    slidesPerView: 1,
+	    spaceBetween: 30,
+	    pagination: {
+	      el: '.swiper-pagination',
+	      clickable: true,
+	    },
+	    navigation: {
+	      nextEl: '.swiper-button-next',
+	      prevEl: '.swiper-button-prev',
+	    },
+	    loop: true,
+	    loopAdditionalSlides: 1,
+	    // 자동 넘기기 기능
+	    autoplay: {
+	      delay: 5000, //5초
+	      disableOnInteraction: false,
+	    },
+	    // 애니메이션 속도
+	    speed: 1000 
+	  });
+	});
 </script>
 
 <script>

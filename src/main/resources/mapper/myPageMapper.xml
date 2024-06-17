@@ -21,7 +21,7 @@ select count(o.order_idx)
 from orders o
 join order_detail ot on o.order_detail_idx = ot.order_detail_idx
 join person p on p.user_idx = #{userIdx}
-where ot.state = 2
+where ot.state = 3
 </select>
 
 <select id="getNickNameByUserIdx">
