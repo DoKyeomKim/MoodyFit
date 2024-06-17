@@ -15,7 +15,7 @@ public interface OrderMapper {
 
 	List<CartDto> selectCart(Long userIdx);
 
-	CartDto selectCart2(CartDto cartDto);
+	List<CartDto> selectCart2(Long userIdx);
 
 	List<DeliveryDto> selectDelivery(Long userIdx);
 
@@ -30,6 +30,8 @@ public interface OrderMapper {
 	int selectPersonIdx(Long userIdx);
 
 	void selectTotalPrice(OrdersDto ordersDto);
+
+	DeliveryDto selectDelivery2(Long userIdx);
 	
 
 }

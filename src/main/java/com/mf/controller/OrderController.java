@@ -1,15 +1,18 @@
 package com.mf.controller;
 
-import java.util.List;
+import java.time.DayOfWeek;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mf.dto.CartDto;
@@ -17,13 +20,11 @@ import com.mf.dto.DeliveryDto;
 import com.mf.dto.OrdersDto;
 import com.mf.dto.PersonDto;
 import com.mf.mapper.OrderMapper;
+import com.mf.service.CartService;
 import com.mf.service.MyPageService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.DayOfWeek;
 
 @Controller
 public class OrderController {
@@ -32,6 +33,9 @@ public class OrderController {
 
 	@Autowired
 	private OrderMapper orderMapper;
+	
+	@Autowired
+	private CartService cartService;
 	
 	// 장바구니 페이지
 	@RequestMapping("/myPage/cart")
@@ -166,7 +170,7 @@ public class OrderController {
 		
 		// 결제하는 페이지
 				@RequestMapping("/myPage/payment")
-				public ModelAndView getPayment(HttpSession session, OrdersDto ordesrDto) {
+				public ModelAndView getPayment(HttpSession session, OrdersDto ordesrDto, CartDto cartDto) {
 					ModelAndView mv = new ModelAndView();
 					Long userIdx = (Long) session.getAttribute("userIdx");
 					
@@ -178,20 +182,41 @@ public class OrderController {
 					// 마이페이지 로직 처리
 					Map<String, Object> result = myPageService.getPersonMyPage(userIdx);
 					PersonDto person = (PersonDto) result.get("person");
-					
-					 List<OrdersDto> orderList = orderMapper.selectOrder(userIdx);
+					 List<CartDto> cartList = orderMapper.selectCart2(userIdx);
 					 List<DeliveryDto> deliveryList = orderMapper.selectDelivery(userIdx);
-					 
+					 DeliveryDto deliveryDto = orderMapper.selectDelivery2(userIdx);
 					 System.out.println("payment---------------------------");
-					 System.out.println(orderList);
+					 System.out.println(cartList);
 					 System.out.println(deliveryList);
-					 
+					
+					
 					mv.addObject("person", person);
-					mv.addObject("orderList", orderList);
+					mv.addObject("cartList", cartList);
+					mv.addObject("deliveryDto", deliveryDto);
 					mv.addObject("deliveryList", deliveryList);
 					mv.setViewName("myPage/payment");
 					return mv;
 				}
 				
-	
+				 @PostMapping("/mypage/paying")
+				    @ResponseBody
+				    public void updateCartAndCreateOrder(@RequestParam("selectedItems") List<Long> selectedItems,
+				                           @RequestParam Map<String, String> allParams, HttpServletResponse response, HttpSession session){
+					 Long userIdx = (Long) session.getAttribute("userIdx");
+					 Map<String, Object> result = myPageService.getPersonMyPage(userIdx);
+						PersonDto person = (PersonDto) result.get("person");
+						Long personIdx = person.getPersonIdx();
+					 
+					 try {
+				            cartService.updateCartAndCreateOrder(selectedItems, allParams, personIdx);
+				            response.sendRedirect("/myPage/payment");
+				        } catch (Exception e) {
+				            e.printStackTrace();
+				            try {
+				                response.sendRedirect("/myPage/cart");
+				            } catch (Exception ex) {
+				                ex.printStackTrace();
+				            }
+				        }
+				    }
 }
