@@ -148,7 +148,7 @@ join product_file e on e.product_info_idx = b.product_info_idx
 join sub_category f on d.sub_category_idx = f.sub_category_idx
 join category g on g.category_idx = f.category_idx
 where g.eng_name = #{categoryEngName}
-ORDER BY a.posting_idx ASC
+ORDER BY a.posting_idx DESC
 </select>
 
 <select id="getSelectedPostingBySubCategory">
@@ -164,7 +164,7 @@ JOIN product d ON c.product_idx = d.product_idx
 join product_file e on e.product_info_idx = b.product_info_idx
 join sub_category f on d.sub_category_idx = f.sub_category_idx
 where f.eng_name = #{subCategoryName}
-ORDER BY a.posting_idx ASC
+ORDER BY a.posting_idx DESC
 </select>
 
 </mapper>
