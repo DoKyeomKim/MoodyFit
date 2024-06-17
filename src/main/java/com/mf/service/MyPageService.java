@@ -28,13 +28,20 @@ public class MyPageService {
 		// 닉네임과 personIdx 갖고오기
 		PersonDto person = myPageMapper.getNickNameByUserIdx(userIdx);
 		
-		// 메인에 갖고올 주문 목록 현황 갖고오기(현재는 전부 다)
-		OrderDto order = myPageMapper.getOrderNow(userIdx);
+		// 배송 준비중인 물품 갖고오기
+		// 배송 준비중
+		OrderDto orderPrePare = myPageMapper.getOrderPrePare(userIdx);
+		// 배송중
+		OrderDto orderIng = myPageMapper.getOrderIng(userIdx);
+		// 배송 완료
+		OrderDto orderDone = myPageMapper.getOrderDone(userIdx);
 		
 		Map<String,Object> result = new HashMap<>();
 		
 		result.put("person", person);
-		result.put("order", order);
+		result.put("orderPrePare", orderPrePare);
+		result.put("orderIng", orderIng);
+		result.put("orderDone", orderDone);
 		return result;
 	}
 	

@@ -91,23 +91,42 @@ main {
     <main style="margin-top: 70px;">
         <div class="status">
             <div class="status-box">
-                <h3><c:choose>
-						<c:when test="${empty order}">
+                <h3>
+                	<c:choose>
+						<c:when test="${empty orderPrePare}">
 							0
 						</c:when>
 						<c:otherwise>
-							${order}
+							${orderPrePare}
 						</c:otherwise>
 					</c:choose>
 				</h3>
                 <p>배송준비중</p>
             </div>
             <div class="status-box">
-                <h3>0</h3>
+                <h3>
+					<c:choose>
+						<c:when test="${empty orderIng}">
+							0
+						</c:when>
+						<c:otherwise>
+							${orderIng}
+						</c:otherwise>
+					</c:choose>
+				</h3>
                 <p>배송중</p>
             </div>
             <div class="status-box">
-                <h3>0</h3>
+                <h3>
+                	<c:choose>
+						<c:when test="${empty orderDone}">
+							0
+						</c:when>
+						<c:otherwise>
+							${orderDone}
+						</c:otherwise>
+					</c:choose>
+                </h3>
                 <p>배송완료</p>
             </div>
             <div class="status-box">
