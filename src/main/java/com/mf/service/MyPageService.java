@@ -102,6 +102,7 @@ public class MyPageService {
 	// 가맹점 정보수정
 	@Transactional
 	public void storeUpdate(Long userIdx, UsersDto users, StoreDto store) {
+		// 현재 유저 정보 갖고 오기(변경전)
 		UsersDto existingUser = myPageMapper.getUserById(userIdx);
 		
         // 사용자가 비밀번호를 변경하려고 하는지 확인
