@@ -81,18 +81,18 @@ public class MainController {
 	}
 
 
-	   // 특정 카테고리 이동 시 기본적으로 All 서브 카테고리로 redirect
+	// 특정 카테고리 이동 시 기본적으로 All 서브 카테고리로 redirect
     @GetMapping("/category/{categoryEngName}")
     public String redirectToDefaultSubCategory(@PathVariable("categoryEngName") String categoryEngName) {
         // 해당 카테고리의 All 서브 카테고리 가져오기
         SubCategoryDto allSubCategory = mainService.getAllSubCategoryByCategoryEngName(categoryEngName);
         
-        log.info("Redirecting to default 'All' subcategory for category: {}, All SubCategory ID: {}", categoryEngName, allSubCategory.getSubCategoryIdx());
         
         // All 카테고리로 redirect
-        return "redirect:/category/" + categoryEngName + "/" + allSubCategory.getSubCategoryIdx();
+        return "redirect:/category/" + categoryEngName + "/All";
     }
 
+    
     // 특정 카테고리와 서브 카테고리 이름으로 페이지 로드
     @GetMapping("/category/{categoryEngName}/{subCategoryName}")
     public ModelAndView category(@PathVariable("categoryEngName") String categoryEngName,
@@ -103,16 +103,20 @@ public class MainController {
         List<SubCategoryDto> subCategories = mainService.getSubCategoriesByCategoryEngName(categoryEngName);
         
         // 서브 카테고리 이름이 All인 경우 해당 카테고리의 All 서브 카테고리 정보 가져옴
-        SubCategoryDto selectedSubCategory;
+        SubCategoryDto selectedSubCategory = new SubCategoryDto();
         if ("all".equalsIgnoreCase(subCategoryName)) {
             selectedSubCategory = mainService.getAllSubCategoryByCategoryEngName(categoryEngName);
+            List<Map<String,Object>> allPosting = mainService.getAllPostingByCategory(categoryEngName);
+            
+            mv.addObject("allPosting", allPosting);
         } else {
             // 서브 카테고리 이름으로 해당 서브 카테고리를 찾음
             selectedSubCategory = mainService.getSubCategoryByNameAndCategoryEngName(subCategoryName, categoryEngName);
+            List<Map<String,Object>> selectedPosting = mainService.getSelectedPostingBySubCategory(subCategoryName);
+            
+            mv.addObject("selectedPosting", selectedPosting);
+            System.out.println(selectedPosting);
         }
-        
-        log.info("Sub Categories for {}: {}", categoryEngName, subCategories);
-        log.info("Selected Sub Category: {}", selectedSubCategory);
         
         mv.addObject("subCategories", subCategories);
         mv.addObject("categoryEngName", categoryEngName);
@@ -123,25 +127,6 @@ public class MainController {
     }
 
     
-    // 카테고리 데이터를 JSON 형식으로 제공하는 메소드
-    @GetMapping("/api/categories")
-    @ResponseBody
-    public List<CategoryDto> getCategories(@RequestParam(value = "keyword", required = false) String keyword) {
-        if (keyword != null && !keyword.isEmpty()) {
-            return mainService.getCategoriesByKeyword(keyword);
-        }
-        return mainService.getCategory();
-    }
-    
-    // 서브 카테고리 데이터를 JSON 형식으로 제공하는 메소드
-    @GetMapping("/api/subcategories")
-    @ResponseBody
-    public List<SubCategoryDto> getSubCategories(@RequestParam("categoryCode") String categoryCode) {
-        log.info("Request for subcategories with categoryCode: {}", categoryCode);
-        List<SubCategoryDto> subCategories = mainService.getSubCategoriesByCategoryCode(categoryCode);
-        log.info("Subcategories fetched: {}", subCategories);
-        return subCategories;
-    }
 
     
     

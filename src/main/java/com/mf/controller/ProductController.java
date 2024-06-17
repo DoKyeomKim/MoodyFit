@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mf.dto.CategoryDto;
 import com.mf.dto.ProductColorDto;
 import com.mf.dto.ProductDetailsDto;
 import com.mf.dto.ProductSizeDto;
+import com.mf.dto.SubCategoryDto;
 import com.mf.service.MainService;
 import com.mf.service.ProductService;
 
@@ -91,6 +93,25 @@ public class ProductController {
         mv.setViewName("product/productlist");
         return mv;
     }
+    
+    // 카테고리 데이터를 JSON 형식으로 제공하는 메소드
+    @GetMapping("/api/categories")
+    @ResponseBody
+    public List<CategoryDto> getCategories(@RequestParam(value = "keyword", required = false) String keyword) {
+        if (keyword != null && !keyword.isEmpty()) {
+            return mainService.getCategoriesByKeyword(keyword);
+        }
+        return mainService.getCategory();
+    }
+    
+    // 서브 카테고리 데이터를 JSON 형식으로 제공하는 메소드
+    @GetMapping("/api/subcategories")
+    @ResponseBody
+    public List<SubCategoryDto> getSubCategories(@RequestParam("categoryCode") String categoryCode) {
+        List<SubCategoryDto> subCategories = mainService.getSubCategoriesByCategoryCode(categoryCode);
+        return subCategories;
+    }
+
     
     // 색상 데이터를 JSON 형식으로 제공하는 메소드
     @GetMapping("/api/colors")

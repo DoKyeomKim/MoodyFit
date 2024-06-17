@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -26,28 +26,75 @@
 	color: grey;
 }
 
+.card {
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 15px;
+	text-align: center;
+}
 </style>
-
 </head>
 <body>
-<%@include file="/WEB-INF/layouts/header.jsp"%>
-<br><br>
-<div class="cateDefault"><h3>${categoryEngName}</h3></div>
+	<%@include file="/WEB-INF/layouts/header.jsp"%>
+	<br>
+	<br>
+	<div class="cateDefault">
+		<h3>${categoryEngName}</h3>
+	</div>
 	<div class="subCateDefault">
 		<c:forEach var="subCategory" items="${subCategories}">
-	   	<a href="/category/${categoryEngName}/${subCategory.engName}">
-		    <c:choose>
-			  	<c:when test="${subCategory.korName == '전체'}">All</c:when>
-				  <c:otherwise>${subCategory.korName}</c:otherwise>
-		    </c:choose>
-	   	</a>
+			<a href="/category/${categoryEngName}/${subCategory.engName}"> 
+				<c:choose>
+					<c:when test="${subCategory.korName == '전체'}">All</c:when>
+					<c:otherwise>${subCategory.korName}</c:otherwise>
+				</c:choose>
+			</a>
 		</c:forEach>
 	</div>
 
-<h3>${defaultSubCategory.korName}</h3>
-<br><br>
-total""items.
+<main>
+    <div class="container">
+        <div class="row">
+            <c:choose>
+                <c:when test="${not empty allPosting}">
+                    <c:forEach var="allPosting" items="${allPosting}" begin="0" end="3">
+                        <div class="col-3">
+                            <div class="card">
+                                <img src="${allPosting.FILE_PATH}" class="img-fluid">
+                                <div class="card-body">
+                                    <span>${allPosting.POSTING_IDX}</span><br>
+                                    <span>제조사 : ${allPosting.MANUFACTURE_NAME}</span><br>
+                                    <span>공고 제목 : ${allPosting.TITLE}</span><br>
+                                    <span>가격 : ${allPosting.PRICE}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </c:when>
+                <c:when test="${not empty selectedPosting}">
+                    <c:forEach var="selectedPosting" items="${selectedPosting}" begin="0" end="3">
+                        <div class="col-3">
+                            <div class="card">
+                                <img src="${selectedPosting.FILE_PATH}" class="img-fluid">
+                                <div class="card-body">
+                                    <span>${selectedPosting.POSTING_IDX}</span><br>
+                                    <span>제조사 : ${selectedPosting.MANUFACTURE_NAME}</span><br>
+                                    <span>공고 제목 : ${selectedPosting.TITLE}</span><br>
+                                    <span>가격 : ${selectedPosting.PRICE}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <h3 style="text-align: center; margin-top:50px;">상품 공고가 없습니다!!</h3>
+                </c:otherwise>
+            </c:choose>
+        </div>
+    </div>
+</main>
 
-<script src="/js/bootstrap.bundle.min.js"></script>
+
+	<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

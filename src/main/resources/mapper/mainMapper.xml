@@ -134,4 +134,37 @@ WHERE REPLACE(a.title, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
 ORDER BY a.posting_idx DESC
 </select>
 
+<select id="getAllPostingByCategory">
+SELECT DISTINCT a.posting_idx AS posting_idx,
+                a.title AS title,
+                d.price AS price,
+                d.MANUFACTURE_NAME,
+                e.file_path AS file_path
+FROM posting a
+JOIN posting_product b ON a.posting_idx = b.posting_idx
+JOIN product_info c ON b.product_info_idx = c.product_info_idx
+JOIN product d ON c.product_idx = d.product_idx
+join product_file e on e.product_info_idx = b.product_info_idx
+join sub_category f on d.sub_category_idx = f.sub_category_idx
+join category g on g.category_idx = f.category_idx
+where g.eng_name = #{categoryEngName}
+ORDER BY a.posting_idx ASC
+</select>
+
+<select id="getSelectedPostingBySubCategory">
+SELECT DISTINCT a.posting_idx AS posting_idx,
+                a.title AS title,
+                d.price AS price,
+                d.MANUFACTURE_NAME,
+                e.file_path AS file_path
+FROM posting a
+JOIN posting_product b ON a.posting_idx = b.posting_idx
+JOIN product_info c ON b.product_info_idx = c.product_info_idx
+JOIN product d ON c.product_idx = d.product_idx
+join product_file e on e.product_info_idx = b.product_info_idx
+join sub_category f on d.sub_category_idx = f.sub_category_idx
+where f.eng_name = #{subCategoryName}
+ORDER BY a.posting_idx ASC
+</select>
+
 </mapper>
