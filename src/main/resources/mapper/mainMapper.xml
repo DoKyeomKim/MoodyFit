@@ -221,4 +221,27 @@ join sub_category f on d.sub_category_idx = f.sub_category_idx
 where f.eng_name = #{subCategoryName}
 </select>
 
+<select id="checkWish">
+select count(*)
+from wish
+where posting_idx=#{postingIdx} and person_idx = #{personIdx}
+</select>
+
+<select id="getPersonIdxByUserIdx">
+select person_idx
+from person
+where user_idx = #{userIdx}
+</select>
+
+
+<insert id="insertWish">
+insert into wish (wish_idx,person_idx,posting_idx)
+values(wish_seq.nextval,#{personIdx},#{postingIdx})
+</insert>
+
+<delete id="deleteWish">
+	delete from wish
+	where person_idx=#{personIdx} and posting_idx=#{postingIdx}
+</delete>
+
 </mapper>

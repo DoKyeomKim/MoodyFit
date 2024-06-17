@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.mf.dto.CategoryDto;
 import com.mf.dto.SubCategoryDto;
+import com.mf.dto.WishDto;
 
 @Mapper
 public interface MainMapper {
@@ -57,5 +58,18 @@ public interface MainMapper {
 
 	// 서브 카테고리별 posting 페이징
 	int getPostingCountBysubCategoryName(String subCategoryName);
+
+
+	// 위시리스트 상태확인
+	int checkWish(Long postingIdx, Long personIdx);
+
+
+	void insertWish(WishDto wish);
+
+
+	void deleteWish(WishDto wish);
+
+
+	Long getPersonIdxByUserIdx(Long userIdx);
 	
 }

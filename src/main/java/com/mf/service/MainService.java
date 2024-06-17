@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.mf.dto.CategoryDto;
 import com.mf.dto.Paging;
 import com.mf.dto.SubCategoryDto;
+import com.mf.dto.WishDto;
 import com.mf.mapper.MainMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -183,6 +184,24 @@ public class MainService {
 	    paging.setNext(next);
 		
 		return paging;
+	}
+
+	// 현재 찜 목록 상태 확인
+	public boolean checkWish(Long postingIdx, Long personIdx) {
+		return mainMapper.checkWish(postingIdx,personIdx) > 0;
+	}
+
+	// 찜 목록 추가
+	public void addWish(WishDto wish) {
+		mainMapper.insertWish(wish);
+	}
+	// 찜 삭제
+	public void deleteWish(WishDto wish) {
+		mainMapper.deleteWish(wish);
+	}
+
+	public Long getPersonIdxByUserIdx(Long userIdx) {
+		return mainMapper.getPersonIdxByUserIdx(userIdx);
 	}
 
 	

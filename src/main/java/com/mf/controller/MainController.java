@@ -1,20 +1,25 @@
 package com.mf.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 //github.com/DoKyeomKim/MoodyFit.git
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mf.dto.CategoryDto;
 import com.mf.dto.Paging;
 import com.mf.dto.SubCategoryDto;
+import com.mf.dto.WishDto;
 //github.com/DoKyeomKim/MoodyFit.git
 import com.mf.service.MainService;
 
@@ -98,8 +103,14 @@ public class MainController {
     @GetMapping("/category/{categoryEngName}/{subCategoryName}")
     public ModelAndView category(@PathVariable("categoryEngName") String categoryEngName,
                                  @PathVariable("subCategoryName") String subCategoryName,
-                                 @RequestParam(value = "page", defaultValue = "1") int page) {
+                                 @RequestParam(value = "page", defaultValue = "1") int page,
+                                 HttpSession session) {
+    	
         ModelAndView mv = new ModelAndView();
+        
+        // 찜 때문에 추가
+        Long userIdx = (Long) session.getAttribute("userIdx");
+        Long personIdx = mainService.getPersonIdxByUserIdx(userIdx);
         
         // 해당 카테고리의 모든 서브 카테고리 목록을 가져옴
         List<SubCategoryDto> subCategories = mainService.getSubCategoriesByCategoryEngName(categoryEngName);
@@ -141,6 +152,7 @@ public class MainController {
             mv.addObject("selectedPosting", selectedPosting);
         }
         
+        mv.addObject("personIdx", personIdx);
 	    mv.addObject("currentPage", page);
         mv.addObject("subCategories", subCategories);
         mv.addObject("categoryEngName", categoryEngName);
@@ -150,7 +162,47 @@ public class MainController {
 
     }
 
-    
+    // 찜 목록 체크
+	@GetMapping("checkWish")
+	public ResponseEntity<Boolean> checkWish(@RequestParam("postingIdx") Long postingIdx,  @RequestParam("personIdx") Long personIdx){
+		boolean isWish = mainService.checkWish(postingIdx,personIdx);
+		return ResponseEntity.ok(isWish);
+	}
+	
+	// 게시글 찜 하기
+	@PostMapping("addWish")
+	@ResponseBody
+	public Map<String, Object> addWish(@RequestBody WishDto wish){
+		Map<String,Object> response = new HashMap<>();
+		
+	try {
+		mainService.addWish(wish);
+        response.put("success", true);
+		
+	}catch (Exception e) {
+        response.put("success", false);
+        response.put("message", e.getMessage());
+	}
+		
+		
+		return response;
+	}
+	
+	
+	// 게시글 찜 삭제
+	@DeleteMapping("/deleteWish")
+	@ResponseBody
+	public Map<String, Object> deleteWish(@RequestBody WishDto wish){
+		 Map<String, Object> response = new HashMap<>();
+	        try {
+	        	mainService.deleteWish(wish);
+	            response.put("success", true);
+	        } catch (Exception e) {
+	            response.put("success", false);
+	            response.put("message", e.getMessage());
+	        }
+	        return response;
+	}
 
     
     

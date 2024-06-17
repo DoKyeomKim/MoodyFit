@@ -35,6 +35,7 @@
 </style>
 </head>
 <body>
+	<input type="hidden" name="personIdx" id="personIdx" value="${personIdx}">
 	<%@include file="/WEB-INF/layouts/header.jsp"%>
 	<br>
 	<br>
@@ -61,10 +62,19 @@
 								<div class="card">
 									<img src="${allPosting.FILE_PATH}" class="img-fluid">
 									<div class="card-body">
-										<span>${allPosting.POSTING_IDX}</span><br> <span>제조사
-											: ${allPosting.MANUFACTURE_NAME}</span><br> <span>공고 제목
-											: ${allPosting.TITLE}</span><br> <span>가격 :
-											${allPosting.PRICE}</span>
+										<span>${allPosting.POSTING_IDX}</span><br> 
+										<span>제조사: ${allPosting.MANUFACTURE_NAME}</span><br> 
+										<span>공고 제목	: ${allPosting.TITLE}</span><br> 
+										<span>가격 :${allPosting.PRICE}</span>
+										
+
+										<button class="btn btn-outline-secondary wishBtn" style="margin-right: 5px;" data-person-idx="${personIdx}" data-posting-idx="${allPosting.POSTING_IDX}">
+										    <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+										        <path fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"/>
+										    </svg>
+										</button>
+
+											
 									</div>
 								</div>
 							</div>
@@ -144,6 +154,92 @@
 
 
 
-	<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const personIdx = document.getElementById('personIdx').value;
+
+    function updateWishSvgs() {
+        const wishButtons = document.querySelectorAll('.wishBtn');
+        wishButtons.forEach(function(button) {
+            const postingIdx = button.getAttribute('data-posting-idx');
+            
+            if (!personIdx) {
+                const svg = button.querySelector('svg path');
+                svg.setAttribute('fill', 'none');
+                return;
+            }
+
+            // 스크랩 상태 확인 요청
+            fetch(`/checkWish?postingIdx=` + postingIdx + `&personIdx=` + personIdx,  {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(isWish => {
+                button.setAttribute('data-wish', isWish);
+                const svg = button.querySelector('svg path');
+                if (isWish) {
+                    svg.setAttribute('fill', 'red');
+                } else {
+                    svg.setAttribute('fill', 'none');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
+
+    updateWishSvgs(); // 페이지 로드 시 스크랩 버튼 상태 갱신
+
+    document.addEventListener('click', async function(e) {
+        const button = e.target.closest('.wishBtn'); // 상위 요소인 버튼을 찾기
+        if (button) {
+            e.preventDefault(); // 기본 동작 방지
+            e.stopPropagation(); // 이벤트 전파 방지
+            const svg = button.querySelector('svg path');
+            const postingIdx = button.getAttribute('data-posting-idx');
+            const personIdx = button.getAttribute('data-person-idx');
+            const isWish = button.getAttribute('data-wish') === 'true';
+            
+            try {
+                let response;
+                if (isWish) {
+                    // 찜 삭제 요청
+                    response = await fetch('/deleteWish', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ postingIdx, personIdx }),
+                    });
+                } else {
+                    // 찜 추가 요청
+                    response = await fetch('/addWish', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ postingIdx, personIdx }), // 변경된 부분
+                    });
+                }
+
+                if (response.ok) {
+                    const message = isWish ? '찜 목록에서 삭제되었습니다.' : '찜 목록에 추가되었습니다.';
+                    alert(message);
+                    updateWishSvgs(); // 개추 버튼 상태 갱신
+                } else {
+                    throw new Error('error.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('오류가 발생했습니다. 다시 시도해주세요.');
+            }
+            return; // 여기서 함수 실행 종료
+        }
+
+    });
+});
+</script>
 </body>
 </html>
