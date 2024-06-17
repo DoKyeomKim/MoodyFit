@@ -24,7 +24,7 @@ JOIN
      <!-- 회원 드롭 -->
       <update id="dropUser">
       UPDATE users
-      SET state = 2
+      SET state = 3
       WHERE user_idx = #{userIdx}
    </update>
 </mapper>

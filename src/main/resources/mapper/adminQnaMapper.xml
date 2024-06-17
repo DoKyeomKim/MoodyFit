@@ -39,5 +39,41 @@ JOIN
 		#{userIdx}		
          )
     </insert>
-   
+   <!-- 특정 FAQ 항목 가져오기 -->
+  <select id="getQnaByquestionIdx" >
+    SELECT 
+        q.question_idx AS questionIdx,
+        q.title,
+        u.id AS id,
+        q.content,
+        q.create_date AS createDate,
+        q.update_date AS updateDate
+    FROM 
+        cs_question q
+    JOIN 
+        users u ON q.user_idx = u.user_idx
+    WHERE 
+        q.question_idx = #{questionIdx}
+</select>
+
+  <!-- 답변 삽입 -->
+    <insert id="insertAnswer" parameterType="com.mf.dto.AdminAnswerDto">
+        INSERT INTO cs_answer (answer_idx, title, content, create_date, update_date, question_idx)
+        VALUES (cs_answer_seq.nextval, #{title}, #{content}, SYSDATE, SYSDATE, #{questionIdx})
+    </insert>
+
+    <!-- 특정 QnA의 답변 가져오기 -->
+    <select id="getAnswersByQuestionIdx" resultType="com.mf.dto.AdminAnswerDto">
+        SELECT 
+            answer_idx AS answerIdx,
+            title,
+            content,
+            create_date AS createDate,
+            update_date AS updateDate,
+            question_idx AS questionIdx
+        FROM 
+            cs_answer
+        WHERE 
+            question_idx = #{questionIdx}
+    </select>
 </mapper>

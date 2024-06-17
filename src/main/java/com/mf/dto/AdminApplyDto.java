@@ -1,4 +1,4 @@
-package com.mf.dto;
+ package com.mf.dto;
 
 import java.sql.Date;
 
@@ -15,9 +15,7 @@ public class AdminApplyDto {
 	private String title;
 	private Date updateDate;
 	private String state;
-	private String productName;
-	private Double price;
-	private String storeName;
+
 
 	
 	

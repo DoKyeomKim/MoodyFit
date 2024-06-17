@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mf.dto.AdminApplyDto;
 import com.mf.mapper.AdminApplyMapper;
@@ -14,10 +15,10 @@ public class AdminApplyService {
 	 public List<AdminApplyDto> getAllAdminApplys() {
 	        return adminApplyMapper.getAllAdminApplys();
 	}
-	public void updateStatus(Long postingIdx, String state) {
-		
-			adminApplyMapper.updateStatus(postingIdx, state);
-		}
+	 @Transactional
+	    public void updateStatus(Long postingIdx, String state) {
+	        adminApplyMapper.updateStatus(postingIdx, state);
+	    }
 
 	
 

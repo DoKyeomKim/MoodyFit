@@ -45,8 +45,11 @@ main {
     color: #333;
 }
 .btn-delete {
-    background-color: #111111;
+        background-color: #111111;
     color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 #updateModal {
     position: absolute;

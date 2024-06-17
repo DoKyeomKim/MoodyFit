@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.mf.dto.AdminAnswerDto;
 import com.mf.dto.AdminQuestionDto;
 import com.mf.dto.CategoryDto;
 import com.mf.dto.CsQnaDto;
@@ -19,6 +20,15 @@ public interface AdminQnaMapper {
 
 
 	void setCsQna(CsQnaDto csQna);
+
+
+	AdminQuestionDto getQnaByquestionIdx(Long questionIdx);
+
+
+	List<AdminAnswerDto> getAnswersByQuestionIdx(Long questionIdx);
+
+
+	void insertAnswer(AdminAnswerDto answerDto);
 	
 			
 		}
