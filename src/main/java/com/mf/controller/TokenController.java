@@ -109,7 +109,7 @@ public class TokenController {
 	                System.out.println("Merchant_uid: " + merchant_uid);
 	                // orderMapper.selectTotalPrice(ordersDto);	
 	                
-	                if (amount == 100) {
+	                if (amount == 101000) {
 	                	 System.out.println("결제 내역과 주문내역의 금액이 같다");
 	                    return ResponseEntity.ok("Success");
 	                } else {

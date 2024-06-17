@@ -41,7 +41,7 @@ main{
                     <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
                         <div class="box" name="title">${item.title}</div>
                         <div class="box" name="name">${item.name}</div>
-                        <div class="box" name="name">내일 날짜: ${formattedDate}</div>
+                        <div class="box" name="name">내일 ${formattedDate} 도착 보장</div>
                         <div class="box" name="price">가격: <span class="itemPrice" data-price="${item.price}">${item.price}</span>원</div>
                     </div>
                     <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
@@ -59,21 +59,17 @@ main{
                 </div>
 
             </c:forEach>
-
-        <button type="button" class="btn btn-primary" style="margin-right: 5px;"
-										onclick="location.href='/myPage/payment'">주문하기</button>
-          <!--   <input type="submit" class="btn btn-primary" style="margin:20px;" id="buyButton" value="구매하기(0)">   -->
+            
+		 <input type="submit" class="btn btn-primary" style="margin:20px;" id="buyButton" value="구매하기">  
+         <button type="button" class="btn btn-primary" style="margin-right: 5px;"
+										onclick="location.href='/myPage/payment'">결제페이지</button>
+       <!--     <button type="button" class="btn btn-primary" style="margin-right: 5px;"
+										onclick="location.href='/myPage/payment'">주문하기</button>   -->
         </form>
     </main>
 
     <script>
- 		// 선택된 상품 수에 따라 구매 버튼을 업데이트하는 JavaScript 함수
-        function updateBuyButton() {
-            const checkboxes = document.querySelectorAll('.itemCheckbox');
-            const selectedCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
-            const buyButton = document.getElementById('buyButton');
-            buyButton.value = `구매하기(${selectedCount})`;
-        }
+   
 
     	 // 수량을 업데이트하는 함수
         function updateQuantity(button, change) {
@@ -102,40 +98,40 @@ main{
 
      // 폼 제출 처리
         document.getElementById('cartForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // 기본 폼 제출 방지
+    event.preventDefault(); // 기본 폼 제출 방지
 
-            const form = event.target;
-            const formData = new FormData();
+    const form = event.target;
+    const formData = new FormData();
 
-         // 체크된 항목에서 데이터 수집
-            document.querySelectorAll('.itemCheckbox:checked').forEach(checkbox => {
-                const container = checkbox.closest('.box-container');
-                const cartIdx = checkbox.value;
-                const quantity = container.querySelector('.itemQuantity').textContent;
-                const price = container.querySelector('.itemPrice').textContent.replace(/,/g, '');
+    // 체크된 항목에서 데이터 수집
+    document.querySelectorAll('.itemCheckbox:checked').forEach(checkbox => {
+        const container = checkbox.closest('.box-container');
+        const cartIdx = checkbox.value;
+        const quantity = container.querySelector('.itemQuantity').textContent;
+        const price = container.querySelector('.itemPrice').textContent.replace(/,/g, '');
 
-                formData.append('selectedItems', cartIdx);
-                formData.append('quantity_' + cartIdx, quantity);
-                formData.append('price_' + cartIdx, price);
-            });
+        formData.append('selectedItems', cartIdx);
+        formData.append('quantity_' + cartIdx, quantity);
+        formData.append('price_' + cartIdx, price);
+    });
 
-         // fetch를 사용하여 수집된 데이터 제출
-            fetch(form.action, {
-                method: form.method,
-                body: formData
-            }).then(response => {
-                if (response.ok) {
-                	// 성공적인 응답을 처리합니다.
-                    window.location.href = response.url; // 응답 URL로 리다이렉트
-                } else {
-                	// 오류 응답을 처리합니다.
-                    alert('Error submitting form');
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-                alert('Error submitting form');
-            });
-        });
+    // fetch를 사용하여 수집된 데이터 제출
+    fetch(form.action, {
+        method: form.method,
+        body: formData
+    }).then(response => {
+        if (response.ok) {
+            // 성공적인 응답을 처리합니다.
+            window.location.href = response.url; // 응답 URL로 리다이렉트
+        } else {
+            // 오류 응답을 처리합니다.
+            alert('Error submitting form');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+        alert('Error submitting form');
+    });
+});
 
      // 페이지 로드 시 올바른 수를 설정하기 위한 초기 업데이트
         updateBuyButton();
