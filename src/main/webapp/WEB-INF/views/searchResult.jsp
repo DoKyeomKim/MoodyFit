@@ -9,6 +9,42 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 <style>
+.searched-box {
+	height:50px;
+	width:340px;
+	background: white;
+	border-radius:40px;
+	padding:10px;
+	border:1px solid #ccc;
+}
+
+.searched-txt{
+	border:none;
+	background:none;
+	outline:none;
+	float:left;
+	padding:0px;
+	padding-left:10px;
+	color:#797979;
+	font-size:16px;
+	line-height:30px;
+	width:260px;
+}
+
+.searched-btn{
+	color: black;
+	float:right;
+	width:40px;
+	height:100%;
+	border-radius:50%;
+	background:white;
+	border:none;
+	font-size:16px;
+	display:flex;
+	justify-content: center;
+	align-items:center;
+}
+
 body{
 margin : 0 auto;
 }
@@ -57,15 +93,6 @@ main{
 <%@include file="/WEB-INF/layouts/header.jsp"%>
 
 <main>
-<div class="centered-container">
-     <form class="search-box" id="searched-box" action="/search?keyword=${keyword}" method="GET">
-         <input class="search-txt" id="searched-txt" type="text" name="keyword" value="${keyword}" placeholder="검색할 내용을 입력해주세요.">
-         <button class="search-btn" type="submit">
-         	<i class="fa-solid fa-magnifying-glass"></i>
-         </button>
-     </form>
-</div>
-
 <div class="container">
   <div class="row">
   <c:choose>
@@ -122,7 +149,16 @@ main{
 		</div>
 		</c:otherwise>
     </c:choose>
+    
   </div>
+</div>
+<div class="centered-container mt-5">
+     <form class="search-box searched-box" id="searched-box" action="/search?keyword=${keyword}" method="GET">
+         <input class="search-txt searched-txt" id="searched-txt" type="text" name="keyword" value="${keyword}" placeholder="검색할 내용을 입력해주세요.">
+         <button class="search-btn searched-btn" type="submit">
+         	<i class="fa-solid fa-magnifying-glass"></i>
+         </button>
+     </form>
 </div>
 </main>
 <script src="/js/bootstrap.bundle.min.js"></script>

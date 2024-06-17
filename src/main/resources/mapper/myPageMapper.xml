@@ -2,6 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.MyPageMapper">
 
+<select id="getOrderPrePare">
+select count(o.order_idx)
+from orders o
+join order_detail ot on o.order_detail_idx = ot.order_detail_idx
+join person p on p.user_idx = #{userIdx}
+where ot.state = 1
+</select>
+<select id="getOrderIng">
+select count(o.order_idx)
+from orders o
+join order_detail ot on o.order_detail_idx = ot.order_detail_idx
+join person p on p.user_idx = #{userIdx}
+where ot.state = 2
+</select>
+<select id="getOrderDone">
+select count(o.order_idx)
+from orders o
+join order_detail ot on o.order_detail_idx = ot.order_detail_idx
+join person p on p.user_idx = #{userIdx}
+where ot.state = 3
+</select>
+
 <select id="getNickNameByUserIdx">
 SELECT PERSON_IDX, NICK_NAME
 FROM PERSON
@@ -92,7 +114,6 @@ UPDATE STORE
 SET 
 STORE_NAME=#{storeName},
 MANAGER_NAME=#{managerName},
-BUSINESS_NUMBER=#{businessNumber},
 EMAIL=#{email},
 PHONE=#{phone},
 POST_CODE=#{postCode},

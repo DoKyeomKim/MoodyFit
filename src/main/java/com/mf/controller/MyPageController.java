@@ -41,6 +41,9 @@ public class MyPageController {
 		
 		
 		mv.addObject("person",person);
+		mv.addObject("orderPrePare", result.get("orderPrePare"));
+		mv.addObject("orderIng", result.get("orderIng"));
+		mv.addObject("orderDone", result.get("orderDone"));
 		mv.setViewName("myPage/myPage");
 		return mv;
 	}
@@ -73,6 +76,7 @@ public class MyPageController {
 		mv.setViewName("redirect:/myPage");
 		return mv;
 	}
+	
 	
 //===========================================================================
 //================================ 가맹점 ===================================

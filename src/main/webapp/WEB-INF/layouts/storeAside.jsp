@@ -26,8 +26,8 @@
 </style>
 </head>
 <body>
-<div class="fixed-sidebar w3-sidebar w3-bar-block w3-light-grey w3-card" style="width:160px;">
-  <a href="#" class="w3-bar-item w3-button">Link 1</a>
+<div class="fixed-sidebar w3-sidebar w3-bar-block w3-light-grey" style="width:160px;">
+  <div style="margin-top :30px;"></div>
   <button class="w3-button w3-block w3-left-align" onclick="toggleAccFunc('productAcc')">
     상품 관리 <i class="fa fa-caret-down"></i>
   </button>
@@ -45,8 +45,8 @@
     <a href="#" class="w3-bar-item w3-button">판매 글 신청 현황..?</a>
   </div>
 
-  <a href="#" class="w3-bar-item w3-button">정보 수정</a>
-  <a href="#" class="w3-bar-item w3-button">회원 탈퇴</a>
+  <a href="/storeUpdateForm" class="w3-bar-item w3-button">정보 수정</a>
+  <a href="/accountDeleteForm" class="w3-bar-item w3-button">회원 탈퇴</a>
 </div>
 <script>
 function toggleAccFunc(id) {

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +28,20 @@ public class MyPageService {
 		// 닉네임과 personIdx 갖고오기
 		PersonDto person = myPageMapper.getNickNameByUserIdx(userIdx);
 		
+		// 배송 준비중인 물품 갖고오기
+		// 배송 준비중
+		OrderDto orderPrePare = myPageMapper.getOrderPrePare(userIdx);
+		// 배송중
+		OrderDto orderIng = myPageMapper.getOrderIng(userIdx);
+		// 배송 완료
+		OrderDto orderDone = myPageMapper.getOrderDone(userIdx);
+		
 		Map<String,Object> result = new HashMap<>();
 		
 		result.put("person", person);
-		
+		result.put("orderPrePare", orderPrePare);
+		result.put("orderIng", orderIng);
+		result.put("orderDone", orderDone);
 		return result;
 	}
 	
@@ -91,6 +102,7 @@ public class MyPageService {
 	// 가맹점 정보수정
 	@Transactional
 	public void storeUpdate(Long userIdx, UsersDto users, StoreDto store) {
+		// 현재 유저 정보 갖고 오기(변경전)
 		UsersDto existingUser = myPageMapper.getUserById(userIdx);
 		
         // 사용자가 비밀번호를 변경하려고 하는지 확인

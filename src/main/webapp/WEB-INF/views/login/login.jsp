@@ -95,8 +95,8 @@ html, body {
                         </div>
                     </div>
                 </form>
-                <div class="center-align" style="margin-left:100px;">
-                    <a href="/totalJoin" style="text-decoration-line: none;">회원가입</a>
+                <div class="center-align" style="margin-left:45px;">
+                    <a href="/totalJoin" style="text-decoration-line: none;">회원 가입 하시겠습니까?</a>
                 </div>
             </div>
         </div>
