@@ -1,5 +1,7 @@
 package com.mf.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,9 +20,10 @@ public class ProductDetailsDto {
     private int price;                
     private String manufactureName;   
     private String color;             
-    private String size;              
+    private String sizes;              
     private String category;          
     private String subCategory;       
     private int quantity;     
     private String updateDate;          
+    private List<ProductFileDto> productFiles;
 }

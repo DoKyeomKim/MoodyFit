@@ -22,19 +22,8 @@ WHERE rnum <= 8
 ]]>
 </select>
 
-<select id="getCategory" resultType="com.mf.dto.CategoryDto">
-SELECT category_idx AS categoryIdx, kor_name AS korName, eng_name AS engName
-        FROM category
-</select>
 
-<select id="getSubCategoriesByCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
-	select sc.*
-		from  sub_category sc
-		join  category c on sc.category_idx = c.category_idx
-		where c.eng_name = #{categoryEngName} 
-</select>
-
- <!-- 카테고리 첫 페이지가 All로 출력되게끔 -->
+<!-- 카테고리 첫 페이지가 All로 출력되게끔 -->
 <select id="getAllSubCategoryByCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
 	select sc.*
 		from sub_category sc
@@ -43,15 +32,13 @@ SELECT category_idx AS categoryIdx, kor_name AS korName, eng_name AS engName
   		and sc.kor_name = '전체'
 </select>
 
-<select id="getAllSubCategories" resultType="com.mf.dto.SubCategoryDto">
-    select * from sub_category
-</select>
 
-
-<select id="getSubCategoryById" resultType="com.mf.dto.SubCategoryDto">
-  select *
-  	from sub_category
-  	where sub_category_idx = #{subCategoryId}
+<!-- 메인홈에서 카테고리 및 서브카테고리로 이동시 = -->
+<select id="getSubCategoriesByCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
+	select sc.*
+		from  sub_category sc
+		join  category c on sc.category_idx = c.category_idx
+		where c.eng_name = #{categoryEngName} 
 </select>
 
 <select id="getSubCategoryByNameAndCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
@@ -62,23 +49,23 @@ SELECT category_idx AS categoryIdx, kor_name AS korName, eng_name AS engName
 			and sc.eng_name = #{subCategoryName}
 </select>
 
-<select id="getSubCategoriesByCategoryCode" resultType="com.mf.dto.SubCategoryDto">
-  select sc.*
-  	from sub_category sc
-  	join category c on sc.category_idx = c.category_idx
-  	where c.kor_name = #{categoryCode}
+
+
+<select id="getAllSubCategories" resultType="com.mf.dto.SubCategoryDto">
+    select * from sub_category
 </select>
 
-<select id="getCategoriesByKeyword" resultType="com.mf.dto.CategoryDto">
-  select * from category
- 		where kor_name like '%' || #{keyword} || '%'
+<select id="getSubCategoryById" resultType="com.mf.dto.SubCategoryDto">
+  select *
+  	from sub_category
+  	where sub_category_idx = #{subCategoryId}
 </select>
-
 
 <select id="getAllProducts" resultType="com.mf.dto.ProductDto">
 	SELECT * form PRODUCT
 		WHERE product_idx = #{productIdx}
 </select>
+
 
 <select id="getPostingAll">
 SELECT DISTINCT a.posting_idx AS posting_idx,
@@ -92,6 +79,7 @@ JOIN product d ON c.product_idx = d.product_idx
 join product_file e on e.product_info_idx = b.product_info_idx
 ORDER BY a.posting_idx ASC
 </select>
+
 
 <select id="getSearchResult">
 SELECT posting_idx, title, price, file_path
@@ -125,7 +113,7 @@ FROM (
 ) outer_sub
 WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
 ORDER BY posting_idx DESC
-</select>
+</select> 
 
 <select id="getPostingCountByKeyword">
 SELECT count(DISTINCT a.posting_idx)

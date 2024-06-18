@@ -1,7 +1,5 @@
 package com.mf.dto;
 
-import java.sql.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,12 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostingDto {
-    private Long postingIdx;
-    private String title;
-    private String content;
-    private int state;
+public class PostingProductDto {
+    private Long postingProductIdx;  
+    private Long postingIdx;         
     private Long productInfoIdx;
-    private Long storeIdx;
-    	
+
 }
+
