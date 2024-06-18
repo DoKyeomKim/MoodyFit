@@ -157,6 +157,9 @@ public class MainController {
 
     }
 
+//======================================================================
+//=======================wish 비동기처리================================
+//======================================================================
     // 찜 목록 체크
 	@GetMapping("/checkWish")
 	public ResponseEntity<Boolean> checkWish(@RequestParam("postingIdx") Long postingIdx,  @RequestParam("userIdx") Long userIdx){
@@ -211,6 +214,8 @@ public class MainController {
 	        }
 	        return response;
 	}
+//======================================================================
+//======================================================================
 
     
     
