@@ -8,11 +8,13 @@
 <title>메인 페이지</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <style>
 html, body {
     height: 100%;
     margin: 0;
-    background-color: #f7f7f7;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -59,7 +61,6 @@ html, body {
     align-items: center; /* 수직 가운데 정렬 */
     width: 100%; /* 부모 요소를 꽉 채우도록 설정 */
 }
-
 .flex-item {
     width: 100%;
     margin-bottom: 20px;
@@ -67,8 +68,22 @@ html, body {
 </style>
 </head>
 <body>
+<div class="modal fade" id="findIdModal" tabindex="-1" role="dialog" aria-labelledby="findIdModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="findIdModalLabel">아이디 찾기</h5>
+            </div>
+            <div class="modal-body">
+                <div id="findIdContent">
+                    <%@ include file="/WEB-INF/views/login/findId.jsp" %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="container">
-    <!-- login Box -->
     <div class="login-box vertical-align">
         <div class="headerImg">
             <a href="/">
@@ -78,37 +93,41 @@ html, body {
         
         <div class="container-fluid" style="width:400px;">
             <div class="IdPwForm" style="margin-bottom:10px;">
-                <form action="/loginProcess" method="post" name="loginForm">
-                    <!-- 새로운 부모 요소 추가 -->
+                <form id="loginForm" action="/loginProcess" method="post">
                     <div class="flex-container">
                         <div class="id-pw-write flex-item" style="margin-right:20px;">
                             <div class="form-group mb-3">
                                 <input type="text" name="id" id="username" placeholder="아이디" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <input type="text" name="pw" id="password" placeholder="비밀번호" class="form-control" autocomplete="off" required>
+                                <input type="password" name="pw" id="password" placeholder="비밀번호" class="form-control" autocomplete="off" required>
                             </div>
                         </div>
-                        <!-- login-btn-box도 새로운 flex-item으로 감싸줌 -->
                         <div class="login-btn-box flex-item">
                             <button type="submit" id="btnLogin" class="btn btn-primary" style="height:90px;">로그인</button>
                         </div>
                     </div>
                 </form>
+                <small class="center-align" style="margin-left:45px;">
+                    <a href="#" data-toggle="modal" data-target="#findIdModal" style="text-decoration-line: none;">아이디 찾기</a>
+                </small>
+                
                 <div class="center-align" style="margin-left:45px;">
                     <a href="/totalJoin" style="text-decoration-line: none;">회원 가입 하시겠습니까?</a>
                 </div>
             </div>
         </div>
-                <hr style="width: 80%;">
-                <div style="margin-bottom : 20px;">소셜 로그인</div>
-            <div class="container" style="text-align:center;">
-				<a href="/oauth2/authorization/naver"><img src="/images/naver.png" style="height:50px; width:50px; margin-right: 5px;"></a>
-				<a href="/oauth2/authorization/google"><img src="/images/google.png" style="height:50px; width:50px; margin-left: 5px;"></a>
-        	</div>
-
+        
+        <hr style="width: 80%;">
+        <div style="margin-bottom : 20px;">소셜 로그인</div>
+        <div class="container" style="text-align:center;">
+            <a href="/oauth2/authorization/naver"><img src="/images/naver.png" style="height:50px; width:50px; margin-right: 5px;"></a>
+            <a href="/oauth2/authorization/google"><img src="/images/google.png" style="height:50px; width:50px; margin-left: 5px;"></a>
+        </div>
     </div>
 </div>
+
+
 
 </body>
 </html>

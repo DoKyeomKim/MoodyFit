@@ -74,6 +74,14 @@ public class UsersService {
 		return usersMapper.getStoreName(storeName);
 	}
 
+	public String getIdByEmail(String email) {
+		return usersMapper.getIdByEmail(email);
+	}
+
+	public String getIdByPhone(String phone) {
+		return usersMapper.getIdByPhone(phone);
+	}
+
 
 }
 

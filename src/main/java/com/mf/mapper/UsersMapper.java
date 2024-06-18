@@ -45,6 +45,10 @@ public interface UsersMapper {
 	// OAuth 회원탈퇴 후 정보 겹치는거 방지
 	UsersDto getUserByIdAndState(String id);
 
+	String getIdByEmail(String email);
+
+	String getIdByPhone(String phone);
+
 
 
 

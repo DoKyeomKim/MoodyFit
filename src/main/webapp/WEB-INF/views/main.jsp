@@ -68,6 +68,7 @@ main {
     justify-content: center;
     align-items: center;
 }
+
 </style>
 </head>
 <body>
