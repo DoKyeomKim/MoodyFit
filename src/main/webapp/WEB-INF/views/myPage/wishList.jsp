@@ -19,11 +19,13 @@
 </head>
 <body>
 	<%@include file="/WEB-INF/layouts/header.jsp"%>
+	<%@include file="/WEB-INF/layouts/aside.jsp"%>
 	<input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
 	<main>
 		<div class="container">
 			<div class="row">
-
+				<c:choose>
+					<c:when test="${not empty wishList }">
 						<c:forEach var="wishList" items="${wishList}">
 							<div class="col-3">
 								<div class="card">
@@ -43,7 +45,11 @@
 								</div>
 							</div>
 						</c:forEach>
-
+					</c:when>
+					<c:otherwise>
+						<h3 style="text-align: center; margin-top: 50px;">관심 상품이 없습니다!</h3>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</div>
 	</main>
