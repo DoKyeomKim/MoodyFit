@@ -192,12 +192,14 @@ public class MainService {
 	// 찜 목록 추가
 	public void addWish(Long postingIdx, Long userIdx) {
 		mainMapper.insertWish(postingIdx,userIdx);
+
 	}
 	
 
 	// 찜 목록 삭제
 	public void deleteWish(Long postingIdx, Long userIdx) {
 		mainMapper.deleteWish(postingIdx,userIdx);
+
 	}
 
 	

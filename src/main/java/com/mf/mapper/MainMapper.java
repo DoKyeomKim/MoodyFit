@@ -61,12 +61,12 @@ public interface MainMapper {
 
 
 	// 찜 상태확인
-	int checkWish(Long postingIdx, Long userIdx);
+	int checkWish(@Param("postingIdx")Long postingIdx, @Param("userIdx")Long userIdx);
 
 	// 찜 추가
-	void insertWish(Long postingIdx, Long userIdx);
+	void insertWish(@Param("postingIdx") Long postingIdx, @Param("userIdx") Long userIdx);
 
 	// 찜 삭제
-	void deleteWish(Long postingIdx, Long userIdx);
+	void deleteWish(@Param("postingIdx") Long postingIdx, @Param("userIdx") Long userIdx);
 	
 }

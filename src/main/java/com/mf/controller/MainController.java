@@ -162,7 +162,7 @@ public class MainController {
 //======================================================================
     // 찜 목록 체크
 	@GetMapping("/checkWish")
-	public ResponseEntity<Boolean> checkWish(@RequestParam("postingIdx") Long postingIdx,  @RequestParam("userIdx") Long userIdx){
+	public ResponseEntity<Boolean> checkWish(@RequestParam("postingIdx") Long postingIdx, @RequestParam("userIdx") Long userIdx){
 		boolean isWish = mainService.checkWish(postingIdx,userIdx);
 		return ResponseEntity.ok(isWish);
 	}
@@ -173,6 +173,7 @@ public class MainController {
 	public Map<String, Object> addWish(@RequestBody Map<String, Long> request){
 		Map<String,Object> response = new HashMap<>();
 		
+
 		// 맞는 DTO가 없기때문에 Map 사용했고
 		// Map에서 postingIdx userIdx 꺼내기.
 		Long postingIdx = request.get("postingIdx");
