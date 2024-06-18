@@ -125,7 +125,7 @@ public class LoginController {
 	    } else if ("phone".equals(findIdMethod) && phone != null) {
 	        id = usersService.getIdByPhone(phone);
 	    }
-	    return id != null ? "ID는 <br> " + id + "<br> 입니다." : "ID를 찾을 수 없습니다.";
+	    return id != null ? "ID는 <br> " + id + "<br> 입니다." : "<small style='color:red;'>찾으시는 ID가 없습니다.<br> 다시 확인해주세요.</small>";
 	}
 	
 }
