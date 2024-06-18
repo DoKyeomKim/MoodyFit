@@ -1,5 +1,6 @@
 package com.mf.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,19 @@ public class MyPageController {
 		myPageService.personUpdate(userIdx,users,person,personSpec);
 		
 		mv.setViewName("redirect:/myPage");
+		return mv;
+	}
+	
+	// 관심상품(찜 목록)
+	@GetMapping("/myPage/wishList")
+	public ModelAndView wishList(HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+		Long userIdx = (Long) session.getAttribute("userIdx");
+		
+		List<Map<String,Object>> wishList= myPageService.getWishList(userIdx);
+		
+		mv.addObject("wishList", wishList);
+		mv.setViewName("myPage/wishList");
 		return mv;
 	}
 	

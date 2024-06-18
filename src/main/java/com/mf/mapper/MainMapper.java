@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.mf.dto.CategoryDto;
 import com.mf.dto.SubCategoryDto;
+import com.mf.dto.WishDto;
 
 @Mapper
 public interface MainMapper {
@@ -46,10 +47,26 @@ public interface MainMapper {
 	List<Map<String, Object>> getRecentPosting();
 
 	// Category로 모든 공고 갖고오기(All페이지에 들어갈 공고)
-	List<Map<String, Object>> getAllPostingByCategory(String categoryEngName);
+	List<Map<String, Object>> getAllPostingByCategory(Map<String, Object> params);
 
 
 	// 카테고리가 같은 공고 중 서브카테리가 같은 공고 갖고오기
-	List<Map<String, Object>> getSelectedPostingBySubCategory(String subCategoryName);
+	List<Map<String, Object>> getSelectedPostingBySubCategory(Map<String, Object> params);
+
+	// 카테고리별 all posting 페이징
+	int getPostingCountBycategoryEngName(String categoryEngName);
+
+	// 서브 카테고리별 posting 페이징
+	int getPostingCountBysubCategoryName(String subCategoryName);
+
+
+	// 찜 상태확인
+	int checkWish(Long postingIdx, Long userIdx);
+
+	// 찜 추가
+	void insertWish(Long postingIdx, Long userIdx);
+
+	// 찜 삭제
+	void deleteWish(Long postingIdx, Long userIdx);
 	
 }

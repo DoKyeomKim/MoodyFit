@@ -8,23 +8,6 @@
 <title>카테고리 - ${categoryEngName}</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <style>
-.cateDefault {
-	text-align: center;
-}
-
-.subCateDefault {
-	text-align: center;
-}
-
-.subCateDefault a {
-	text-decoration: none;
-	margin: 20px;
-	color: black;
-}
-
-.subCateDefault a:hover {
-	color: grey;
-}
 
 .card {
 	border: 1px solid #ddd;
@@ -36,117 +19,37 @@
 </head>
 <body>
 	<%@include file="/WEB-INF/layouts/header.jsp"%>
-	<br>
-	<br>
-	<div class="cateDefault">
-		<h3>${categoryEngName}</h3>
-	</div>
+	<%@include file="/WEB-INF/layouts/aside.jsp"%>
 	<input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
-	<div class="subCateDefault">
-		<c:forEach var="subCategory" items="${subCategories}">
-			<a href="/category/${categoryEngName}/${subCategory.engName}"> <c:choose>
-					<c:when test="${subCategory.korName == '전체'}">All</c:when>
-					<c:otherwise>${subCategory.korName}</c:otherwise>
-				</c:choose>
-			</a>
-		</c:forEach>
-	</div>
-
 	<main>
 		<div class="container">
 			<div class="row">
 				<c:choose>
-					<c:when test="${not empty allPosting}">
-						<c:forEach var="allPosting" items="${allPosting}">
+					<c:when test="${not empty wishList }">
+						<c:forEach var="wishList" items="${wishList}">
 							<div class="col-3">
 								<div class="card">
-									<img src="${allPosting.FILE_PATH}" class="img-fluid">
+									<img src="${wishList.FILE_PATH}" class="img-fluid">
 									<div class="card-body">
-										<span>${allPosting.POSTING_IDX}</span><br> 
-										<span>제조사: ${allPosting.MANUFACTURE_NAME}</span><br> 
-										<span>공고 제목	: ${allPosting.TITLE}</span><br> 
-										<span>가격 :${allPosting.PRICE}</span>
+										<span>${wishList.POSTING_IDX}</span><br> 
+										<span>제조사: ${wishList.MANUFACTURE_NAME}</span><br> 
+										<span>공고 제목	: ${wishList.TITLE}</span><br> 
+										<span>가격 :${wishList.PRICE}</span>
 										
-										<security:authorize access="hasRole('ROLE_PERSON')">
-											<button class="btn btn-outline-secondary wishBtn" style="margin-right: 5px;" data-user-idx="${sessionScope.userIdx}" data-posting-idx="${allPosting.POSTING_IDX}">
+											<button class="btn btn-outline-secondary wishBtn" style="margin-right: 5px;" data-user-idx="${sessionScope.userIdx}" data-posting-idx="${wishList.POSTING_IDX}">
 											    <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 											        <path fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"/>
 											    </svg>
 											</button>
-										</security:authorize>	
 									</div>
 								</div>
 							</div>
 						</c:forEach>
-						
-						<nav aria-label="Page navigation" style="margin-top: 100px;">
-							<ul class="pagination justify-content-center">
-								<c:if test="${prev}">
-									<li class="page-item"><a class="page-link"
-										href="?page=${startPageNum - 1}" aria-label="Previous"> <span
-											aria-hidden="true" class="fas fa-angle-left"></span>
-									</a></li>
-								</c:if>
-								<c:forEach begin="${startPageNum}" end="${endPageNum}"
-									var="page">
-									<li class="page-item ${currentPage == page ? 'active' : ''}">
-										<a class="page-link" href="?page=${page}">${page}</a>
-									</li>
-								</c:forEach>
-								<c:if test="${next}">
-									<li class="page-item"><a class="page-link"
-										href="?page=${endPageNum + 1}"> <span aria-hidden="true"
-											class="fas fa-angle-right"></span>
-									</a></li>
-								</c:if>
-							</ul>
-						</nav>
-					</c:when>
-					<c:when test="${not empty selectedPosting}">
-						<c:forEach var="selectedPosting" items="${selectedPosting}">
-							<div class="col-3">
-								<div class="card">
-									<img src="${selectedPosting.FILE_PATH}" class="img-fluid">
-									<div class="card-body">
-										<span>${selectedPosting.POSTING_IDX}</span><br> <span>제조사
-											: ${selectedPosting.MANUFACTURE_NAME}</span><br> <span>공고
-											제목 : ${selectedPosting.TITLE}</span><br> <span>가격 :
-											${selectedPosting.PRICE}</span>
-									</div>
-								</div>
-							</div>
-						</c:forEach>
-
-						<nav aria-label="Page navigation" style="margin-top: 100px;">
-							<ul class="pagination justify-content-center">
-								<c:if test="${prev}">
-									<li class="page-item"><a class="page-link"
-										href="?page=${startPageNum - 1}" aria-label="Previous"> <span
-											aria-hidden="true" class="fas fa-angle-left"></span>
-									</a></li>
-								</c:if>
-								<c:forEach begin="${startPageNum}" end="${endPageNum}"
-									var="page">
-									<li class="page-item ${currentPage == page ? 'active' : ''}">
-										<a class="page-link" href="?page=${page}">${page}</a>
-									</li>
-								</c:forEach>
-								<c:if test="${next}">
-									<li class="page-item"><a class="page-link"
-										href="?page=${endPageNum + 1}"> <span aria-hidden="true"
-											class="fas fa-angle-right"></span>
-									</a></li>
-								</c:if>
-							</ul>
-						</nav>
-						
 					</c:when>
 					<c:otherwise>
-						<h3 style="text-align: center; margin-top: 50px;">상품 공고가 없습니다!!</h3>
+						<h3 style="text-align: center; margin-top: 50px;">관심 상품이 없습니다!</h3>
 					</c:otherwise>
 				</c:choose>
-
-
 			</div>
 		</div>
 	</main>

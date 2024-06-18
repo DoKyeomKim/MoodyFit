@@ -124,7 +124,7 @@ main{
 
 					<c:forEach begin="${startPageNum}" end="${endPageNum}" var="page">
 		                    <li class="page-item ${currentPage == page ? 'active' : ''}">
-					   			<a class="page-link"  href="?page=${page}">${page}</a> 
+					   			<a class="page-link"  href="?keyword=${keyword }&page=${page}">${page}</a> 
 							</li>
 					</c:forEach>
 					

@@ -1,20 +1,25 @@
 package com.mf.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 //github.com/DoKyeomKim/MoodyFit.git
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mf.dto.CategoryDto;
 import com.mf.dto.Paging;
 import com.mf.dto.SubCategoryDto;
+import com.mf.dto.WishDto;
 //github.com/DoKyeomKim/MoodyFit.git
 import com.mf.service.MainService;
 
@@ -57,13 +62,14 @@ public class MainController {
 	public ModelAndView search(@RequestParam("keyword") String keyword,@RequestParam(value = "page", defaultValue = "1") int page) {
 		ModelAndView mv = new ModelAndView();
 		
-	    int pageSize = 8; // 한 페이지에 표시할 게시글 수
+	    int pageSize = 2; // 한 페이지에 표시할 게시글 수 지금은 확인용으로 2개만 해둠.
 	    int startIndex = (page - 1) * pageSize;
-		
-		List<Map<String,Object>> result = mainService.getSearchResult(keyword,startIndex,pageSize);
 
-	    int totalCount = mainService.getPostingCountByKeyword(keyword);
 	    
+	    // 검색 결과 비즈니스 로직 처리
+		List<Map<String,Object>> result = mainService.getSearchResult(keyword,startIndex,pageSize);
+		
+	    // 페이징 된 로직 처리
 	    Paging paging = mainService.calculatePagingInfo(keyword, page, pageSize);
 
 	    mv.addObject("prev", paging.isPrev());
@@ -96,28 +102,53 @@ public class MainController {
     // 특정 카테고리와 서브 카테고리 이름으로 페이지 로드
     @GetMapping("/category/{categoryEngName}/{subCategoryName}")
     public ModelAndView category(@PathVariable("categoryEngName") String categoryEngName,
-                                 @PathVariable("subCategoryName") String subCategoryName) {
+                                 @PathVariable("subCategoryName") String subCategoryName,
+                                 @RequestParam(value = "page", defaultValue = "1") int page) {
+    	
         ModelAndView mv = new ModelAndView();
+        
         
         // 해당 카테고리의 모든 서브 카테고리 목록을 가져옴
         List<SubCategoryDto> subCategories = mainService.getSubCategoriesByCategoryEngName(categoryEngName);
+        
+	    int pageSize = 1; // 한 페이지에 표시할 게시글 수 확인용으로 1 해놓음 나중에 수정
+	    int startIndex = (page - 1) * pageSize;
         
         // 서브 카테고리 이름이 All인 경우 해당 카테고리의 All 서브 카테고리 정보 가져옴
         SubCategoryDto selectedSubCategory = new SubCategoryDto();
         if ("all".equalsIgnoreCase(subCategoryName)) {
             selectedSubCategory = mainService.getAllSubCategoryByCategoryEngName(categoryEngName);
-            List<Map<String,Object>> allPosting = mainService.getAllPostingByCategory(categoryEngName);
             
+            // 같은 카테고리 안의 전체 공고 들고 오는 로직처리
+            List<Map<String,Object>> allPosting = mainService.getAllPostingByCategory(categoryEngName,pageSize,startIndex);
+            // 페이징 처리
+            Paging paging = mainService.calculatePagingInfoByCategory(categoryEngName, page, pageSize);
+            
+    	    mv.addObject("prev", paging.isPrev());
+    	    mv.addObject("next", paging.isNext());
+    	    mv.addObject("startPageNum", paging.getStartPageNum());
+    	    mv.addObject("endPageNum", paging.getEndPageNum());
+    	    mv.addObject("totalPages", paging.getTotalPages());
             mv.addObject("allPosting", allPosting);
         } else {
             // 서브 카테고리 이름으로 해당 서브 카테고리를 찾음
             selectedSubCategory = mainService.getSubCategoryByNameAndCategoryEngName(subCategoryName, categoryEngName);
-            List<Map<String,Object>> selectedPosting = mainService.getSelectedPostingBySubCategory(subCategoryName);
             
+            // 같은 세부 카테고리 안의 공고 들고 오는 로직 처리
+            List<Map<String,Object>> selectedPosting = mainService.getSelectedPostingBySubCategory(subCategoryName,pageSize,startIndex);
+            
+            // 페이징 처리
+            Paging paging = mainService.calculatePagingInfoBySubCategory(subCategoryName, page, pageSize);
+            
+    	    mv.addObject("prev", paging.isPrev());
+    	    mv.addObject("next", paging.isNext());
+    	    mv.addObject("startPageNum", paging.getStartPageNum());
+    	    mv.addObject("endPageNum", paging.getEndPageNum());
+    	    mv.addObject("totalPages", paging.getTotalPages());
             mv.addObject("selectedPosting", selectedPosting);
-            System.out.println(selectedPosting);
         }
         
+	    mv.addObject("currentPage", page);
         mv.addObject("subCategories", subCategories);
         mv.addObject("categoryEngName", categoryEngName);
         mv.addObject("selectedSubCategory", selectedSubCategory);
@@ -126,7 +157,65 @@ public class MainController {
 
     }
 
-    
+//======================================================================
+//=======================wish 비동기처리================================
+//======================================================================
+    // 찜 목록 체크
+	@GetMapping("/checkWish")
+	public ResponseEntity<Boolean> checkWish(@RequestParam("postingIdx") Long postingIdx,  @RequestParam("userIdx") Long userIdx){
+		boolean isWish = mainService.checkWish(postingIdx,userIdx);
+		return ResponseEntity.ok(isWish);
+	}
+	
+	// 게시글 찜 하기
+	@PostMapping("/addWish")
+	@ResponseBody
+	public Map<String, Object> addWish(@RequestBody Map<String, Long> request){
+		Map<String,Object> response = new HashMap<>();
+		
+		// 맞는 DTO가 없기때문에 Map 사용했고
+		// Map에서 postingIdx userIdx 꺼내기.
+		Long postingIdx = request.get("postingIdx");
+		Long userIdx = request.get("userIdx");
+		
+		
+	try {
+		mainService.addWish(postingIdx,userIdx);
+        response.put("success", true);
+		
+	}catch (Exception e) {
+        response.put("success", false);
+        response.put("message", e.getMessage());
+	}
+		
+		
+		return response;
+	}
+	
+	
+	// 게시글 찜 삭제
+	@DeleteMapping("/deleteWish")
+	@ResponseBody
+	public Map<String, Object> deleteWish(@RequestBody Map<String, Long> request){
+		Map<String, Object> response = new HashMap<>();
+		 
+		// 맞는 DTO가 없기때문에 Map 사용했고
+		// Map에서 postingIdx userIdx 꺼내기.
+		Long postingIdx = request.get("postingIdx");
+		Long userIdx = request.get("userIdx");
+			
+
+	        try {
+	        	mainService.deleteWish(postingIdx,userIdx);
+	            response.put("success", true);
+	        } catch (Exception e) {
+	            response.put("success", false);
+	            response.put("message", e.getMessage());
+	        }
+	        return response;
+	}
+//======================================================================
+//======================================================================
 
     
     

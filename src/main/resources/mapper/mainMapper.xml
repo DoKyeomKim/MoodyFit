@@ -97,24 +97,33 @@ ORDER BY a.posting_idx ASC
 SELECT posting_idx, title, price, file_path
 FROM (
     SELECT 
-        a.posting_idx,
-        a.title,
-        d.price,
-        f.file_path,
-        ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY a.posting_idx DESC) AS row_num
-    FROM posting a
-    JOIN posting_product b ON a.posting_idx = b.posting_idx
-    JOIN product_info c ON b.product_info_idx = c.product_info_idx
-    JOIN product d ON c.product_idx = d.product_idx
-    JOIN product_color e ON c.product_color_idx = e.product_color_idx
-    JOIN product_file f ON f.product_info_idx = b.product_info_idx
-    WHERE REPLACE(a.title, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
-       OR REPLACE(a.content, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
-       OR REPLACE(d.manufacture_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
-       OR REPLACE(d.name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
-       OR REPLACE(e.color, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
-) sub
-WHERE sub.row_num = 1
+        posting_idx,
+        title,
+        price,
+        file_path,
+        ROWNUM AS rnum
+    FROM (
+        SELECT 
+            a.posting_idx,
+            a.title,
+            d.price,
+            f.file_path,
+            ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY f.file_path) AS row_num
+        FROM posting a
+        JOIN posting_product b ON a.posting_idx = b.posting_idx
+        JOIN product_info c ON b.product_info_idx = c.product_info_idx
+        JOIN product d ON c.product_idx = d.product_idx
+        JOIN product_color e ON c.product_color_idx = e.product_color_idx
+        JOIN product_file f ON f.product_info_idx = b.product_info_idx
+        WHERE REPLACE(a.title, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+           OR REPLACE(a.content, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+           OR REPLACE(d.manufacture_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+           OR REPLACE(d.name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+           OR REPLACE(e.color, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+    ) inner_sub
+    WHERE inner_sub.row_num = 1
+) outer_sub
+WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
 ORDER BY posting_idx DESC
 </select>
 
@@ -135,11 +144,34 @@ ORDER BY a.posting_idx DESC
 </select>
 
 <select id="getAllPostingByCategory">
+SELECT posting_idx, title, price,manufacture_name, file_path 
+FROM (
+SELECT posting_idx, title, price,manufacture_name, file_path, ROWNUM AS rnum
+FROM
+(
 SELECT DISTINCT a.posting_idx AS posting_idx,
                 a.title AS title,
                 d.price AS price,
                 d.MANUFACTURE_NAME,
-                e.file_path AS file_path
+                e.file_path AS file_path,
+                ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY a.posting_idx DESC) AS row_num
+		FROM posting a
+		JOIN posting_product b ON a.posting_idx = b.posting_idx
+		JOIN product_info c ON b.product_info_idx = c.product_info_idx
+		JOIN product d ON c.product_idx = d.product_idx
+		join product_file e on e.product_info_idx = b.product_info_idx
+		join sub_category f on d.sub_category_idx = f.sub_category_idx
+		join category g on g.category_idx = f.category_idx
+		where g.eng_name = #{categoryEngName}
+	)inner_sub
+	WHERE inner_sub.row_num = 1
+)outer_sub
+WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
+ORDER BY posting_idx DESC
+</select>
+
+<select id="getPostingCountBycategoryEngName">
+SELECT count(DISTINCT a.posting_idx)
 FROM posting a
 JOIN posting_product b ON a.posting_idx = b.posting_idx
 JOIN product_info c ON b.product_info_idx = c.product_info_idx
@@ -148,15 +180,22 @@ join product_file e on e.product_info_idx = b.product_info_idx
 join sub_category f on d.sub_category_idx = f.sub_category_idx
 join category g on g.category_idx = f.category_idx
 where g.eng_name = #{categoryEngName}
-ORDER BY a.posting_idx DESC
 </select>
 
+
 <select id="getSelectedPostingBySubCategory">
+SELECT posting_idx, title, price,manufacture_name, file_path 
+FROM (
+SELECT posting_idx, title, price,manufacture_name, file_path, ROWNUM AS rnum
+FROM
+(
 SELECT DISTINCT a.posting_idx AS posting_idx,
                 a.title AS title,
                 d.price AS price,
                 d.MANUFACTURE_NAME,
-                e.file_path AS file_path
+                e.file_path AS file_path,
+                ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY a.posting_idx DESC) AS row_num
+                
 FROM posting a
 JOIN posting_product b ON a.posting_idx = b.posting_idx
 JOIN product_info c ON b.product_info_idx = c.product_info_idx
@@ -164,7 +203,47 @@ JOIN product d ON c.product_idx = d.product_idx
 join product_file e on e.product_info_idx = b.product_info_idx
 join sub_category f on d.sub_category_idx = f.sub_category_idx
 where f.eng_name = #{subCategoryName}
-ORDER BY a.posting_idx DESC
+)inner_sub
+	WHERE inner_sub.row_num = 1
+)outer_sub
+WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
+ORDER BY posting_idx DESC
 </select>
 
+<select id="getPostingCountBysubCategoryName">
+SELECT count(DISTINCT a.posting_idx)
+FROM posting a
+JOIN posting_product b ON a.posting_idx = b.posting_idx
+JOIN product_info c ON b.product_info_idx = c.product_info_idx
+JOIN product d ON c.product_idx = d.product_idx
+join product_file e on e.product_info_idx = b.product_info_idx
+join sub_category f on d.sub_category_idx = f.sub_category_idx
+where f.eng_name = #{subCategoryName}
+</select>
+
+<select id="checkWish">
+select count(wish_idx)
+from wish w
+join person p on p.person_idx = w.person_idx
+where posting_idx=#{postingIdx} and p.user_idx=#{userIdx}
+</select>
+
+<select id="getPersonIdxByUserIdx">
+select person_idx
+from person
+where user_idx = #{userIdx}
+</select>
+
+
+<insert id="insertWish">
+  insert into wish (wish_idx, person_idx, posting_idx)
+  values (wish_seq.nextval, (select person_idx from person where user_idx = #{userIdx}), #{postingIdx})
+</insert>
+
+
+<delete id="deleteWish">
+  delete from wish
+  where person_idx = (select person_idx from person where user_idx = #{userIdx})
+  and posting_idx = #{postingIdx}
+</delete>
 </mapper>

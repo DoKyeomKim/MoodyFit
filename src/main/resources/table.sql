@@ -309,6 +309,14 @@ CREATE TABLE cs_answer (
     FOREIGN KEY (question_idx) REFERENCES cs_question(question_idx)
 );
 
+CREATE TABLE wish (
+    wish_idx NUMBER PRIMARY KEY,
+    person_idx NUMBER,
+    posting_idx NUMBER,
+    FOREIGN KEY (person_idx) REFERENCES person(person_idx),
+    FOREIGN KEY (posting_idx) REFERENCES posting(posting_idx)
+);
+
 ALTER TABLE posting
 ADD store_idx NUMBER;
 
@@ -438,5 +446,9 @@ CREATE SEQUENCE sub_category_seq
 	NOCACHE;
 	
     CREATE SEQUENCE posting_file_seq
+	START WITH 1
+	INCREMENT BY 1;
+	
+    CREATE SEQUENCE wish_seq
 	START WITH 1
 	INCREMENT BY 1;

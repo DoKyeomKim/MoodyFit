@@ -1,5 +1,6 @@
 package com.mf.mapper;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -39,8 +40,8 @@ public interface MyPageMapper {
 	// 개인회원 person_spec 수정
 	void personSpecUpdate(PersonSpecDto personSpec);
 	
-	
-	
+	// 위시리스트 갖고 오기
+	List<Map<String, Object>> getWishList(Long userIdx);
 	
 	
 	//=====================================================
@@ -60,6 +61,8 @@ public interface MyPageMapper {
 	//======================== 공통 ========================
 	// 회원 탈퇴
 	void userDelete(Long userIdx);
+
+
 
 
 
