@@ -34,7 +34,7 @@
 				<li><a href="/personUpdateForm">정보 수정</a></li>
 				<li><a href="/myPage/Order">주문 정보</a></li>
 				<li><a href="/myPage/delivery">배송지 관리</a></li>
-				<li><a href="#">관심상품</a></li>
+				<li><a href="/myPage/wishList">관심상품</a></li>
 				<li><a href="/myPage/cart">장바구니</a></li>
 				<li><a href="/accountDeleteForm">회원탈퇴</a></li>
 			</ul>

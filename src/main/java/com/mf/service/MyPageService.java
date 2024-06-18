@@ -1,6 +1,7 @@
 package com.mf.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,13 @@ public class MyPageService {
 		myPageMapper.personSpecUpdate(personSpec);
 	}
 	
+	// 관심상품(찜목록)
+	public List<Map<String, Object>> getWishList(Long userIdx) {
+		// 찜 목록 갖고오기
+		List<Map<String, Object>> getWishList = myPageMapper.getWishList(userIdx);
+		
+		return getWishList;
+	}
 	
 //===========================================================================================
 	
@@ -131,6 +139,8 @@ public class MyPageService {
 		// 개인회원은 장바구니 삭제 정도?
 		// 주문(orders) 관련해서는 유지해야할듯
 	}
+
+
 
 
 }
