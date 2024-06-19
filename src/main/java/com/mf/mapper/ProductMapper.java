@@ -1,6 +1,7 @@
 package com.mf.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -67,14 +68,13 @@ public interface ProductMapper {
 
     // 모든 상품 정보 로드
     List<ProductInfoDto> getAllProductInfo();
-    List<ProductDetailsDto> getAllProductDetails();
     
     
 	List<ProductColorDto> getAllColors();
 	
 	List<ProductSizeDto> getAllSizes();
 
-	List<ProductDetailsDto> getAllProductDetails(Long storeIdx); // 여기에 파일목록까지 포함 로드
+	List<Map<String, Object>> getAllProductDetails(Long storeIdx); // 여기에 파일목록까지 포함 로드
 	
 	List<PostingProductDto> getPostingProduct(Long userIdx);
 	
