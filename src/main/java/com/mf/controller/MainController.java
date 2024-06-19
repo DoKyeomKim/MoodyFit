@@ -69,6 +69,8 @@ public class MainController {
 	    // 검색 결과 비즈니스 로직 처리
 		List<Map<String,Object>> result = mainService.getSearchResult(keyword,startIndex,pageSize);
 		
+		int totalCount = mainService.getPostingCountByKeyword(keyword);
+		
 	    // 페이징 된 로직 처리
 	    Paging paging = mainService.calculatePagingInfo(keyword, page, pageSize);
 
