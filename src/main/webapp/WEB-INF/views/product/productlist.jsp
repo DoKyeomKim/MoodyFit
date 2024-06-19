@@ -161,18 +161,18 @@
 </div>
 
 <div class="table-container">
-	<a href="/postingDetails">
     <table class="table">
         <thead>
             <tr>
                 <th><input type="checkbox" id="select-all"></th>
-                <th style="width: 10px;">no</th>
+                <th style="width: 10px;">no</th>                
                	<th style="width: 50px;">사진</th>
                 <th>상품명</th>
                 <th>판매가</th>
                 <th>분류</th>
                 <th>재고</th>
                 <th>수정일</th>
+                <th>수정/삭제</th>
             </tr>
         </thead>
         <tbody>
@@ -180,6 +180,7 @@
             <tr>
                 <td><input type="checkbox" class="select-item"></td>
                 <td style="width: 10px;">${product.productIdx}</td>
+                	
                 <td style="width: 50px;">
                 	<c:if test="${not empty product.productFiles}">
                   	<img src="${product.productFiles[0].filePath}" >
@@ -188,17 +189,20 @@
                 <td>${product.name}</td>
                 <td>${product.price}</td>
                 <td>${product.category}/${product.subCategory}</td>
-                <td>[${product.color}] ${product.quantity}</td>
+                <td>${product.inventory}</td>
                 <td>${product.updateDate}</td>
+                <td>
+               		<button class="btn btn-primary" onclick="editProduct(${product.productIdx})">수정</button>
+                	<button class="btn btn-danger" onclick="deleteProduct(${product.productIdx})">삭제</button>
+                </td>
             </tr>
            </c:forEach>
         </tbody>
     </table>
-  </a>
 
     <div class="button-container">
         <a href="/storeMypage/productWrite"><button>신규 상품 등록</button></a>
-        <a href="/storeMypage/productUpdate"><button>수정</button></a>
+        <a href="/storeMypage/productUpdate"><button>삭제</button></a>
     </div>
 </div>
 

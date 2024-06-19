@@ -2,6 +2,9 @@ package com.mf.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,15 +87,24 @@ public class ProductService {
      }
  	
  	
+ 	/*
+	 	파일 저장 --> 추후 이미지 로드 수정 필요
+	 	java.io.IOException: java.io.FileNotFoundException: /private/var/folders/9l/vt0_rhzx4cb0bmwy4137h9mh0000gn/T/tomcat.9095.17627246450066852468/work/Tomcat/localhost/ROOT/upload_2a1c56f3_0aba_4605_8d05_60332a3860cb_00000016.tmp (No such file or directory)
+	 	at org.apache.catalina.core.ApplicationPart.write(ApplicationPart.java:119)
+	 	at org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile.transferTo(StandardMultipartHttpServletRequest.java:265)
+	 	at com.mf.service.ProductService.saveProductImages(ProductService.java:109)
+	 	at com.mf.service.ProductService.addProduct(ProductService.java:88)
+ 	*/
+ 	private static final String UPLOAD_DIRECTORY = "src/main/resources/static/images/";
+ 	 
     private void saveProductImages(Long productInfoIdx, List<MultipartFile> productImages) {
     	for (MultipartFile file : productImages) {
     		// 파일 이름 변경 및 저장 위치 설정
     		String originalFileName = file.getOriginalFilename();
     		String fileNameScret = System.currentTimeMillis() + "_" + originalFileName; // 파일 이름 변경(시간값 + 기존 이름)
     		String filePath = "/Users/sinminjae/dev/" + fileNameScret; // 저장 경로
-    		// 이력서 파일 이름
 
-    	      File dest = new File("/Users/sinminjae/dev/"+fileNameScret);
+    	      File dest = new File("/Users/sinminjae/dev/productimg/"+fileNameScret);
     	      // 만약 해당 위치에 폴더가 없으면 생성
     	      if (!dest.exists()) {
     	         dest.mkdirs();
@@ -116,8 +128,7 @@ public class ProductService {
      	}
 		
 	}
-    
-
+ 	
 	@Transactional
     public void addProductDetails(ProductDetailsDto productDetailsDto) {
         // Product 테이블에 삽입
