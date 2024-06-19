@@ -119,7 +119,7 @@ public class ProductService {
     			// 파일 정보 db에 기록
     			ProductFileDto productFileDto = new ProductFileDto();
     			productFileDto.setOriginalName(originalFileName);
-    			productFileDto.setFilePath(filePath);
+    			productFileDto.setFilePath("/images/"+fileNameScret);
     			productFileDto.setFileSize(String.valueOf(file.getSize()));
     			productFileDto.setProductInfoIdx(productInfoIdx);
     			productMapper.insertProductFile(productFileDto);
