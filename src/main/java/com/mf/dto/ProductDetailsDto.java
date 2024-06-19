@@ -25,7 +25,8 @@ public class ProductDetailsDto {
     private String subCategory;       
     private int quantity;     
     private String updateDate;
-    private String inventory; // 색상, 사이즈, 재고 합친
+    private String inventory; // 색상, 사이즈, 재고 합침
+    private String filePaths;
     
     private List<ProductInfoDto> productInfos;
     private List<ProductFileDto> productFiles;

@@ -3,30 +3,30 @@
 <mapper namespace="com.mf.mapper.ProductMapper">
 
 
-
 <!-- 전체 상품 정보 -->
-<select id="getAllProductDetails">
-SELECT 
-        p.product_idx as product_idx,
-        p.name as name,
-        p.price as price,
-        p.manufacture_name as manufacture_name,
-        pf.file_path as file_path,
-        c.kor_name as category,
-        sc.kor_name as sub_category,
+<select id="getAllProductDetails" resultType="java.util.HashMap">
+    SELECT 
+        p.product_idx AS product_idx,
+        p.name AS name,
+        p.price AS price,
+        p.manufacture_name AS manufacture_name,
+        c.kor_name AS category,
+        sc.kor_name AS sub_category,
         LISTAGG('[' || pc.color || '] ' || ps.sizes || ', ' || pq.quantity || '개', ' / ') WITHIN GROUP (ORDER BY pc.color) AS inventory,
-        TO_CHAR(pi.update_date, 'YYYY.MM.DD') AS update_date
+        TO_CHAR(pi.update_date, 'YYYY.MM.DD') AS update_date,
+        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS file_paths -- 이미지 파일 결합
     FROM product p
     JOIN product_info pi ON p.product_idx = pi.product_idx
-    join product_file pf on pi.product_info_idx = pf.product_info_idx
+    LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx -- JOIN 변경
     JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
     JOIN category c ON sc.category_idx = c.category_idx
     LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
     LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
     LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
     WHERE p.store_idx = #{storeIdx}
-    GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name, pi.update_date, PF.FILE_PATH
+    GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name, pi.update_date
 </select>
+
 
 <select id="getProductInfosByProductIdx" resultType="com.mf.dto.ProductInfoDto">
     SELECT 
@@ -56,7 +56,6 @@ SELECT
     JOIN product_info pi ON pf.product_info_idx = pi.product_info_idx
     WHERE pi.product_idx = #{productIdx}
 </select>
-
 
 
 <!-- storeIdx 조회 -->

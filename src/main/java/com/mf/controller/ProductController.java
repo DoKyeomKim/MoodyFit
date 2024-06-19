@@ -1,6 +1,8 @@
 package com.mf.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -77,11 +79,19 @@ public class ProductController {
         ModelAndView mv = new ModelAndView();
     	Long userIdx = (Long) session.getAttribute("userIdx");
     	Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
-
-        // mv.addObject("productInfo", productService.getAllProductInfo());
     	
     	List<Map<String,Object>> products = productService.getAllProductDetails(storeIdx);
 
+    	// 이미지 파일 경로를 분할하여 리스트로 저장
+        for (Map<String, Object> product : products) {
+            String filePaths = (String) product.get("FILE_PATHS");
+            if (filePaths != null) {
+                product.put("FILE_PATHS", Arrays.asList(filePaths.split(", ")));
+            } else {
+                product.put("FILE_PATHS", Collections.emptyList());
+            }
+        }
+    	
     	
         mv.addObject("products", products);
         mv.setViewName("product/productlist");

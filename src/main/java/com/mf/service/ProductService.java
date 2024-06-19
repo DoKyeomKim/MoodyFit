@@ -86,40 +86,27 @@ public class ProductService {
              saveProductImages(productInfoIdx, productImages);
          }
      }
- 	
- 	
- 	/*
-	 	파일 저장 --> 추후 이미지 로드 수정 필요
-	 	java.io.IOException: java.io.FileNotFoundException: /private/var/folders/9l/vt0_rhzx4cb0bmwy4137h9mh0000gn/T/tomcat.9095.17627246450066852468/work/Tomcat/localhost/ROOT/upload_2a1c56f3_0aba_4605_8d05_60332a3860cb_00000016.tmp (No such file or directory)
-	 	at org.apache.catalina.core.ApplicationPart.write(ApplicationPart.java:119)
-	 	at org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile.transferTo(StandardMultipartHttpServletRequest.java:265)
-	 	at com.mf.service.ProductService.saveProductImages(ProductService.java:109)
-	 	at com.mf.service.ProductService.addProduct(ProductService.java:88)
- 	*/
-// 	private static final String UPLOAD_DIRECTORY = "src/main/resources/static/images/";
  	 
     private void saveProductImages(Long productInfoIdx, List<MultipartFile> productImages) {
     	for (MultipartFile file : productImages) {
     		// 파일 이름 변경 및 저장 위치 설정
     		String originalFileName = file.getOriginalFilename();
     		String fileNameScret = System.currentTimeMillis() + "_" + originalFileName; // 파일 이름 변경(시간값 + 기존 이름)
-    		String filePath = "C:/dev/" + fileNameScret; // 저장 경로
+    		String filePath = "/Users/sinminjae/dev/" + fileNameScret; // 저장 경로
 
-    	      File dest = new File("C:/dev/images/"+fileNameScret);
+    	      File dest = new File("/Users/sinminjae/dev/images/"+fileNameScret);
     	      // 만약 해당 위치에 폴더가 없으면 생성
     	      if (!dest.exists()) {
     	         dest.mkdirs();
     	        }
-    	      
     		try {
     			// 파일을 저장할 디렉토리에 저장
     			file.transferTo(dest);
     			
-    			
     			// 파일 정보 db에 기록
     			ProductFileDto productFileDto = new ProductFileDto();
     			productFileDto.setOriginalName(originalFileName);
-    			productFileDto.setFilePath(filePath);
+    			productFileDto.setFilePath("/images/"+fileNameScret);
     			productFileDto.setFileSize(String.valueOf(file.getSize()));
     			productFileDto.setProductInfoIdx(productInfoIdx);
     			productMapper.insertProductFile(productFileDto);
@@ -127,9 +114,13 @@ public class ProductService {
     			e.printStackTrace();
     		}
      	}
-		
 	}
- 	
+    
+    // 모든 상품 정보 가져오기
+    public List<Map<String, Object>> getAllProductDetails(Long storeIdx) {	
+    	return productMapper.getAllProductDetails(storeIdx);
+    }
+    
 	@Transactional
     public void addProductDetails(ProductDetailsDto productDetailsDto) {
         // Product 테이블에 삽입
@@ -183,22 +174,13 @@ public class ProductService {
             productMapper.insertPostingProduct(postingProductDto);
         }
     }
-    
-
-    
+   
     public List<String> getProductColors(Long productInfoIdx) {
         return productMapper.getProductColors(productInfoIdx);
     }
 
     public List<String> getProductSizes(Long productInfoIdx) {
         return productMapper.getProductSizes(productInfoIdx);
-    }
-    
-    
- // 모든 상품 정보 가져오기
-    public List<Map<String, Object>> getAllProductDetails(Long storeIdx) {
-    	
-    	return productMapper.getAllProductDetails(storeIdx);
     }
     
     /*
@@ -232,7 +214,6 @@ public class ProductService {
 	}
 
 	public ProductDetailsDto getProductDetailsByProductInfoIdx(Long productInfoIdx) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

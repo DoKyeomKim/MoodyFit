@@ -41,7 +41,6 @@ public interface ProductMapper {
     void insertProductInfo(ProductInfoDto productInfoDto);
     void insertProductQuantity(ProductQuantityDto productQuantityDto);
 	
-	
 	// Product 삽입 (ProductDetailsDto 사용)
     void insertProduct(ProductDetailsDto productDetailsDto);
     
@@ -69,7 +68,6 @@ public interface ProductMapper {
     // 모든 상품 정보 로드
     List<ProductInfoDto> getAllProductInfo();
     
-    
 	List<ProductColorDto> getAllColors();
 	
 	List<ProductSizeDto> getAllSizes();
@@ -77,10 +75,6 @@ public interface ProductMapper {
 	List<Map<String, Object>> getAllProductDetails(Long storeIdx); // 여기에 파일목록까지 포함 로드
 	
 	List<PostingProductDto> getPostingProduct(Long userIdx);
-	
-	
-	// 파일 목록 로드
-    // List<ProductFileDto> getProductFilesByProductIdx(Long productIdx);
 
 	// 파일 정보
 	void insertProductFile(ProductFileDto productFileDto);
