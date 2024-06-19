@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -95,16 +96,16 @@ public class ProductService {
 	 	at com.mf.service.ProductService.saveProductImages(ProductService.java:109)
 	 	at com.mf.service.ProductService.addProduct(ProductService.java:88)
  	*/
- 	private static final String UPLOAD_DIRECTORY = "src/main/resources/static/images/";
+// 	private static final String UPLOAD_DIRECTORY = "src/main/resources/static/images/";
  	 
     private void saveProductImages(Long productInfoIdx, List<MultipartFile> productImages) {
     	for (MultipartFile file : productImages) {
     		// 파일 이름 변경 및 저장 위치 설정
     		String originalFileName = file.getOriginalFilename();
     		String fileNameScret = System.currentTimeMillis() + "_" + originalFileName; // 파일 이름 변경(시간값 + 기존 이름)
-    		String filePath = "/Users/sinminjae/dev/" + fileNameScret; // 저장 경로
+    		String filePath = "C:/dev/" + fileNameScret; // 저장 경로
 
-    	      File dest = new File("/Users/sinminjae/dev/productimg/"+fileNameScret);
+    	      File dest = new File("C:/dev/images/"+fileNameScret);
     	      // 만약 해당 위치에 폴더가 없으면 생성
     	      if (!dest.exists()) {
     	         dest.mkdirs();
@@ -112,7 +113,7 @@ public class ProductService {
     	      
     		try {
     			// 파일을 저장할 디렉토리에 저장
-    			file.transferTo(new File(filePath));
+    			file.transferTo(dest);
     			
     			
     			// 파일 정보 db에 기록
@@ -183,9 +184,6 @@ public class ProductService {
         }
     }
     
-    public List<ProductDetailsDto> getAllProductDetails() {
-        return productMapper.getAllProductDetails();
-    }
 
     
     public List<String> getProductColors(Long productInfoIdx) {
@@ -198,7 +196,7 @@ public class ProductService {
     
     
  // 모든 상품 정보 가져오기
-    public List<ProductDetailsDto> getAllProductDetails(Long storeIdx) {
+    public List<Map<String, Object>> getAllProductDetails(Long storeIdx) {
     	
     	return productMapper.getAllProductDetails(storeIdx);
     }

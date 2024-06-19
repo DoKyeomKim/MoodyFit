@@ -179,21 +179,19 @@
        		<c:forEach var="product" items="${products }">
             <tr>
                 <td><input type="checkbox" class="select-item"></td>
-                <td style="width: 10px;">${product.productIdx}</td>
+                <td style="width: 10px;">${product.PRODUCT_IDX}</td>
                 	
                 <td style="width: 50px;">
-                	<c:if test="${not empty product.productFiles}">
-                  	<img src="${product.productFiles[0].filePath}" >
-                  </c:if>
+                  	<img src="${product.FILE_PATH}" >
                 </td>
-                <td>${product.name}</td>
-                <td>${product.price}</td>
-                <td>${product.category}/${product.subCategory}</td>
-                <td>${product.inventory}</td>
-                <td>${product.updateDate}</td>
+                <td>${product.NAME}</td>
+                <td>${product.PRICE}</td>
+                <td>${product.CATEGORY}/${product.SUB_CATEGORY}</td>
+                <td>${product.INVENTORY}</td>
+                <td>${product.UPDATE_DATE}</td>
                 <td>
-               		<button class="btn btn-primary" onclick="editProduct(${product.productIdx})">수정</button>
-                	<button class="btn btn-danger" onclick="deleteProduct(${product.productIdx})">삭제</button>
+               		<button class="btn btn-primary" onclick="editProduct(${product.PRODUCT_IDX})">수정</button>
+                	<button class="btn btn-danger" onclick="deleteProduct(${product.PRODUCT_IDX})">삭제</button>
                 </td>
             </tr>
            </c:forEach>

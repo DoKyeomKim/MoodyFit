@@ -73,15 +73,14 @@ public class ProductController {
     }
 
     @GetMapping("/productList")
-    public ModelAndView productList(HttpSession session,ProductDetailsDto product) {
+    public ModelAndView productList(HttpSession session) {
         ModelAndView mv = new ModelAndView();
     	Long userIdx = (Long) session.getAttribute("userIdx");
     	Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
 
         // mv.addObject("productInfo", productService.getAllProductInfo());
     	
-    	List<ProductDetailsDto> products = productService.getAllProductDetails(storeIdx);
-    	
+    	List<Map<String,Object>> products = productService.getAllProductDetails(storeIdx);
 
     	
         mv.addObject("products", products);
