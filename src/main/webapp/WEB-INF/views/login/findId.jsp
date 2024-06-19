@@ -61,46 +61,65 @@
 </div>
 
 
-	<script>
-    function toggleInput(method) {
-        var phoneInput = document.getElementById('phoneInput');
-        var emailInput = document.getElementById('emailInput');
-        
-        if (method === 'phone') {
-            phoneInput.style.display = 'block';
-            emailInput.style.display = 'none';
-        } else if (method === 'email') {
-            phoneInput.style.display = 'none';
-            emailInput.style.display = 'block';
-        }
-    }
+<script>
+  function toggleInput(method) {
+      var phoneInput = document.getElementById('phoneInput');
+      var emailInput = document.getElementById('emailInput');
+      
+      if (method === 'phone') {
+          phoneInput.style.display = 'block';
+          emailInput.style.display = 'none';
+      } else if (method === 'email') {
+          phoneInput.style.display = 'none';
+          emailInput.style.display = 'block';
+      }
+  }
+  
+  function findId() {
+      var method = document.querySelector('input[name="findIdMethod"]:checked').value;
+      var phone = document.getElementById('phoneInputValue').value;
+      var email = document.getElementById('emailInputValue').value;
+      
+      fetch('/findId', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+              findIdMethod: method,
+              phone: phone,
+              email: email
+          })
+      })
+      .then(response => response.text())
+      .then(data => {
+          document.getElementById('findIdResult').innerHTML = data;
+          $('#findIdModal').modal('show');
+      })
+      .catch(error => {
+          console.error('아이디 찾기에 실패했습니다.', error);
+          alert('아이디 찾기에 실패했습니다.');
+      });
+  }
+</script>
+<script>
+document.getElementById('phoneInputValue').addEventListener('input', function (e) {
+    // 현재 입력된 값에서 숫자만 추출
+    let numbers = e.target.value.replace(/\D/g, '');
     
-    function findId() {
-        var method = document.querySelector('input[name="findIdMethod"]:checked').value;
-        var phone = document.getElementById('phoneInputValue').value;
-        var email = document.getElementById('emailInputValue').value;
-        
-        fetch('/findId', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                findIdMethod: method,
-                phone: phone,
-                email: email
-            })
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('findIdResult').innerHTML = data;
-            $('#findIdModal').modal('show');
-        })
-        .catch(error => {
-            console.error('아이디 찾기에 실패했습니다.', error);
-            alert('아이디 찾기에 실패했습니다.');
-        });
+    // 하이픈(-)을 추가한 전화번호 포맷 생성
+    let formattedNumber = '';
+    if (numbers.length <= 3) {
+        formattedNumber = numbers;
+    } else if (numbers.length <= 7) {
+        formattedNumber = numbers.slice(0, 3) + '-' + numbers.slice(3);
+    } else {
+        formattedNumber = numbers.slice(0, 3) + '-' + numbers.slice(3, 7) + '-' + numbers.slice(7, 11);
     }
-    </script>
+
+    // 포맷된 번호를 입력 필드에 설정
+    e.target.value = formattedNumber;
+});
+</script>
 </body>
 </html>

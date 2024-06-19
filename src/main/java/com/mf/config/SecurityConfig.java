@@ -49,7 +49,7 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/","/findIdForm","/findId","/faq**","/qna","/category/**","/category/**", 
+				.requestMatchers("/","/findIdForm","/findId","/faq**","/qna","/category/**","/category/**", "/emailCheck",
 						"/oauth2/**","/postingDetail","/search**","/totalJoin","/login","/idCheck","/storeNameCheck",
 						"/nickNameCheck","/loginProcess", "/storeJoin","/storeJoinProcess","/join", 
 						"/joinProcess","/error","/loginFail").permitAll()

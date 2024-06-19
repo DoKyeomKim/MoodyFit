@@ -49,6 +49,8 @@ public interface UsersMapper {
 
 	String getIdByPhone(String phone);
 
+	String getEmail(String email);
+
 
 
 

@@ -109,7 +109,7 @@ html, body {
                     </div>
                 </form>
                 <small class="center-align" style="margin-left:45px;">
-                    <a href="#" data-toggle="modal" data-target="#findIdModal" style="text-decoration-line: none;">아이디 찾기</a>
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#findIdModal" style="text-decoration-line: none;">아이디 찾기</a>
                 </small>
                 
                 <div class="center-align" style="margin-left:45px;">

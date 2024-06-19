@@ -82,6 +82,12 @@ public class UsersService {
 		return usersMapper.getIdByPhone(phone);
 	}
 
+	public String getEmail(String email) {
+		
+		
+		return usersMapper.getEmail(email);
+	}
+
 
 }
 

@@ -38,6 +38,16 @@ PERSON_SEQ.NEXTVAL,
 )
 </insert>
 
+<select id="getEmail">
+SELECT email
+FROM person
+WHERE email = #{email}
+UNION
+SELECT email
+FROM store
+WHERE email = #{email}
+</select>
+
 <select id="getId">
 SELECT ID FROM USERS WHERE ID = #{id}
 </select>

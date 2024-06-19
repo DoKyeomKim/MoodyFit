@@ -112,6 +112,20 @@ public class LoginController {
 		
 	}
 	
+	@GetMapping("/emailCheck")
+	@ResponseBody
+	public String emailCheck(@RequestParam("email") String email) {
+		
+		
+		String resultEmail = usersService.getEmail(email);
+		if(resultEmail==null) {
+			return "<small style='color:green'>사용가능한 이메일입니다</small>";
+		}  else {
+			return "<small style='color:red'>사용중인 이메일 입니다.</small>";
+		}
+		
+	}
+	
 	// 아이디 찾기
 	@PostMapping("/findId")
 	@ResponseBody
@@ -124,7 +138,7 @@ public class LoginController {
 	        id = usersService.getIdByEmail(email);
 	    } else if ("phone".equals(findIdMethod) && phone != null) {
 	        id = usersService.getIdByPhone(phone);
-	    }
+	    } 
 	    return id != null ? "<small>찾으시는 ID는</small><div style='color:green; font-size: 20px;'>" + 
 	    id + "</div><small>입니다.</small>" 
 	    : "<small style='color:red;'>찾으시는 ID가 없습니다.<br> 다시 확인해주세요.</small>";

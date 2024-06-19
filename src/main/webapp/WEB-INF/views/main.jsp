@@ -83,7 +83,7 @@ main {
           <div style="text-align:center;">
             <a href="/postingDetail?postingIdx=${all.POSTING_IDX}">
               <div class="image-container" data-posting-idx="${all.POSTING_IDX}" data-price="${all.PRICE}" data-title="${all.TITLE}">
-                <img src="${all.FILE_PATH}" class="img-fluid" alt="Image 1" style="height: 300px; width:auto;">
+                <img src="${all.FILE_PATH}" class="img-fluid" alt="Image 1" style="height: 1000px; width:auto;">
                 <div class="overlay">
                   <div class="info"></div>
                 </div>
