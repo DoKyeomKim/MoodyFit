@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectKey;
 
 import com.mf.dto.ProductInfoDto;
+import com.mf.dto.ProductOptionDto;
 import com.mf.dto.ProductQuantityDto;
 import com.mf.dto.ProductSizeDto;
 import com.mf.dto.SubCategoryDto;
@@ -38,8 +39,6 @@ public interface ProductMapper {
 	
 	// 다중 색상,사이즈,재고 
 	void insertProduct(ProductDto productDto);
-    void insertProductInfo(ProductInfoDto productInfoDto);
-    void insertProductQuantity(ProductQuantityDto productQuantityDto);
 	
 	// Product 삽입 (ProductDetailsDto 사용)
     void insertProduct(ProductDetailsDto productDetailsDto);
@@ -86,6 +85,28 @@ public interface ProductMapper {
 	Long getProductInfoIdx();
 
 	Long getStoreIdxByUserIdx(@Param("userIdx") Long userIdx);
+
+	
+	// ==============================================================
+    // ====================== 상품 수정 =============================
+	void updateProduct(ProductDto productDto);
+	void updateProductInfo(ProductOptionDto productOptionDto);
+	void updateProductQuantity(ProductOptionDto productOptionDto);
+	
+	void deleteProductFile(Long productFileIdx);
+	void deleteProductInfosByProductIdx(Long productIdx);
+	void deleteProductFilesByProductIdx(Long productIdx);
+	
+	void insertProductInfo(ProductInfoDto productInfoDto);
+	void insertProductQuantity(ProductQuantityDto productQuantityDto);
+
+	List<ProductDetailsDto> getProductDetailsByProductIdx(Long productIdx); // 필요?
+
+	List<ProductInfoDto> getProductInfosByProductIdx(Long productIdx);
+
+	void deleteProductInfo(Long productInfoIdx);
+
+	void deleteProductQuantity(Long productInfoIdx);
 
 	
 }

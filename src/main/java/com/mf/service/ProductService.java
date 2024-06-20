@@ -121,6 +121,8 @@ public class ProductService {
     	return productMapper.getAllProductDetails(storeIdx);
     }
     
+    // ==============================================================
+    // ====================== 상품 등록 =============================
 	@Transactional
     public void addProductDetails(ProductDetailsDto productDetailsDto) {
         // Product 테이블에 삽입
@@ -154,7 +156,62 @@ public class ProductService {
         
      
     }
-    
+	
+    // ==============================================================
+    // ====================== 상품 수정 =============================
+	@Transactional
+	public void updateProduct(ProductDto productDto, List<ProductOptionDto> productInfos, List<MultipartFile> productImages, List<Long> deleteFileIds) {
+	    // Product 테이블 업데이트
+	    productMapper.updateProduct(productDto);
+
+	    // 기존 ProductInfo와 ProductQuantity 삭제 및 새로 삽입
+	    List<ProductInfoDto> existingInfos = productMapper.getProductInfosByProductIdx(productDto.getProductIdx());
+	    for (ProductOptionDto productOptionDto : productInfos) {
+	        if (productOptionDto.getProductInfoIdx() == null) {
+	            // 새로운 정보 삽입
+	            ProductInfoDto productInfoDto = new ProductInfoDto();
+	            productInfoDto.setProductColorIdx(productOptionDto.getColorIdx());
+	            productInfoDto.setProductSizeIdx(productOptionDto.getSizeIdx());
+	            productInfoDto.setProductIdx(productDto.getProductIdx());
+	            productMapper.insertProductInfo(productInfoDto);
+
+	            Long productInfoIdx = productInfoDto.getProductInfoIdx();
+	            ProductQuantityDto productQuantityDto = new ProductQuantityDto();
+	            productQuantityDto.setProductInfoIdx(productInfoIdx);
+	            productQuantityDto.setQuantity(productOptionDto.getQuantity());
+	            productMapper.insertProductQuantity(productQuantityDto);
+	        } else {
+	            // 기존 정보 업데이트
+	            productMapper.updateProductInfo(productOptionDto);
+	            productMapper.updateProductQuantity(productOptionDto);
+	        }
+	    }
+
+	    // 기존 이미지 삭제 및 재삽입
+	    if (!deleteFileIds.isEmpty()) {
+	        for (Long fileId : deleteFileIds) {
+	            productMapper.deleteProductFile(fileId);
+	        }
+	    }
+	    saveProductImages(productDto.getProductIdx(), productImages);
+	}
+
+	
+	
+	@Transactional
+	public List<ProductDetailsDto> getProductDetailsByProductIdx(Long productIdx) {
+	    if (productIdx == null) {
+	        throw new IllegalArgumentException("productIdx는 null이 될 수 없습니다.");
+	    }
+	    List<ProductDetailsDto> productDetails = productMapper.getProductDetailsByProductIdx(productIdx);
+	    if (productDetails == null || productDetails.isEmpty()) {
+	        System.out.println("상품 정보가 없습니다.");
+	    } else {
+	        System.out.println("상품 정보 로드 성공: " + productDetails);
+	    }
+	    return productDetails;
+	}
+	
     // =========== 상품 판매 ===============
     @Transactional
     public void addPosting(PostingDto postingDto) {

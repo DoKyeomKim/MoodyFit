@@ -252,9 +252,15 @@ document.getElementById('select-all').addEventListener('change', function() {
     });
 });
 
+// ===========================================================================================
+// =============================== 수정 & 삭제 ===============================================
+// 수정 페이지로 이동
+function editProduct(productIdx) {
+    window.location.href = "/storeMypage/updateForm?productIdx=" + productIdx;
+}
+
+
 </script>
-
-
 
 </body>
 </html>

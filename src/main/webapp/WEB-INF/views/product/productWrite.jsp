@@ -36,16 +36,16 @@
 			<form action="${pageContext.request.contextPath}/storeMypage/products/add"
 				method="post" enctype="multipart/form-data">
 				<div class="form-group">
-					<label for="pname">상품명</label> <input type="text" value="에어포스"
-						class="form-control" id="pname" name="pname" required>
+					<label for="pname">상품명</label> 
+						<input type="text" value="에어포스" class="form-control" id="pname" name="pname" required>
 				</div>
 				<div class="form-group">
-					<label for="unitprice">상품 판매가</label> <input type="number" value="109000"
-						class="form-control" id="unitprice" name="unitprice" required>
+					<label for="unitprice">상품 판매가</label> 
+						<input type="number" value="109000" class="form-control" id="unitprice" name="unitprice" required>
 				</div>
 				<div class="form-group">
-					<label for="menufecturer">제조사</label><input type="text" value="나이키"
-						class="form-control" id="menufecturer" name="menufecturer" required>
+					<label for="menufecturer">제조사</label>
+						<input type="text" value="나이키" class="form-control" id="menufecturer" name="menufecturer" required>
 				</div>
 				<div class="form-group">
 					<label for="category">카테고리</label>
@@ -225,8 +225,8 @@
 	<script src="/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
 	<script>
-	
 	// =====================  스크립트 =========================================================================== 
 		function toggleAccFunc(id) {
 			var x = document.getElementById(id);
@@ -265,8 +265,7 @@
 		        timeout = setTimeout(() => func.apply(context, args), wait);
 		    };
 		}
-			
-			
+		
 		$(document).ready(function() {
     var selectedCategory = null;
     var selectedSubCategory = null;
@@ -368,8 +367,6 @@
     });
 });
 	
-		
-		
 		// =================== 색상 모달 =============================
 		$(document).ready(function() {
 	        var selectedColor = null;
