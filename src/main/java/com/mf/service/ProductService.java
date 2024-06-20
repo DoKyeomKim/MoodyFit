@@ -195,6 +195,15 @@ public class ProductService {
 	    }
 	    saveProductImages(productDto.getProductIdx(), productImages);
 	}
+	
+	public List<ProductInfoDto> getProductInfosByProductIdx(Long productIdx) {
+	    return productMapper.getProductInfosByProductIdx(productIdx);
+	}
+
+	public List<ProductFileDto> getProductFilesByProductIdx(Long productIdx) {
+	    return productMapper.getProductFilesByProductIdx(productIdx);
+	}
+
 
 	
 	

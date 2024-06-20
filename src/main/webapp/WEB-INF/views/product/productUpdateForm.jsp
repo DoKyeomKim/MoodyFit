@@ -32,30 +32,34 @@
 			<h3>상품 수정</h3>
 			
 			<form action="/updateProduct" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="productIdx" value="${productDetails[0].productIdx}">
+			
 				<div class="form-group">
 					<label for="pname">상품명</label> 
-						<input type="text" value="${productDetails[0].name}" class="form-control" id="pname" name="pname" required>
+					<input type="text" value="${productDetails[0].name}" class="form-control" id="pname" name="pname" required>
 				</div>
+				
 				<div class="form-group">
 					<label for="unitprice">상품 판매가</label> 
-						<input type="number" value="${productDetails[0].price}" class="form-control" id="unitprice" name="unitprice" required>
+					<input type="number" value="${productDetails[0].price}" class="form-control" id="unitprice" name="unitprice" required>
 				</div>
+				
 				<div class="form-group">
 					<label for="menufecturer">제조사</label>
-						<input type="text" value="${productDetails[0].manufactureName}" class="form-control" id="manufecturer" name="manufecturer" required>
+					<input type="text" value="${productDetails[0].manufactureName}" class="form-control" id="menufecturer" name="manufactureName" required>
 				</div>
+				
 				<div class="form-group">
 					<label for="category">카테고리</label>
 					<div class="input-group">
-						<input type="text" value="${productDetails[0].category}/${productDetails[0].subCategory}" class="form-control" id="categoryInput" name="category" 
-							placeholder="카테고리를 선택하세요" required readonly>	
+						<input type="text" value="${productDetails[0].category}/${productDetails[0].subCategory}" 
+							class="form-control" id="categoryInput" name="category" placeholder="카테고리를 선택하세요" required readonly>	
 						<div class="input-group-append">
 							<button type="button" class="btn btn-primary" data-toggle="modal"
 								data-target="#categoryModal">카테고리 선택</button>
 						</div>
 					</div>
-					
-					<input type="hidden" id="subCategoryInput" name="subCategoryIdx">
+				</div>
 
 					<!-- 모달 창 -->
 					<div class="modal fade" id="categoryModal" tabindex="-1"
@@ -126,44 +130,42 @@
 				<br><br>
 				
 				<div class="form-group">
-				    <button type="button" id="addProductInfo" class="btn btn-secondary" name="productInfos">색상/사이즈/재고 추가</button>
+		    	<button type="button" id="addProductInfo" class="btn btn-secondary" name="productInfos">색상/사이즈/재고 추가</button>
 				</div>
 				<div class="form-group">
-				    <table class="table" id="productInfoTable">
-				        <thead>
-				            <tr>
-			                <th>색상</th>
-			                <th>사이즈</th>
-			                <th>재고</th>
-			                <th>삭제</th>
-				            </tr>
-				        </thead>
-				        <tbody>
-				            <c:forEach var="info" items="${productDetails}">
-			                <tr>
-		                    <td>${info.color}</td>
-		                    <td>${info.sizes}</td>
-		                    <td>${info.quantity}</td>
-		                    <td><button type="button" class="btn btn-danger removeProductInfo">삭제</button></td>
-			                    <input type="hidden" name="productInfos[${info.productInfoIdx}].colorIdx" value="${info.productColorIdx}">
-	                        <input type="hidden" name="productInfos[${info.productInfoIdx}].sizeIdx" value="${info.productSizeIdx}">
-	                        <input type="hidden" name="productInfos[${info.productInfoIdx}].quantity" value="${info.quantity}">
-			                </tr>
-				            </c:forEach>
-				        </tbody>
-				    </table>
+			    <table class="table" id="productInfoTable">
+		        <thead>
+	           <tr>
+	              <th>색상</th>
+	              <th>사이즈</th>
+	              <th>재고</th>
+	              <th>삭제</th>
+	           </tr>
+			     	</thead>
+		       	<tbody>
+	            <tr>
+	               <td>${info.color}</td>
+	               <td>${info.sizes}</td>
+	               <td>${info.quantity}</td>
+	               <td><button type="button" class="btn btn-danger removeProductInfo">삭제</button></td>
+	                	<input type="hidden" name="productInfos[${info.productInfoIdx}].colorIdx" value="${info.productColorIdx}">
+	                  <input type="hidden" name="productInfos[${info.productInfoIdx}].sizeIdx" value="${info.productSizeIdx}">
+	                  <input type="hidden" name="productInfos[${info.productInfoIdx}].quantity" value="${info.quantity}">
+	            </tr>
+		        </tbody>
+			    </table>
 				</div>
 				
 				<div class="form-group">
-        <label for="productImages">상품 사진</label> 
-        <input type="file" class="form-control" id="productImages" name="productImages" multiple>
-        <c:forEach var="file" items="${productDetails[0].productFiles}">
-	        <div>
-	          <img src="${file.filePath}" alt="${file.originalName}" width="50">
-	          <input type="checkbox" name="deleteFiles" value="${file.productFileIdx}"> 삭제
-	        </div>
-        </c:forEach>
-    </div>
+        	<label for="productImages">상품 사진</label> 
+       		<input type="file" class="form-control" id="productImages" name="productImages" multiple>
+       		<c:forEach var="file" items="${productFiles}">
+	        	<div>
+	          	<img src="${file.filePath}" alt="${file.originalName}" width="50">
+	          	<input type="checkbox" name="deleteFiles" value="${file.productFileIdx}"> 삭제
+	        	</div>
+        	</c:forEach>
+    		</div>
 				<br>
 				<br>
 				 
@@ -187,8 +189,8 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>색상</th>
-                            <th>선택</th>
+	                        <th>색상</th>
+	                        <th>선택</th>
                         </tr>
                     </thead>
                     <tbody id="colorList">
@@ -218,8 +220,8 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>사이즈</th>
-                            <th>선택</th>
+                         <th>사이즈</th>
+                         <th>선택</th>
                         </tr>
                     </thead>
                     <tbody id="sizeList">
@@ -241,7 +243,9 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script>
 	
-	// =====================  스크립트 =========================================================================== 
+	// ===================================================================================
+	// ===============================  스크립트 =========================================
+		
 		function toggleAccFunc(id) {
 			var x = document.getElementById(id);
 
@@ -270,7 +274,7 @@
 		}
 		
 		
-		// =================== 카테고리 모달 ======================================================
+		// =================== 카테고리 모달 =====================================
 		function debounce(func, wait) {
 		    let timeout;
 		    return function() {
@@ -470,7 +474,22 @@
 			var productInfoIndex = ${product != null ? product.productInfos.size() : 0};
 		 	
 			$(document).ready(function() {
-			    // 색상, 사이즈 및 재고 정보 추가 로직
+				// 수정 페이지에서 기존 색상, 사이즈 및 재고 정보를 로드하여 테이블에 추가
+			    <c:forEach var="info" items="${productInfos}">
+			        var row = '<tr>' +
+			            '<td>' + '${info.color}' + '</td>' +
+			            '<td>' + '${info.sizes}' + '</td>' +
+			            '<td>' + '${info.quantity}' + '</td>' +
+			            '<td><button type="button" class="btn btn-danger removeProductInfo">삭제</button></td>' +
+			            '<input type="hidden" name="productInfos[' + ${info.productInfoIdx} + '].colorIdx" value="' + '${info.productColorIdx}' + '">' +
+			            '<input type="hidden" name="productInfos[' + ${info.productInfoIdx} + '].sizeIdx" value="' + '${info.productSizeIdx}' + '">' +
+			            '<input type="hidden" name="productInfos[' + ${info.productInfoIdx} + '].quantity" value="' + '${info.quantity}' + '">' +
+			            '</tr>';
+			        
+			        $('#productInfoTable tbody').append(row);
+			    </c:forEach>
+
+			    // 다중 레코드 추가 로직
 			    $('#addProductInfo').click(function() {
 			        var color = $('#colorInput').val();
 			        var colorIdx = $('#colorIdx').val();
@@ -496,7 +515,7 @@
 			        $('#productInfoTable tbody').append(row);
 			        productInfoIndex++;
 			    });
-			    
+
 			    $(document).on('click', '.removeProductInfo', function() {
 			        $(this).closest('tr').remove();
 			        // 삭제 후 인덱스를 다시 맞추는 로직 필요할 수 있음

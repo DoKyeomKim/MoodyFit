@@ -100,12 +100,12 @@ public interface ProductMapper {
 	void insertProductInfo(ProductInfoDto productInfoDto);
 	void insertProductQuantity(ProductQuantityDto productQuantityDto);
 
+	List<ProductInfoDto> getProductInfosByProductIdx(Long productIdx);
+	List<ProductFileDto> getProductFilesByProductIdx(Long productIdx);
+
 	List<ProductDetailsDto> getProductDetailsByProductIdx(Long productIdx); // 필요?
 
-	List<ProductInfoDto> getProductInfosByProductIdx(Long productIdx);
-
 	void deleteProductInfo(Long productInfoIdx);
-
 	void deleteProductQuantity(Long productInfoIdx);
 
 	

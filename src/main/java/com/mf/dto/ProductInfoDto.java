@@ -13,4 +13,6 @@ public class ProductInfoDto {
     private Long productSizeIdx;     
     private Long productIdx;              
     private int quantity;
+    private String color;
+    private String sizes;
 }

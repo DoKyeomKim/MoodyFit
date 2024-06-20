@@ -23,6 +23,8 @@ import com.mf.dto.CategoryDto;
 import com.mf.dto.ProductColorDto;
 import com.mf.dto.ProductDetailsDto;
 import com.mf.dto.ProductDto;
+import com.mf.dto.ProductFileDto;
+import com.mf.dto.ProductInfoDto;
 import com.mf.dto.ProductInfoList;
 import com.mf.dto.ProductOptionDto;
 import com.mf.dto.ProductSizeDto;
@@ -78,8 +80,6 @@ public class ProductController {
     
     // =======================================================================
     // =========================== 상품 수정 =================================
-    
-    
     @GetMapping("/updateForm")
     public String showUpdateForm(@RequestParam("productIdx") Long productIdx, Model model) {
         try {
@@ -88,7 +88,7 @@ public class ProductController {
                 return "redirect:/storeMypage/productList";
             }
 
-            // Product와 연관된 모든 정보 로드
+            // 상품 세부 정보 로드
             List<ProductDetailsDto> productDetails = productService.getProductDetailsByProductIdx(productIdx);
             if (productDetails.isEmpty()) {
                 System.out.println("상품 정보를 찾을 수 없습니다.");
@@ -98,12 +98,27 @@ public class ProductController {
             // 모델에 상품 세부 정보 추가
             model.addAttribute("productDetails", productDetails);
             System.out.println("상품 정보 로드 성공: " + productDetails);
-            return "product/productUpdateForm"; 
+
+            // 개별 ProductInfo 및 ProductFiles도 로드하여 모델에 추가
+            List<ProductInfoDto> productInfos = productService.getProductInfosByProductIdx(productIdx);
+            List<ProductFileDto> productFiles = productService.getProductFilesByProductIdx(productIdx);
+
+            // productInfos가 비어있지 않도록 검증
+            if (productInfos != null && !productInfos.isEmpty()) {
+                model.addAttribute("productInfos", productInfos);
+            }
+            
+            model.addAttribute("productInfos", productInfos);
+            model.addAttribute("productFiles", productFiles);
+
+            return "product/productUpdateForm"; // 수정 폼 페이지로 이동
         } catch (Exception e) {
             System.out.println("오류 발생: " + e.getMessage());
             return "redirect:/storeMypage/productList";
         }
     }
+
+
     
     
     
