@@ -61,11 +61,6 @@ WHERE rnum <= 8
   	where sub_category_idx = #{subCategoryId}
 </select>
 
-<select id="getAllProducts" resultType="com.mf.dto.ProductDto">
-	SELECT * form PRODUCT
-		WHERE product_idx = #{productIdx}
-</select>
-
 
 <select id="getPostingAll">
 SELECT DISTINCT a.posting_idx AS posting_idx,

@@ -214,8 +214,8 @@
     </table>
 
     <div class="button-container">
-        <a href="/storeMypage/productWrite"><button>신규 상품 등록</button></a>
-        <a href="/storeMypage/productUpdate"><button>삭제</button></a>
+        <a href="/storeMyPage/productWrite"><button>신규 상품 등록</button></a>
+        <a href="/storeMyPage/productUpdate"><button>삭제</button></a>
     </div>
 </div>
 
@@ -256,7 +256,7 @@ document.getElementById('select-all').addEventListener('change', function() {
 // =============================== 수정 & 삭제 ===============================================
 // 수정 페이지로 이동
 function editProduct(productIdx) {
-    window.location.href = "/storeMypage/updateForm?productIdx=" + productIdx;
+    window.location.href = "/storeMyPage/updateForm?productIdx=" + productIdx;
 }
 
 

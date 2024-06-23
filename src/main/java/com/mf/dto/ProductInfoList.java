@@ -2,7 +2,6 @@ package com.mf.dto;
 
 import java.util.List;
 
-
 // ProductOptionDto를 감쌈
 public class ProductInfoList {
 	private List<ProductOptionDto> productInfos;

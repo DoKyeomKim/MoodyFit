@@ -13,8 +13,8 @@ public class PostingDto {
     private Long postingIdx;
     private String title;
     private String content;
-    private int state;
     private Long productInfoIdx;
     private Long storeIdx;
+    private Integer state;
     	
 }

@@ -36,7 +36,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@RequestMapping("/storeMypage")
+@RequestMapping("/storeMyPage")
 @Slf4j
 public class ProductController {
 
@@ -75,7 +75,7 @@ public class ProductController {
         // 서비스 호출
         productService.addProduct(productDto, productInfos.getProductInfos(), productImages);
         
-        return "redirect:/storeMypage/productList";
+        return "redirect:/storeMyPage/productList";
     }
     
     // =======================================================================
@@ -85,14 +85,14 @@ public class ProductController {
         try {
             if (productIdx == null) {
                 System.out.println("productIdx가 null입니다.");
-                return "redirect:/storeMypage/productList";
+                return "redirect:/storeMyPage/productList";
             }
 
             // 상품 세부 정보 로드
             List<ProductDetailsDto> productDetails = productService.getProductDetailsByProductIdx(productIdx);
             if (productDetails.isEmpty()) {
                 System.out.println("상품 정보를 찾을 수 없습니다.");
-                return "redirect:/storeMypage/productList";
+                return "redirect:/storeMyPage/productList";
             }
 
             // 모델에 상품 세부 정보 추가
@@ -114,13 +114,10 @@ public class ProductController {
             return "product/productUpdateForm"; // 수정 폼 페이지로 이동
         } catch (Exception e) {
             System.out.println("오류 발생: " + e.getMessage());
-            return "redirect:/storeMypage/productList";
+            return "redirect:/storeMyPage/productList";
         }
     }
 
-
-    
-    
     
     @GetMapping("/productList")
     public ModelAndView productList(HttpSession session) {

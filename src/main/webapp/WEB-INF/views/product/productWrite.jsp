@@ -33,7 +33,7 @@
 	<div class="w3-container" style="margin-left: 160px">
 		<div class="container">
 			<h3>상품 등록</h3>
-			<form action="${pageContext.request.contextPath}/storeMypage/products/add"
+			<form action="${pageContext.request.contextPath}/storeMyPage/products/add"
 				method="post" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="pname">상품명</label> 
@@ -155,7 +155,7 @@
 				 <br><br>
 				<button type="submit" class="btn btn-outline-primary">상품 등록</button>
 			</form>
-				<a href="/storeMypage/productList"><button type="submit" class="btn btn-outline-dark">목록</button></a>
+				<a href="/storeMyPage/productList"><button type="submit" class="btn btn-outline-dark">목록</button></a>
 		</div>
 	</div>
 	
@@ -284,7 +284,7 @@
     // 카테고리 목록 불러오는 함수
     function loadCategories(keyword) {
         $.ajax({
-            url: '/storeMypage/api/categories',
+            url: '/storeMyPage/api/categories',
             method: 'GET',
             data: { keyword: keyword }, 
             success: function(categories) {
@@ -317,7 +317,7 @@
     // 서브 카테고리 목록을 불러오는 함수
     function loadSubCategories(categoryCode) {
         $.ajax({
-            url: '/storeMypage/api/subcategories',
+            url: '/storeMyPage/api/subcategories',
             method: 'GET',
             data: { categoryCode: categoryCode },
             success: function(subCategories) {
@@ -379,7 +379,7 @@
 	        // 색상 목록 로드 함수
 	        function loadColors() {
 	            $.ajax({
-	                url: '/storeMypage/api/colors', 
+	                url: '/storeMyPage/api/colors', 
 	                method: 'GET',
 	                success: function(colors) {
 	                    var colorList = $('#colorList');
@@ -423,7 +423,7 @@
 	        // 사이즈 목록 불러오는 함수
 	        function loadSizes() {
 	            $.ajax({
-	                url: '/storeMypage/api/sizes', 
+	                url: '/storeMyPage/api/sizes', 
 	                method: 'GET',
 	                success: function(sizes) {
 	                    var sizeList = $('#sizeList');

@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.ProductMapper">
 
-
 <!-- 전체 상품 정보 -->
 <select id="getAllProductDetails" resultType="java.util.HashMap">
     SELECT 
@@ -218,26 +217,6 @@ SELECT category_idx AS categoryIdx, kor_name AS korName, eng_name AS engName
 
 
 
-<!-- ============ Posting =============== -->
-<!-- 판매글 삽입 -->
-<insert id="insertPosting" parameterType="com.mf.dto.PostingDto">
-	<selectKey keyProperty="postingIdx" resultType="long" order="AFTER">
-	    SELECT posting_seq.CURRVAL FROM DUAL
-	</selectKey>
-	INSERT INTO posting (posting_idx, title, content, update_date, state, store_idx)
-	VALUES (posting_seq.NEXTVAL, #{title}, #{content}, SYSDATE, #{state}, #{storeIdx})
-</insert>
-
-
-
-<!-- 판매글 제품 정보 삽입 -->
-<insert id="insertPostingProduct" parameterType="com.mf.dto.PostingProductDto">
-   INSERT INTO posting_product (posting_product_idx, posting_idx, product_info_idx)
-   VALUES (posting_product_seq.NEXTVAL, #{postingIdx}, #{productInfoIdx})
-</insert>
-
-
-
 <select id="getProductDetailsByProductInfoIdx" parameterType="long" resultType="com.mf.dto.ProductDetailsDto">
         SELECT 
             p.name,
@@ -305,6 +284,30 @@ SELECT category_idx AS categoryIdx, kor_name AS korName, eng_name AS engName
   WHERE users.user_idx = #{userIdx} 
 
 </select>
+
+
+<!-- 상품 판매글 작성을 위한 전체 상품 정보 로드 쿼리문 -->
+<select id="getAllProducts" resultType="com.mf.dto.ProductDto">
+SELECT 
+    p.product_idx AS productIdx,
+    p.name AS name,
+    p.price AS price,
+    p.manufacture_name AS manufactureName,
+    c.kor_name AS category,
+    sc.kor_name AS subCategory,
+    LISTAGG('[' || pc.color || '] ' || ps.sizes || ', ' || pq.quantity || '개', ' / ') WITHIN GROUP (ORDER BY pc.color) AS inventory,
+    LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS filePaths
+FROM product p
+JOIN product_info pi ON p.product_idx = pi.product_idx
+LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
+JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
+JOIN category c ON sc.category_idx = c.category_idx
+LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name
+</select>
+
 
 
 

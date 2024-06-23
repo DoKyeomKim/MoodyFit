@@ -24,9 +24,9 @@ import com.mf.dto.ProductFileDto;
 @Mapper
 public interface ProductMapper {
 	
+	List<ProductDto> getAllProducts();
 	
 	// ============= 카테고리 ================
-	
 	List<CategoryDto> getCategory();
 	
 	List<CategoryDto> getCategoriesByKeyWord(@Param("keyword") String keyword);
@@ -52,11 +52,6 @@ public interface ProductMapper {
     	    @Param("quantity") int quantity
     	);
     
-    // ============= posting ==================== 
-    // posting 테이블에 새로운 판매글 삽입
-    void insertPosting(PostingDto postingDto);
-    // posting_product 테이블에 해당 제품 정보 삽입
-    void insertPostingProduct(PostingProductDto postingProductDto);
     
     // 특정 상품의 사이즈 목록 로드
     List<String> getProductSizes(Long productInfoIdx);
@@ -72,8 +67,7 @@ public interface ProductMapper {
 	List<ProductSizeDto> getAllSizes();
 
 	List<Map<String, Object>> getAllProductDetails(Long storeIdx); // 여기에 파일목록까지 포함 로드
-	
-	List<PostingProductDto> getPostingProduct(Long userIdx);
+
 
 	// 파일 정보
 	void insertProductFile(ProductFileDto productFileDto);

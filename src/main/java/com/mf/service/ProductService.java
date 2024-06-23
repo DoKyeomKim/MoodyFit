@@ -205,8 +205,6 @@ public class ProductService {
 	}
 
 
-	
-	
 	@Transactional
 	public List<ProductDetailsDto> getProductDetailsByProductIdx(Long productIdx) {
 	    if (productIdx == null) {
@@ -220,65 +218,43 @@ public class ProductService {
 	    }
 	    return productDetails;
 	}
-	
-    // =========== 상품 판매 ===============
-    @Transactional
-    public void addPosting(PostingDto postingDto) {
-    	// null 값일 경우 기본 storeIdx 설정
-    	if (postingDto.getStoreIdx() == null) {
-    		throw new IllegalArgumentException("storeIdx cannot be null");
-        }
-    	
-    	// posting 테이블에 새로운 판매글 삽입
-    	productMapper.insertPosting(postingDto);
-    	
-    	// posting_product 테이블에 해당 제품 정보 삽입
-        if (postingDto.getProductInfoIdx() != null) {
-            PostingProductDto postingProductDto = new PostingProductDto();
-            postingProductDto.setPostingIdx(postingDto.getPostingIdx());
-            postingProductDto.setProductInfoIdx(postingDto.getProductInfoIdx());
-            productMapper.insertPostingProduct(postingProductDto);
-        }
+    
+	// 모든 상품 로드 
+    public List<ProductDto> getAllProducts() {
+		return productMapper.getAllProducts();
+	}
+    
+    // 모든 색상 정보 로드
+    public List<ProductColorDto> getAllColors() {
+    	return productMapper.getAllColors();	
     }
-   
+    
+    // 모든 사이즈 정보 로드
+    public List<ProductSizeDto> getAllSizes() {
+    	return productMapper.getAllSizes();
+    }
+    
+    // 특정 상품의 색상 리스트 로드
     public List<String> getProductColors(Long productInfoIdx) {
         return productMapper.getProductColors(productInfoIdx);
     }
-
+    
+    // 특정 상품의 사이즈 리스트 로드
     public List<String> getProductSizes(Long productInfoIdx) {
         return productMapper.getProductSizes(productInfoIdx);
     }
-    
-    /*
-    public ProductDetailsDto getProductDetailsByProductInfoIdx(Long productInfoIdx) {
-		return productMapper.getProductDetailsByProductInfoIdx(productInfoIdx);
-	}
-    */
-    
-    public List<ProductColorDto> getAllColors() {
-    	return productMapper.getAllColors();
-    	
-    }
-    
-	public List<ProductSizeDto> getAllSizes() {
-		return productMapper.getAllSizes();
+
+	
+	// 새로운 상품 정보 추가
+	public void addProductInfo(ProductInfoDto productInfoDto) {
 	}
 	
-
-	public void addProductInfo(ProductInfoDto productInfoDto) {
-		
-	}
-
+	// 사용자 ID를 통해 store ID 로드
 	public Long getStoreIdxByUserIdx(Long userIdx) {
-		
 		return productMapper.getStoreIdxByUserIdx(userIdx);
 	}
-
-	public List<PostingProductDto> getPostingProduct(Long userIdx) {
-
-		return productMapper.getPostingProduct(userIdx);
-	}
-
+	
+	// 특정 상품 정보 로드
 	public ProductDetailsDto getProductDetailsByProductInfoIdx(Long productInfoIdx) {
 		return null;
 	}
