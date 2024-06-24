@@ -97,7 +97,7 @@ public interface ProductMapper {
 	List<ProductInfoDto> getProductInfosByProductIdx(Long productIdx);
 	List<ProductFileDto> getProductFilesByProductIdx(Long productIdx);
 
-	List<ProductDetailsDto> getProductDetailsByProductIdx(Long productIdx); // 필요?
+	List<Map<String, Object>> getProductDetailsByProductIdx(Long productIdx);
 
 	void deleteProductInfo(Long productInfoIdx);
 	void deleteProductQuantity(Long productInfoIdx);

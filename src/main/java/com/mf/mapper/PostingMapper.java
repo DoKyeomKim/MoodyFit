@@ -24,6 +24,8 @@ public interface PostingMapper {
     List<PostingProductDto> getPostingProduct(Long userIdx);
     
     List<Map<String, Object>> getAllProductDetailsWithInventory();
+
+	Map<String, Object> getProductDetailsByProductIdxForPosting(Long productIdx);
     
 }
 

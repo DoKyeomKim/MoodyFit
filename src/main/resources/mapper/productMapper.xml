@@ -27,35 +27,32 @@
 </select>
 
 
-<!-- 특정 productIdx에 해당하는 상품 상세 정보 로드 -->
-<select id="getProductDetailsByProductIdx" resultType="com.mf.dto.ProductDetailsDto">
-    WITH ProductInventory AS (
-        SELECT 
-            pi.product_idx,
-            LISTAGG('[' || pc.color || '] ' || ps.sizes || ', ' || pq.quantity || '개', ' / ') WITHIN GROUP (ORDER BY pi.product_info_idx) AS inventory,
-            MAX(pi.update_date) AS max_update_date
-        FROM product_info pi
-        LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
-        LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
-        LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
-        WHERE pi.product_idx = #{producIdx}
-        GROUP BY pi.product_idx
-    )
+<select id="getProductDetailsByProductIdx" resultType="java.util.HashMap">
     SELECT 
         p.product_idx AS productIdx,
         p.name AS name,
         p.price AS price,
         p.manufacture_name AS manufactureName,
-        sc.kor_name AS subCategory,
         c.kor_name AS category,
-        inv.inventory AS inventory,
-        TO_CHAR(inv.max_update_date, 'YYYY.MM.DD') AS updateDate
+        sc.kor_name AS subCategory,
+        LISTAGG(pc.color, ', ') WITHIN GROUP (ORDER BY pc.color) AS colors,
+        LISTAGG(ps.sizes, ', ') WITHIN GROUP (ORDER BY ps.sizes) AS sizes,
+        LISTAGG(pq.quantity, ', ') WITHIN GROUP (ORDER BY pq.quantity) AS quantities,
+        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS filePaths
     FROM product p
-    LEFT JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
-    LEFT JOIN category c ON sc.category_idx = c.category_idx
-    LEFT JOIN ProductInventory inv ON p.product_idx = inv.product_idx
+    JOIN product_info pi ON p.product_idx = pi.product_idx
+    LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
+    JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
+    JOIN category c ON sc.category_idx = c.category_idx
+    LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+    LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+    LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
     WHERE p.product_idx = #{productIdx}
+    GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name
 </select>
+
+
+
 
 
 <select id="getProductInfosByProductIdx" resultType="com.mf.dto.ProductInfoDto">

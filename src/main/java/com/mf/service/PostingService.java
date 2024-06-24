@@ -97,4 +97,9 @@ public class PostingService {
             e.printStackTrace();
         }
     }
+    
+    // 비동기로 상품 정보 로드
+	public Map<String, Object> getProductDetailsByProductIdx(Long productIdx) {
+		return postingMapper.getProductDetailsByProductIdxForPosting(productIdx);
+	}
 }

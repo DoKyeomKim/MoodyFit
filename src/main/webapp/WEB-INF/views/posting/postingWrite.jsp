@@ -58,42 +58,38 @@
     <h3>판매글 등록</h3>
     
     <!-- 상품 목록 -->
-    <div class="product-list">
-    <c:forEach var="product" items="${products}">
-        <div class="product-item" onclick="selectProduct(${product.PRODUCTIDX})" id="product-${product.PRODUCTIDX}">
-            <img src="${product.FILEPATHS}" alt="${product.NAME}">
-            <p>${product.NAME}</p>
-            <p>${product.PRICE} 원</p>
-            <p>색상: ${product.COLOR}</p>
-            <p>사이즈: ${product.SIZES}</p>
-            <p>재고: ${product.QUANTITY} 개</p>
-        </div>
-    </c:forEach>
+    <div class="product-selection">
+		    <label for="productSelect">판매 상품 선택:</label>
+		    <select id="productSelect" onchange="loadProductDetails(this.value)">
+		        <option value="">상품을 선택하세요</option>
+		        <c:forEach var="product" items="${products}">
+		            <option value="${product.PRODUCTIDX}">${product.NAME} - ${product.CATEGORY} / ${product.SUBCATEGORY}</option>
+		        </c:forEach>
+		    </select>
 		</div>
 
-    <!-- 선택한 상품 상세 정보 -->
-    <div class="details-container">
-        <h4>선택한 상품 정보</h4>
-        <form action="/storeMyPage/postingWrite" method="post" enctype="multipart/form-data">
-            <input type="hidden" id="selectedProductIdx" name="productIdx">
+		
+		<div id="productDetails">
+     	<!-- 상품 상세 정보를 여기에 표시 -->
+		</div>
             
-            <div class="form-group">
-                <label for="title">판매글 제목</label>
-                <input type="text" id="title" name="title" class="form-control" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="content">판매글 내용</label>
-                <textarea id="content" name="content" class="form-control" rows="5" required></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label for="postingFile">판매글 이미지</label>
-                <input type="file" id="postingFile" name="postingFile" class="form-control" multiple>
-            </div>
-            
-            <button type="submit" class="btn btn-primary">등록</button>
-        </form>
+          <div class="form-group">
+              <label for="title">판매글 제목</label>
+              <input type="text" id="title" name="title" class="form-control" required>
+          </div>
+          
+          <div class="form-group">
+              <label for="content">판매글 내용</label>
+              <textarea id="content" name="content" class="form-control" rows="5" required></textarea>
+          </div>
+          
+          <div class="form-group">
+              <label for="postingFile">판매글 이미지</label>
+              <input type="file" id="postingFile" name="postingFile" class="form-control" multiple>
+          </div>
+          
+          <button type="submit" class="btn btn-primary">등록</button>
+      </form>
         
         <!-- 상품 상세 정보, 사이즈, 후기, Q&A 탭 -->
         <div class="tabs">
@@ -119,33 +115,54 @@
     </div>
 </div>
 
-<script src="/js/bootstrap.bundle.min.js"></script>
-<script>
-	
-function selectProduct(productIdx) {
-    console.log('Selected Product ID:', productIdx);
 
-    if (typeof productIdx === 'undefined' || productIdx === null) {
-        console.error('productIdx is not defined');
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<script>
+		// ================================================================================
+		// =============== 스크립트 =======================================================
+		function loadProductDetails(productIdx) {
+    if (productIdx === "") {
+        document.getElementById('productDetails').innerHTML = "";
         return;
     }
 
-    // 모든 product-item 요소에서 selected 클래스를 제거
-    document.querySelectorAll('.product-item').forEach(item => {
-        item.classList.remove('selected');
-    });
+    console.log("Selected Product IDX:", productIdx); // 디버깅용 로그
 
-    // 선택된 product-item 요소에 selected 클래스를 추가
-    var selectedElement = document.getElementById('product-' + productIdx);
-    if (selectedElement) {
-        selectedElement.classList.add('selected');
-    } else {
-        console.error('No element found with ID: product-' + productIdx);
-    }
+    fetch('/storeMyPage/posting/getProductDetails?productIdx='+productIdx)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Fetched product details:", data);
+            displayProductDetails(data);
+        })
+        .catch(error => console.error('Error fetching product details:', error));
+		}
+		
+		// 상품 세부 정보를 표시하는 함수
+	    function displayProductDetails(data) {
+	        const detailsDiv = document.getElementById('productDetails');
+	        let imagesHtml = '';
 
-    // 선택된 상품의 상세 정보를 처리하는 추가 코드 (필요한 경우)
-    document.getElementById('selectedProductIdx').value = productIdx;
-}
+	        if (data.filePaths) {
+	            imagesHtml = data.filePaths.split(', ').map(filePath => {
+	                return '<img src="' + filePath + '" alt="' + data.name + '">';
+	            }).join('');
+	        }
+
+	        detailsDiv.innerHTML = `
+	            <h3>${data.name}</h3>
+	            <p>가격: ${data.price} 원</p>
+	            <p>색상: ${data.colors}</p>
+	            <p>사이즈: ${data.sizes}</p>
+	            <p>재고: ${data.quantities}</p>
+	            <div class="images">${imagesHtml}</div>
+	        `;
+	    }
 
 		
 		// ===============================================================

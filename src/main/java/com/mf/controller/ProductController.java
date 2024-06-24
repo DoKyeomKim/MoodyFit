@@ -89,7 +89,7 @@ public class ProductController {
             }
 
             // 상품 세부 정보 로드
-            List<ProductDetailsDto> productDetails = productService.getProductDetailsByProductIdx(productIdx);
+            Map<String, Object> productDetails = productService.getProductDetailsByProductIdx(productIdx);
             if (productDetails.isEmpty()) {
                 System.out.println("상품 정보를 찾을 수 없습니다.");
                 return "redirect:/storeMyPage/productList";
@@ -99,24 +99,34 @@ public class ProductController {
             model.addAttribute("productDetails", productDetails);
             System.out.println("상품 정보 로드 성공: " + productDetails);
 
-            // 개별 ProductInfo 및 ProductFiles도 로드하여 모델에 추가
-            List<ProductInfoDto> productInfos = productService.getProductInfosByProductIdx(productIdx);
-            List<ProductFileDto> productFiles = productService.getProductFilesByProductIdx(productIdx);
-
-            // productInfos가 비어있지 않도록 검증
-            if (productInfos != null && !productInfos.isEmpty()) {
-                model.addAttribute("productInfos", productInfos);
-            }
-            
-            model.addAttribute("productInfos", productInfos);
-            model.addAttribute("productFiles", productFiles);
-
             return "product/productUpdateForm"; // 수정 폼 페이지로 이동
         } catch (Exception e) {
             System.out.println("오류 발생: " + e.getMessage());
             return "redirect:/storeMyPage/productList";
         }
     }
+    
+    @PostMapping("/updateProduct")
+    public String updateProduct(@RequestParam("productIdx") Long productIdx,
+                                @RequestParam("unitprice") int price,
+                                @RequestParam("productInfos") List<ProductOptionDto> productInfos) {
+        try {
+            // 가격 수정
+            productService.updateProductPrice(productIdx, price);
+
+            // 재고 수정
+            for (ProductOptionDto info : productInfos) {
+                productService.updateProductQuantity(info.getProductInfoIdx(), info.getQuantity());
+            }
+
+            return "redirect:/storeMyPage/productList";
+        } catch (Exception e) {
+            System.out.println("오류 발생: " + e.getMessage());
+            return "redirect:/storeMyPage/productList";
+        }
+    }
+    
+    
 
     
     @GetMapping("/productList")

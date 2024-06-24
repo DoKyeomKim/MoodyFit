@@ -2,9 +2,7 @@ package com.mf.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mf.dto.CategoryDto;
-import com.mf.dto.PostingDto;
-import com.mf.dto.PostingProductDto;
 import com.mf.dto.ProductColorDto;
 import com.mf.dto.ProductDetailsDto;
 import com.mf.dto.ProductDto;
@@ -206,19 +202,39 @@ public class ProductService {
 
 
 	@Transactional
-	public List<ProductDetailsDto> getProductDetailsByProductIdx(Long productIdx) {
+	public Map<String, Object> getProductDetailsByProductIdx(Long productIdx) {
 	    if (productIdx == null) {
 	        throw new IllegalArgumentException("productIdx는 null이 될 수 없습니다.");
 	    }
-	    List<ProductDetailsDto> productDetails = productMapper.getProductDetailsByProductIdx(productIdx);
-	    if (productDetails == null || productDetails.isEmpty()) {
+	    List<Map<String, Object>> productDetailsList = productMapper.getProductDetailsByProductIdx(productIdx);
+	    if (productDetailsList == null || productDetailsList.isEmpty()) {
 	        System.out.println("상품 정보가 없습니다.");
+	        return Collections.emptyMap();
 	    } else {
-	        System.out.println("상품 정보 로드 성공: " + productDetails);
+	        System.out.println("상품 정보 로드 성공: " + productDetailsList);
+	        // 단일 상품 정보이므로 첫 번째 항목을 반환
+	        return productDetailsList.get(0);
 	    }
-	    return productDetails;
 	}
-    
+
+	
+	
+	public void updateProductPrice(Long productIdx, int price) {
+	    ProductDto productDto = new ProductDto();
+	    productDto.setProductIdx(productIdx);
+	    productDto.setPrice(price);
+	    productMapper.updateProduct(productDto);
+	}
+	
+	public void updateProductQuantity(Long productInfoIdx, int quantity) {
+	    ProductOptionDto optionDto = new ProductOptionDto();
+	    optionDto.setProductInfoIdx(productInfoIdx);
+	    optionDto.setQuantity(quantity);
+	    productMapper.updateProductQuantity(optionDto);
+	}
+	
+	
+	
 	// 모든 상품 로드 
     public List<ProductDto> getAllProducts() {
 		return productMapper.getAllProducts();

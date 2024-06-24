@@ -32,129 +32,57 @@
 			<h3>상품 수정</h3>
 			
 			<form action="/updateProduct" method="post" enctype="multipart/form-data">
-			<input type="hidden" name="productIdx" value="${productDetails[0].productIdx}">
+				<input type="hidden" name="productIdx" value="${productDetails[0].productIdx}">
 			
 				<div class="form-group">
-					<label for="pname">상품명</label> 
-					<input type="text" value="${productDetails[0].name}" class="form-control" id="pname" name="pname" required>
-				</div>
-				
-				<div class="form-group">
-					<label for="unitprice">상품 판매가</label> 
-					<input type="number" value="${productDetails[0].price}" class="form-control" id="unitprice" name="unitprice" required>
-				</div>
-				
-				<div class="form-group">
-					<label for="menufecturer">제조사</label>
-					<input type="text" value="${productDetails[0].manufactureName}" class="form-control" id="menufecturer" name="manufactureName" required>
-				</div>
-				
-				<div class="form-group">
-					<label for="category">카테고리</label>
-					<div class="input-group">
-						<input type="text" value="${productDetails[0].category}/${productDetails[0].subCategory}" 
-							class="form-control" id="categoryInput" name="category" placeholder="카테고리를 선택하세요" required readonly>	
-						<div class="input-group-append">
-							<button type="button" class="btn btn-primary" data-toggle="modal"
-								data-target="#categoryModal">카테고리 선택</button>
-						</div>
-					</div>
-				</div>
-
-					<!-- 모달 창 -->
-					<div class="modal fade" id="categoryModal" tabindex="-1"
-						role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="categoryModalLabel">카테고리 선택</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<!-- 검색창 -->
-									<div class="input-group mb-3">
-										<input type="text" class="form-control" id="searchInput" placeholder="카테고리를 검색하세요">
-										<div class="input-group-append">
-											<button class="btn btn-primary" type="button" id="searchButton">검색</button>
-										</div>
-									</div>
-									<!-- 카테고리 리스트 -->
-									<table class="table">
-										<thead>
-											<tr>
-												<th>카테고리</th>
-												<th>선택</th>
-											</tr>
-										</thead>
-										<tbody id="categoryList">
-											<!-- 카테고리 리스트가 여기에 동적으로 추가 -->
-										</tbody>
-									</table>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-									<button type="button" class="btn btn-primary"id="applyCategory">적용</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+		        <label for="pname">상품명</label> 
+		        <input type="text" value="${productDetails['NAME']}" class="form-control" id="pname" name="pname" readonly>
+		    </div>
+		
+		    <div class="form-group">
+		        <label for="unitprice">상품 판매가</label> 
+		        <input type="number" value="${productDetails['PRICE']}" class="form-control" id="unitprice" name="unitprice">
+		    </div>
+		
+		    <div class="form-group">
+		        <label for="menufecturer">제조사</label>
+		        <input type="text" value="${productDetails['MANUFACTURENAME']}" class="form-control" id="menufecturer" name="manufactureName" readonly>
+		    </div>
+		
+		    <div class="form-group">
+		        <label for="category">카테고리</label>
+		        <input type="text" value="${productDetails['CATEGORY']}/${productDetails['SUBCATEGORY']}" class="form-control" id="categoryInput" name="category" readonly>	
+		    </div>
 
 
 				<div class="form-group">
-            <label for="color">색상</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="colorInput" name="colorName" placeholder="색상을 선택하세요" readonly>
-                <input type="hidden" id="colorIdx" name="colorIdx">
-                <div class="input-group-append">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#colorModal">색상 선택</button>
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group">
-            <label for="size">사이즈</label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="sizeInput" name="sizeName" placeholder="사이즈를 선택하세요" readonly>
-                <input type="hidden" id="sizeIdx" name="sizeIdx">
-                <div class="input-group-append">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sizeModal">사이즈 선택</button>
-                </div>
-            </div>
-        </div>
-				<div class="form-group">
-					<label for="quantity">재고</label> <input type="number" value="99" class="form-control" id="quantity" name="quantity" required>
+				    <table class="table" id="productInfoTable">
+				        <thead>
+				            <tr>
+					            <th>색상</th>
+					            <th>사이즈</th>
+					            <th>재고</th>
+				            </tr>
+				        </thead>
+				        <tbody>
+				            <c:forEach var="info" items="${productInfos}">
+										    <tr>
+									        <td>${info['color']}</td>
+									        <td>${info['sizes']}</td>
+									        <td>
+								            <input type="number" name="productInfos[${info['productInfoIdx']}].quantity" value="${info['quantity']}" class="form-control">
+								            <input type="hidden" name="productInfos[${info['productInfoIdx']}].colorIdx" value="${info['productColorIdx']}">
+								            <input type="hidden" name="productInfos[${info['productInfoIdx']}].sizeIdx" value="${info['productSizeIdx']}">
+								            <c:if test="${info['quantity'] == 0}">
+								                <span class="badge badge-danger">품절</span>
+								            </c:if>
+									        </td>
+										    </tr>
+										</c:forEach>
+				        </tbody>
+				    </table>
 				</div>
-				<br><br>
-				
-				<div class="form-group">
-		    	<button type="button" id="addProductInfo" class="btn btn-secondary" name="productInfos">색상/사이즈/재고 추가</button>
-				</div>
-				<div class="form-group">
-			    <table class="table" id="productInfoTable">
-		        <thead>
-	           <tr>
-	              <th>색상</th>
-	              <th>사이즈</th>
-	              <th>재고</th>
-	              <th>삭제</th>
-	           </tr>
-			     	</thead>
-		       	<tbody>
-	            <tr>
-	               <td>${info.color}</td>
-	               <td>${info.sizes}</td>
-	               <td>${info.quantity}</td>
-	               <td><button type="button" class="btn btn-danger removeProductInfo">삭제</button></td>
-	                	<input type="hidden" name="productInfos[${info.productInfoIdx}].colorIdx" value="${info.productColorIdx}">
-	                  <input type="hidden" name="productInfos[${info.productInfoIdx}].sizeIdx" value="${info.productSizeIdx}">
-	                  <input type="hidden" name="productInfos[${info.productInfoIdx}].quantity" value="${info.quantity}">
-	            </tr>
-		        </tbody>
-			    </table>
-				</div>
+
 				
 				<div class="form-group">
         	<label for="productImages">상품 사진</label> 
