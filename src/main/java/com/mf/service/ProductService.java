@@ -157,6 +157,11 @@ public class ProductService {
     // ====================== 상품 수정 =============================
 	@Transactional
 	public void updateProduct(ProductDto productDto, List<ProductOptionDto> productInfos, List<MultipartFile> productImages, List<Long> deleteFileIds) {
+		// 판매가가 0 미만인지 확인
+	    if (productDto.getPrice() < 0) {
+	        productDto.setPrice(0);
+	    }
+		
 	    // Product 테이블 업데이트
 	    productMapper.updateProduct(productDto);
 
@@ -218,6 +223,7 @@ public class ProductService {
 	}
 
 	public void updateProductPrice(Long productIdx, int price) {
+		if (price < 0) price = 0; // 0보다 작은 값을 0으로 변경
 	    ProductDto productDto = new ProductDto();
 	    productDto.setProductIdx(productIdx);
 	    productDto.setPrice(price);
@@ -225,6 +231,7 @@ public class ProductService {
 	}
 
 	public void updateProductQuantity(Long productInfoIdx, int quantity) {
+		if (quantity < 0) quantity = 0;
 	    ProductOptionDto optionDto = new ProductOptionDto();
 	    optionDto.setProductInfoIdx(productInfoIdx);
 	    optionDto.setQuantity(quantity);

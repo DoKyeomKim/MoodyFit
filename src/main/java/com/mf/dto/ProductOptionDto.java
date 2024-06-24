@@ -11,6 +11,6 @@ public class ProductOptionDto {
 	private Long productInfoIdx;
 	private Long colorIdx;
 	private Long sizeIdx;
-	private int  quantity;
+	private Integer quantity;
 	
 }

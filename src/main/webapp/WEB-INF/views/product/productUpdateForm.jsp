@@ -31,7 +31,7 @@
 		<div class="container">
 			<h3>상품 수정</h3>
 			
-			<form action="/updateProduct" method="post" enctype="multipart/form-data">
+			<form id="updateForm" action="/storeMyPage/updateProduct" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="productIdx" value="${productDetails[0].productIdx}">
 			
 				<div class="form-group">
@@ -41,7 +41,7 @@
 		
 		    <div class="form-group">
 		        <label for="unitprice">상품 판매가</label> 
-		        <input type="number" value="${productDetails['PRICE']}" class="form-control" id="unitprice" name="unitprice">
+		        <input type="number" value="${productDetails['PRICE']}" class="form-control" id="unitprice" name="unitprice" min="0" required>
 		    </div>
 		
 		    <div class="form-group">
@@ -105,68 +105,6 @@
 		</div>
 	</div>
 	
-	<!-- 색상 선택 모달 -->
-<div class="modal fade" id="colorModal" tabindex="-1" role="dialog" aria-labelledby="colorModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="colorModalLabel">색상 선택</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-	                        <th>색상</th>
-	                        <th>선택</th>
-                        </tr>
-                    </thead>
-                    <tbody id="colorList">
-                        <!-- 색상 리스트가 여기에 동적으로 추가됩니다 -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary" id="applyColor">적용</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 사이즈 선택 모달 -->
-<div class="modal fade" id="sizeModal" tabindex="-1" role="dialog" aria-labelledby="sizeModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="sizeModalLabel">사이즈 선택</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                         <th>사이즈</th>
-                         <th>선택</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sizeList">
-                        <!-- 사이즈 리스트가 여기에 동적으로 추가됩니다 -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary" id="applySize">적용</button>
-            </div>
-        </div>
-    </div>
-</div>
-	
 
 	<script src="/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -202,265 +140,35 @@
 						.replace(" w3-lightgrey", "");
 			}
 		}
-		
-		
-		// =================== 카테고리 모달 =====================================
-		function debounce(func, wait) {
-		    let timeout;
-		    return function() {
-		        const context = this, args = arguments;
-		        clearTimeout(timeout);
-		        timeout = setTimeout(() => func.apply(context, args), wait);
-		    };
-		}
-			
-			
-		$(document).ready(function() {
-    var selectedCategory = null;
-    var selectedSubCategory = null;
-
-    // 모달 창 열릴 때 카테고리 목록을 불러옴
-    $('#categoryModal').on('show.bs.modal', function () {
-        loadCategories();
-    });
-
-    // 검색 입력 시 실시간으로 필터링 된 카테고리 목록 불러옴
-    $('#searchInput').on('input', debounce(function() {
-        var keyword = $(this).val();
-        loadCategories(keyword);
-    }, 50)); // 50ms 지연 후 실행
-
-    // 카테고리 목록 불러오는 함수
-    function loadCategories(keyword) {
-        $.ajax({
-            url: '/storeMyPage/api/categories',
-            method: 'GET',
-            data: { keyword: keyword }, 
-            success: function(categories) {
-                // 카테고리 리스트를 테이블에 추가
-                var categoryList = $('#categoryList');
-                categoryList.empty(); // 기존 목록 삭제
-                categories.forEach(function(category) {
-                	// 카테고리 로드 시 engName과 korName 으로
-                    categoryList.append('<tr><td>' + category.engName + '</td><td><a href="#" class="category-item" data-code="' + category.korName + '" data-name="' + category.korName + '">' + category.korName + '</a></td></tr>');
-                });
-
-                // 카테고리 아이템 클릭 시
-                $('.category-item').click(function() {
-                    var categoryCode = $(this).data('code'); // engName
-                    var categoryName = $(this).data('name'); // korName
-                    selectedCategory = { code: categoryCode, name: categoryName };
-                    
-                    console.log('Selected Category:', selectedCategory);
-                    loadSubCategories(categoryCode); // 서브 카테고리 로드
-                });
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-            		console.error('AJAX error: ', textStatus, errorThrown);
-                console.error('Response text: ', jqXHR.responseText);
-                alert('카테고리를 불러오는 중 오류가 발생했습니다. 자세한 내용은 콘솔을 확인하세요.');
-            }
-        });
-    }
-
-    // 서브 카테고리 목록을 불러오는 함수
-    function loadSubCategories(categoryCode) {
-        $.ajax({
-            url: '/storeMyPage/api/subcategories',
-            method: 'GET',
-            data: { categoryCode: categoryCode },
-            success: function(subCategories) {
-                // 서브 카테고리 리스트를 표시
-                var subCategoryList = $('#categoryList');
-                subCategoryList.empty(); 
-                subCategories.forEach(function(subCategory) {
-                	 // 서브 카테 이름 = kor, 선택 부분 = idx 표시
-                    subCategoryList.append('<tr><td>' + subCategory.korName + '</td><td><a href="#" class="subcategory-item" data-id="' + subCategory.subCategoryIdx + '" data-name="' + subCategory.korName + '">' + subCategory.subCategoryIdx + '</a></td></tr>');
-                });
-
-                // 서브 카테고리 아이템 클릭 시
-                $('.subcategory-item').click(function() {
-                    var subCategoryId = $(this).data('id');
-                    var subCategoryName = $(this).data('name');
-                    selectedSubCategory = { id: subCategoryId, name: subCategoryName };
-                    
-                    console.log('Selected SubCategory:', selectedSubCategory);
-		                // 선택된 서브 카테고리 idx를 숨겨진 필드에 설정
-		                $('#subCategoryInput').val(subCategoryId);
-		                $('#categoryInput').val(selectedCategory.name); // 카테고리 이름 설정
-		           		  
-                });
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('AJAX error: ', textStatus, errorThrown);
-                console.error('Response text: ', jqXHR.responseText);
-                alert('서브 카테고리를 불러오는 중 오류가 발생했습니다. 자세한 내용은 콘솔을 확인하세요.');
-            }
-        });
-    }
-
- // 적용 버튼 클릭 시
-    $('#applyCategory').click(function() {
-        // 선택된 카테고리와 서브 카테고리가 있는지 확인
-        if (selectedCategory && selectedSubCategory) {
-            // 선택된 카테고리와 서브 카테고리 값을 입력 필드에 설정
-            $('#categoryInput').val(selectedCategory.name);
-            $('#subCategoryInput').val(selectedSubCategory.id);
-            
-            console.log('Category set to:', $('#categoryInput').val()); // 디버깅용 로그
-            console.log('SubCategory set to:', $('#subCategoryInput').val()); // 디버깅용 로그
-            $('#categoryModal').modal('hide');
-        } else {
-            alert('카테고리와 서브 카테고리를 선택하세요.');
-        }
-    });
-});
 	
+	
+		document.getElementById('updateForm').onsubmit = function() {
+		    var quantities = document.querySelectorAll('input[name^="productInfos"][name$="quantity"]');
+		    for (var i = 0; i < quantities.length; i++) {
+		        if (quantities[i].value.trim() === "") {
+		            alert('재고를 작성해주세요.');
+		            return false;
+		        }
+		    }
+		    return true;
+		};
+	
+		document.querySelectorAll('input[name^="productInfos"][name$="quantity"]').forEach(input => {
+		    input.addEventListener('input', function() {
+		        if (this.value < 0) {
+		            this.value = 0; // 값이 0 미만으로 내려가면 0으로 설정
+		        }
+		    });
 		
-		
-		// =================== 색상 모달 =============================
-		$(document).ready(function() {
-	        var selectedColor = null;
-
-	        // 모달 창 열릴 때 색상 목록 로드
-	        $('#colorModal').on('show.bs.modal', function () {
-	            loadColors();
-	        });
-
-	        // 색상 목록 로드 함수
-	        function loadColors() {
-	            $.ajax({
-	                url: '/storeMyPage/api/colors', 
-	                method: 'GET',
-	                success: function(colors) {
-	                    var colorList = $('#colorList');
-	                    colorList.empty();
-	                    colors.forEach(function(color) {
-	                        colorList.append('<tr><td>' + color.color + '</td><td><a href="#" class="color-item" data-id="' + color.productColorIdx + '" data-name="' + color.color + '">선택</a></td></tr>');
-	                    });
-	                    
-	                    console.dir($(this));
-	                    var colorId = $(this).data('id');
-                      var colorName = $(this).data('name');
-                      console.log(colorId);
-                      console.log(colorName);
-
-	                    // 색상 아이템 클릭 시
-	                    $('.color-item').click(function() {
-	                        var colorId = $(this).data('id');
-	                        var colorName = $(this).data('name');
-	                        selectedColor = { id: colorId, name: colorName };
-	                        $('#colorInput').val(colorName);
-	                        $('#colorIdx').val(colorId);
-	                        $('#colorModal').modal('hide');
-	                    });
-	                },
-	                error: function() {
-	                    alert('색상을 불러오는 중 오류가 발생했습니다.');
-	                }
-	            });
+		// 화살표 키로 값을 조정할 때 제어
+	    input.addEventListener('keydown', function(event) {
+	        if (event.key === 'ArrowDown' && this.value <= 0) {
+	            event.preventDefault(); // 값이 0 이하로 내려가는 것을 방지
 	        }
 	    });
-
-		// =================== 사이즈 모달 =============================
-	    $(document).ready(function() {
-	        var selectedSize = null;
-
-	        // 모달 창 열릴 때 사이즈 목록을 불러옴
-	        $('#sizeModal').on('show.bs.modal', function () {
-	            loadSizes();
-	        });
-
-	        // 사이즈 목록 불러오는 함수
-	        function loadSizes() {
-	            $.ajax({
-	                url: '/storeMyPage/api/sizes', 
-	                method: 'GET',
-	                success: function(sizes) {
-	                    var sizeList = $('#sizeList');
-	                    sizeList.empty();
-	                    sizes.forEach(function(size) {
-	                        sizeList.append('<tr><td>' + size.sizes + '</td><td><a href="#" class="size-item" data-id="' + size.productSizeIdx + '" data-name="' + size.sizes + '">선택</a></td></tr>');
-	                    });
-
-	                    // 사이즈 아이템 클릭 시
-	                    $('.size-item').click(function() {
-	                        var sizeId = $(this).data('id');
-	                        var sizeName = $(this).data('name');
-	                        selectedSize = { id: sizeId, name: sizeName };
-	                        $('#sizeInput').val(sizeName);
-	                        $('#sizeIdx').val(sizeId);
-	                        $('#sizeModal').modal('hide'); 
-	                    });
-	                },
-	                error: function() {
-	                    alert('사이즈를 불러오는 중 오류가 발생했습니다.');
-	                }
-	            });
-	        }
-	    });
-			
-			// ================== 상품 정보 인덱스 변수 정의 및 초기화 ==========================
-			var productInfoIndex = ${product != null ? product.productInfos.size() : 0};
-		 	
-			$(document).ready(function() {
-				// 수정 페이지에서 기존 색상, 사이즈 및 재고 정보를 로드하여 테이블에 추가
-			    <c:forEach var="info" items="${productInfos}">
-			        var row = '<tr>' +
-			            '<td>' + '${info.color}' + '</td>' +
-			            '<td>' + '${info.sizes}' + '</td>' +
-			            '<td>' + '${info.quantity}' + '</td>' +
-			            '<td><button type="button" class="btn btn-danger removeProductInfo">삭제</button></td>' +
-			            '<input type="hidden" name="productInfos[' + ${info.productInfoIdx} + '].colorIdx" value="' + '${info.productColorIdx}' + '">' +
-			            '<input type="hidden" name="productInfos[' + ${info.productInfoIdx} + '].sizeIdx" value="' + '${info.productSizeIdx}' + '">' +
-			            '<input type="hidden" name="productInfos[' + ${info.productInfoIdx} + '].quantity" value="' + '${info.quantity}' + '">' +
-			            '</tr>';
-			        
-			        $('#productInfoTable tbody').append(row);
-			    </c:forEach>
-
-			    // 다중 레코드 추가 로직
-			    $('#addProductInfo').click(function() {
-			        var color = $('#colorInput').val();
-			        var colorIdx = $('#colorIdx').val();
-			        var size = $('#sizeInput').val();
-			        var sizeIdx = $('#sizeIdx').val();
-			        var quantity = $('#quantity').val();
-			        
-			        if (!color || !size || !quantity) {
-			            alert("모든 필드를 입력하세요.");
-			            return;
-			        }
-			        
-			        var row = '<tr>' +
-			            '<td>' + color + '</td>' +
-			            '<td>' + size + '</td>' +
-			            '<td>' + quantity + '</td>' +
-			            '<td><button type="button" class="btn btn-danger removeProductInfo">삭제</button></td>' +
-			            '<input type="hidden" name="productInfos[' + productInfoIndex + '].colorIdx" value="' + colorIdx + '">' +
-			            '<input type="hidden" name="productInfos[' + productInfoIndex + '].sizeIdx" value="' + sizeIdx + '">' +
-			            '<input type="hidden" name="productInfos[' + productInfoIndex + '].quantity" value="' + quantity + '">' +
-			            '</tr>';
-			        
-			        $('#productInfoTable tbody').append(row);
-			        productInfoIndex++;
-			    });
-
-			    $(document).on('click', '.removeProductInfo', function() {
-			        $(this).closest('tr').remove();
-			        // 삭제 후 인덱스를 다시 맞추는 로직 필요할 수 있음
-			        productInfoIndex--;
-			        $('#productInfoTable tbody tr').each(function(index) {
-			            $(this).find('input').each(function() {
-			                var name = $(this).attr('name');
-			                var newName = name.replace(/\[\d+\]/, '[' + index + ']');
-			                $(this).attr('name', newName);
-			            });
-			        });
-			    });
-			});
+	});
 		
-			
+	
 	</script>
 </body>
 </html>

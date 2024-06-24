@@ -107,24 +107,30 @@ public class ProductController {
     }
     
     @PostMapping("/updateProduct")
-    public String updateProduct(@RequestParam("productIdx") Long productIdx,
-                                @RequestParam("unitprice") int price,
-                                @RequestParam("productInfos") List<ProductOptionDto> productInfos) {
-        try {
-            // 가격 수정
-            productService.updateProductPrice(productIdx, price);
-
-            // 재고 수정
-            for (ProductOptionDto info : productInfos) {
-                productService.updateProductQuantity(info.getProductInfoIdx(), info.getQuantity());
-            }
-
-            return "redirect:/storeMyPage/productList";
-        } catch (Exception e) {
-            System.out.println("오류 발생: " + e.getMessage());
-            return "redirect:/storeMyPage/productList";
+    public String updateProduct(
+    		@ModelAttribute ProductDto productDto,
+            @RequestParam(value = "productInfos", required = false) List<ProductOptionDto> productInfos,
+            @RequestParam(value = "productImages", required = false) List<MultipartFile> productImages,
+            @RequestParam(value = "deleteFileIds", required = false) List<Long> deleteFileIds) {
+        
+        // 판매가가 변경된 경우
+        if (productDto.getPrice() != null) {
+            productService.updateProductPrice(productDto.getProductIdx(), productDto.getPrice());
         }
+
+        // 재고가 변경된 경우
+        for (ProductOptionDto productOptionDto : productInfos) {
+            if (productOptionDto.getQuantity() != null) {
+                productService.updateProductQuantity(productOptionDto.getProductInfoIdx(), productOptionDto.getQuantity());
+            }
+        }
+
+        // 이미지 변경 및 삭제 처리
+        productService.updateProduct(productDto, productInfos, productImages, deleteFileIds);
+
+        return "redirect:/storeMyPage/productList";
     }
+
     
     
 
