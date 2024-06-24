@@ -303,7 +303,8 @@
             } else {
                 messageElement.classList.add('chat-message', 'message-received');
                 textElement.style.marginTop = '10px';
-                textElement.style.marginLeft = '10px'; // received 메시지의 margin-left 설정
+                textElement.style.marginLeft = '20px';
+                userAvatar.style.marginLeft = '10px'; 
                 messageElement.appendChild(userAvatar);
                 messageElement.appendChild(usernameElement);
                 messageElement.appendChild(lineBreak); // br 요소 추가
