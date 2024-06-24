@@ -17,7 +17,6 @@
     padding: 20px;
 }
 .modal-content {
-    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 300px;
@@ -25,17 +24,22 @@
     max-width: 100%;
     margin: 0 auto;
 }
+
 .username-page-container, .chat-container {
     background-color: #fff;
-    padding: 20px;
+    padding: 0 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 300px;
     max-width: 100%;
 }
 
-.username-page-container {
-    margin-top: 100px;
+.username-page-container{
+	height:450px;
+    display: flex; /* Flexbox를 이용하여 내부 요소를 가운데 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    flex-direction: column; /* 세로 방향으로 요소 배치 */
 }
 
 .title {
@@ -73,8 +77,7 @@
 .chat-container {
     display: flex;
     flex-direction: column;
-    height: 400px;
-    margin-top: 20px;
+    height: 450px;
 }
 .chat-header {
     text-align: center;
@@ -171,8 +174,8 @@
     <div id="chat-page" class="hidden">
         <!-- 채팅 화면 -->
         <div class="chat-container">
-            <div class="chat-header">
-                커뮤니티
+            <div class="chat-header" style="margin-top:15px;">
+                실시간 채팅
             </div>
             <ul id="messageArea">
                 <!-- 메시지가 표시될 영역 -->
