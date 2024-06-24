@@ -324,6 +324,9 @@ ALTER TABLE posting
 ADD CONSTRAINT fk_posting_store
 FOREIGN KEY (store_idx) REFERENCES store(store_idx);
 
+ALTER TABLE product
+ADD state NUMBER;
+
 -----------------------------------------
 
 

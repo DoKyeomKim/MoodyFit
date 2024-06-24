@@ -57,5 +57,15 @@ public interface MainMapper {
 	// 찜 삭제
 	void deleteWish(@Param("postingIdx") Long postingIdx, @Param("userIdx") Long userIdx);
 
+
+	//=========================================
+	// 채팅용 닉네임 들고오기
+	// 개인
+	String getPNickNameByUserIdx(Long userIdx);
+
+	// 가맹점
+	String getSNickNameByUserIdx(Long userIdx);
+	//=========================================
+
 	
 }

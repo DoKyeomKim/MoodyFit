@@ -22,6 +22,16 @@ WHERE rnum <= 8
 ]]>
 </select>
 
+<select id="getPNickNameByUserIdx">
+select nick_name
+from person
+where user_idx = #{userIdx}
+</select>
+<select id="getSNickNameByUserIdx">
+select store_name
+from store
+where user_idx = #{userIdx}
+</select>
 
 <!-- 카테고리 첫 페이지가 All로 출력되게끔 -->
 <select id="getAllSubCategoryByCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
