@@ -189,5 +189,19 @@ public class MainService {
 
 	}
 
+	//=========================================
+	// 채팅용 닉네임 들고오기
+	// 개인
+	public String getPNickNameByUserIdx(Long userIdx) {
+		 
+		return mainMapper.getPNickNameByUserIdx(userIdx);
+	}
+
+	// 가맹점
+	public String getSNickNameByUserIdx(Long userIdx) {
+		return mainMapper.getSNickNameByUserIdx(userIdx);
+	}
+	//=========================================
+
 	
 }

@@ -60,6 +60,8 @@ public class SecurityConfig {
 				.anyRequest().authenticated()
 				);
 
+
+
 		http.formLogin((auth) -> auth.loginPage("/login")
 				.loginProcessingUrl("/loginProcess").permitAll()
 				.usernameParameter("id")
