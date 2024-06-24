@@ -4,6 +4,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="${pageContext.request.contextPath}/scripts.js"></script>
+<script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
+
+
 <style>
 body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
@@ -70,13 +75,23 @@ function confirmDelete(event, form) {
 <input type="hidden" value="{store_idx}" id="storeIdx">
 <h3 class="mt-3 text-center">가맹점 관리</h3>
 <hr class="mb-3">
-<div class="container mt-3">
+<form action="${pageContext.request.contextPath}/admin/userManagement2" method="get" class="search-container">
+    <div class="form-group mb-2">
+        <label for="searchId" class="sr-only">아이디</label>
+        <input type="text" name="searchId" id="searchId" class="form-control" placeholder="아이디를 입력하세요">
+    </div>
+   <button class="header-search-btn" type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+</form>
+<div class="table-container">
     <div class="row">
         <div class="col-12">
             <table class="table table-bordered">
                 <thead class="table-secondary">
                     <tr>
                         <th>번호</th>
+                        <th>아이디</th>
                         <th>가맹점 이름</th>
                         <th>매니저 이름</th>
                         <th>사업자 번호</th>
@@ -89,9 +104,10 @@ function confirmDelete(event, form) {
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="store" items="${storeList}">
-                        <tr>
+                    <c:forEach var="store" items="${storeList}" varStatus="status">
+                        <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
                             <td>${store.storeIdx}</td>
+                            <td>${store.id}</td>
                             <td>${store.storeName}</td>
                             <td>${store.managerName}</td>
                             <td>${store.businessNumber}</td>

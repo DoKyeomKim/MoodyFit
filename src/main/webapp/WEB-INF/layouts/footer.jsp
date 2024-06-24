@@ -4,20 +4,20 @@
 <html>
 <head>
 <style>
-body {
+#footer-body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
     margin: 0;
     padding: 0;
     font-size: 11px; /* 기본 폰트 크기를 11px로 설정 */
 }
 footer {
-    background-color: #f8f8f8;
+    background-color: white;
     border-top: 1px solid #e7e7e7;
     padding: 40px 0;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    font-size: 11px; /* 푸터 폰트 크기를 11px로 설정 */
+    font-size: 12px; /* 푸터 폰트 크기를 11px로 설정 */
 }
 .footer-column {
     flex: 1;
@@ -50,7 +50,7 @@ footer {
     text-align: center;
     padding: 10px 0;
     background-color: #f1f1f1;
-    width: 100%;
+    width: 100% !important;
     font-size: 11px; /* 하단 링크 폰트 크기를 11px로 설정 */
 }
 .footer .bottom-links a {
@@ -62,9 +62,10 @@ footer {
 .footer .bottom-links a:hover {
     text-decoration: underline;
 }
+
 </style>
 </head>
-<body>
+<body id="footer-body">
  <footer>
     <div class="footer-column">
         <h3 class="bold">C/S CENTER</h3>
@@ -79,12 +80,12 @@ footer {
     </div>
     <div class="footer-column">
         <img src="/images/logo.png" alt="GOPEOPLE 로고" style="width: 100px;">
-        <p>COMPANY. 주식회사 무디핏</p>
+        <p class="bold">COMPANY. 주식회사 무디핏</p>
         <p>OWNER. 96&97s</p>
         <p>TEL. 041-579-3720</p>
         <p>ADDRESS. 13561 경기 성남시 분당구 정자일로 95</p>
         <p>BUSINESS LICENSE. 720-88-00965</p>
-        <p>ONLINE ORDER LICENSE. 제 2018-부산-0990 호 [사업자정보확인]</p>
+        <p>ONLINE ORDER LICENSE. 제 2024-부산-0990 호 [사업자정보확인]</p>
         <p>CHIEF PRIVACY OFFICER. 96&97s</p>
         <p>E-MAIL. e8014@naver.com</p>
         <p>HOSTING BY 카페24(주)</p>
@@ -101,10 +102,6 @@ footer {
  </footer>
  <div class="bottom-links">
     <a href="/">홈으로</a>
-    <a href="/company">회사소개</a>
-    <a href="/terms">이용약관</a>
-    <a href="/privacy">개인정보처리방침</a>
-    <a href="/faq">이용안내</a>
 </div>
 </body>
 </html>

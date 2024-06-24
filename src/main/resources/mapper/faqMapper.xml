@@ -33,4 +33,17 @@
 <delete id="deleteFAQ">
     DELETE FROM cs_faq WHERE faq_idx = #{faqIdx}
      </delete>
+     
+     
+     <select id="searchFaqsById" resultType="com.mf.dto.CsFaqDto">
+        SELECT  faq_idx,
+    title
+  
+        FROM cs_faq      
+        <where>
+            <if test="searchId != null and searchId != ''">
+                title LIKE '%' || #{searchId, jdbcType=VARCHAR} || '%'
+            </if>
+        </where>
+    </select>
 </mapper>

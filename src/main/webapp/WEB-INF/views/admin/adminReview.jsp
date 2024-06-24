@@ -6,7 +6,9 @@
 <meta charset="UTF-8">
 <title>리뷰 관리</title>
 
-
+    <script src="${pageContext.request.contextPath}/scripts.js"></script>
+    <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <style>
 body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
@@ -71,6 +73,15 @@ main {
 
 <h3 class="mt-3 text-center">리뷰 관리</h3>
 <hr class="mb-3">
+<form action="${pageContext.request.contextPath}/admin/userManagement5" method="get" class="search-container">
+    <div class="form-group mb-2">
+        <label for="searchId" class="sr-only"></label>
+        <input type="text" name="searchId" id="searchId" class="form-control" placeholder="제목을 입력하세요">
+    </div>
+   <button class="header-search-btn" type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+</form>
 <div class="container mt-3">
     <div class="row">
         <div class="col-12">
@@ -87,8 +98,8 @@ main {
                 </thead>
                 <tbody>
        
-                    <c:forEach var="review" items="${reviewList}">
-                        <tr>
+                    <c:forEach var="review" items="${reviewList}" varStatus="status">
+                        <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
                             <td>${review.postingReviewIdx}</td>
                             <td>${review.title}</td>
                             <td>${review.content}</td>

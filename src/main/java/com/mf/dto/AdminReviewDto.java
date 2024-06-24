@@ -15,4 +15,6 @@ public class AdminReviewDto {
  private String content;
  private int rating;
  private Date createDate;
+ private Long postingIdx;
+ private Long personIdx;
 }

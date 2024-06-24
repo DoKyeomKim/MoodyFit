@@ -7,40 +7,69 @@
 <title>Insert title here</title>
 <style>
 #sidebar {
-	position:fixed;
-	float: left;
-	width: 200px;
-	height: auto;
-	border: 1px solid gray;
-	margin-top :60px;
+    position: fixed;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 100px;
+    height: auto;
+    border: 1px solid gray;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-left:40px;
+    font-size:10px;
+      transition: top 0.5s;
 }
+
 #sidebar nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    margin-top:30px;
-    text-align:center;
+    text-align: left;
+    
 }
 
 #sidebar nav ul li {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+  margin-left:20px;
+  margin-top:20px;
+}
+
+#sidebar nav ul li a {
+    text-decoration: none;
+    color: #867B73;
+}
+
+#sidebar nav ul li a.bold {
+    font-weight: bold;
+    font-size:12px;
 }
 </style>
 </head>
 <body>
-	<aside id="sidebar">
-		<nav>
-			<ul>
-				<li><a href="/personUpdateForm">정보 수정</a></li>
-				<li><a href="/myPage/Order">주문 정보</a></li>
-				<li><a href="/myPage/delivery">배송지 관리</a></li>
-				<li><a href="/myPage/wishList">관심상품</a></li>
-				<li><a href="/myPage/cart">장바구니</a></li>
-				<li><a href="/accountDeleteForm">회원탈퇴</a></li>
-			</ul>
-		</nav>
-	</aside>
-	
-
+    <aside id="sidebar">
+        <nav>
+            <ul>
+                <li><a href="/myPage" class="bold">마이페이지</a></li>
+                <li><a href="/personUpdateForm">정보 수정</a></li>
+                <li><a href="/myPage/Order">주문 정보</a></li>
+                <li><a href="/myPage/delivery">배송지 관리</a></li>
+                <li><a href="/myPage/wishList">관심상품</a></li>
+                <li><a href="/myPage/cart">장바구니</a></li>
+                <li><a href="/accountDeleteForm">회원탈퇴</a></li>
+            </ul>
+        </nav>
+    </aside>
+    <script>
+    window.addEventListener('scroll', function() {
+        var sidebar = document.getElementById('sidebar');
+        var scrollPosition = window.scrollY;
+        var windowHeight = window.innerHeight;
+        var sidebarHeight = sidebar.offsetHeight;
+        
+        var topPosition = scrollPosition + (windowHeight / 2) - (sidebarHeight / 2);
+        sidebar.style.top = topPosition + 'px';
+    });
+    </script>
 </body>
 </html>

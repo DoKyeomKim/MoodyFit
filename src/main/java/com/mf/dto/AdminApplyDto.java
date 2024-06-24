@@ -15,6 +15,7 @@ public class AdminApplyDto {
 	private String title;
 	private Date updateDate;
 	private String state;
+	private String id;
 
 
 	

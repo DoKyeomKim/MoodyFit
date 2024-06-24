@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mf.dto.PersonDto;
 import com.mf.dto.StoreDto;
 import com.mf.dto.UsersDto;
 import com.mf.mapper.StoreMapper;
@@ -25,6 +26,16 @@ public class StoreService {
 			storeMapper.dropUser(userIdx);
 		}
 
+		  public List<StoreDto> searchStoresById(String searchId) {
+		    	System.out.println("Searching for ID: " + searchId); // 로그 추가
+		        return storeMapper.searchStoresById(searchId);
+		    }
+
 		
 
-}
+	
+		}
+
+		
+
+

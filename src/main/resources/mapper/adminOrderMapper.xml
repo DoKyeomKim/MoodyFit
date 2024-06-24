@@ -4,22 +4,50 @@
     <select id="getAllAdminOrders">
 SELECT
     O.ORDER_IDX,
-    O.AMOUNT,
+    U.ID,
+    O.QUANTITY,
     O.DELIVERY_PRICE,
     O.TOTAL_PRICE,
     O.ORDER_DATE,
-    OD.PRICE,
-    P.NAME
+    O.PRICE,
+    D.NAME
 FROM
     ORDERS O
 JOIN
-    ORDER_DETAIL OD ON O.ORDER_DETAIL_IDX = OD.ORDER_DETAIL_IDX
+    DELIVERY D ON O.DELIVERY_IDX = D.DELIVERY_IDX
 JOIN
-    CART C ON OD.CART_IDX = C.CART_IDX
+    PERSON P ON O.PERSON_IDX = P.PERSON_IDX
 JOIN
-    PRODUCT P ON C.PRODUCT_IDX = P.PRODUCT_IDX
+    USERS U ON P.USER_IDX = U.USER_IDX
+  
+    
+    
 
     </select>
-    
+    <select id="searchOrdersById" resultType="com.mf.dto.AdminOrderDto">
+SELECT
+    O.ORDER_IDX,
+    U.ID,
+    O.QUANTITY,
+    O.DELIVERY_PRICE,
+    O.TOTAL_PRICE,
+    O.ORDER_DATE,
+    O.PRICE,
+    D.NAME
+FROM
+    ORDERS O
+JOIN
+    DELIVERY D ON O.DELIVERY_IDX = D.DELIVERY_IDX
+JOIN
+    PERSON P ON O.PERSON_IDX = P.PERSON_IDX
+JOIN
+    USERS U ON P.USER_IDX = U.USER_IDX
+
+        <where>
+            <if test="searchId != null and searchId != ''">
+                u.id LIKE '%' || #{searchId, jdbcType=VARCHAR} || '%'
+            </if>
+        </where>
+    </select>
    
 </mapper>

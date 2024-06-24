@@ -12,4 +12,8 @@ public interface AdminReviewMapper {
 
 	public List<AdminReviewDto> getAllAdminReviews();
 
+	public List<AdminReviewDto> searchReviewsById(String searchId);
+
+	public void addReview(AdminReviewDto reviewDto);
+
 	}

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -21,17 +20,18 @@ body.loaded {
     opacity: 1;
 }
 main {
-    margin-top: 50px;
+    margin-top: -200px; /* Adjust based on the height of your header */
+    padding-top: 100px; /* To ensure the content is not hidden under the header */
 }
 .image-container {
     position: relative;
     display: inline-block;
 }
-.top-cards {
-    background-color: white;
-    position: relative;
-    height: 400px;
-    overflow: hidden;
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 .overlay {
     position: absolute;
@@ -61,114 +61,130 @@ main {
     left: 0;
     width: 100%;
     height: 100%;
-    overflow:hidden;
+    overflow: hidden;
 }
 .swiper-slide {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+.light-text {
+    color: #6c757d;
+}
+
+.top-cards {
+    background-color: white;
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 1;
+}
 </style>
 </head>
 <body>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
-<main>
+<main id="main-content">
 <div class="top-cards" id="editor-picks">
-  <h2>에디터 픽 영역</h2>
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-      <c:forEach var="all" items="${all}">
-        <div class="swiper-slide">
-          <div style="text-align:center;">
-            <a href="/postingDetail?postingIdx=${all.POSTING_IDX}">
-              <div class="image-container" data-posting-idx="${all.POSTING_IDX}" data-price="${all.PRICE}" data-title="${all.TITLE}">
-                <img src="${all.FILE_PATH}" class="img-fluid" alt="Image 1" style="height: 300px; width:auto;">
-                <div class="overlay">
-                  <div class="info"></div>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <c:forEach var="all" items="${all}">
+                <div class="swiper-slide">
+                    <div style="text-align:center;">
+                        <a href="/postingDetail?postingIdx=${all.POSTING_IDX}">
+                            <div class="image-container" data-posting-idx="${all.POSTING_IDX}" data-price="${all.PRICE}" data-title="${all.TITLE}">
+                                <img src="${all.FILE_PATH}" class="img-fluid" alt="Image 1" style="width: 1920px; height:900px;">
+                                <div class="overlay">
+                                    <div class="info"></div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-              </div>
-            </a>
-          </div>
+            </c:forEach>
         </div>
-      </c:forEach>
+        <div class="swiper-pagination"></div>
     </div>
-    <div class="swiper-pagination"></div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
-  </div>
 </div>
 
 <div class="container">
-  <h2>매출 상위</h2>
+    <h4 class="bold-text">WEEKLY BEST</h4>
+    <div class="light-text">한주간 가장 인기있는 상품입니다</div>
+
 </div>
 
 <div class="container">
-  <h2>신상품</h2>
-  <div class="row">
-    <c:forEach var="recent" items="${recent}">
-      <div class="col-md-3 mt-5 mb-5" style="text-align:center;">
-        <a href="/postingDetail?postingIdx=${recent.POSTING_IDX}">
-          <div class="image-container" data-posting-idx="${recent.POSTING_IDX}" data-price="${recent.PRICE}" data-title="${recent.TITLE}" data-date="${recent.UPDATE_DATE}">
-            <img src="${recent.FILE_PATH}" class="img-fluid" alt="Image 1" style="height: 300px; width:auto;">
-            <div class="overlay">
-              <div class="info"></div>
+    <h4 class="bold-text" >NEW ARRIVALS</h4>
+    <div class="light-text">새롭게 업데이트된 상품입니다</div>
+    <div class="row">
+        <c:forEach var="recent" items="${recent}">
+            <div class="col-md-3 mt-5 mb-5" style="text-align:center;">
+                <a href="/postingDetail?postingIdx=${recent.POSTING_IDX}">
+                    <div class="image-container" data-posting-idx="${recent.POSTING_IDX}" data-price="${recent.PRICE}" data-title="${recent.TITLE}" data-date="${recent.UPDATE_DATE}">
+                        <img src="${recent.FILE_PATH}" class="img-fluid" alt="Image 1" style="height: 260px; width:334px;">
+                        <div class="overlay">
+                            <div class="info"></div>
+                        </div>
+                    </div>
+                </a>
             </div>
-          </div>
-        </a>
-      </div>
-    </c:forEach>
-  </div>
+        </c:forEach>
+    </div>
 </div>
 </main>
 <%@include file="/WEB-INF/layouts/footer.jsp"%>
 <script src="/js/bootstrap.bundle.min.js"></script>
 
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-	  const swiper = new Swiper('.swiper-container', {
-	    slidesPerView: 1,
-	    spaceBetween: 30,
-	    pagination: {
-	      el: '.swiper-pagination',
-	      clickable: true,
-	    },
-	    navigation: {
-	      nextEl: '.swiper-button-next',
-	      prevEl: '.swiper-button-prev',
-	    },
-	    loop: true,
-	    loopAdditionalSlides: 1,
-	    // 자동 넘기기 기능
-	    autoplay: {
-	      delay: 5000, //5초
-	      disableOnInteraction: false,
-	    },
-	    // 애니메이션 속도
-	    speed: 1000 
-	  });
-	});
+    const imageContainers = document.querySelectorAll('.image-container');
+
+    imageContainers.forEach(container => {
+        container.addEventListener('mouseover', function() {
+            const postingIdx = this.dataset.postingIdx;
+            const price = this.dataset.price;
+            const title = this.dataset.title;
+            const updateDate = this.dataset.date
+            const infoDiv = this.querySelector('.info');
+
+            // 가격을 파싱하여 포맷팅하는 함수
+            const formattedPrice = Number(price).toLocaleString();
+
+            infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + '원</div><div>'+updateDate+'일 출시</div>';
+        });
+    });
+});
+
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-	  const imageContainers = document.querySelectorAll('.image-container');
+    const swiper = new Swiper('.swiper-container', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        loop: true,
+        loopAdditionalSlides: 1,
+        // 자동 넘기기 기능
+        autoplay: {
+            delay: 5000, // 5초
+            disableOnInteraction: false,
+        },
+        // 애니메이션 속도
+        speed: 1000 
+    });
+});
 
-	  imageContainers.forEach(container => {
-	    container.addEventListener('mouseover', function() {
-	      const postingIdx = this.dataset.postingIdx;
-	      const price = this.dataset.price;
-	      const title = this.dataset.title;
-	      const updateDate = this.dataset.date
-	      const infoDiv = this.querySelector('.info');
-
-	      // 가격을 파싱하여 포맷팅하는 함수
-	      const formattedPrice = Number(price).toLocaleString();
-
-	      infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + '원</div><div>'+updateDate+'일 출시</div>';
-	    });
-	  });
-	});
-
+// 페이지가 로드된 후에 body에 'loaded' 클래스를 추가
+window.addEventListener('load', function() {
+    document.body.classList.add('loaded');
+});
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

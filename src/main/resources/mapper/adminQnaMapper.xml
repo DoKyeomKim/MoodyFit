@@ -76,4 +76,28 @@ JOIN
         WHERE 
             question_idx = #{questionIdx}
     </select>
+    <select id="searchQnasById" resultType="com.mf.dto.AdminQuestionDto">
+        SELECT 
+    cq.question_idx,
+    u.id,
+    cq.title,
+    cq.create_date,
+    cq.update_date,
+    cq.state
+FROM 
+    cs_question cq
+JOIN 
+    USERS u ON cq.USER_IDX = u.USER_IDX
+WHERE 
+    u.id LIKE '%' || #{searchId} || '%'
+
+    </select>
+    
+    <update id="qna1">
+    UPDATE cs_question
+    SET state = 2
+    WHERE question_idx = #{questionIdx}
+</update>
+    
+    
 </mapper>

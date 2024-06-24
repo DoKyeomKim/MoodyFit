@@ -5,7 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <title>카테고리 수정/삭제</title>
-
+    <script src="${pageContext.request.contextPath}/scripts.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <style>
 body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
@@ -101,8 +102,8 @@ main {
                 </thead>
                 <tbody>
 
-                    <c:forEach var="subcategory" items="${subcategoryList}">
-                        <tr>
+                    <c:forEach var="subcategory" items="${subcategoryList}" varStatus="status">
+                       <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
                             <td>${subcategory.subCategoryIdx }</td>
                             <td>${subcategory.korName}</td>
                             <td>${subcategory.engName}</td>

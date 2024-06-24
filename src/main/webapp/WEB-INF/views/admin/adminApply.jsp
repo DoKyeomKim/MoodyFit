@@ -6,6 +6,9 @@
 <head>
 <meta charset="UTF-8">
 <title>가맹점 공고 관리</title>
+<script src="${pageContext.request.contextPath}/scripts.js"></script>
+<script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <style>
 body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
@@ -19,8 +22,8 @@ main {
     font-size : 15px;
 }
 .table td {
-    padding: 30px; /* 셀 내부 여백 조정 */
-    margin: 30px; /* 셀 외부 여백 조정 */
+    padding: 15px; /* 셀 내부 여백 조정 */
+    margin: 15px; /* 셀 외부 여백 조정 */
 }
 .container {
     display: flex;
@@ -74,13 +77,22 @@ function confirmAction(form, message) {
 <main>
     <h3>가맹점 공고 관리</h3>
     <hr class="mb-3">
-    <div class="container mt-3">
+    <form action="${pageContext.request.contextPath}/admin/userManagement3" method="get" class="search-container">
+    <div class="form-group mb-2">
+        <label for="searchId" class="sr-only"></label>
+        <input type="text" name="searchId" id="searchId" class="form-control" placeholder="공고 제목 입력">
+    </div>
+<button class="header-search-btn" type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button></form>
+    <div class="table-container">
         <div class="row">
             <div class="col-main">
                 <table class="table table-bordered">
                     <thead class="table-secondary">
                         <tr>
                             <th>번호</th>
+                          
                             <th>제목</th>
                             <th>작성일</th>
                             <th>상태</th>
@@ -88,9 +100,11 @@ function confirmAction(form, message) {
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="apply" items="${adminApplyList}">
-                            <tr>
+                        <c:forEach var="apply" items="${adminApplyList}" varStatus="status">
+                          <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
+                        
                                 <td>${apply.postingIdx}</td>
+                             
                                 <td>${apply.title}</td>
                                 <td>${apply.updateDate}</td>
                                 <td>
