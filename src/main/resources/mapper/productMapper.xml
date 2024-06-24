@@ -53,24 +53,23 @@
 
 
 
-
-
 <select id="getProductInfosByProductIdx" resultType="com.mf.dto.ProductInfoDto">
     SELECT 
-        pi.product_info_idx,
-        pi.product_color_idx,
-        pi.product_size_idx,
-        pi.product_idx,
+        pi.product_info_idx AS productInfoIdx,
+        pi.product_color_idx AS productColorIdx,
+        pi.product_size_idx AS productSizeIdx,
+        pi.product_idx AS productIdx,
         pc.color,
         ps.sizes,
-        pq.quantity,
-        TO_CHAR(pi.update_date, 'YYYY.MM.DD') AS updateDate
+        pq.quantity
     FROM product_info pi
     LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
     LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
     LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
     WHERE pi.product_idx = #{productIdx}
 </select>
+
+
 
 <select id="getProductFilesByProductIdx" resultType="com.mf.dto.ProductFileDto">
     SELECT 

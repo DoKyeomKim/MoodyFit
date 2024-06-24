@@ -59,29 +59,31 @@
 				    <table class="table" id="productInfoTable">
 				        <thead>
 				            <tr>
-					            <th>색상</th>
-					            <th>사이즈</th>
-					            <th>재고</th>
+				                <th>색상</th>
+				                <th>사이즈</th>
+				                <th>재고</th>
 				            </tr>
 				        </thead>
 				        <tbody>
 				            <c:forEach var="info" items="${productInfos}">
-										    <tr>
-									        <td>${info['color']}</td>
-									        <td>${info['sizes']}</td>
-									        <td>
-								            <input type="number" name="productInfos[${info['productInfoIdx']}].quantity" value="${info['quantity']}" class="form-control">
-								            <input type="hidden" name="productInfos[${info['productInfoIdx']}].colorIdx" value="${info['productColorIdx']}">
-								            <input type="hidden" name="productInfos[${info['productInfoIdx']}].sizeIdx" value="${info['productSizeIdx']}">
-								            <c:if test="${info['quantity'] == 0}">
-								                <span class="badge badge-danger">품절</span>
-								            </c:if>
-									        </td>
-										    </tr>
-										</c:forEach>
+				                <tr>
+				                    <td>${info['color']}</td>
+				                    <td>${info['sizes']}</td>
+				                    <td>
+				                        <input type="number" name="productInfos[${info['productInfoIdx']}].quantity" value="${info['quantity']}" class="form-control">
+				                        <input type="hidden" name="productInfos[${info['productInfoIdx']}].colorIdx" value="${info['productColorIdx']}">
+				                        <input type="hidden" name="productInfos[${info['productInfoIdx']}].sizeIdx" value="${info['productSizeIdx']}">
+				                        <c:if test="${info['quantity'] == 0}">
+				                            <span class="badge badge-danger">품절</span>
+				                        </c:if>
+				                    </td>
+				                </tr>
+				            </c:forEach>
 				        </tbody>
 				    </table>
 				</div>
+
+
 
 				
 				<div class="form-group">
