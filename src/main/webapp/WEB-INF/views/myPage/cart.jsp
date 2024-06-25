@@ -25,7 +25,7 @@ main {
         <c:choose>
             <c:when test="${empty cartList}">
                 <div style="text-align: center; margin-top: 50px;">
-                    <h3 style="margin:100px 30px;">장바구니가 비어있습니다.</h3>
+                    <h3 style="margin:100px 30px;">장바구니가 비어있습니다.z</h3>
                     <hr>
                 </div>
                 <div style="text-align : right; margin-right:20px;">
