@@ -1,7 +1,8 @@
 package com.mf.controller;
 
-import java.io.File;
-import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -514,6 +515,7 @@ public class AdminController {
 	   public ModelAndView editorPick() {
 		   ModelAndView mv = new ModelAndView();
 		   
+		   // 에디터픽 리스트 갖고오기
 		   List<Map<String,Object>> editorPick = editorPickService.getEditorPick();
 		   
 		   mv.addObject("editorPick", editorPick);
@@ -535,17 +537,57 @@ public class AdminController {
 		   return mv;
 	   }
 	   
+	   // 에디터 픽 작성
 	   @PostMapping("/EPWrite")
 	   public ModelAndView EPWrite(@RequestParam("file") MultipartFile file, EditorPickDto editorPick) {
 		   ModelAndView mv = new ModelAndView();
-
+		   // 에디터픽 작성 로직
 		   editorPickService.writeEditorPick(editorPick,file);
 		   
 		   mv.setViewName("redirect:/adminEditorPick");
 		   return mv;
 	   }
 	   
-	   
+	   // 에디터 픽 수정 페이지
+	   @GetMapping("/EPEditForm")
+	   public ModelAndView EPEditForm(@RequestParam("pickIdx") Long pickIdx,EditorPickDto editorPick) throws ParseException {
+		   ModelAndView mv = new ModelAndView();
+		   
+		   Map<String,Object> editPick = editorPickService.getEditPickByPickIdx(pickIdx,editorPick);
+		   
+		    // 시간 설정을 위한 맵 밖으로 빼내기
+		    editorPick = (EditorPickDto) editPick.get("editorPick");
+		    String startDate = editorPick.getStartDate();
+		    String endDate = editorPick.getEndDate();
+		    
+		    // 날짜 형식 변환
+		    SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		    SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd");
+		    
+		    Date startDateParsed = originalFormat.parse(startDate);
+		    Date endDateParsed = originalFormat.parse(endDate);
+		    
+		    String formattedStartDate = targetFormat.format(startDateParsed);
+		    String formattedEndDate = targetFormat.format(endDateParsed);
+
+		    
+		   mv.addObject("startDate",formattedStartDate);
+		   mv.addObject("endDate",formattedEndDate);
+		   mv.addObject("editorPick",editPick.get("editorPick"));
+		   mv.addObject("postingInfo",editPick.get("postingInfo"));
+		   mv.addObject("editPick", editPick);
+		   mv.setViewName("admin/editorPickEdit");
+		   return mv;
+	   }
 	  
+	   @PostMapping("/EPEdit")
+	   public ModelAndView EPEdit(@RequestParam("file") MultipartFile file,EditorPickDto editorPick) {
+		   ModelAndView mv = new ModelAndView();
+		   
+		   editorPickService.editorPickUpdate(file,editorPick);
+		   
+		   mv.setViewName("redirect:/adminEditorPick");
+		   return mv;
+	   }
 	   
 }

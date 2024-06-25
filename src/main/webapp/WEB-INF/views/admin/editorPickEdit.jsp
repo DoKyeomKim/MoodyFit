@@ -9,6 +9,7 @@
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <style>
+/* CSS styles */
 body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
 }
@@ -77,27 +78,33 @@ table.editor-pick-table tr.posting-info:active {
 </div>
 
 <main>
-<form action="/EPWrite" method="POST" enctype="multipart/form-data">
+<form id="editForm" action="/EPEdit" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="pickIdx" value="${editorPick.pickIdx}">
+    <input type="hidden" id="initialPostingIdx" name="initialPostingIdx" value="${postingInfo.POSTING_IDX}">
     <div id="main-area">
-        <h2>에디터 픽 작성페이지</h2>
+        <h2>에디터 픽 수정페이지</h2>
         <div id="selected-posting" class="selected-posting">
             <h4>선택된 공고 정보</h4>
-            <input type="hidden" value=""  id="postingIdx" name="postingIdx">
-            <p>공고번호: <span id="selected-posting-idx"></span></p>
-            <p>공고명: <span id="selected-posting-title"></span></p>
-            <p>가맹점명: <span id="selected-posting-store"></span></p>
+            <input type="hidden" value="" id="postingIdx" name="postingIdx">
+            <p>공고번호: <span id="selected-posting-idx">${postingInfo.POSTING_IDX}</span></p>
+            <p>공고명: <span id="selected-posting-title">${postingInfo.TITLE}</span></p>
+            <p>가맹점명: <span id="selected-posting-store">${postingInfo.STORE_NAME}</span></p>
+            <!-- 버튼 타입을 button으로 변경 -->
             <button type="button" id="pick-posting" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pickModal">공고 선택</button>
         </div>
         <div class="preview-area"> 
-            <img src="#" id="imagePreview" style="height:450px; width:910px;" class="imagePreview">
+            <img src="${editorPick.filePath}" id="imagePreview" style="height:450px; width:910px;" class="imagePreview">
         </div>
         <div class="file-area">
-            <input type="file" name="file" id="uploadInput" onchange="previewImage()" required>
+            <input type="file" name="file" id="uploadInput" onchange="previewImage()">
         </div>
         <div class="posting-date">
-            <input type="date" name="startDate" required> ~ <input type="date" name="endDate" required>
+            <input type="date" name="startDate" value="${startDate}" required> ~ <input type="date" name="endDate" value="${endDate}" required>
         </div>
-		<button type="submit" class="btn btn-primary">등록하기</button>
+        <div>
+            <button type="submit" class="btn btn-primary">수정하기</button>
+            <a href="/adminEditorPick" class="btn btn-secondary">목록으로</a>
+        </div>
     </div>
 </form>
 </main>
@@ -118,7 +125,8 @@ table.editor-pick-table tr.posting-info:active {
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="posting" items="${posting}">    
+                <!-- posting 변수로 forEach 반복 -->
+                <c:forEach var="posting" items="${posting}">
                     <tr class="posting-info">
                         <td>${posting.POSTING_IDX}</td>
                         <td>${posting.TITLE}</td>
@@ -151,30 +159,42 @@ function previewImage() {
 }
 
 window.onload = function() {
-    var today = new Date();
-    var year = today.getFullYear();
-    var month = ('0' + (today.getMonth() + 1)).slice(-2);
-    var day = ('0' + today.getDate()).slice(-2);
-    var formattedDate = year + '-' + month + '-' + day;
-    
-    document.querySelector('input[name="startDate"]').value = formattedDate;
 
-    // tr 클릭 이벤트 추가
+    // "공고 선택" 버튼 클릭 시 모달 열기
+    document.getElementById('pick-posting').addEventListener('click', function() {
+        var modal = new bootstrap.Modal(document.getElementById('pickModal'));
+        modal.show();
+    });
+
+    // 테이블에서 공고 선택 시 처리
     document.querySelectorAll('.posting-info').forEach(function(row) {
         row.addEventListener('click', function() {
             var postingIdx = this.cells[0].innerText;
             var postingTitle = this.cells[1].innerText;
             var postingStore = this.cells[2].innerText;
 
+            // 선택된 공고 정보 업데이트
             document.getElementById('postingIdx').value = postingIdx;
             document.getElementById('selected-posting-idx').innerText = postingIdx;
             document.getElementById('selected-posting-title').innerText = postingTitle;
             document.getElementById('selected-posting-store').innerText = postingStore;
+            document.getElementById('initialPostingIdx').value = postingIdx; // 초기값 업데이트
 
             // 모달 닫기
             var modal = bootstrap.Modal.getInstance(document.getElementById('pickModal'));
             modal.hide();
         });
+    });
+
+    // 폼 제출 시 초기 postingIdx 값이 변경되지 않았을 경우 처리
+    document.getElementById('editForm').addEventListener('submit', function() {
+        var initialPostingIdx = document.getElementById('initialPostingIdx').value;
+        var currentPostingIdx = document.getElementById('postingIdx').value;
+
+        if (currentPostingIdx === '') {
+            // 선택된 postingIdx가 없을 경우 초기값 사용
+            document.getElementById('postingIdx').value = initialPostingIdx;
+        }
     });
 };
 </script>

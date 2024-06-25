@@ -52,7 +52,7 @@ main {
                         <td>${editorPick.STORE_NAME}</td>
                         <td class="start-date">${editorPick.START_DATE}</td>
             			<td class="end-date">${editorPick.END_DATE}</td>
-                        <td><a href="#" class="btn btn-primary" style="margin-right:5px;">수정</a><a href="#" class="btn btn-danger">삭제</a></td>
+                        <td><a href="/EPEditForm?pickIdx=${editorPick.PICK_IDX}" class="btn btn-primary" style="margin-right:5px;">수정</a><a href="#" class="btn btn-danger">삭제</a></td>
                     </tr>
                 </c:forEach>
             </tbody>
