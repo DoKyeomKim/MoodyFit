@@ -21,4 +21,5 @@ public class PersonDto {
 	private String social;
 	private String socialRoot;
 	private int state;
+	private String id;
 }

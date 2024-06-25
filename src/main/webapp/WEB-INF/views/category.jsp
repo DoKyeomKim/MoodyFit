@@ -8,8 +8,10 @@
 <title>카테고리 - ${categoryEngName}</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <style>
+
 .cateDefault {
 	text-align: center;
+	background-color :#fafafa;
 }
 
 .subCateDefault {
@@ -23,23 +25,24 @@
 }
 
 .subCateDefault a:hover {
-	color: grey;
+	color: gray;
 }
 
 .card {
-	border: 1px solid #ddd;
+	border: none !important; /* Added !important to override other styles */
 	border-radius: 4px;
 	padding: 15px;
 	text-align: center;
 }
 </style>
 </head>
-<body>
+<body style="margin-top:70px;">
 	<%@include file="/WEB-INF/layouts/header.jsp"%>
 	<br>
 	<br>
-	<div class="cateDefault">
+	<div class="cateDefault" >
 		<h3>${categoryEngName}</h3>
+		Best Item<br></br>
 	</div>
 	<input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
 	<div class="subCateDefault">
@@ -51,7 +54,7 @@
 			</a>
 		</c:forEach>
 	</div>
-
+여기 필터링 기능 추가 화면 오른쪽에 버튼기능으로 일렬로 
 	<main>
 		<div class="container">
 			<div class="row">

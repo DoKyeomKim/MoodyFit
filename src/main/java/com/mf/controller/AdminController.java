@@ -10,9 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mf.dto.AdminAnswerDto;
@@ -26,6 +28,7 @@ import com.mf.dto.CsQnaDto;
 import com.mf.dto.PersonDto;
 import com.mf.dto.StoreDto;
 import com.mf.dto.SubCategoryDto;
+import com.mf.mapper.PostingMapper;
 import com.mf.service.AdminApplyService;
 import com.mf.service.AdminOrderService;
 import com.mf.service.AdminQnaService;
@@ -130,7 +133,12 @@ public class AdminController {
 		        return "redirect:/adminCategoryUpdate"; 
 		    }
 
-		
+		 @PostMapping("/admin/qna1")
+		 public String qna1(@RequestParam("questionIdx") Long questionIdx) {
+		     adminQnaService.qna1(questionIdx);
+		     return "redirect:/adminQnA";
+		 }
+
 
 	   
 	 //가맹점 회원 탈퇴
@@ -151,10 +159,95 @@ public class AdminController {
 		        adminApplyService.updateStatus(postingIdx, state);
 		        return "redirect:/adminApply";
 		    }
-		
-		
-		
-	
+		  @RequestMapping("/admin/paging")
+		    public String getPersons(@RequestParam(defaultValue = "1") int page, Model model) {
+		        int recordsPerPage = 10;
+		        int offset = (page - 1) * recordsPerPage;
+
+		        List<PersonDto> personList = personService.getPersons(offset, recordsPerPage);
+		        int noOfRecords = personService.getNoOfRecords();
+		        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+
+		        model.addAttribute("personList", personList);
+		        model.addAttribute("noOfPages", noOfPages);
+		        model.addAttribute("currentPage", page);
+
+		        return "adminPuser";
+		    }
+		  //개인회원 검색
+		  @GetMapping("/admin/userManagement")
+		    public String userManagement(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<PersonDto> personList = personService.searchUsersById(searchId);
+		        model.addAttribute("personList", personList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminPuser";
+		    }
+		  
+		  //가맹점회원 검색
+		  @GetMapping("/admin/userManagement2")
+		    public String cManagement(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<StoreDto> storeList = storeService.searchStoresById(searchId);
+		        model.addAttribute("storeList", storeList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminCuser";
+		    }
+		  
+		  
+		  //공고 검색
+		  @GetMapping("/admin/userManagement3")
+		    public String applySearch(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<AdminApplyDto> adminApplyList = adminApplyService.searchApplysById(searchId);
+		        model.addAttribute("adminApplyList", adminApplyList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminApply";
+		    }
+		  //Q&A검색
+		  @GetMapping("/admin/userManagement4")
+		    public String qnaSearch(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<AdminQuestionDto> AdminqnaList = adminQnaService.searchQnasById(searchId);
+		        model.addAttribute("AdminqnaList", AdminqnaList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminQnA";
+		    }
+		//Q&A검색
+		  @GetMapping("/admin/userManagement5")
+		    public String reviewSearch(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<AdminReviewDto> reviewList = adminReviewService.searchReviewsById(searchId);
+		        model.addAttribute("reviewList", reviewList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminReview";
+		    }
+		  
+		//주문내역검색
+		  @GetMapping("/admin/userManagement6")
+		    public String orderSearch(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<AdminOrderDto> adminOrderList = adminOrderService.searchOrdersById(searchId);
+		        model.addAttribute("adminOrderList", adminOrderList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminOrder";
+		    }
+		  
+		  @GetMapping("/admin/userManagement7")
+		    public String faqSearch(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<AdminQuestionDto> faqList = faqService.searchFaqsById(searchId);
+		        model.addAttribute("faqList", faqList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/faq";
+		    }
 
 		
 	//판매수익 페이지
@@ -178,6 +271,28 @@ public class AdminController {
 	    public ModelAndView adminFAQwrite() {
 	        ModelAndView mv = new ModelAndView("adminFAQWrite");
 	        mv.setViewName("/admin/adminFAQWrite");
+	        return mv;
+	    }
+//	    //리뷰 작성 페이지
+//	    @PostMapping("/admin/reviewWrite")
+//	    public String addReview(@ModelAttribute("reviewDto") AdminReviewDto reviewDto,MultipartFile file) {
+////	        adminReviewService.file();
+//	    	adminReviewService.addReview(reviewDto); // FAQ 서비스를 통해 FAQ 추가
+//	        
+//	        return "redirect:/"; // FAQ 목록 페이지로 리다이렉트 
+//	    }
+
+	    @RequestMapping("/reviewWrite")
+	    public ModelAndView reviewWrite() {
+	        ModelAndView mv = new ModelAndView("reviewWrite");
+	        mv.setViewName("/admin/reviewWrite");
+	        return mv;
+	    }
+	    
+	    @RequestMapping("/review")
+	    public ModelAndView review() {
+	        ModelAndView mv = new ModelAndView("review");
+	        mv.setViewName("/admin/review");
 	        return mv;
 	    }
 	
@@ -388,4 +503,9 @@ public class AdminController {
 		   System.out.println(AdminOrderList);		
 		   return mv;
 }
+	   
+	   
+	   
+	  
+	   
 }

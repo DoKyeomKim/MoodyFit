@@ -15,4 +15,6 @@ public interface StoreMapper {
 
 	void dropUser(Long userIdx);
 
+	List<StoreDto> searchStoresById(String searchId);
+
 }

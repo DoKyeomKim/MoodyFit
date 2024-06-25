@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <title>FAQ 관리</title>
+    <script src="${pageContext.request.contextPath}/scripts.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <style>
 body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
@@ -103,8 +105,8 @@ main {
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="faq" items="${faqList}">
-                        <tr>
+                    <c:forEach var="faq" items="${faqList}" varStatus="status">
+                        <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
                             <td>${faq.faqIdx}</td>
                             <td>${faq.title}</td>
                             <td>${faq.content}</td>

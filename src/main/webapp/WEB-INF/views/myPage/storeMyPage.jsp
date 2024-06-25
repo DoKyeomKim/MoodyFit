@@ -73,13 +73,14 @@ main {
 
 </head>
 <body>
-	<%@include file="/WEB-INF/layouts/header.jsp"%>
+	<%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
 	<%@include file="/WEB-INF/layouts/storeAside.jsp"%>
 
-	<h5 style="text-align: center; margin-top: 50px;">${store.storeName} 님 반갑습니다.</h5>
+
+	    <main style="margin-top: 70px;">
+	    	<h5 style="text-align: center; margin-top: 50px;">${store.storeName} 님 반갑습니다.</h5>
 		<hr>
 			
-	    <main style="margin-top: 70px;">
         <div class="status">
             <div class="status-box">
                 <h3>

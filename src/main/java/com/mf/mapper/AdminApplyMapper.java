@@ -11,4 +11,6 @@ public interface AdminApplyMapper {
 	List<AdminApplyDto> getAllAdminApplys();
 
 	void updateStatus(@Param("postingIdx") Long postingIdx, @Param("state") String state);
+
+	List<AdminApplyDto> searchApplysById(String searchId);
 	}

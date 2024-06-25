@@ -15,5 +15,9 @@ public class AdminOrderService {
 	 public List<AdminOrderDto> getAllAdminOrders() {
 	        return adminOrderMapper.getAllAdminOrders();
 	}
+	public List<AdminOrderDto> searchOrdersById(String searchId) {
 
-}
+		return adminOrderMapper.searchOrdersById(searchId);
+	}
+
+	}

@@ -44,4 +44,15 @@ public class AdminQnaService {
 	    public List<AdminAnswerDto> getAnswersByQuestionIdx(Long questionIdx) {
 	        return adminQnaMapper.getAnswersByQuestionIdx(questionIdx);
 	    }
+
+		public List<AdminQuestionDto> searchQnasById(String searchId) {
+			
+			return adminQnaMapper.searchQnasById(searchId);
+		}
+
+		 public int qna1(Long questionIdx) {
+		        return adminQnaMapper.qna1(questionIdx);
+		    }
+
+		
 }

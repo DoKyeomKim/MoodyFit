@@ -6,7 +6,9 @@
 <meta charset="UTF-8">
 <title>주문내역 관리</title>
 
-
+    <script src="${pageContext.request.contextPath}/scripts.js"></script>
+    <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <style>
 body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
@@ -72,13 +74,23 @@ main {
 <input type="hidden" value="{user_idx}" id="userIdx">
 <h3 class="mt-3 text-center">주문내역 관리</h3>
 <hr class="mb-3">
+<form action="${pageContext.request.contextPath}/admin/userManagement6" method="get" class="search-container">
+    <div class="form-group mb-2">
+        <label for="searchId" class="sr-only"></label>
+        <input type="text" name="searchId" id="searchId" class="form-control" placeholder="아이디를 입력하세요">
+    </div>
+    <button class="header-search-btn" type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+</form>
 <div class="container mt-3">
     <div class="row">
         <div class="col-12">
             <table class="table table-bordered">
                 <thead class="table-secondary">
-                    <tr>
+                  <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
                         <th>번호</th>
+                        <th>아이디</th>
                         <th>상품명</th>
                         <th>주문수량</th>
                         <th>상품가격</th>
@@ -90,9 +102,10 @@ main {
                 </thead>
                 <tbody>
            
-                    <c:forEach var="order" items="${adminOrderList}">
-                        <tr>
+                    <c:forEach var="order" items="${adminOrderList}" varStatus="status">
+                        <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
                             <td>${order.orderIdx}</td>
+                            <td>${order.id}</td>
                             <td>${order.name}</td>
                             <td>${order.amount}</td>
                             <td>${order.price}</td>

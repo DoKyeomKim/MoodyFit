@@ -6,6 +6,8 @@
 
 
     <title>FAQ 등록</title>
+        <script src="${pageContext.request.contextPath}/scripts.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 
 <style>
        /* 전체 페이지 스타일 */

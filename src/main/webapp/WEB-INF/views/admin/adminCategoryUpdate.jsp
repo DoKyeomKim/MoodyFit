@@ -5,7 +5,9 @@
 <head>
 <meta charset="UTF-8">
 <title>카테고리 수정/삭제</title>
-
+<script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/scripts.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <style>
 body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
@@ -19,8 +21,8 @@ main {
     font-size : 15px;
 }
 .table td {
-    padding: 30px; /* 셀 내부 여백 조정 */
-    margin: 30px; /* 셀 외부 여백 조정 */
+    padding: 15px; /* 셀 내부 여백 조정 */
+    margin: 15px; /* 셀 외부 여백 조정 */
 }
 .container {
     display: flex;
@@ -74,7 +76,7 @@ main {
     <%@include file="/WEB-INF/layouts/adminsidebar.jsp"%>
 </div>
 <main> 
-<div class="container">
+<div class="container" >
     <div class="mt-3">
         <h3 class="text-center">상위 카테고리 관리</h3>
     </div>
@@ -88,10 +90,10 @@ main {
 </div>       
             
 <hr class="mb-3">
-<div class="container mt-3">
+<div class="table-container">
     <div class="row">
         <div class="col-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered" >
                 <thead class="table-secondary">
                     <tr>
                         <th>번호</th>
@@ -101,8 +103,8 @@ main {
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="category" items="${categoryList}">
-                        <tr>
+                    <c:forEach var="category" items="${categoryList}" varStatus="status">
+                         <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
                             <td>${category.categoryIdx }</td>
                             <td>${category.korName}</td>
                             <td>${category.engName}</td>

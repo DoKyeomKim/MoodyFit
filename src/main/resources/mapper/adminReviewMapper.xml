@@ -12,7 +12,37 @@
         ORDER BY POSTING_REVIEW_IDX ASC
                
     </select>
-    
-
-  
+    <select id="searchReviewsById" resultType="com.mf.dto.AdminReviewDto">
+        SELECT  POSTING_REVIEW_IDX,
+    title,
+    content,
+    rating,
+    create_date
+        FROM POSTING_REVIEW       
+        <where>
+            <if test="searchId != null and searchId != ''">
+                title LIKE '%' || #{searchId, jdbcType=VARCHAR} || '%'
+            </if>
+        </where>
+    </select>
+  <insert id="addReview" parameterType="com.mf.dto.AdminReviewDto">
+        INSERT INTO posting_review  (
+        posting_review_idx,
+        title,
+        content,
+        rating,
+        create_date,
+        person_idx,
+        posting_idx 
+        VALUES (        
+        posting_review_seq.NEXTVAL,
+        #{title},
+         #{content},
+         #{rating},
+         default,
+         #{personIdx},
+         #{postingIdx}
+         )
+    </insert>
+<!--   <insert id="add" -->
     </mapper>

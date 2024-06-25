@@ -19,4 +19,5 @@ public class AdminOrderDto {
 	    private double price;
 	    private String name;	    
 	    private Long orderDetailIdx;
+	    private String id;
 }

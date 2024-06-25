@@ -19,7 +19,7 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    background: transparent; /* 헤더 배경 투명하게 설정 */
+    background: #FFFFFF; /* 헤더 배경 투명하게 설정 */
     z-index: 1000;
     transition: background 0.3s ease, box-shadow 0.3s ease; /* 애니메이션 추가 */
 }
@@ -101,7 +101,7 @@ body {
     margin-right: 30px;
     font-size: 14px; /* 폰트 사이즈 */
     font-family: Arial, sans-serif; /* 글씨체 */
-    color: black;
+    color: #867B73;
     text-decoration: none;
     transition: color 0.3s ease; /* 애니메이션 추가 */
 }
@@ -143,8 +143,6 @@ main {
 </style>
 </head>
 <body>
-
-
     <div class="fixed-header">
         <div class="header-container">
             <div class="logo-img">
@@ -175,7 +173,7 @@ main {
 
                 <!-- COMMUNITY 드롭다운 버튼 추가 -->
                 <div class="dropdown ms-3">
-                    <a class="nav-link dropdown-toggle" href="#" id="communityDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="" id="communityDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         COMMUNITY
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="communityDropdown">
@@ -219,7 +217,7 @@ main {
             </nav>
         </div>
     </div>
-
+<script src="/js/bootstrap.bundle.min.js"></script>
     <script>
 
     document.querySelector('.header-search-box').addEventListener('submit', function(event) {

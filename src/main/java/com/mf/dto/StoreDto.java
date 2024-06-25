@@ -19,5 +19,6 @@ public class StoreDto {
 	private String detailAddress;
 	private Long userIdx;
 	private int state;
+	private String id;
 
 }

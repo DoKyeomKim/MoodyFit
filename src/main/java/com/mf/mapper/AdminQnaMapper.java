@@ -29,9 +29,18 @@ public interface AdminQnaMapper {
 
 
 	void insertAnswer(AdminAnswerDto answerDto);
+
+
+	List<AdminQuestionDto> searchQnasById(String searchId);
+
+
+
+	    int qna1(Long questionIdx);
+	}
+
 	
 			
-		}
+		
 
 	
 
