@@ -1,5 +1,7 @@
 package com.mf.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,15 +26,16 @@ import com.mf.dto.AdminReviewDto;
 import com.mf.dto.CategoryDto;
 import com.mf.dto.CsFaqDto;
 import com.mf.dto.CsQnaDto;
+import com.mf.dto.EditorPickDto;
 import com.mf.dto.PersonDto;
 import com.mf.dto.StoreDto;
 import com.mf.dto.SubCategoryDto;
-import com.mf.mapper.PostingMapper;
 import com.mf.service.AdminApplyService;
 import com.mf.service.AdminOrderService;
 import com.mf.service.AdminQnaService;
 import com.mf.service.AdminReviewService;
 import com.mf.service.CategoryService;
+import com.mf.service.EditorPickService;
 import com.mf.service.FAQService;
 import com.mf.service.PersonService;
 import com.mf.service.StoreService;
@@ -63,6 +65,8 @@ public class AdminController {
 	private AdminOrderService adminOrderService;
 	@Autowired
 	private AdminApplyService adminApplyService;
+	@Autowired
+	private EditorPickService editorPickService;
  
 	   
    //관리자 메인페이지
@@ -502,8 +506,77 @@ public class AdminController {
 		   mv.setViewName("/admin/adminOrder");
 		   System.out.println(AdminOrderList);		
 		   return mv;
-}
+	   }
 	   
+	   
+	   // 에디터 픽 이동
+	   @GetMapping("/adminEditorPick")
+	   public ModelAndView editorPick() {
+		   ModelAndView mv = new ModelAndView();
+		   
+		   List<Map<String,Object>> editorPick = editorPickService.getEditorPick();
+		   
+		   mv.addObject("editorPick", editorPick);
+		   mv.setViewName("admin/editorPick");
+		   return mv;
+	   }
+	   
+	   // 에디터 픽 작성 페이지 이동
+	   @GetMapping("/EPWriteForm")
+	   public ModelAndView EPWriteForm() {
+		   ModelAndView mv = new ModelAndView();
+		   // 임시용 전부 들고 오는 로직
+		   List<Map<String,Object>> posting = editorPickService.getAllPosting();
+		   
+		   
+		   
+		   mv.addObject("posting", posting);
+		   mv.setViewName("admin/editorPickWrite");
+		   return mv;
+	   }
+	   
+	   @PostMapping("/EPWrite")
+	   public ModelAndView EPWrite(@RequestParam("file") MultipartFile file, EditorPickDto editorPick) {
+		   ModelAndView mv = new ModelAndView();
+		   
+		   
+		    //사진 파일 이름
+			String fileName = file.getOriginalFilename();
+			// 암호환 파일 이름 중복방지(그냥 시간 앞에 붙임)
+			String fileNameScret = System.currentTimeMillis() + "_" + fileName;
+
+			String filePath = "C:/dev/" + fileNameScret;
+			Long fileSize = file.getSize();
+			// 파일 해당 위치에 저장
+			File dest = new File("C:/dev/images/"+fileNameScret);
+			// 만약 해당 위치에 폴더가 없으면 생성
+			if (!dest.exists()) {
+				dest.mkdirs();
+	        }
+			
+			try {
+				// 파일을 지정된 경로로 저장
+				file.transferTo(dest);
+
+				// 데이터베이스에 저장할 이미지 경로 설정
+				editorPick.setFilePath("/images/" + fileNameScret);
+				editorPick.setOriginalName(fileName);
+				editorPick.setFileSize(fileSize);
+				// 이후 데이터베이스에 저장(경로로 저장)
+
+				editorPickService.writeEditorPick(editorPick);
+
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+				mv.addObject("error", "파일 업로드 실패.");
+				mv.setViewName("admin/editorPickWrite");
+				return mv;
+			}
+		   
+		   
+		   mv.setViewName("redirect:/adminEditorPick");
+		   return mv;
+	   }
 	   
 	   
 	  

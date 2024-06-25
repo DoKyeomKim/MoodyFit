@@ -64,11 +64,11 @@ public class MainController {
 		    }
 		}
 		
-        List<Map<String, Object>> all = result.get("all");
+        List<Map<String, Object>> edtiorPick = result.get("edtiorPick");
         List<Map<String, Object>> recent = result.get("recent");
         
 		
-		mv.addObject("all", all);
+		mv.addObject("edtiorPick", edtiorPick);
 		mv.addObject("recent", recent);
 		mv.setViewName("/main");
 		return mv;
