@@ -9,34 +9,57 @@
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <style>
-body {
-    font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
-}
+
 main {
-    width: 90%;
-    background-color: #fff;
+    max-width: 960px;
+    margin: 20px auto;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    font-size: 15px;
 }
-#main-area {
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.selected-posting {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+}
+
+.preview-area {
     text-align: center;
+    margin-bottom: 20px;
 }
-.preview-area, #uploadInput, .posting-date {
-    margin: 20px 0;
+
+.file-area {
+    margin-bottom: 20px;
 }
-.modal-dialog {
-    max-width: 80%;
+
+.posting-date {
+    margin-bottom: 20px;
 }
-.modal-body {
-    overflow-x: auto;
+.btn {
+    display: block;
+    margin: 0 auto;
 }
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
 table.editor-pick-table {
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
     border: 1px solid #dee2e6;
     border-collapse: collapse;
+    margin-top: 10px;
 }
 
 table.editor-pick-table th, table.editor-pick-table td {
@@ -55,18 +78,47 @@ table.editor-pick-table tr:nth-child(even) {
 
 table.editor-pick-table tr.posting-info:hover {
     cursor: pointer;
-    background-color: #e9ecef; /* 배경색 어두워짐 */
+    background-color: #e9ecef; /* 호버 배경색 */
 }
 
 table.editor-pick-table tr.posting-info:active {
     transform: translateY(1px); 
 }
-.selected-posting {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #dee2e6;
+
+.modal-content {
+    background-color: #fff;
+    border: none;
     border-radius: 5px;
-    background-color: #f8f9fa;
+    width: 100%; /* 모달 너비에 맞게 조정 */
+    max-width: 100%; /* 너무 커질 경우 최대 너비 제한 */
+}
+.file-area {
+    position: relative;
+    width: fit-content;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.file-area input[type=file] {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-area .btn2 {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.file-area .selectedFileName {
+    margin-left: 10px;
+    font-size: 14px;
 }
 </style>
 </head>
@@ -91,9 +143,11 @@ table.editor-pick-table tr.posting-info:active {
         <div class="preview-area"> 
             <img src="#" id="imagePreview" style="height:450px; width:910px;" class="imagePreview">
         </div>
-        <div class="file-area">
-            <input type="file" name="file" id="uploadInput" onchange="previewImage()" required>
-        </div>
+		<div class="file-area">
+		    <label for="uploadInput" class="btn2">이미지 업로드</label>
+		    <input type="file" name="file" id="uploadInput" onchange="previewImage()" required>
+		    <span id="selectedFileName" class="selectedFileName"></span>
+		</div>
         <div class="posting-date">
             <input type="date" name="startDate" required> ~ <input type="date" name="endDate" required>
         </div>
@@ -102,8 +156,8 @@ table.editor-pick-table tr.posting-info:active {
 </form>
 </main>
 <div class="modal fade" id="pickModal" tabindex="-1" aria-labelledby="pickModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+  <div class="modal-dialog modal-dialog-centered modal-xl"> <!-- modal-xl로 변경 -->
+    <div class="modal-content overflow-auto">
       <div class="modal-header">
         <h5 class="modal-title" id="pickModalLabel">공고 선택</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -138,15 +192,17 @@ table.editor-pick-table tr.posting-info:active {
 function previewImage() {
     const fileInput = document.getElementById('uploadInput');
     const imagePreview = document.getElementById('imagePreview');
+    const selectedFileName = document.getElementById('selectedFileName');
     
     if (fileInput.files && fileInput.files[0]) {
         const reader = new FileReader();
 
         reader.onload = function(e) {
             imagePreview.src = e.target.result;
+            selectedFileName.textContent = fileInput.files[0].name;
         }
 
-        reader.readAsDataURL(fileInput.files[0]); // 파일을 읽어 데이터 URL로 변환
+        reader.readAsDataURL(fileInput.files[0]);
     }
 }
 

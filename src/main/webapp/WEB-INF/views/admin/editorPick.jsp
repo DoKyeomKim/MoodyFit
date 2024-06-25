@@ -21,6 +21,33 @@ main {
     font-size : 15px;
   
 }
+.editor-pick-table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+.editor-pick-table th, .editor-pick-table td {
+    padding: 10px;
+    text-align: center;
+}
+
+.editor-pick-table th {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.editor-pick-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.editorPick-info td {
+    vertical-align: middle;
+}
+
+.btn-margin-right {
+    margin-right: 5px;
+}
 </style>
 </head>
 <body>
@@ -41,6 +68,7 @@ main {
                     <th>가맹점명</th>
                     <th>게시 시작일</th>
                     <th>게시 마감일</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
