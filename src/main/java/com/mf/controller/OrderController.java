@@ -1,9 +1,5 @@
 package com.mf.controller;
 
-import java.time.DayOfWeek;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +15,8 @@ import com.mf.dto.CartDto;
 import com.mf.dto.DeliveryDto;
 import com.mf.dto.OrdersDto;
 import com.mf.dto.PersonDto;
+import com.mf.jpa.CartService;
 import com.mf.mapper.OrderMapper;
-import com.mf.service.CartService;
 import com.mf.service.MyPageService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -52,49 +48,9 @@ public class OrderController {
 	    Map<String, Object> result = myPageService.getPersonMyPage(userIdx);
 	    PersonDto person = (PersonDto) result.get("person");
 	    
-	 // 오늘 날짜를 가져옴
-	    LocalDate today = LocalDate.now();
-	    // 내일 날짜를 계산
-	    LocalDate tomorrow = today.plusDays(1);
-	    // 날짜 포맷 설정
-	    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	    // 내일의 요일을 가져옴
-	    DayOfWeek dayOfWeek = tomorrow.getDayOfWeek();
-	    
-	    // 내일 날짜와 요일을 문자열로 변환
-	    String formattedDate = tomorrow.format(dateFormatter);
-	    
-	    // 요일을 한글로 변환하는 로직
-	    String dayOfWeekString = "";
-	    switch(dayOfWeek) {
-	        case MONDAY:
-	            dayOfWeekString = "월요일";
-	            break;
-	        case TUESDAY:
-	            dayOfWeekString = "화요일";
-	            break;
-	        case WEDNESDAY:
-	            dayOfWeekString = "수요일";
-	            break;
-	        case THURSDAY:
-	            dayOfWeekString = "목요일";
-	            break;
-	        case FRIDAY:
-	            dayOfWeekString = "금요일";
-	            break;
-	        case SATURDAY:
-	            dayOfWeekString = "토요일";
-	            break;
-	        case SUNDAY:
-	            dayOfWeekString = "일요일";
-	            break;
-	    }
-	    System.out.println(formattedDate);
 	    
 	    List<CartDto> cartList = orderMapper.selectCart(userIdx);
-	    System.out.println(cartList);
 	    
-	    mv.addObject(formattedDate);
 	    mv.addObject("cartList", cartList);
 	    mv.addObject("person", person);
 	    mv.setViewName("myPage/cart");
@@ -184,8 +140,8 @@ public class OrderController {
 					PersonDto person = (PersonDto) result.get("person");
 					 List<CartDto> cartList = orderMapper.selectCart2(userIdx);
 					 List<DeliveryDto> deliveryList = orderMapper.selectDelivery(userIdx);
+					// OrdersDto orderList = orderMapper.selectOrderList(userIdx);
 					 DeliveryDto deliveryDto = orderMapper.selectDelivery2(userIdx);
-					 System.out.println("payment---------------------------");
 					 System.out.println(cartList);
 					 System.out.println(deliveryList);
 					
@@ -193,6 +149,7 @@ public class OrderController {
 					mv.addObject("person", person);
 					mv.addObject("cartList", cartList);
 					mv.addObject("deliveryDto", deliveryDto);
+					// mv.addObject("orderList", orderList);
 					mv.addObject("deliveryList", deliveryList);
 					mv.setViewName("myPage/payment");
 					return mv;

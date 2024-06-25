@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,13 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-//github.com/DoKyeomKim/MoodyFit.git
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mf.dto.Paging;
 import com.mf.dto.SubCategoryDto;
-import com.mf.dto.WishDto;
-//github.com/DoKyeomKim/MoodyFit.git
 import com.mf.service.MainService;
 
 import jakarta.servlet.http.HttpSession;
@@ -47,8 +47,26 @@ public class MainController {
 		// 그 안에서 서로다른 DTO를 가진 것들을 결과를 받고 List형태로 반환 하기위해 또 Map을 씀
 		Map<String, List<Map<String, Object>>> result = mainService.getPostingAll();
 		
+		// 채팅에 필요로한 채팅 추가
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.isAuthenticated()) {
+		    // 사용자의 권한 확인
+		    for (GrantedAuthority authority : authentication.getAuthorities()) {
+		        if ("ROLE_PERSON".equals(authority.getAuthority())) {
+		            String nickName = mainService.getPNickNameByUserIdx(userIdx);
+		            mv.addObject("nickName", nickName);
+		            break; // 이미 닉네임을 설정했으면 루프 종료
+		        } else if ("ROLE_STORE".equals(authority.getAuthority())) {
+		            String nickName = mainService.getSNickNameByUserIdx(userIdx);
+		            mv.addObject("nickName", nickName);
+		            break; // 이미 닉네임을 설정했으면 루프 종료
+		        }
+		    }
+		}
+		
         List<Map<String, Object>> all = result.get("all");
         List<Map<String, Object>> recent = result.get("recent");
+        
 		
 		mv.addObject("all", all);
 		mv.addObject("recent", recent);
@@ -68,6 +86,8 @@ public class MainController {
 	    
 	    // 검색 결과 비즈니스 로직 처리
 		List<Map<String,Object>> result = mainService.getSearchResult(keyword,startIndex,pageSize);
+		
+		int totalCount = mainService.getPostingCountByKeyword(keyword);
 		
 	    // 페이징 된 로직 처리
 	    Paging paging = mainService.calculatePagingInfo(keyword, page, pageSize);

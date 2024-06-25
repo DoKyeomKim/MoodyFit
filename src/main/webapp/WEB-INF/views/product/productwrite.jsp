@@ -25,31 +25,7 @@
 </head>
 <body>
 	<%@include file="/WEB-INF/layouts/header.jsp"%>
-
-	<div class="w3-sidebar w3-bar-block w3-light-grey w3-card"
-		style="width: 160px;">
-		<a href="#" class="w3-bar-item w3-button">Link 1</a>
-		<button class="w3-button w3-block w3-left-align"
-			onclick="toggleAccFunc('productAcc')">
-			상품 관리 <i class="fa fa-caret-down"></i>
-		</button>
-		<div id="productAcc" class="w3-hide w3-white w3-card">
-			<a href="/storeMypage/productList" class="w3-bar-item w3-button">상품 리스트</a> <a
-				href="/storeMypage/productAdd" class="w3-bar-item w3-button">상품등록</a> 
-		</div>
-		<button class="w3-button w3-block w3-left-align" 
-			onclick="toggleAccFunc('saleAcc')">
-			판매 글 관리 <i class="fa fa-caret-down"></i>
-		</button>
-		<div id="saleAcc" class="w3-hide w3-white w3-card">
-			<a href="#" class="w3-bar-item w3-button">판매 글 리스트</a> <a href="#"
-				class="w3-bar-item w3-button">판매 글 등록</a> <a href="#"
-				class="w3-bar-item w3-button">판매 글 신청 현황</a>
-		</div>
-
-		<a href="#" class="w3-bar-item w3-button">정보 수정</a> <a href="#"
-			class="w3-bar-item w3-button">회원 탈퇴</a>
-	</div>
+	<%@include file="/WEB-INF/layouts/storeAside.jsp"%>
 	
 	
 	<!-- ========= 등록 페이지 ============ -->
@@ -64,7 +40,7 @@
 						class="form-control" id="pname" name="pname" required>
 				</div>
 				<div class="form-group">
-					<label for="unitprice">상품 판매가</label> <input type="number" value="999"
+					<label for="unitprice">상품 판매가</label> <input type="number" value="109000"
 						class="form-control" id="unitprice" name="unitprice" required>
 				</div>
 				<div class="form-group">
@@ -135,6 +111,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="form-group">
             <label for="size">사이즈</label>
             <div class="input-group">
@@ -146,18 +123,35 @@
             </div>
         </div>
 				<div class="form-group">
-					<label for="quantity">재고</label> <input type="text" value="99"
-						class="form-control" id="quantity" name="quantity" required>
+					<label for="quantity">재고</label> <input type="number" value="99" class="form-control" id="quantity" name="quantity" required>
+				</div>
+				<br><br>
+				<div class="form-group">
+				    <button type="button" id="addProductInfo" class="btn btn-secondary" name="productInfos">색상/사이즈/재고 추가</button>
+				</div>
+				<div class="form-group">
+				    <table class="table" id="productInfoTable">
+				        <thead>
+				            <tr>
+				                <th>색상</th>
+				                <th>사이즈</th>
+				                <th>재고</th>
+				                <th>삭제</th>
+				            </tr>
+				        </thead>
+				        <tbody>
+				            <!-- 추가된 색상, 사이즈, 재고가 이 body에 추가됨 -->
+				        </tbody>
+				    </table>
 				</div>
 				
-				<!--
 				<div class="form-group">
-					<label for="image">상품 사진</label> <input type="file"
-						class="form-control" id="image" name="image" required>
+					<label for="productImages">상품 사진</label> 
+					<input type="file" class="form-control" id="productImages" name="productImages" multiple>
 				</div>
 				<br>
 				<br>
-				 -->
+				 
 				 <br><br>
 				<button type="submit" class="btn btn-outline-primary">상품 등록</button>
 			</form>
@@ -291,7 +285,7 @@
     // 카테고리 목록 불러오는 함수
     function loadCategories(keyword) {
         $.ajax({
-            url: '/api/categories',
+            url: '/storeMypage/api/categories',
             method: 'GET',
             data: { keyword: keyword }, 
             success: function(categories) {
@@ -324,7 +318,7 @@
     // 서브 카테고리 목록을 불러오는 함수
     function loadSubCategories(categoryCode) {
         $.ajax({
-            url: '/api/subcategories',
+            url: '/storeMypage/api/subcategories',
             method: 'GET',
             data: { categoryCode: categoryCode },
             success: function(subCategories) {
@@ -457,6 +451,51 @@
 	            });
 	        }
 	    });
+			
+			// 상품 정보 인덱스 변수 정의 및 초기화
+			var productInfoIndex = 0;
+		 	
+			// 다중 레코드 추가
+	    $('#addProductInfo').click(function() {
+	        var color = $('#colorInput').val();
+	        var colorIdx = $('#colorIdx').val();
+	        var size = $('#sizeInput').val();
+	        var sizeIdx = $('#sizeIdx').val();
+	        var quantity = $('#quantity').val();
+	        
+	        if (!color || !size || !quantity) {
+	            alert("모든 필드를 입력하세요.");
+	            return;
+	        }
+	        
+	        var row = '<tr>' +
+            '<td>' + color + '</td>' +
+            '<td>' + size + '</td>' +
+            '<td>' + quantity + '</td>' +
+            '<td><button type="button" class="btn btn-danger removeProductInfo">삭제</button></td>' +
+            '<input type="hidden" name="productInfos[' + productInfoIndex + '].colorIdx" value="' + colorIdx + '">' +
+            '<input type="hidden" name="productInfos[' + productInfoIndex + '].sizeIdx" value="' + sizeIdx + '">' +
+            '<input type="hidden" name="productInfos[' + productInfoIndex + '].quantity" value="' + quantity + '">' +
+            '</tr>';
+        
+        $('#productInfoTable tbody').append(row);
+        productInfoIndex++;
+    });
+		
+		
+    $(document).on('click', '.removeProductInfo', function() {
+        $(this).closest('tr').remove();
+        // 삭제 후 인덱스를 다시 맞추는 로직 필요할 수 있음
+        productInfoIndex--;
+        $('#productInfoTable tbody tr').each(function(index) {
+            $(this).find('input').each(function() {
+                var name = $(this).attr('name');
+                var newName = name.replace(/\[\d+\]/, '[' + index + ']');
+                $(this).attr('name', newName);
+            });
+        });
+        
+    });
 		
 			
 	</script>

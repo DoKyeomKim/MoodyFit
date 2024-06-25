@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.mf.dto.CategoryDto;
-import com.mf.service.MainService;
+import com.mf.service.ProductService;
 
 // modelAttribute를 컨트롤러 전역에 쓰기위해 사용
 @ControllerAdvice
 public class GlobalControllerAdvice {
 
 	@Autowired
-	private MainService mainService;
+	private ProductService productService;
 	
     @ModelAttribute
     public void categories(Model model){
     	//카테고리 불러오기
-		List<CategoryDto> category = mainService.getCategory();
+		List<CategoryDto> category = productService.getCategory();
 
         model.addAttribute("category",category);
     }

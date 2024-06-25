@@ -82,6 +82,10 @@
         margin-top: -1px;
         height : 36px;
     }
+    #btnEmailCheck{
+        margin-top: -1px;
+        height : 36px;
+    }
     th.required::after {
     content: " *";
     color: red;
@@ -155,7 +159,13 @@
         </tr>
         <tr>
             <th class="required">이메일</th>
-            <td><input type="email" name="email" id="email" class="form-control" placeholder="@를 포함한 이메일을 입력해주세요"></td>
+            <td>
+            	<div class="form-inline flex-container">
+            		<input type="email" name="email" id="email" class="form-control" placeholder="@를 포함한 이메일을 입력해주세요" style="width:50%">
+            		<input type="button" class="btn btn-sm btn-outline-secondary" value="중복확인" id="btnEmailCheck"/>
+            	</div>
+            	<span id="output3"></span>
+            </td>
         </tr>
     </table>
 </div>
@@ -217,11 +227,14 @@
 <script>
     const btnIdCheckEl = document.querySelector('#btnIdCheck');
     const btnNicknameCheckEl = document.querySelector('#btnNickNameCheck');
+    const btnEmailCheckEl = document.querySelector('#btnEmailCheck');
     var submitBtnEl = document.querySelector('#submitBtn');
     const outputEl = document.querySelector('#output');
     const output2El = document.querySelector('#output2');
+    const output3El = document.querySelector('#output3');
     const idInputEl = document.querySelector('[name=id]');
     const nickNameInputEl = document.querySelector('[name=nickName]');
+    const emailInputEl = document.querySelector('[name=email]');
     const pw1InputEl = document.getElementById("password");
     const pw2InputEl = document.getElementById("password2");
     const pwConfirmEl = document.getElementById("pwConfirm");
@@ -229,9 +242,10 @@
     let idCheckPassed = false;
     let nickNameCheckPassed = false;
     let pwCheckPassed = false;
+    let emailCheckPassed = false;
 
     function checkFormValidity() {
-        if (idCheckPassed && nickNameCheckPassed && pwCheckPassed) {
+        if (idCheckPassed && nickNameCheckPassed && pwCheckPassed && emailCheckPassed) {
             submitBtnEl.disabled = false;
         } else {
             submitBtnEl.disabled = true;
@@ -291,6 +305,34 @@
                 checkFormValidity();
             });
     }
+    
+    btnEmailCheckEl.onclick = function(e){
+    	if(!emailInputEl.value.trim()){
+    		output3El.innerHTML = "<small style='color:red'>이메일을 입력해주세요.</small>";
+    		emailCheckPassed = false;
+    		checkFormValidity();
+    		return;
+    	}
+    	
+    	fetch('emailCheck?email='+ encodeURIComponent(emailInputEl.value))
+    	.then(response => response.text())
+    	.then((data) => {
+            console.log(data);
+            output3El.innerHTML = data;
+
+            if (data.includes('사용가능한 이메일입니다')) {
+                emailCheckPassed = true;
+            } else {
+                emailCheckPassed = false;
+            }
+            checkFormValidity();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            emailCheckPassed = false;
+            checkFormValidity();
+        });
+    }
 
     function pwCheck() {
         if (pw1InputEl.value !== pw2InputEl.value) {
@@ -316,6 +358,11 @@
     nickNameInputEl.oninput = function() {
         nickNameCheckPassed = false;
         output2El.innerHTML = '';
+        checkFormValidity();
+    }
+    emailInputEl.oninput = function() {
+        emailCheckPassed = false;
+        output3El.innerHTML = '';
         checkFormValidity();
     }
 

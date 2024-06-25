@@ -1,5 +1,8 @@
 package com.mf.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -107,6 +110,38 @@ public class LoginController {
 			return "<small style='color:red'>사용할 수 없는 상호명입니다</small>";
 		}
 		
+	}
+	
+	@GetMapping("/emailCheck")
+	@ResponseBody
+	public String emailCheck(@RequestParam("email") String email) {
+		
+		
+		String resultEmail = usersService.getEmail(email);
+		if(resultEmail==null) {
+			return "<small style='color:green'>사용가능한 이메일입니다</small>";
+		}  else {
+			return "<small style='color:red'>사용중인 이메일 입니다.</small>";
+		}
+		
+	}
+	
+	// 아이디 찾기
+	@PostMapping("/findId")
+	@ResponseBody
+	public String findId(@RequestParam("findIdMethod") String findIdMethod,
+	                     @RequestParam("phone") String phone,
+	                     @RequestParam("email") String email) {
+	    String id = null;
+
+	    if ("email".equals(findIdMethod) && email != null) {
+	        id = usersService.getIdByEmail(email);
+	    } else if ("phone".equals(findIdMethod) && phone != null) {
+	        id = usersService.getIdByPhone(phone);
+	    } 
+	    return id != null ? "<small>찾으시는 ID는</small><div style='color:green; font-size: 20px;'>" + 
+	    id + "</div><small>입니다.</small>" 
+	    : "<small style='color:red;'>찾으시는 ID가 없습니다.<br> 다시 확인해주세요.</small>";
 	}
 	
 }

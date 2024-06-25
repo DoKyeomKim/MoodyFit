@@ -70,6 +70,10 @@ dependencies {
 	// 이미지 파일 관련
 	implementation 'commons-fileupload:commons-fileupload:1.4'
 	implementation 'commons-io:commons-io:2.11.0'
+	
+	//웹소켓(채팅)
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	
 }
 
 

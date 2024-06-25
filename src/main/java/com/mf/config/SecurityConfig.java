@@ -49,13 +49,18 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/","/api/**","/faq**","/qna","/category/**","/category/**", "/oauth2/**","/postingDetail","/search**","/totalJoin","/login","/idCheck","/storeNameCheck","/nickNameCheck","/loginProcess", "/storeJoin","/storeJoinProcess","/join", "/joinProcess","/error","/loginFail").permitAll()
+				.requestMatchers("/","/api/**","/findIdForm","/findId","/faq**","/qna","/category/**","/category/**", "/emailCheck",
+						"/oauth2/**","/postingDetail","/search**","/totalJoin","/login","/idCheck","/storeNameCheck",
+						"/nickNameCheck","/loginProcess", "/storeJoin","/storeJoinProcess","/join", 
+						"/joinProcess","/error","/loginFail").permitAll()
 				.requestMatchers("/admin/admin**","/admin**").hasRole("ADMIN")
-				.requestMatchers("/myPage","/personUpdateForm","/personUpdate").hasAnyRole("ADMIN","PERSON")
+				.requestMatchers("/myPage/**","/personUpdateForm","/personUpdate").hasAnyRole("ADMIN","PERSON")
 				.requestMatchers("/storeMyPage","/storeUpdateForm").hasAnyRole("ADMIN","STORE")
 				.requestMatchers("/accountDeleteForm").hasAnyRole("PERSON","STORE")
 				.anyRequest().authenticated()
 				);
+
+
 
 		http.formLogin((auth) -> auth.loginPage("/login")
 				.loginProcessingUrl("/loginProcess").permitAll()
