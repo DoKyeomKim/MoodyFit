@@ -273,14 +273,14 @@ public class AdminController {
 	        mv.setViewName("/admin/adminFAQWrite");
 	        return mv;
 	    }
-	    //리뷰 작성 페이지
-	    @PostMapping("/admin/reviewWrite")
-	    public String addReview(@ModelAttribute("reviewDto") AdminReviewDto reviewDto,MultipartFile file) {
-//	        adminReviewService.file();
-	    	adminReviewService.addReview(reviewDto); // FAQ 서비스를 통해 FAQ 추가
-	        
-	        return "redirect:/"; // FAQ 목록 페이지로 리다이렉트 
-	    }
+//	    //리뷰 작성 페이지
+//	    @PostMapping("/admin/reviewWrite")
+//	    public String addReview(@ModelAttribute("reviewDto") AdminReviewDto reviewDto,MultipartFile file) {
+////	        adminReviewService.file();
+//	    	adminReviewService.addReview(reviewDto); // FAQ 서비스를 통해 FAQ 추가
+//	        
+//	        return "redirect:/"; // FAQ 목록 페이지로 리다이렉트 
+//	    }
 
 	    @RequestMapping("/reviewWrite")
 	    public ModelAndView reviewWrite() {

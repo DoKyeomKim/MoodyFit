@@ -8,123 +8,157 @@
 <title>Q&A 리스트</title>
 <style>
 body {
-    font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif; /* 글꼴 설정 */
-    background-color: #F6F4EE; /* 배경색 설정 */
+    font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
+    background-color: #F6F4EE;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    align-items: center; /* 수직 정렬 */
+    align-items: center;
 }
 
 main {
-    width: 60%; /* 너비 설정 */
-    background-color: #F6F4EE; /* 배경색 설정 */
-    padding: 20px; /* 안쪽 여백 설정 */
-    font-size: 15px; /* 폰트 크기 설정 */
-    margin-top: 70px; /* 위쪽 여백 설정 */
+    width: 60%;
+    background-color: #F6F4EE;
+    padding: 20px;
+    font-size: 15px;
+    margin-top: 70px;
 }
 
 table {
-    width: 100%; /* 테이블 너비 설정 */
-    margin-top: 20px; /* 위쪽 여백 설정 */
-    border-radius:50px;
+    width: 100%;
+    margin-top: 20px;
 }
 
 th, td {
-    padding: 20px; /* 안쪽 여백 설정 */
-    text-align: left; /* 텍스트 정렬 */
+    padding: 20px;
+    text-align: left;
 }
 
 thead {
-    background-color: white; /* 헤더 배경색 설정 */
-    border-bottom: 2px solid #867B73; /* 헤더 아래쪽 밑줄 설정 */
+    background-color: white;
+    border-bottom: 2px solid #867B73;
 }
 
-
 th {
-    font-weight: bold; /* 글꼴 두께 설정 */
-    background-color: #FFF; /* 헤더 배경색 설정 */
-       border-bottom: 1px solid #867B73 !important;  /* td 아래쪽 테두리 설정 */
+    font-weight: bold;
+    background-color: #FFF;
+    border-bottom: 1px solid #867B73 !important;
 }
 
 td {
     background-color: white;
- 
 }
 
 tr {
-    background-color: #F6F4EE; /* 행 배경색 설정 */
+    background-color: #F6F4EE;
 }
 
 tr:hover td {
-    background-color: #f1f1f1; /* 마우스 오버 시 배경색 설정 */
+    background-color: #f1f1f1;
 }
 
 .button-container {
-    text-align: center; /* 텍스트 중앙 정렬 */
-    margin-top: 20px; /* 위쪽 여백 설정 */
+    text-align: center;
+    margin-top: 30px;
 }
 .table-container {
     width: 100%;
-    border-radius: 20px; /* 테이블 컨테이너 모서리 둥글게 설정 */
-    overflow: hidden; /* 자식 요소의 테두리가 부모의 테두리를 넘지 않도록 설정 */
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.qna-style {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.qna-style a {
+    margin: 0 10px;
+    color: #A9A9A9;
+    text-decoration: none;
+    font-weight: normal;
+    transition: color 0.3s, border-bottom 0.3s;
+    padding-bottom: 5px;
+}
+
+.qna-style a.active, .qna-style a:hover {
+    color: #867B73;
+    border-bottom: 2px solid #867B73;
 }
 
 button {
-    padding: 15px 40px; /* 안쪽 여백 설정 */
-    font-size: 16px; /* 폰트 크기 설정 */
-    border: none; /* 테두리 없음 */
-    background-color: #E5AAA3; /* 배경색 설정 */
-    color: white; /* 글자 색상 설정 */
-    cursor: pointer; /* 커서 모양 설정 */
+    padding: 15px 40px;
+    font-size: 16px;
+    border: none;
+    background-color: #E5AAA3;
+    color: white;
+    cursor: pointer;
     border-radius: 10px !important;
 }
 
 button:hover {
-    background-color: #E3AAA2; /* 마우스 오버 시 배경색 설정 */
+    background-color: #E3AAA2;
 }
 </style>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const links = document.querySelectorAll('.qna-style a');
+    const currentPath = window.location.pathname;
+
+    links.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+        link.addEventListener('click', function() {
+            links.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+});
+</script>
 </head>
-<body style="background-color: #F6F4EE;">
+<body>
     <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
     <main>
         <h2 class="text-center" style="font-weight:bold; color: #867B73;">1:1문의</h2>
-        관리자문의 상품문의 
-       <div class="table-container">
-        <table >
-        
-            <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                    <th>답변여부</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="qna" items="${AdminqnaList}">
+        <div class="qna-style">
+            <a href="/qna">관리자문의</a>
+            <a href="/qna2">상품문의</a>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
                     <tr>
-                        <td>${qna.QUESTION_IDX}</td>
-                        <td><a href="/qnaDetail?questionIdx=${qna.QUESTION_IDX}">${qna.TITLE}</a></td>
-                        <td>${qna.ID}</td>
-                        <td>${qna.CREATE_DATE}</td>
-                        <td>
-                        <c:choose>
-                            <c:when test="${qna.STATE==1}">답변대기</c:when>
-                            <c:when test="${qna.STATE==2}">답변완료</c:when>
-                        </c:choose>
-                        </td>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                        <th>답변여부</th>
                     </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <c:forEach var="qna" items="${AdminqnaList}">
+                        <tr>
+                            <td>${qna.QUESTION_IDX}</td>
+                            <td><a href="/qnaDetail?questionIdx=${qna.QUESTION_IDX}">${qna.TITLE}</a></td>
+                            <td>${qna.ID}</td>
+                            <td>${qna.CREATE_DATE}</td>
+                            <td>
+                            <c:choose>
+                                <c:when test="${qna.STATE==1}">답변대기</c:when>
+                                <c:when test="${qna.STATE==2}">답변완료</c:when>
+                            </c:choose>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
         <div class="button-container">
-            <button onclick="window.location.href='qnaWrite'">글 작성</button>
+            <button onclick="window.location.href='qnaWrite'">글쓰기</button>
         </div>
     </main>
-   
+    <%@include file="/WEB-INF/layouts/footer.jsp"%>
 </body>
- <%@include file="/WEB-INF/layouts/footer.jsp"%>
 </html>

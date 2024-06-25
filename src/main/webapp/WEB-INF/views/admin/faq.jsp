@@ -31,7 +31,7 @@ main {
 
 .table-container {
     width: 100%;
-    border-radius: 20px; /* 테이블 컨테이너 모서리 둥글게 설정 */
+    border-radius: 30px; /* 테이블 컨테이너 모서리 둥글게 설정 */
     overflow: hidden; /* 자식 요소의 테두리가 부모의 테두리를 넘지 않도록 설정 */
 }
 
@@ -42,9 +42,10 @@ table {
     margin-top: 0; /* 테이블 컨테이너 내부에 있어서 여백 제거 */
 }
 
-th, td {
+ td {
     padding: 20px; /* 안쪽 여백 설정 */
     text-align: left; /* 텍스트 정렬 */
+    border-bottom: 1px solid #D3D3D3 !important; /* 연한 회색 밑줄 설정 */
 }
 
 thead {
@@ -56,14 +57,6 @@ th {
     font-weight: bold; /* 글꼴 두께 설정 */
     background-color: #FFF; /* 헤더 배경색 설정 */
     border-bottom: 1px solid #867B73 !important; /* td 아래쪽 테두리 설정 */
-}
-
-td {
-    background-color: white;
-}
-
-tr {
-    background-color: #F6F4EE; /* 행 배경색 설정 */
 }
 
 tr:hover td {
@@ -124,6 +117,23 @@ button.header-search-btn i {
     font-size: 20px; /* 아이콘 크기 설정 */
     color: #867B73; /* 아이콘 색상 설정 */
 }
+
+.faq-question {
+    font-weight: bold; /* 글꼴 두께 설정 */
+    color: #71B2C3; /* 글자 색상 설정 */
+    font-size: 25px; /* 글자 크기 설정 */
+}
+
+.faq-answer a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: black; /* 글자 색상 설정 */
+    margin-left: 10px; /* 간격 설정 */
+    font-size: 16px; /* 글자 크기 설정 */
+}
+
+.faq-answer a:hover {
+    text-decoration: underline; /* 마우스 오버 시 밑줄 설정 */
+}
 </style>
 </head>
 <body style="background-color: #F6F4EE;">
@@ -132,6 +142,7 @@ button.header-search-btn i {
 <main>
 <input type="hidden" value="{user_idx}" id="userIdx">
 <h1 class="mt-3 text-center" style="font-weight:bold; color: #867B73;">FAQ</h1>
+키워드 추천:  입금확인  |  배송  |  반품  |  교환
 <div class="search-container">
     <form action="${pageContext.request.contextPath}/admin/userManagement7" method="get">
         <div class="form-group mb-2">
@@ -147,30 +158,24 @@ button.header-search-btn i {
 <div class="container mt-3">
     <div class="row">
         <div class="col-12">
-            <div class="table-container"> <!-- 테이블을 감싸는 컨테이너 -->
-                <table>
-                    <thead>
+            <table>
+                <tbody>
+                    <c:forEach var="faq" items="${faqList}">
                         <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
+                            <td class="faq-question">Q</td>
+                            <td class="faq-answer"><a href="/faqDetail?faqIdx=${faq.faqIdx}">${faq.title}</a></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="faq" items="${faqList}">
-                            <tr>
-                                <td>${faq.faqIdx}</td>
-                                <td><a href="/faqDetail?faqIdx=${faq.faqIdx}">${faq.title}</a></td>
-                                <td>관리자</td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </div>
+                    </c:forEach>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
+<div class="button-container">
+    <button onclick="window.location.href='qnaWrite'">문의 글쓰기</button>
+</div>
 </main>
 </body>
- <%@include file="/WEB-INF/layouts/footer.jsp"%>
+<%@include file="/WEB-INF/layouts/footer.jsp"%>
 </html>
