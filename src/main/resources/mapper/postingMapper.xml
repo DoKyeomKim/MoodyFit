@@ -3,6 +3,9 @@
 <mapper namespace="com.mf.mapper.PostingMapper">
 
 <insert id="insertPosting" parameterType="com.mf.dto.PostingDto">
+    <selectKey keyProperty="postingIdx" resultType="long" order="BEFORE">
+        SELECT posting_seq.NEXTVAL FROM DUAL
+    </selectKey>
     INSERT INTO posting (posting_idx, title, content, update_date, state)
     VALUES (#{postingIdx}, #{title}, #{content}, SYSDATE, #{state})
 </insert>
@@ -13,8 +16,11 @@
 </insert>
 
 <insert id="insertPostingFile" parameterType="com.mf.dto.PostingFileDto">
+    <selectKey keyProperty="postingFileIdx" resultType="long" order="BEFORE">
+        SELECT posting_file_seq.NEXTVAL FROM DUAL
+    </selectKey>
     INSERT INTO posting_file (posting_file_idx, original_name, file_path, file_size, posting_idx)
-    VALUES (posting_file_seq.NEXTVAL, #{originalName}, #{filePath}, #{fileSize}, #{postingIdx})
+    VALUES (#{postingFileIdx}, #{originalName}, #{filePath}, #{fileSize}, #{postingIdx})
 </insert>
 
 <select id="getAllProductDetailsWithInventory" resultType="java.util.HashMap">
@@ -40,8 +46,6 @@
     GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name
 </select>
 
-
-<!-- 특정 productIdx에 해당하는 상품 상세 정보 로드 -->
 <select id="getProductDetailsByProductIdxForPosting" resultType="java.util.HashMap">
     SELECT 
         p.product_idx AS productIdx,
@@ -61,9 +65,5 @@
     WHERE p.product_idx = #{productIdx}
     GROUP BY p.product_idx, p.name, p.price, p.manufacture_name
 </select>
-
-
-
-
 
 </mapper>

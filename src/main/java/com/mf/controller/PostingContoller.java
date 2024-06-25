@@ -31,7 +31,6 @@ public class PostingContoller {
 	public String showPostingWritePage(Model model) {
 		// 등록된 모든 상품 목록을 가져와서 모델에 추가
 		List<Map<String, Object>> products = postingService.getAllProductDetailsWithInventory();
-		
 		model.addAttribute("products", products);
 		return "/posting/postingWrite";
 	}
@@ -45,12 +44,11 @@ public class PostingContoller {
     }
 
 	
-	
 	@PostMapping("/postingWrite")
     public String createPosting(@RequestParam("productIdx") Long productIdx,
                                 @RequestParam("title") String title,
                                 @RequestParam("content") String content,
-                                @RequestParam("postingFile") List<MultipartFile> postingFiles) {
+                                @RequestParam("postingFiles") List<MultipartFile> postingFiles) {
         // 새로운 판매글을 생성하는 서비스 메서드를 호출
         postingService.createPosting(productIdx, title, content, postingFiles);
         return "redirect:/storeMyPage/postingList"; 

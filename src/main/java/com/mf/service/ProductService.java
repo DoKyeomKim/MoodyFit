@@ -32,7 +32,6 @@ public class ProductService {
     @Autowired
     private ProductMapper productMapper;
     
-    
     // ============ 상품 등록에서의 카테고리 ======================
     
     // 키워드를 사용해 필터링된 카테고리 목록 가져오는 메소드

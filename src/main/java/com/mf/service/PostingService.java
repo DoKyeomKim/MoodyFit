@@ -45,11 +45,6 @@ public class PostingService {
 		return postingMapper.getPostingProduct(userIdx);
 	}
     
-    // 상품 상세 정보 & 다중 레코드 정보 로드
- 	public List<Map<String, Object>> getAllProductDetailsWithInventory() {
- 		return postingMapper.getAllProductDetailsWithInventory();
- 	}
-    
     
     @Transactional
     public void createPosting(Long productIdx, String title, String content, List<MultipartFile> postingFiles) {
@@ -97,6 +92,11 @@ public class PostingService {
             e.printStackTrace();
         }
     }
+    
+    // 상품 상세 정보 & 다중 레코드 정보 로드
+  	public List<Map<String, Object>> getAllProductDetailsWithInventory() {
+  		return postingMapper.getAllProductDetailsWithInventory();
+  	}
     
     // 비동기로 상품 정보 로드
 	public Map<String, Object> getProductDetailsByProductIdx(Long productIdx) {

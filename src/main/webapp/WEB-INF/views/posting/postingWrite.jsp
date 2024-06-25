@@ -87,106 +87,121 @@
           </div>
           
           <div class="form-group">
-              <label for="postingFile">판매글 이미지</label>
-              <input type="file" id="postingFile" name="postingFile" class="form-control" multiple>
-          </div>
+	            <label for="postingFiles"></label>
+	            <button type="button" id="addFileButton" class="btn btn-secondary mt-2">Image 추가</button>
+	            <input type="file" id="postingFile" name="postingFiles" class="form-control" style="display: none;">
+	            <div id="imagePreviewContainer" class="d-flex flex-wrap mt-2"></div>
+	        </div>
           
           <button type="submit" class="btn btn-primary">등록</button>
     </form>
-        
-        <!-- 상품 상세 정보, 사이즈, 후기, Q&A 탭 -->
-        <div class="tabs">
-            <div class="tab-nav">
-                <div class="tab-link active" data-tab="details">상세정보</div>
-                <div class="tab-link" data-tab="sizes">사이즈</div>
-                <div class="tab-link" data-tab="reviews">후기</div>
-                <div class="tab-link" data-tab="qna">Q&A</div>
-            </div>
-            <div class="tab-content active" id="details">
-                <p>상품 상세 정보 표시</p>
-            </div>
-            <div class="tab-content" id="sizes">
-                <p>상품 사이즈 정보 표시</p>
-            </div>
-            <div class="tab-content" id="reviews">
-                <p>상품 후기</p>
-            </div>
-            <div class="tab-content" id="qna">
-                <p>상품 Q&A</p>
-            </div>
-        </div>
-    </div>
+ </div>
 
 
 <script src="/js/bootstrap.bundle.min.js"></script>
 
 <script>
-		// ===============================================================================
-		// =============== 스크립트 =======================================================
-		function loadProductDetails(productIdx) {
-    if (productIdx === "") {
-        document.getElementById('productDetails').innerHTML = "";
-        return;
-    }
-
-    console.log("Selected Product IDX:", productIdx); // 디버깅용 로그
-
-    fetch('/storeMyPage/posting/getProductDetails?productIdx=' + productIdx)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Fetched product details:", data);
-            document.getElementById('productIdx').value = productIdx;
-            displayProductDetails(data);
-        })
-        .catch(error => console.error('Error fetching product details:', error));
-		}
-		
-		// ==================== 상품 세부 정보를 표시하는 함수 ==================================
-	    function displayProductDetails(data) {
-	    		console.log("Data received:", data);
-	    		
-	        const detailsDiv = document.getElementById('productDetails');
-	        let imagesHtml = '';
-
-	        if (data.filePaths) {
-	        		// filePathes를 쉼표와 공백으로 구분하여 배열로 만듦
-	            imagesHtml = data.filePaths.split(', ').map(filePath => {
-	                return '<img src="' + filePath + '" alt="' + data.name + '">';
-	            }).join('');
-	        }
-					
-	        detailsDiv.innerHTML = `
-	            <h3>${data.name}</h3>
-	            <p>가격: ${data.price} 원</p>
-	            <p>색상: ${data.colors}</p>
-	            <p>사이즈: ${data.sizes}</p>
-	            <p>재고: ${data.quantities} 개</p>
-	            <div class="images">${imagesHtml}</div>
-	        `;
-	        console.log("HTML set to:", detailsDiv.innerHTML);
+	// 상품 상세 정보 로드 관련
+	function loadProductDetails(productIdx) {
+	    if (productIdx === "") {
+	        document.getElementById('productDetails').innerHTML = "";
+	        return;
 	    }
+	
+	    console.log("Selected Product IDX:", productIdx);
+	
+	    fetch('/storeMyPage/posting/getProductDetails?productIdx=' + productIdx)
+	        .then(response => {
+	            if (!response.ok) {
+	                throw new Error('Network response was not ok ' + response.statusText);
+	            }
+	            return response.json();
+	        })
+	        .then(data => {
+	            console.log("Fetched product details:", data);
+	            document.getElementById('productIdx').value = productIdx;
+	            displayProductDetails(data);
+	        })
+	        .catch(error => console.error('Error fetching product details:', error));
+	}
+	
+	function displayProductDetails(data) {
+        console.log("Data received:", data);
 
+        const detailsDiv = document.getElementById('productDetails');
+        let imagesHtml = '';
+
+        if (data.filePaths) {
+            imagesHtml = data.filePaths.split(', ').map(filePath => {
+                return '<img src="' + filePath + '" alt="' + data.name + '">';
+            }).join('');
+        }
+
+        detailsDiv.innerHTML = `
+            <h3>${data.name}</h3>
+            <p>가격: ${data.price} 원</p>
+            <p>색상: ${data.colors}</p>
+            <p>사이즈: ${data.sizes}</p>
+            <p>재고: ${data.quantities} 개</p>
+            <div class="images">${imagesHtml}</div>
+        `;
+        console.log("HTML set to:", detailsDiv.innerHTML);
+    }
 		
-		// ===============================================================
-		// ================ 하단 상세정보 부분 ===========================
-    // 탭 전환 로직
-    document.querySelectorAll('.tab-link').forEach(tab => {
-        tab.addEventListener('click', function() {
-            document.querySelectorAll('.tab-link').forEach(item => {
-                item.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            this.classList.add('active');
-            document.getElementById(this.dataset.tab).classList.add('active');
-        });
+	
+	
+		// ==================================================================================
+		// ======================= 판매글 파일 등록 관련 =====================================
+    document.getElementById('addFileButton').addEventListener('click', function() {
+        document.getElementById('postingFile').click();
     });
+
+    document.getElementById('postingFile').addEventListener('change', function(event) {
+        handleFileSelect(event);
+    });
+
+    let filesArray = [];
+
+    function handleFileSelect(event) {
+        const files = event.target.files;
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            filesArray.push(file);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.width = '100px';
+                img.style.height = '100px';
+                img.style.objectFit = 'cover';
+                img.style.margin = '5px';
+                
+                const removeButton = document.createElement('span');
+                removeButton.innerHTML = '&times;';
+                removeButton.classList.add('btn', 'btn-danger', 'btn-sm', 'ml-2');
+                removeButton.style.position = 'absolute';
+                removeButton.style.top = '5px';
+                removeButton.style.right = '5px';
+                removeButton.style.cursor = 'pointer';
+                removeButton.addEventListener('click', function() {
+                    filesArray = filesArray.filter(f => f !== file);
+                    previewContainer.removeChild(imgContainer);
+                });
+
+                const imgContainer = document.createElement('div');
+                imgContainer.style.position = 'relative';
+                imgContainer.appendChild(img);
+                imgContainer.appendChild(removeButton);
+                previewContainer.appendChild(imgContainer);
+            }
+            reader.readAsDataURL(file);
+        }
+
+        // Clear the input to allow the same file to be selected again if needed
+        event.target.value = '';
+    }
 </script>
 
 
