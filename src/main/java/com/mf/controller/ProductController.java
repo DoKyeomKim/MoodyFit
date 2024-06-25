@@ -106,34 +106,41 @@ public class ProductController {
         }
     }
     
-    @PostMapping("/updateProduct")
+    @PostMapping("/products/update")
     public String updateProduct(
-    		@ModelAttribute ProductDto productDto,
-            @RequestParam(value = "productInfos", required = false) List<ProductOptionDto> productInfos,
-            @RequestParam(value = "productImages", required = false) List<MultipartFile> productImages,
-            @RequestParam(value = "deleteFileIds", required = false) List<Long> deleteFileIds) {
-        
-        // 판매가가 변경된 경우
-        if (productDto.getPrice() != null) {
-            productService.updateProductPrice(productDto.getProductIdx(), productDto.getPrice());
-        }
+            @RequestParam("productIdx") Long productIdx,
+            @RequestParam("unitprice") Integer price,
+            @ModelAttribute ProductInfoList productInfos,
+            HttpSession session) {
 
-        // 재고가 변경된 경우
-        for (ProductOptionDto productOptionDto : productInfos) {
-            if (productOptionDto.getQuantity() != null) {
-                productService.updateProductQuantity(productOptionDto.getProductInfoIdx(), productOptionDto.getQuantity());
+    	System.out.println("ProductIdx: " + productIdx);
+        System.out.println("ProductInfos: " + productInfos);
+        System.out.println("ProductInfos.getProductInfos(): " + (productInfos != null ? productInfos.getProductInfos() : "null"));
+        
+        // 판매가 변경 시
+        if (price != null) {
+            productService.updateProductPrice(productIdx, price);
+        }
+        
+        // 재고 변경 시
+        if (productInfos != null && productInfos.getProductInfos() != null) {
+            for (ProductOptionDto productOptionDto : productInfos.getProductInfos()) {
+                if (productOptionDto.getQuantity() != null) {
+                    productService.updateProductQuantity(productOptionDto.getProductInfoIdx(), productOptionDto.getQuantity());
+                }
             }
         }
-
-        // 이미지 변경 및 삭제 처리
-        productService.updateProduct(productDto, productInfos, productImages, deleteFileIds);
 
         return "redirect:/storeMyPage/productList";
     }
 
-    
-    
+        /* 이미지 변경 및 삭제 처리
+        productService.updateProduct(productDto, productInfos, productImages, deleteFileIds);
 
+        return "redirect:/storeMyPage/productList";
+        */
+
+ 
     
     @GetMapping("/productList")
     public ModelAndView productList(HttpSession session) {

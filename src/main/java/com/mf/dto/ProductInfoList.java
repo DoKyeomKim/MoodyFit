@@ -11,4 +11,12 @@ public class ProductInfoList {
 	public void setProductInfos(List<ProductOptionDto> productInfos) {
         this.productInfos = productInfos;
     }
+	
+	@Override
+    public String toString() {
+        return "ProductInfoList{" +
+                "productInfos=" + productInfos +
+                '}';
+    }
+	
 }

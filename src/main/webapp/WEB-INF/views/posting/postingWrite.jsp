@@ -70,9 +70,12 @@
 
 		
 		<div id="productDetails">
-     	<!-- 상품 상세 정보를 여기에 표시 -->
+		    <!-- 상품 상세 정보를 여기에 표시 -->
 		</div>
-            
+
+		
+		<form method="post" enctype="multipart/form-data" action="/storeMyPage/postingWrite">
+   		<input type="hidden" id="productIdx" name="productIdx" value="">
           <div class="form-group">
               <label for="title">판매글 제목</label>
               <input type="text" id="title" name="title" class="form-control" required>
@@ -89,7 +92,7 @@
           </div>
           
           <button type="submit" class="btn btn-primary">등록</button>
-      </form>
+    </form>
         
         <!-- 상품 상세 정보, 사이즈, 후기, Q&A 탭 -->
         <div class="tabs">
@@ -113,13 +116,12 @@
             </div>
         </div>
     </div>
-</div>
 
 
 <script src="/js/bootstrap.bundle.min.js"></script>
 
 <script>
-		// ================================================================================
+		// ===============================================================================
 		// =============== 스크립트 =======================================================
 		function loadProductDetails(productIdx) {
     if (productIdx === "") {
@@ -129,7 +131,7 @@
 
     console.log("Selected Product IDX:", productIdx); // 디버깅용 로그
 
-    fetch('/storeMyPage/posting/getProductDetails?productIdx='+productIdx)
+    fetch('/storeMyPage/posting/getProductDetails?productIdx=' + productIdx)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
@@ -138,30 +140,35 @@
         })
         .then(data => {
             console.log("Fetched product details:", data);
+            document.getElementById('productIdx').value = productIdx;
             displayProductDetails(data);
         })
         .catch(error => console.error('Error fetching product details:', error));
 		}
 		
-		// 상품 세부 정보를 표시하는 함수
+		// ==================== 상품 세부 정보를 표시하는 함수 ==================================
 	    function displayProductDetails(data) {
+	    		console.log("Data received:", data);
+	    		
 	        const detailsDiv = document.getElementById('productDetails');
 	        let imagesHtml = '';
 
 	        if (data.filePaths) {
+	        		// filePathes를 쉼표와 공백으로 구분하여 배열로 만듦
 	            imagesHtml = data.filePaths.split(', ').map(filePath => {
 	                return '<img src="' + filePath + '" alt="' + data.name + '">';
 	            }).join('');
 	        }
-
+					
 	        detailsDiv.innerHTML = `
 	            <h3>${data.name}</h3>
 	            <p>가격: ${data.price} 원</p>
 	            <p>색상: ${data.colors}</p>
 	            <p>사이즈: ${data.sizes}</p>
-	            <p>재고: ${data.quantities}</p>
+	            <p>재고: ${data.quantities} 개</p>
 	            <div class="images">${imagesHtml}</div>
 	        `;
+	        console.log("HTML set to:", detailsDiv.innerHTML);
 	    }
 
 		

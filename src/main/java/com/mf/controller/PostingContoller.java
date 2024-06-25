@@ -36,7 +36,6 @@ public class PostingContoller {
 		return "/posting/postingWrite";
 	}
 	
-	
 	@GetMapping("/posting/getProductDetails")
     @ResponseBody
     public Map<String, Object> getProductDetails(@RequestParam("productIdx") Long productIdx) {

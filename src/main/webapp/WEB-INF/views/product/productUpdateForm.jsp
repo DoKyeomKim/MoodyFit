@@ -31,7 +31,7 @@
 		<div class="container">
 			<h3>상품 수정</h3>
 			
-			<form id="updateForm" action="/storeMyPage/updateProduct" method="post" enctype="multipart/form-data">
+			<form id="updateForm" action="${pageContext.request.contextPath}/storeMyPage/products/update" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="productIdx" value="${productDetails[0].productIdx}">
 			
 				<div class="form-group">
@@ -40,7 +40,7 @@
 		    </div>
 		
 		    <div class="form-group">
-		        <label for="unitprice">상품 판매가</label> 
+		        <label for="unitprice">상품 판매가</label>
 		        <input type="number" value="${productDetails['PRICE']}" class="form-control" id="unitprice" name="unitprice" min="0" required>
 		    </div>
 		
@@ -65,14 +65,15 @@
 				            </tr>
 				        </thead>
 				        <tbody>
-				            <c:forEach var="info" items="${productInfos}">
+				            <c:forEach var="info" items="${productInfos}" varStatus="status">
 				                <tr>
 				                    <td>${info['color']}</td>
 				                    <td>${info['sizes']}</td>
 				                    <td>
-				                        <input type="number" name="productInfos[${info['productInfoIdx']}].quantity" value="${info['quantity']}" class="form-control">
-				                        <input type="hidden" name="productInfos[${info['productInfoIdx']}].colorIdx" value="${info['productColorIdx']}">
-				                        <input type="hidden" name="productInfos[${info['productInfoIdx']}].sizeIdx" value="${info['productSizeIdx']}">
+				                        <input type="number" name="productInfos[${status.index}].quantity" value="${info['quantity']}" class="form-control">
+		                            <input type="hidden" name="productInfos[${status.index}].productInfoIdx" value="${info['productInfoIdx']}">
+		                            <input type="hidden" name="productInfos[${status.index}].colorIdx" value="${info['productColorIdx']}">
+		                            <input type="hidden" name="productInfos[${status.index}].sizeIdx" value="${info['productSizeIdx']}">
 				                        <c:if test="${info['quantity'] == 0}">
 				                            <span class="badge badge-danger">품절</span>
 				                        </c:if>
@@ -167,6 +168,33 @@
 	        }
 	    });
 	});
+		
+		
+		// ================ ajax form 관련 ======================
+		$(document).ready(function() {
+    $('#updateForm').submit(function(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+
+        // 폼 데이터를 직렬화
+        var formData = new FormData(this);
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                window.location.href = '/storeMyPage/productList';
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('AJAX error: ', textStatus, errorThrown);
+                alert('수정 중 오류가 발생했습니다. 다시 시도해주세요.');
+            }
+        });
+    });
+});
+
 		
 	
 	</script>
