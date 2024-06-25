@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.OrderMapper">
+<!--  
+ <resultMap id="OrderDetailMap" type="OrderDetailDTO">
+        <id property="orderIdx" column="order_idx"/>
+        <result property="quantity" column="quantity"/>
+        <result property="merchantUid" column="merchant_uid"/>
+        <result property="deliveryPrice" column="delivery_price"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="orderDate" column="order_date"/>
+        <result property="impUid" column="imp_uid"/>
+        <result property="personIdx" column="person_idx"/>
+        <result property="deliveryIdx" column="delivery_idx"/>
+        <result property="deliveryName" column="deliveryName"/>
+        <result property="deliveryEmail" column="deliveryEmail"/>
+        <result property="deliveryAddress" column="deliveryAddress"/>
+        <result property="deliveryPostCode" column="deliveryPostCode"/>
+        <result property="deliveryDetailAddress" column="deliveryDetailAddress"/>
+        <result property="productName" column="productName"/>
+    </resultMap> -->
 
 <select id="selectCart" >
 
@@ -9,7 +27,7 @@ select 	posting.title,
         product_file.file_path,
         person.person_idx,
         cart.cart_idx,
-        cart.price,
+        product.price,
         cart.quantity,
         product_info.product_info_idx,
         users.user_idx
@@ -22,7 +40,7 @@ from 	users
     join product on product.product_idx = product_info.product_idx
 	join product_file on product_info.product_info_idx = product_file.product_info_idx
 where	users.user_idx = #{ userIdx }
-and		cart.state = '진행중'
+and		cart.state = '장바구니'
 
 
 </select>
@@ -34,7 +52,7 @@ select 	posting.title,
         product_file.file_path,
         person.person_idx,
         cart.cart_idx,
-        cart.price,
+        product.price,
         cart.quantity,
         product_info.product_info_idx,
         users.user_idx
@@ -91,33 +109,68 @@ and 	d.is_default = 1
 
 </select>
 
-<select id="selectOrder">
+<select id="selectOrder"  >
 
 
-select	orders.order_idx,
-		orders.amount,
-		orders.merchant_uid,
-		orders.delivery_price,
-		orders.total_price,
-		orders.order_date,
-		orders.imp_uid,
-		orders.person_idx,
-		orders.delivery_idx,
-        posting.title,
-        product.name,
-        product_file.file_path
-from orders
-    join person on orders.person_idx = person.person_idx
-    join users on person.user_idx = users.user_idx
-    join order_cart on order_cart.order_idx = orders.order_idx
-    join cart on order_cart.cart_idx = cart.cart_idx
-	join posting_product on cart.posting_product_idx = posting_product.posting_product_idx
-	join product_info on cart.product_info_idx = product_info.product_info_idx
-	join product_file on product_info.product_info_idx = product_file.product_info_idx
-    join product on product.product_idx = product_info.product_idx
-    join posting on posting.posting_idx = posting_product.posting_idx
-where users.user_idx = #{ userIdx }
-and		cart.state = '결제중'
+SELECT
+    orders.order_idx,
+    orders.quantity,
+    orders.merchant_uid,
+    orders.delivery_price,
+    orders.total_price,
+    orders.order_date,
+    orders.imp_uid,
+    orders.person_idx,
+    orders.delivery_idx,
+    posting.title,
+    product.name,
+    product_file.file_path,
+    delivery.name as dename,
+    delivery.email,
+    delivery.phone,
+    delivery.post_code,
+    delivery.address,
+    delivery.detail_address
+FROM orders
+    JOIN person ON orders.person_idx = person.person_idx
+    JOIN users ON person.user_idx = users.user_idx
+    JOIN order_cart ON order_cart.order_idx = orders.order_idx
+    Join delivery on orders.delivery_idx = delivery.delivery_idx
+    JOIN cart ON order_cart.cart_idx = cart.cart_idx
+    JOIN posting_product ON cart.posting_product_idx = posting_product.posting_product_idx
+    JOIN product_info ON cart.product_info_idx = product_info.product_info_idx
+    JOIN product_file ON product_info.product_info_idx = product_file.product_info_idx
+    JOIN product ON product.product_idx = product_info.product_idx
+    JOIN posting ON posting.posting_idx = posting_product.posting_idx
+WHERE users.user_idx = #{ userIdx }
+AND orders.state = '결제중'
+AND cart.state = '결제중'
+AND cart.cart_idx = (
+    SELECT MIN(cart_idx)
+    FROM cart
+    WHERE state = '결제중')
+
+</select>
+
+<select id="selectOrderList">
+
+select o.order_idx,
+        o.price,
+        o.quantity,
+        o.merchant_uid,
+        o.delivery_price,
+        o.total_price,
+        o.order_date,
+        o.imp_uid,
+        o.delivery_idx,
+        o.state,
+        p.name,
+        p.email
+from orders o
+join person p on p.person_idx = o.person_idx
+join users u on u.user_idx = p.user_idx
+where u.user_idx = #{ userIdx }
+and o.state = '결제중'
 
 </select>
 
@@ -131,7 +184,22 @@ where user_idx = #{ userIdx }
 
 <select id="selectTotalPrice">
 
+select total_price
+    from orders 
+     join person on person.person_idx = orders.person_idx
+     join users on person.user_idx = users.user_idx
+    where orders.state = '결제중'
+    and users.user_idx = #{ userIdx }
 
+</select>
+
+<select id="selectCartIdxByImpUid"  parameterType="String" resultType="Integer">
+
+select cart.cart_idx
+from cart
+JOIN order_cart ON cart.cart_idx = order_cart.cart_idx
+JOIN orders ON order_cart.order_idx = orders.order_idx
+WHERE orders.imp_uid = #{ impUid }
 
 </select>
 
@@ -163,5 +231,46 @@ insert into delivery (
 				)
 				
 </insert>
+
+<insert id="insertOrder">
+
+insert into orders (
+						order_idx,
+						price,
+						quantity,
+						merchant_uid,
+						delivery_price,
+						total_price,
+						order_date,
+						person_idx,
+						state,
+						delivery_idx
+						)
+				values (
+						(select nvl(max(order_idx), 0) + 1 from orders),
+						#{ price },
+						#{ quantity },
+						(SELECT TO_CHAR(SYSDATE, 'YYYYMMDD') || '00' || (select nvl(max(order_idx), 0) + 1 from orders) FROM DUAL),
+						#{ deliveryPrice },
+						(#{ price } + #{ deliveryPrice }),
+						sysdate,
+						#{ personIdx },
+						'결제중',
+						#{ deliveryIdx }
+				)
+				
+</insert>
+
+<update id="updateImpUid">
+
+update orders set imp_uid = #{ impUid }, state = '결제완료' where state = '결제중' and person_idx = #{ personIdx }
+
+</update>
+
+<update id="updateCartStateToComplete" parameterType="Integer">
+
+update cart set state = '결제완료' where cart_idx = #{ cartIdx }
+
+</update>
 
 </mapper>

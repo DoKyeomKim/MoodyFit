@@ -10,14 +10,12 @@ import lombok.NoArgsConstructor;
 public class OrdersDto {
 	
 	private int cartIdx;
-	private int orderDetailIdx;
 	private int price;
 	private int quantity;
 	private Long userIdx;
 	private String state;
 	
 	private int orderIdx;
-	private int amount;
 	private String merchantUid;
 	private String deliveryPrice;
 	private int totalPrice;
@@ -25,6 +23,12 @@ public class OrdersDto {
 	private String impUid;
 	private int personIdx;
 	private int deliveryIdx;
+	private String dename;
+	private String email;
+	private String phone;
+	private String postcode;
+	private String address;
+	private String detailAddress;
 
 	private String title;
 	private String name;

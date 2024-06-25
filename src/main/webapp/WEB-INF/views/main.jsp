@@ -100,7 +100,7 @@ main {
 <main>
 <div class="top-cards" id="editor-picks">
   <h2>에디터 픽 영역</h2>
-  <div class="swiper-container">
+  <div class="swiper-container"> 
     <div class="swiper-wrapper">
       <c:forEach var="all" items="${all}">
         <div class="swiper-slide">
