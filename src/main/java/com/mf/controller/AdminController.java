@@ -554,26 +554,11 @@ public class AdminController {
 	   public ModelAndView EPEditForm(@RequestParam("pickIdx") Long pickIdx,EditorPickDto editorPick) throws ParseException {
 		   ModelAndView mv = new ModelAndView();
 		   
+		   // 수정 페이지에 필요한 정보 들고오는 로직처리
 		   Map<String,Object> editPick = editorPickService.getEditPickByPickIdx(pickIdx,editorPick);
-		   
-		    // 시간 설정을 위한 맵 밖으로 빼내기
-		    editorPick = (EditorPickDto) editPick.get("editorPick");
-		    String startDate = editorPick.getStartDate();
-		    String endDate = editorPick.getEndDate();
 		    
-		    // 날짜 형식 변환
-		    SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		    SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd");
-		    
-		    Date startDateParsed = originalFormat.parse(startDate);
-		    Date endDateParsed = originalFormat.parse(endDate);
-		    
-		    String formattedStartDate = targetFormat.format(startDateParsed);
-		    String formattedEndDate = targetFormat.format(endDateParsed);
-
-		    
-		   mv.addObject("startDate",formattedStartDate);
-		   mv.addObject("endDate",formattedEndDate);
+		   mv.addObject("startDate",editPick.get("formattedStartDate"));
+		   mv.addObject("endDate",editPick.get("formattedEndDate"));
 		   mv.addObject("editorPick",editPick.get("editorPick"));
 		   mv.addObject("postingInfo",editPick.get("postingInfo"));
 		   mv.addObject("editPick", editPick);

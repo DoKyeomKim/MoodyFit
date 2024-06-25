@@ -2,6 +2,7 @@ package com.mf.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,20 +64,36 @@ public class EditorPickService {
 	}
 
 	// 에디터픽 수정용 내용 갖고오는 로직
-	public Map<String, Object> getEditPickByPickIdx(Long pickIdx, EditorPickDto editorPick) {
+	public Map<String, Object> getEditPickByPickIdx(Long pickIdx, EditorPickDto editorPick) throws ParseException {
 		Map<String,Object> editPick = new HashMap<>();
 
 		// 에디터픽 idx,postingIdx,filePath등 갖고오기
 		editorPick= editorPickMapper.getEditPickByPickIdx(pickIdx);
-		
+
 		Long postingIdx = editorPick.getPostingIdx();
 		
 		// postingIdx로 해당 공고 갖고오기
 		Map<String,Object> postingInfo = editorPickMapper.getPostingByPostingIdx(postingIdx);
 		
+		// 시간 형식 맞추기 위해 값 꺼내기
+	    String startDate = editorPick.getStartDate();
+	    String endDate = editorPick.getEndDate();
+		
+	    // 날짜 형식 변환
+	    SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    
+	    Date startDateParsed = originalFormat.parse(startDate);
+	    Date endDateParsed = originalFormat.parse(endDate);
+	    
+	    String formattedStartDate = targetFormat.format(startDateParsed);
+	    String formattedEndDate = targetFormat.format(endDateParsed);
+	    
 		// 맵에 값 입력
 		editPick.put("editorPick", editorPick);
 		editPick.put("postingInfo", postingInfo);
+		editPick.put("formattedStartDate", formattedStartDate);
+		editPick.put("formattedEndDate", formattedEndDate);
 		
 		return editPick;
 	}
@@ -115,6 +132,7 @@ public class EditorPickService {
 	    }
 	}
 
+	// 에디터 픽 삭제 로직
 	public void editorPickDelete(Long pickIdx) {
 			editorPickMapper.editorPickDelete(pickIdx);
 	}
