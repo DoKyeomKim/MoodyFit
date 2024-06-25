@@ -116,15 +116,12 @@ main {
 <div class="top-cards" id="editor-picks">
     <div class="swiper-container">
         <div class="swiper-wrapper">
-            <c:forEach var="all" items="${all}">
+            <c:forEach var="edtiorPick" items="${edtiorPick}">
                 <div class="swiper-slide">
                     <div style="text-align:center;">
-                        <a href="/postingDetail?postingIdx=${all.POSTING_IDX}">
-                            <div class="image-container" data-posting-idx="${all.POSTING_IDX}" data-price="${all.PRICE}" data-title="${all.TITLE}">
-                                <img src="${all.FILE_PATH}" class="img-fluid" alt="Image 1" style="width: 1920px; height:900px;">
-                                <div class="overlay">
-                                    <div class="info"></div>
-                                </div>
+                        <a href="/postingDetail?postingIdx=${edtiorPick.POSTING_IDX}">
+                            <div class="image-container" data-posting-idx="${edtiorPick.POSTING_IDX}">
+                                <img src="${edtiorPick.FILE_PATH}" class="img-fluid" alt="Image 1" style="width: 1920px; height:900px;">
                             </div>
                         </a>
                     </div>
@@ -184,27 +181,7 @@ window.onclick = function(event) {
     }
 }
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const imageContainers = document.querySelectorAll('.image-container');
 
-    imageContainers.forEach(container => {
-        container.addEventListener('mouseover', function() {
-            const postingIdx = this.dataset.postingIdx;
-            const price = this.dataset.price;
-            const title = this.dataset.title;
-            const updateDate = this.dataset.date
-            const infoDiv = this.querySelector('.info');
-
-            // 가격을 파싱하여 포맷팅하는 함수
-            const formattedPrice = Number(price).toLocaleString();
-
-            infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + '원</div><div>'+updateDate+'일 출시</div>';
-        });
-    });
-});
-
-</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const swiper = new Swiper('.swiper-container', {

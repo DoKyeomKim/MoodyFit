@@ -109,9 +109,10 @@
      <button class="dropdown-btn">FAQ 관리 
       <i class="fa fa-caret-down"></i></button>
        <div class="dropdown-container">
-    <a href="adminFAQWrite">FAQ 등록</a>
-    <a href="adminFAQUpdate">FAQ 수정/삭제</a>
-  </div>
+    		<a href="adminFAQWrite">FAQ 등록</a>
+    		<a href="adminFAQUpdate">FAQ 수정/삭제</a>
+  		</div>
+    <a href="adminEditorPick">에디터픽</a>
   
     <script>
     const dropdownBtns = document.getElementsByClassName("dropdown-btn");

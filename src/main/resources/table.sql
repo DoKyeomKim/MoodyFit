@@ -337,6 +337,17 @@ COLOR_SATIS NUMBER,
 SIZES_SATIS NUMBER
 );
 
+CREATE TABLE editor_pick (
+    pick_idx NUMBER PRIMARY KEY,
+    original_name VARCHAR2(300) NOT NULL,
+    file_path VARCHAR2(300) NOT NULL,
+    file_size VARCHAR2(100) NOT NULL,
+    start_date DATE DEFAULT SYSDATE NOT NULL,
+    end_date DATE,
+    posting_idx NUMBER NOT NULL,
+    CONSTRAINT fk_posting_idx FOREIGN KEY (posting_idx) REFERENCES posting(posting_idx)
+);
+
 
 -----------------------------------------
 
@@ -464,5 +475,9 @@ CREATE SEQUENCE sub_category_seq
 	INCREMENT BY 1;
 	
     CREATE SEQUENCE wish_seq
+	START WITH 1
+	INCREMENT BY 1;
+
+    CREATE SEQUENCE pick_seq
 	START WITH 1
 	INCREMENT BY 1;

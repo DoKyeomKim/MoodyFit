@@ -15,9 +15,8 @@ public interface MainMapper {
     
     List<SubCategoryDto> getSubCategoriesByCategoryEngName(@Param("categoryEngName") String categoryEngName);
 
-
-	// 임시로 만든 전체 포스팅 내용 갖고오기
-	List<Map<String, Object>> getPostingAll();
+    // 에디터 픽 들고오기
+    List<Map<String, Object>> getEdtiorPick();
 
 	// 검색결과
 	List<Map<String, Object>> getSearchResult(Map<String, Object> params);
@@ -66,6 +65,10 @@ public interface MainMapper {
 	// 가맹점
 	String getSNickNameByUserIdx(Long userIdx);
 	//=========================================
+
+
+
+	
 
 	
 }

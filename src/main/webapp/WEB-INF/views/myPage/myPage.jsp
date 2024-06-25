@@ -20,13 +20,8 @@
         </div>
         
         <div class="row profile-section mt-4">
-            <div class="col-3 text-center">
-                <img src="${pageContext.request.contextPath}/images/default-profile.png" alt="Profile Image" class="profile-img">
-            </div>
             <div class="col-6 profile-info">
-                <h2>${user.name}님</h2>
-                <p class="membership-duration">[${user.membershipStart} - ${user.membershipEnd}]</p>
-                <button class="btn btn-edit">수정</button>
+                <h2>${person.nickName}님</h2>
             </div>
             <div class="col-3 profile-stats text-right">
                 <ul>
