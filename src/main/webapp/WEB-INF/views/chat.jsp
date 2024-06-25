@@ -164,7 +164,6 @@
 </head>
 <body>
     <div id="username-page">
-        <!-- 닉네임 입력 폼을 없애고 바로 채팅 시작 버튼으로 변경 -->
         <div class="username-page-container">
             <h1 class="title">채팅에 입장합니다</h1>
             <button id="enterChatBtn" class="accent">채팅 시작하기</button>
@@ -172,13 +171,11 @@
     </div>
 
     <div id="chat-page" class="hidden">
-        <!-- 채팅 화면 -->
         <div class="chat-container">
             <div class="chat-header" style="margin-top:15px;">
                 실시간 채팅
             </div>
             <ul id="messageArea">
-                <!-- 메시지가 표시될 영역 -->
             </ul>
             <form id="messageForm" name="messageForm">
                 <div class="form-group">
