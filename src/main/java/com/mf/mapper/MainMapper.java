@@ -12,25 +12,8 @@ import com.mf.dto.WishDto;
 
 @Mapper
 public interface MainMapper {
-    List<CategoryDto> getCategory();
-    
-    
-    List<CategoryDto> getCategoriesByKeyWord(@Param("keyword") String keyword);
     
     List<SubCategoryDto> getSubCategoriesByCategoryEngName(@Param("categoryEngName") String categoryEngName);
-    
-    SubCategoryDto getAllSubCategoryByCategoryEngName(@Param("categoryEngName") String categoryEngName);
-    
-    // 서브 카테고리 이름과 카테고리 이름으로 서브 카테고리를 가져오는 메서드
-    SubCategoryDto getSubCategoryByNameAndCategoryEngName(@Param("subCategoryName") String subCategoryName,
-                                                          @Param("categoryEngName") String categoryEngName);
-
-
-	List<CategoryDto> getCategoriesByKeyword(String keyword);
-	
-	List<SubCategoryDto> getSubCategoriesByCategoryCode(@Param("categoryCode") String categoryCode);
-	
-	List<CategoryDto> searchCategoriesAndSubCategories(@Param("keyword") String keyword);
 
 
 	// 임시로 만든 전체 포스팅 내용 갖고오기
@@ -42,10 +25,15 @@ public interface MainMapper {
 	// 총 검색 결과량
 	int getPostingCountByKeyword(String keyword);
 
-
 	// 최근 공고 갖고오기
 	List<Map<String, Object>> getRecentPosting();
-
+	
+	SubCategoryDto getAllSubCategoryByCategoryEngName(@Param("categoryEngName") String categoryEngName);
+	
+	// 서브 카테고리 이름과 카테고리 이름으로 서브 카테고리를 가져오는 메서드
+    SubCategoryDto getSubCategoryByNameAndCategoryEngName(@Param("subCategoryName") String subCategoryName,
+                                                          @Param("categoryEngName") String categoryEngName);
+	
 	// Category로 모든 공고 갖고오기(All페이지에 들어갈 공고)
 	List<Map<String, Object>> getAllPostingByCategory(Map<String, Object> params);
 
@@ -68,5 +56,16 @@ public interface MainMapper {
 
 	// 찜 삭제
 	void deleteWish(@Param("postingIdx") Long postingIdx, @Param("userIdx") Long userIdx);
+
+
+	//=========================================
+	// 채팅용 닉네임 들고오기
+	// 개인
+	String getPNickNameByUserIdx(Long userIdx);
+
+	// 가맹점
+	String getSNickNameByUserIdx(Long userIdx);
+	//=========================================
+
 	
 }

@@ -38,6 +38,16 @@ PERSON_SEQ.NEXTVAL,
 )
 </insert>
 
+<select id="getEmail">
+SELECT email
+FROM person
+WHERE email = #{email}
+UNION
+SELECT email
+FROM store
+WHERE email = #{email}
+</select>
+
 <select id="getId">
 SELECT ID FROM USERS WHERE ID = #{id}
 </select>
@@ -146,5 +156,19 @@ PERSON_SPEC_SEQ.NEXTVAL,
 PERSON_SEQ.CURRVAL
 )
 </insert>
+
+<select id="getIdByEmail">
+select id
+from users u
+join person p on u.user_idx = p.user_idx
+where p.email= #{email}
+</select>
+
+<select id="getIdByPhone">
+select id
+from users u
+join person p on u.user_idx = p.user_idx
+where p.phone=#{phone}
+</select>
 
 </mapper>

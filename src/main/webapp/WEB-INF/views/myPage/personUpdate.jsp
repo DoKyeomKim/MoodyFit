@@ -77,6 +77,10 @@
         margin-top: -1px;
         height : 36px;
     }
+    th.required::after {
+    content: " *";
+    color: red;
+	}
 </style>
 </head>
 <body>
@@ -92,15 +96,15 @@
     <table class="table table-bordered">
         <c:if test="${result.SOCIAL=='NO'}">
             <tr>
-                <th>아이디</th>
+                <th class="required">아이디</th>
                 <td style="padding-left:21px">${result.ID}</td>
             </tr>
             <tr>
-                <th>비밀번호</th>
+                <th class="required">비밀번호</th>
                 <td><input type="password" name="pw" id="password" oninput="pwCheck()" class="form-control" style="width: 60%;"placeholder="변경을 원하실 경우 입력해주세요."></td>
             </tr>
             <tr>
-                <th>비밀번호 확인</th>
+                <th class="required">비밀번호 확인</th>
                 <td>
                     <input type="password" id="password2" oninput="pwCheck()" class="form-control" style="width: 60%;"placeholder="비밀번호를 다시 한번 입력해주세요">
                     <span id="pwConfirm" style="display: block;"></span>
@@ -108,11 +112,11 @@
             </tr>
         </c:if>
         <tr>
-            <th>이름</th>
+            <th class="required">이름</th>
             <td><input type="text" name="name" id="name" value="${result.NAME}" class="form-control" style="width: 60%;" placeholder="이름을 입력해주세요"></td>
         </tr>
         <tr>
-            <th>닉네임</th>
+            <th class="required">닉네임</th>
             <td>
                 <div class="form-inline flex-container">
                     <input type="text" name="nickName" id="nickName" value="${result.NICK_NAME}" class="form-control" placeholder="닉네임을 입력해주세요">
@@ -122,7 +126,7 @@
             </td>
         </tr>
         <tr>
-            <th>우편번호</th>
+            <th class="required">우편번호</th>
             <td>
                 <div class="form-inline flex-container">
                     <input type="text" name="postCode" id="sample6_postcode" value="${result.POST_CODE}" class="form-control" placeholder="우편번호">
@@ -131,19 +135,19 @@
             </td>
         </tr>
         <tr>
-            <th>주소</th>
+            <th class="required">주소</th>
             <td><input type="text" name="address" id="sample6_address" value="${result.ADDRESS}" class="form-control" placeholder="주소"></td>
         </tr>
         <tr>
-            <th>상세주소</th>
+            <th class="required">상세주소</th>
             <td><input type="text" name="detailAddress" id="sample6_detailAddress" value="${result.DETAIL_ADDRESS}" class="form-control" placeholder="상세주소를 입력해주세요"></td>
         </tr>
         <tr>
-            <th>전화번호</th>
+            <th class="required">전화번호</th>
             <td><input type="text" name="phone" id="phone" value="${result.PHONE}" class="form-control" placeholder="-를 제외한 번호만 입력해주세요"></td>
         </tr>
         <tr>
-            <th>이메일</th>
+            <th class="required">이메일</th>
             <td><input type="email" name="email" id="email" value="${result.EMAIL}" class="form-control" placeholder="@를 포함한 이메일을 입력해주세요"></td>
         </tr>
     </table>
@@ -222,6 +226,17 @@
 
 
 <script>
+    window.onload = function() {
+        console.log("Page loaded");
+        const urlParams = new URLSearchParams(window.location.search);
+        console.log("URL parameters: ", urlParams.toString());
+        if (urlParams.has('newUser')) {
+            alert('환영합니다! 정보수정을 마저 해주세요!');
+        }
+        // 초기 상태 설정
+        initialize();
+    };
+
     const btnNicknameCheckEl = document.querySelector('#btnNickNameCheck');
     const submitBtnEl = document.querySelector('#submitBtn');
     const output2El = document.querySelector('#output2');
@@ -235,9 +250,14 @@
         } else {
             btnNicknameCheckEl.disabled = false;
         }
+
+        // 이벤트 리스너 추가
+        nickNameInputEl.addEventListener('input', handleNickNameInput);
+        btnNicknameCheckEl.addEventListener('click', handleNickNameCheck);
     }
 
-    nickNameInputEl.addEventListener('input', function() {
+    // 닉네임 입력 이벤트 처리 함수
+    function handleNickNameInput() {
         if (nickNameInputEl.value === originalNickName) {
             btnNicknameCheckEl.disabled = true;
             submitBtnEl.disabled = false;
@@ -246,9 +266,10 @@
             submitBtnEl.disabled = true;
         }
         output2El.innerHTML = '';
-    });
+    }
 
-    btnNicknameCheckEl.onclick = function(e) {
+    // 닉네임 중복 체크 버튼 클릭 이벤트 처리 함수
+    function handleNickNameCheck(e) {
         if (!nickNameInputEl.value.trim()) {
             output2El.innerHTML = "<small style='color:red'>닉네임을 입력해주세요.</small>";
             return;
@@ -266,9 +287,6 @@
             })
             .catch(error => console.error('Error:', error));
     }
-
-    // 페이지가 로드되었을 때 초기 상태 설정
-    window.onload = initialize;
 </script>
 
 <!-- 전화번호 입력시 - 자동생성 -->

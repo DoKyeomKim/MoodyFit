@@ -1,5 +1,7 @@
 package com.mf.service;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -18,6 +20,7 @@ import com.mf.dto.PersonDto;
 import com.mf.dto.UsersDto;
 import com.mf.mapper.UsersMapper;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Service
@@ -30,6 +33,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private UsersMapper usersMapper;
     @Autowired
     private HttpSession session;
+    @Autowired
+    private HttpServletResponse response;
 
 	
       @Transactional
@@ -94,6 +99,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	        	usersMapper.OAuthJoin(users);
 	        	usersMapper.OAuthPersonJoin(person);
 	        	usersMapper.OAuthSpecJoin();
+	    
+	        	    try {
+						response.sendRedirect("/personUpdateForm?newUser=true");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+	        	    
 	        	}
 	        
 	        

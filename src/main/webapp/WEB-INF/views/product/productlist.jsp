@@ -27,7 +27,7 @@
 }
 
 .table-container {
-    border: 2px solid #007bff; 
+    border: 2px solid grey; 
     padding: 10px;
     width: 75%;
     margin: auto;
@@ -76,7 +76,7 @@
 }
 
 .button-container button {
-    background-color: #007bff; 
+    background-color: grey; 
     color: white;
     border: none;
     padding: 10px 20px;
@@ -128,32 +128,33 @@
 	width : 10px;
 }
 
+.table-container a {
+    text-decoration: none; 
+    color: inherit; 
+}
+
+
+.table-container {
+	text-decoration: none;
+}
+
+.table-container a:hover {
+	text-decoration: none;
+}
+
+.table-container a:hover .table {
+    border: 2px solid lightgrey; 
+    background-color: #f0f8ff; 
+}
+
+
 </style>
 
 </head>
 <body>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
-<div class="fixed-sidebar w3-sidebar w3-bar-block w3-light-grey w3-card" style="width:160px;">
-  <a href="#" class="w3-bar-item w3-button">Link 1</a>
-  <button class="w3-button w3-block w3-left-align" onclick="toggleAccFunc('productAcc')">
-    상품 관리 <i class="fa fa-caret-down"></i>
-  </button>
-  <div id="productAcc" class="w3-hide w3-white w3-card">
-    <a href="storeMypage/productList" class="w3-bar-item w3-button">상품 리스트</a>
-    <a href="/storeMypage/productWrite" class="w3-bar-item w3-button">상품 등록</a>
-  </div>
-  <button class="w3-button w3-block w3-left-align" onclick="toggleAccFunc('saleAcc')">
-    판매 글 관리 <i class="fa fa-caret-down"></i>
-  </button>
-  <div id="saleAcc" class="w3-hide w3-white w3-card">
-    <a href="#" class="w3-bar-item w3-button">판매 글 리스트</a>
-    <a href="#" class="w3-bar-item w3-button">판매 글 등록</a>
-    <a href="#" class="w3-bar-item w3-button">판매 글 신청 현황</a>
-  </div>
+<%@include file="/WEB-INF/layouts/storeAside.jsp"%>
 
-  <a href="#" class="w3-bar-item w3-button">정보 수정</a>
-  <a href="#" class="w3-bar-item w3-button">회원 탈퇴</a>
-</div>
 
 <div class="w3-container" style="margin-left:160px">
   <h3>상품 관리 리스트</h3>
@@ -164,28 +165,34 @@
         <thead>
             <tr>
                 <th><input type="checkbox" id="select-all"></th>
-                <th style="width: 10px;">no</th>
-                <th style="width: 50px;">사진(임시)</th>
+                <th style="width: 10px;">no</th>                
+               	<th style="width: 50px;">사진</th>
                 <th>상품명</th>
                 <th>판매가</th>
                 <th>분류</th>
-                <th>판매상태</th>
                 <th>재고</th>
                 <th>수정일</th>
+                <th>수정/삭제</th>
             </tr>
         </thead>
         <tbody>
        		<c:forEach var="product" items="${products }">
             <tr>
                 <td><input type="checkbox" class="select-item"></td>
-                <td style="width: 10px;">${product.productInfoIdx}</td>
-                <td style="width: 50px;"><img src="/images/airporce.jpg" alt="임시"></td>
-                <td>${product.name}</td>
-                <td>${product.price}</td>
-                <td>${product.category}/${product.subCategory}</td>
-                <td>판매전</td>
-                <td>[${product.color}] ${product.quantity}</td>
-                <td>${product.updateDate}</td>
+                <td style="width: 10px;">${product.PRODUCT_IDX}</td>
+                	
+                <td style="width: 50px;">
+                  	<img src="${product.FILE_PATH}" >
+                </td>
+                <td>${product.NAME}</td>
+                <td>${product.PRICE}</td>
+                <td>${product.CATEGORY}/${product.SUB_CATEGORY}</td>
+                <td>${product.INVENTORY}</td>
+                <td>${product.UPDATE_DATE}</td>
+                <td>
+               		<button class="btn btn-primary" onclick="editProduct(${product.PRODUCT_IDX})">수정</button>
+                	<button class="btn btn-danger" onclick="deleteProduct(${product.PRODUCT_IDX})">삭제</button>
+                </td>
             </tr>
            </c:forEach>
         </tbody>
@@ -193,7 +200,7 @@
 
     <div class="button-container">
         <a href="/storeMypage/productWrite"><button>신규 상품 등록</button></a>
-        <a href="/storeMypage/productUpdate"><button>수정</button></a>
+        <a href="/storeMypage/productUpdate"><button>삭제</button></a>
     </div>
 </div>
 
