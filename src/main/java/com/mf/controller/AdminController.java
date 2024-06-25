@@ -538,41 +538,8 @@ public class AdminController {
 	   @PostMapping("/EPWrite")
 	   public ModelAndView EPWrite(@RequestParam("file") MultipartFile file, EditorPickDto editorPick) {
 		   ModelAndView mv = new ModelAndView();
-		   
-		   
-		    //사진 파일 이름
-			String fileName = file.getOriginalFilename();
-			// 암호환 파일 이름 중복방지(그냥 시간 앞에 붙임)
-			String fileNameScret = System.currentTimeMillis() + "_" + fileName;
 
-			String filePath = "C:/dev/" + fileNameScret;
-			Long fileSize = file.getSize();
-			// 파일 해당 위치에 저장
-			File dest = new File("C:/dev/images/"+fileNameScret);
-			// 만약 해당 위치에 폴더가 없으면 생성
-			if (!dest.exists()) {
-				dest.mkdirs();
-	        }
-			
-			try {
-				// 파일을 지정된 경로로 저장
-				file.transferTo(dest);
-
-				// 데이터베이스에 저장할 이미지 경로 설정
-				editorPick.setFilePath("/images/" + fileNameScret);
-				editorPick.setOriginalName(fileName);
-				editorPick.setFileSize(fileSize);
-				// 이후 데이터베이스에 저장(경로로 저장)
-
-				editorPickService.writeEditorPick(editorPick);
-
-			} catch (IllegalStateException | IOException e) {
-				e.printStackTrace();
-				mv.addObject("error", "파일 업로드 실패.");
-				mv.setViewName("admin/editorPickWrite");
-				return mv;
-			}
-		   
+		   editorPickService.writeEditorPick(editorPick,file);
 		   
 		   mv.setViewName("redirect:/adminEditorPick");
 		   return mv;

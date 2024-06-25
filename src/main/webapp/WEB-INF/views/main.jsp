@@ -212,10 +212,5 @@ window.addEventListener('load', function() {
     document.body.classList.add('loaded');
 });
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.body.classList.add('loaded');
-});
-</script>
 </body>
 </html>
