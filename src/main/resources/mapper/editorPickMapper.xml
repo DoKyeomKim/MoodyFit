@@ -70,5 +70,9 @@ END_DATE=#{endDate},
 POSTING_IDX=#{postingIdx}
 where pick_idx=#{pickIdx}
 </update>
+<delete id="editorPickDelete">
+delete from editor_pick
+where pick_idx=#{pickIdx}
+</delete>
 
 </mapper>

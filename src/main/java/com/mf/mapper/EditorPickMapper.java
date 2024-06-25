@@ -26,5 +26,7 @@ public interface EditorPickMapper {
 	void editorPickUpdate(EditorPickDto editorPick);
 	// 에디터픽 수정(파일 업로드 없을 시)
 	void editorPickUpdateWithoutFile(EditorPickDto editorPick);
+	// 에디터픽 삭제
+	void editorPickDelete(Long pickIdx);
 
 }

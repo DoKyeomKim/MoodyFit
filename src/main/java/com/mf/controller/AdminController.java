@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -580,6 +581,7 @@ public class AdminController {
 		   return mv;
 	   }
 	  
+	   // 에디터픽 수정
 	   @PostMapping("/EPEdit")
 	   public ModelAndView EPEdit(@RequestParam("file") MultipartFile file,EditorPickDto editorPick) {
 		   ModelAndView mv = new ModelAndView();
@@ -588,6 +590,15 @@ public class AdminController {
 		   
 		   mv.setViewName("redirect:/adminEditorPick");
 		   return mv;
+	   }
+	   
+	   // 에디터픽 삭제
+	   @PostMapping("/EPDelete")
+	   public String EPDelete(@RequestParam("pickIdx") Long pickIdx) {
+		   
+		   editorPickService.editorPickDelete(pickIdx);
+		   
+		   return "redirect:/adminEditorPick";
 	   }
 	   
 }

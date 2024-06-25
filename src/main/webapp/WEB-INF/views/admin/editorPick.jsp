@@ -44,17 +44,23 @@ main {
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="editorPick" items="${editorPick}">    
-                    <tr class="editorPick-info">
-                        <td>${editorPick.PICK_IDX}</td>
-                        <td>${editorPick.POSTING_IDX}</td>
-                        <td>${editorPick.TITLE}</td>
-                        <td>${editorPick.STORE_NAME}</td>
-                        <td class="start-date">${editorPick.START_DATE}</td>
-            			<td class="end-date">${editorPick.END_DATE}</td>
-                        <td><a href="/EPEditForm?pickIdx=${editorPick.PICK_IDX}" class="btn btn-primary" style="margin-right:5px;">수정</a><a href="#" class="btn btn-danger">삭제</a></td>
-                    </tr>
-                </c:forEach>
+				<c:forEach var="editorPick" items="${editorPick}">
+				    <tr class="editorPick-info">
+				        <form id="deleteForm${editorPick.PICK_IDX}" method="post" action="/EPDelete">
+				            <input type="hidden" name="pickIdx" value="${editorPick.PICK_IDX}">
+				            <td>${editorPick.PICK_IDX}</td>
+				            <td>${editorPick.POSTING_IDX}</td>
+				            <td>${editorPick.TITLE}</td>
+				            <td>${editorPick.STORE_NAME}</td>
+				            <td class="start-date">${editorPick.START_DATE}</td>
+				            <td class="end-date">${editorPick.END_DATE}</td>
+				            <td>
+				                <a href="/EPEditForm?pickIdx=${editorPick.PICK_IDX}" class="btn btn-primary" style="margin-right:5px;">수정</a>
+				                <button type="button" class="btn btn-danger" onclick="confirmDelete(${editorPick.PICK_IDX})">삭제</button>
+				            </td>
+				        </form>
+				    </tr>
+				</c:forEach>
             </tbody>
         </table>
         <a href="/EPWriteForm" class="btn btn-primary">작성하기</a>
@@ -82,6 +88,19 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
-
+<script>
+function confirmDelete(pickIdx) {
+    var confirmDelete = confirm("정말로 삭제하시겠습니까?");
+    if (confirmDelete) {
+        // 확인을 눌렀을 때 삭제 진행
+        var form = document.getElementById("deleteForm" + pickIdx);
+        if (form) {
+            form.submit(); // 해당 폼을 서브밋하여 삭제 처리
+        }
+    } else {
+        // 취소했을 때 추가 작업 (여기서는 아무 작업 없음)
+    }
+}
+</script>
 </body>
 </html>

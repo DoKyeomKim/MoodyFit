@@ -115,6 +115,10 @@ public class EditorPickService {
 	    }
 	}
 
+	public void editorPickDelete(Long pickIdx) {
+			editorPickMapper.editorPickDelete(pickIdx);
+	}
+
 
 
 }
