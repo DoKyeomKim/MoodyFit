@@ -1,5 +1,6 @@
 package com.mf.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +15,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mf.dto.OrdersDto;
+import com.mf.dto.PersonDto;
+import com.mf.jpa.CartService;
 import com.mf.mapper.OrderMapper;
+import com.mf.service.MyPageService;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 public class TokenController {
 
 	@Autowired
+	private MyPageService myPageService;
+	
+	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private CartService cartService;
 	
 	@Autowired
 	private OrderMapper orderMapper;
@@ -40,7 +51,13 @@ public class TokenController {
 	private String iamportApiSecret;
 
 	@RequestMapping("/api/postToken")
-	public ResponseEntity<String> postToken(  @RequestBody Map<String, Object> request, OrdersDto ordersDto ) throws Exception {
+	public ResponseEntity<String> postToken(  @RequestBody Map<String, Object> request, OrdersDto ordersDto, HttpSession session ) throws Exception {
+		
+		
+		Long userIdx = (Long) session.getAttribute("userIdx");
+		 Map<String, Object> result = myPageService.getPersonMyPage(userIdx);
+			PersonDto person = (PersonDto) result.get("person");
+			Long personIdx = person.getPersonIdx();
 		
 		//   @RequestParam("impUid") String impUid
 		 String impUid = (String) request.get("impUid");
@@ -48,6 +65,7 @@ public class TokenController {
 		System.out.println(impUid);
 		System.out.println(impUid);
 		System.out.println(impUid);
+		
 		
 		// IAMPORT API URL
 		String url = iamportApiUrl + "/users/getToken";
@@ -102,15 +120,20 @@ public class TokenController {
 	                JsonNode amountNode = paymentRootNode.path("response").path("amount");
 	                JsonNode merchantUidNode = paymentRootNode.path("response").path("merchant_uid");
 	                
-	                int amount = amountNode.asInt();
+	                Long amount = (long) amountNode.asInt();
 	                String merchant_uid = merchantUidNode.asText();
 
 	                System.out.println("Amount: " + amount);
 	                System.out.println("Merchant_uid: " + merchant_uid);
-	                // orderMapper.selectTotalPrice(ordersDto);	
-	                
-	                if (amount == 101000) {
+	                Long totalPrice = orderMapper.selectTotalPrice(userIdx);	
+	                System.out.println("totalPrice: " + totalPrice);
+	                if (amount.equals(totalPrice)) {
 	                	 System.out.println("결제 내역과 주문내역의 금액이 같다");
+	                	 orderMapper.updateImpUid(impUid, personIdx);
+	                	 List<Integer> cartIdxs = orderMapper.selectCartIdxByImpUid(impUid);
+	                	 for (Integer cartIdx : cartIdxs) {
+	                         orderMapper.updateCartStateToComplete(cartIdx);
+	                     }
 	                    return ResponseEntity.ok("Success");
 	                } else {
 	                	System.out.println("결제 내역과 주문내역의 금액이 다르다1");
