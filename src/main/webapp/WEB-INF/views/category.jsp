@@ -54,7 +54,6 @@
 			</a>
 		</c:forEach>
 	</div>
-여기 필터링 기능 추가 화면 오른쪽에 버튼기능으로 일렬로 
 	<main>
 		<div class="container">
 			<div class="row">

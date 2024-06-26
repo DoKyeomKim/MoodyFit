@@ -29,6 +29,7 @@ import com.mf.dto.CategoryDto;
 import com.mf.dto.CsFaqDto;
 import com.mf.dto.CsQnaDto;
 import com.mf.dto.EditorPickDto;
+import com.mf.dto.Paging;
 import com.mf.dto.PersonDto;
 import com.mf.dto.StoreDto;
 import com.mf.dto.SubCategoryDto;
@@ -509,16 +510,32 @@ public class AdminController {
 		   System.out.println(AdminOrderList);		
 		   return mv;
 	   }
-	   
+
+//=========================================================================
+//==============================에디터 픽==================================
+//=========================================================================
+//=========================================================================
 	   
 	   // 에디터 픽 이동
 	   @GetMapping("/adminEditorPick")
-	   public ModelAndView editorPick() {
+	   public ModelAndView editorPick(@RequestParam(value = "page", defaultValue = "1") int page) {
 		   ModelAndView mv = new ModelAndView();
 		   
-		   // 에디터픽 리스트 갖고오기
-		   List<Map<String,Object>> editorPick = editorPickService.getEditorPick();
+		   int pageSize = 5;
+		   int startIndex = (page - 1) * pageSize;
 		   
+		   // 에디터픽 리스트 갖고오기
+		   List<Map<String,Object>> editorPick = editorPickService.getEditorPick(pageSize,startIndex);
+		   // 페이징 처리
+		   Paging paging = editorPickService.calculatePagingInfo(page, pageSize);
+		   
+		   mv.addObject("prev", paging.isPrev());
+		   mv.addObject("next", paging.isNext());
+		   mv.addObject("startPageNum", paging.getStartPageNum());
+		   mv.addObject("endPageNum", paging.getEndPageNum());
+		   mv.addObject("totalPages", paging.getTotalPages());
+		   mv.addObject("currentPage", page);
+
 		   mv.addObject("editorPick", editorPick);
 		   mv.setViewName("admin/editorPick");
 		   return mv;
@@ -529,7 +546,7 @@ public class AdminController {
 	   public ModelAndView EPWriteForm() {
 		   ModelAndView mv = new ModelAndView();
 		   // 임시용 전부 들고 오는 로직
-		   List<Map<String,Object>> posting = editorPickService.getAllPosting();
+		   List<Map<String,Object>> posting = editorPickService.getPickPosting();
 		   
 		   
 		   
@@ -585,5 +602,10 @@ public class AdminController {
 		   
 		   return "redirect:/adminEditorPick";
 	   }
+//=========================================================================
+//=========================================================================
+//=========================================================================
+
+	   
 	   
 }
