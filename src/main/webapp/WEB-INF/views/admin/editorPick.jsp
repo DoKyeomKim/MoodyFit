@@ -21,6 +21,7 @@ main {
     font-size : 15px;
   
 }
+
 .editor-pick-table {
     width: 100%;
     margin-bottom: 20px;
@@ -47,6 +48,11 @@ main {
 
 .btn-margin-right {
     margin-right: 5px;
+}
+.button-group {
+	margin-top : 20px;
+    display: flex;
+    justify-content: center;
 }
 </style>
 </head>
@@ -91,7 +97,9 @@ main {
 				</c:forEach>
             </tbody>
         </table>
-        <a href="/EPWriteForm" class="btn btn-primary">작성하기</a>
+        <div class="button-group">
+        <a href="/EPWriteForm" class="btn btn-outline-primary" style="width : 500px;">작성하기</a>
+        </div>
 	</div>
 </main>
 

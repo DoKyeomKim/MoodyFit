@@ -9,35 +9,68 @@
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <style>
-/* CSS styles */
-body {
-    font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
-}
+
 main {
-    width: 90%;
-    background-color: #fff;
+    max-width: 960px;
+    margin: 20px auto;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    font-size: 15px;
 }
-#main-area {
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.selected-posting {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+}
+
+.preview-area {
+    text-align: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+
+.file-area {
+    margin-bottom: 20px;
+}
+
+.posting-date {
+    margin-bottom: 20px;
     text-align: center;
 }
-.preview-area, #uploadInput, .posting-date {
-    margin: 20px 0;
+
+.posting-date input[type="date"] {
+    font-size: 16px;
+    padding: 10px;
+    width: 200px;
+    margin: 0 10px;
 }
-.modal-dialog {
-    max-width: 80%;
+.pick-posting {
+    display: block;
+    margin: 0 auto;
 }
-.modal-body {
-    overflow-x: auto;
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
 }
+
+.btn-primary:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
 table.editor-pick-table {
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
     border: 1px solid #dee2e6;
     border-collapse: collapse;
+    margin-top: 10px;
 }
 
 table.editor-pick-table th, table.editor-pick-table td {
@@ -56,19 +89,54 @@ table.editor-pick-table tr:nth-child(even) {
 
 table.editor-pick-table tr.posting-info:hover {
     cursor: pointer;
-    background-color: #e9ecef; /* 배경색 어두워짐 */
+    background-color: #e9ecef; /* 호버 배경색 */
 }
 
 table.editor-pick-table tr.posting-info:active {
     transform: translateY(1px); 
 }
-.selected-posting {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #dee2e6;
+
+.modal-content {
+    background-color: #fff;
+    border: none;
     border-radius: 5px;
-    background-color: #f8f9fa;
+    width: 100%; /* 모달 너비에 맞게 조정 */
+    max-width: 100%; /* 너무 커질 경우 최대 너비 제한 */
 }
+.file-area {
+    position: relative;
+    width: fit-content;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.file-area input[type=file] {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-area .btn2 {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.file-area .selectedFileName {
+    margin-left: 10px;
+    font-size: 14px;
+}
+.button-group {
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    gap : 10px;
+}
+
 </style>
 </head>
 <body>
@@ -90,18 +158,20 @@ table.editor-pick-table tr.posting-info:active {
             <p>공고명: <span id="selected-posting-title">${postingInfo.TITLE}</span></p>
             <p>가맹점명: <span id="selected-posting-store">${postingInfo.STORE_NAME}</span></p>
             <!-- 버튼 타입을 button으로 변경 -->
-            <button type="button" id="pick-posting" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pickModal">공고 선택</button>
+            <button type="button" id="pick-posting" class="btn btn-primary pick-posting" data-bs-toggle="modal" data-bs-target="#pickModal">공고 선택</button>
         </div>
-        <div class="preview-area"> 
+        <div class="preview-area" onclick="openFileInput()"> 
             <img src="${editorPick.filePath}" id="imagePreview" style="height:450px; width:910px;" class="imagePreview">
         </div>
-        <div class="file-area">
-            <input type="file" name="file" id="uploadInput" onchange="previewImage()">
-        </div>
+		<div class="file-area">
+		    <label for="uploadInput" class="btn2">이미지 업로드</label>
+		    <input type="file" name="file" id="uploadInput" onchange="previewImage()">
+		    <span id="selectedFileName" class="selectedFileName"></span>
+		</div>
         <div class="posting-date">
             <input type="date" name="startDate" value="${startDate}" required> ~ <input type="date" name="endDate" value="${endDate}" required>
         </div>
-        <div>
+        <div class="button-group">
             <button type="submit" class="btn btn-primary">수정하기</button>
             <a href="/adminEditorPick" class="btn btn-secondary">목록으로</a>
         </div>
@@ -109,8 +179,8 @@ table.editor-pick-table tr.posting-info:active {
 </form>
 </main>
 <div class="modal fade" id="pickModal" tabindex="-1" aria-labelledby="pickModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+  <div class="modal-dialog modal-dialog-centered modal-xl"> <!-- modal-xl로 변경 -->
+    <div class="modal-content overflow-auto">
       <div class="modal-header">
         <h5 class="modal-title" id="pickModalLabel">공고 선택</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -125,8 +195,7 @@ table.editor-pick-table tr.posting-info:active {
                 </tr>
             </thead>
             <tbody>
-                <!-- posting 변수로 forEach 반복 -->
-                <c:forEach var="posting" items="${posting}">
+                <c:forEach var="posting" items="${posting}">    
                     <tr class="posting-info">
                         <td>${posting.POSTING_IDX}</td>
                         <td>${posting.TITLE}</td>
@@ -143,23 +212,27 @@ table.editor-pick-table tr.posting-info:active {
 <script src="/js/bootstrap.bundle.min.js"></script>
 
 <script>
+function openFileInput() {
+    document.getElementById('uploadInput').click();
+}
 function previewImage() {
     const fileInput = document.getElementById('uploadInput');
     const imagePreview = document.getElementById('imagePreview');
+    const selectedFileName = document.getElementById('selectedFileName');
     
     if (fileInput.files && fileInput.files[0]) {
         const reader = new FileReader();
 
         reader.onload = function(e) {
             imagePreview.src = e.target.result;
+            selectedFileName.textContent = fileInput.files[0].name;
         }
 
-        reader.readAsDataURL(fileInput.files[0]); // 파일을 읽어 데이터 URL로 변환
+        reader.readAsDataURL(fileInput.files[0]);
     }
 }
 
 window.onload = function() {
-
     // "공고 선택" 버튼 클릭 시 모달 열기
     document.getElementById('pick-posting').addEventListener('click', function() {
         var modal = new bootstrap.Modal(document.getElementById('pickModal'));
@@ -183,6 +256,11 @@ window.onload = function() {
             // 모달 닫기
             var modal = bootstrap.Modal.getInstance(document.getElementById('pickModal'));
             modal.hide();
+
+            // 배경 회색 복구
+            document.body.classList.remove('modal-open');
+            var backdrop = document.getElementsByClassName('modal-backdrop')[0];
+            backdrop.remove(); // 또는 backdrop.style.display = 'none';으로 설정
         });
     });
 

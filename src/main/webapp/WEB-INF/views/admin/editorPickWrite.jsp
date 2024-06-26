@@ -32,6 +32,8 @@ h2 {
 .preview-area {
     text-align: center;
     margin-bottom: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
 }
 
 .file-area {
@@ -40,8 +42,16 @@ h2 {
 
 .posting-date {
     margin-bottom: 20px;
+    text-align: center;
 }
-.btn {
+
+.posting-date input[type="date"] {
+    font-size: 16px;
+    padding: 10px;
+    width: 200px;
+    margin: 0 10px;
+}
+.pick-posting {
     display: block;
     margin: 0 auto;
 }
@@ -120,6 +130,11 @@ table.editor-pick-table tr.posting-info:active {
     margin-left: 10px;
     font-size: 14px;
 }
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap : 10px;
+}
 </style>
 </head>
 <body>
@@ -138,10 +153,10 @@ table.editor-pick-table tr.posting-info:active {
             <p>공고번호: <span id="selected-posting-idx"></span></p>
             <p>공고명: <span id="selected-posting-title"></span></p>
             <p>가맹점명: <span id="selected-posting-store"></span></p>
-            <button type="button" id="pick-posting" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pickModal">공고 선택</button>
+            <button type="button" id="pick-posting" class="btn btn-primary pick-posting" data-bs-toggle="modal" data-bs-target="#pickModal">공고 선택</button>
         </div>
-        <div class="preview-area"> 
-            <img src="#" id="imagePreview" style="height:450px; width:910px;" class="imagePreview">
+        <div class="preview-area" onclick="openFileInput()"> 
+            <img src="images/plus-file.svg" id="imagePreview" style="height:450px; width:910px;" class="imagePreview">
         </div>
 		<div class="file-area">
 		    <label for="uploadInput" class="btn2">이미지 업로드</label>
@@ -151,7 +166,10 @@ table.editor-pick-table tr.posting-info:active {
         <div class="posting-date">
             <input type="date" name="startDate" required> ~ <input type="date" name="endDate" required>
         </div>
-		<button type="submit" class="btn btn-primary">등록하기</button>
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">수정하기</button>
+            <a href="/adminEditorPick" class="btn btn-secondary">목록으로</a>
+        </div>
     </div>
 </form>
 </main>
@@ -189,6 +207,10 @@ table.editor-pick-table tr.posting-info:active {
 <script src="/js/bootstrap.bundle.min.js"></script>
 
 <script>
+function openFileInput() {
+    document.getElementById('uploadInput').click();
+}
+
 function previewImage() {
     const fileInput = document.getElementById('uploadInput');
     const imagePreview = document.getElementById('imagePreview');
