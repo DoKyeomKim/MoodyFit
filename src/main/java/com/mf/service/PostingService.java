@@ -47,7 +47,7 @@ public class PostingService {
     
     
     @Transactional
-    public void createPosting(Long productIdx, String title, String content, List<MultipartFile> postingFiles) {
+    public void createPosting(Long productIdx, Long productInfoIdx, String title, String content, List<MultipartFile> postingFiles) {
         // Posting 테이블에 새 레코드 삽입
         PostingDto postingDto = new PostingDto();
         postingDto.setTitle(title);
@@ -65,6 +65,9 @@ public class PostingService {
         }
 
         // Posting_Product 테이블에 상품 정보와 연결
+        PostingProductDto postingProductDto = new PostingProductDto();
+        postingProductDto.setPostingIdx(postingIdx);
+        postingProductDto.setProductInfoIdx(productInfoIdx);
         postingMapper.insertPostingProduct(postingIdx, productIdx);
     }
 

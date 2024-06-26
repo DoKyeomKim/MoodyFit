@@ -10,9 +10,12 @@
     VALUES (#{postingIdx}, #{title}, #{content}, SYSDATE, #{state})
 </insert>
 
-<insert id="insertPostingProduct" parameterType="map">
+<insert id="insertPostingProduct" parameterType="com.mf.dto.PostingProductDto">
+    <selectKey keyProperty="postingProductIdx" resultType="long" order="BEFORE">
+        SELECT posting_product_seq.NEXTVAL FROM DUAL
+    </selectKey>
     INSERT INTO posting_product (posting_product_idx, posting_idx, product_info_idx)
-    VALUES (posting_product_seq.NEXTVAL, #{postingIdx}, #{productIdx})
+    VALUES (#{postingProductIdx}, #{postingIdx}, #{productInfoIdx})
 </insert>
 
 <insert id="insertPostingFile" parameterType="com.mf.dto.PostingFileDto">
