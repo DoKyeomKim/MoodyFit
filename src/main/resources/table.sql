@@ -359,6 +359,8 @@ CREATE TABLE EDITOR_SCRAP(
 ALTER TABLE posting_question
 ADD state NUMBER;
 
+alter table posting_answer
+add title varchar2(300);
 -----------------------------------------
 
 
