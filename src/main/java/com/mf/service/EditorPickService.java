@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mf.dto.EditorPickDto;
+import com.mf.dto.Paging;
 import com.mf.dto.StoreDto;
 import com.mf.mapper.EditorPickMapper;
 
@@ -24,8 +25,8 @@ public class EditorPickService {
 	@Autowired
 	private EditorPickMapper editorPickMapper;
 	
-	public List<Map<String, Object>> getAllPosting() {
-		return editorPickMapper.getAllPosting();
+	public List<Map<String, Object>> getPickPosting() {
+		return editorPickMapper.getPickPosting();
 	}
 
 	public void writeEditorPick(EditorPickDto editorPick, MultipartFile file) {
@@ -59,9 +60,43 @@ public class EditorPickService {
 	}
 	
 	// 에디터 픽 리스트 갖고오기 로직
-	public List<Map<String, Object>> getEditorPick() {
-		return editorPickMapper.getAllPick();
+	public List<Map<String, Object>> getEditorPick(int pageSize, int startIndex) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("pageSize", pageSize);
+		params.put("startIndex", startIndex);
+		return editorPickMapper.getAllPick(params);
 	}
+	
+
+	// 에디터픽 리스트 페이징 처리
+	public Paging calculatePagingInfo(int page, int pageSize) {
+		int totalCount = editorPickMapper.getEditorPickCount();
+		int totalPages = (int) Math.ceil((double) totalCount / pageSize); // 총 페이지 수
+	    
+	    int pageNum_cnt = 10; // 한번에 보여줄 페이지 수
+	    int endPageNum = (int) (Math.ceil((double) page / pageNum_cnt) * pageNum_cnt); // 마지막 페이지 번호
+	    int startPageNum = endPageNum - (pageNum_cnt - 1); // 시작 페이지 번호
+	    
+	    // 마지막 페이지 번호 다시 검증
+	    int endPageNum_tmp = (int) (Math.ceil((double) totalCount / pageSize));
+	    if (endPageNum > endPageNum_tmp) {
+	        endPageNum = endPageNum_tmp;
+	    }
+	    
+	    boolean prev = startPageNum > 1; // 이전 페이지 존재 여부
+	    boolean next = endPageNum * pageSize < totalCount; // 다음 페이지 존재 여부
+	    
+	    Paging paging = new Paging();
+	    paging.setTotalPages(totalPages);
+	    paging.setStartPageNum(startPageNum);
+	    paging.setEndPageNum(endPageNum);
+	    paging.setPrev(prev);
+	    paging.setNext(next);
+		
+		return paging;
+
+	}
+
 
 	// 에디터픽 수정용 내용 갖고오는 로직
 	public Map<String, Object> getEditPickByPickIdx(Long pickIdx, EditorPickDto editorPick) throws ParseException {
@@ -136,6 +171,9 @@ public class EditorPickService {
 	public void editorPickDelete(Long pickIdx) {
 			editorPickMapper.editorPickDelete(pickIdx);
 	}
+
+
+
 
 
 

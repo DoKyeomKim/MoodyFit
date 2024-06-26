@@ -13,7 +13,7 @@ body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
 }
 main {
-    width: 90%;
+    width: 100%;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -97,6 +97,31 @@ main {
 				</c:forEach>
             </tbody>
         </table>
+        
+		<nav aria-label="Page navigation" style="margin-top: 100px;">
+			<ul class="pagination justify-content-center">
+				<c:if test="${prev}">
+					<li class="page-item"><a class="page-link"
+						href="?page=${startPageNum - 1}" aria-label="Previous"> <span
+							aria-hidden="true" class="fas fa-angle-left"></span>
+					</a></li>
+				</c:if>
+				<c:forEach begin="${startPageNum}" end="${endPageNum}"
+					var="page">
+					<li class="page-item ${currentPage == page ? 'active' : ''}">
+						<a class="page-link" href="?page=${page}">${page}</a>
+					</li>
+				</c:forEach>
+				<c:if test="${next}">
+					<li class="page-item"><a class="page-link"
+						href="?page=${endPageNum + 1}"> <span aria-hidden="true"
+							class="fas fa-angle-right"></span>
+					</a></li>
+				</c:if>
+			</ul>
+		</nav>
+  
+        
         <div class="button-group">
         <a href="/EPWriteForm" class="btn btn-outline-primary" style="width : 500px;">작성하기</a>
         </div>

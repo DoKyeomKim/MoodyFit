@@ -1,78 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.EditorPickMapper">
-<select id="getAllPosting">
-select p.posting_idx, p.title, s.store_name
-from posting p
-join store s on p.store_idx = s.store_idx
-where p.state='1'
-order by posting_idx desc
-</select>
-<insert id="writeEditorPick">
-insert into editor_pick(
-PICK_IDX,
-ORIGINAL_NAME,
-FILE_PATH,
-FILE_SIZE,
-START_DATE,
-END_DATE,
-POSTING_IDX
-)
-values(
-pick_seq.nextval,
-#{originalName},
-#{filePath},
-#{fileSize},
-#{startDate},
-#{endDate},
-#{postingIdx}
-)
-</insert>
-<select id="getAllPick">
-select ep.pick_idx, ep.start_date, ep.end_date, ep.posting_idx, p.title, s.store_name
-from editor_pick ep
-join posting p on p.posting_idx = ep.posting_idx
-join store s on p.store_idx = s.store_idx
-where p.state='1'
-order by ep.pick_idx desc
-</select>
+	<select id="getPickPosting">
+		select p.posting_idx, p.title, s.store_name
+		from
+		posting p
+		join store s on p.store_idx = s.store_idx
+		where p.state='1'
+		order by posting_idx desc
+	</select>
+	<insert id="writeEditorPick">
+		insert into editor_pick(
+		PICK_IDX,
+		ORIGINAL_NAME,
+		FILE_PATH,
+		FILE_SIZE,
+		START_DATE,
+		END_DATE,
+		POSTING_IDX
+		)
+		values(
+		pick_seq.nextval,
+		#{originalName},
+		#{filePath},
+		#{fileSize},
+		#{startDate},
+		#{endDate},
+		#{postingIdx}
+		)
+	</insert>
+	<select id="getAllPick">
+		SELECT
+		    pick_idx,
+		    start_date,
+		    end_date,
+		    posting_idx,
+		    title,
+		    store_name
+		FROM (
+		    SELECT
+		        pick_idx,
+		        start_date,
+		        end_date,
+		        posting_idx,
+		        title,
+		        store_name,
+		        ROWNUM AS rnum
+		    FROM (
+		        SELECT 
+		            ep.pick_idx, 
+		            ep.start_date, 
+		            ep.end_date, 
+		            ep.posting_idx, 
+		            p.title, 
+		            s.store_name
+		        FROM
+		            editor_pick ep
+		            JOIN posting p ON p.posting_idx = ep.posting_idx
+		            JOIN store s ON p.store_idx = s.store_idx
+		        WHERE 
+		            p.state = '1'
+		        ORDER BY ep.pick_idx DESC
+		    ) inner_sub
+		)
+		WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
+		ORDER BY pick_idx DESC
+	</select>
+	
+	<select id="getEditorPickCount">
+	select count(ep.pick_idx) from editor_pick ep
+	JOIN posting p ON p.posting_idx = ep.posting_idx
+	where p.state = '1'
+	</select>
 
-<select id="getEditPickByPickIdx">
-select * 
-from editor_pick
-where pick_idx = #{pickIdx}
-</select>
+	<select id="getEditPickByPickIdx">
+		select *
+		from editor_pick
+		where pick_idx = #{pickIdx}
+	</select>
 
-<select id="getPostingByPostingIdx">
-select p.posting_idx, p.title, s.store_name
-from posting p
-join store s on p.store_idx = s.store_idx
-where p.state='1' and posting_idx = #{postingIdx}
-order by posting_idx desc
-</select>
+	<select id="getPostingByPostingIdx">
+		select p.posting_idx, p.title, s.store_name
+		from
+		posting p
+		join store s on p.store_idx = s.store_idx
+		where p.state='1'
+		and posting_idx = #{postingIdx}
+		order by posting_idx desc
+	</select>
 
-<update id="editorPickUpdate">
-update editor_pick
-set 
-ORIGINAL_NAME=#{originalName},
-FILE_PATH=#{filePath},
-FILE_SIZE=#{fileSize},
-START_DATE=#{startDate},
-END_DATE=#{endDate},
-POSTING_IDX=#{postingIdx}
-where pick_idx=#{pickIdx}
-</update>
-<update id="editorPickUpdateWithoutFile">
-update editor_pick
-set 
-START_DATE=#{startDate},
-END_DATE=#{endDate},
-POSTING_IDX=#{postingIdx}
-where pick_idx=#{pickIdx}
-</update>
-<delete id="editorPickDelete">
-delete from editor_pick
-where pick_idx=#{pickIdx}
-</delete>
+	<update id="editorPickUpdate">
+		update editor_pick
+		set
+		ORIGINAL_NAME=#{originalName},
+		FILE_PATH=#{filePath},
+		FILE_SIZE=#{fileSize},
+		START_DATE=#{startDate},
+		END_DATE=#{endDate},
+		POSTING_IDX=#{postingIdx}
+		where pick_idx=#{pickIdx}
+	</update>
+	<update id="editorPickUpdateWithoutFile">
+		update editor_pick
+		set
+		START_DATE=#{startDate},
+		END_DATE=#{endDate},
+		POSTING_IDX=#{postingIdx}
+		where pick_idx=#{pickIdx}
+	</update>
+	<delete id="editorPickDelete">
+		delete from editor_pick
+		where pick_idx=#{pickIdx}
+	</delete>
 
 </mapper>
