@@ -348,6 +348,16 @@ CREATE TABLE editor_pick (
     CONSTRAINT fk_posting_idx FOREIGN KEY (posting_idx) REFERENCES posting(posting_idx)
 );
 
+CREATE TABLE EDITOR_SCRAP(
+  editor_scrap_idx NUMBER PRIMARY KEY,
+  user_idx NUMBER NOT NULL,
+  CONSTRAINT fk_editor_scrap_user_idx FOREIGN KEY (user_idx) REFERENCES users(user_idx),
+  posting_idx NUMBER NOT NULL,
+  CONSTRAINT fk_editor_scrap_posting_idx FOREIGN KEY (posting_idx) REFERENCES posting(posting_idx)
+);
+
+ALTER TABLE posting_question
+ADD state NUMBER;
 
 -----------------------------------------
 
