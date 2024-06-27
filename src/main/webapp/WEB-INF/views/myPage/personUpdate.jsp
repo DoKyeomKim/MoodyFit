@@ -11,15 +11,17 @@
     body {
         background-color: #f8f9fa;
     }
-    main {
+    section {
         max-width: 800px;
-        margin: 50px auto;
-        padding: 20px;
+        margin: 0 auto;
+        margin-top: 80px;
+        padding: 0 20px;
         background-color: #fff;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
     h4 {
+    	padding-top:30px;
         margin-bottom: 30px;
         font-weight: bold;
     }
@@ -86,7 +88,7 @@
 <body>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
 
-<main>
+<section>
 <form action="/personUpdate" method="post" name="update">
 <h4 class="text-center">정보 수정</h4>
 <div class="required-table">
@@ -205,7 +207,7 @@
     <a href="/myPage" class="btn btn-secondary">취소하기</a>
 </div>
 </form>
-</main>
+</section>
 
 <script>
     function pwCheck() {
