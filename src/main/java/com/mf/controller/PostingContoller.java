@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mf.dto.PostingDto;
 import com.mf.service.PostingService;
 import com.mf.service.ProductService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/storeMyPage")
@@ -45,15 +48,27 @@ public class PostingContoller {
 
 	
 	@PostMapping("/postingWrite")
-    public String createPosting(@RequestParam(value="productIdx",required=false) Long productIdx,
-    							@RequestParam(value="productInfoIdx", required=false) Long productInfoIdx,
-                                @RequestParam("title") String title,
-                                @RequestParam("content") String content,
-                                @RequestParam(value="postingFiles", required=false) List<MultipartFile> postingFiles) {
-        // 새로운 판매글을 생성하는 서비스 메서드를 호출
-        postingService.createPosting(productIdx, productInfoIdx, title, content, postingFiles);
-        return "redirect:/storeMyPage/postingList"; 
-    }
+	public String createPosting(@RequestParam(value="productIdx",required=false) Long productIdx,
+	                            @RequestParam(value="productInfoIdx", required=false) Long productInfoIdx,
+	                            @RequestParam("title") String title,
+	                            @RequestParam("content") String content,
+	                            @RequestParam(value="postingFiles", required=false) List<MultipartFile> postingFiles,
+	                            HttpSession session) {
+	    Long userIdx = (Long) session.getAttribute("userIdx");
+	    Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
+
+	    PostingDto postingDto = new PostingDto();
+	    postingDto.setTitle(title);
+	    postingDto.setContent(content);
+	    postingDto.setProductInfoIdx(productInfoIdx);
+	    postingDto.setStoreIdx(storeIdx); 
+	    postingDto.setState(1); // 일단은 등록완료로 설정
+	    postingDto.setPostingFiles(postingFiles);
+
+	    postingService.createPosting(postingDto); 
+	    return "redirect:/storeMyPage/postingList"; 
+	}
+
 	
 	
 	@GetMapping("/postingDetail")

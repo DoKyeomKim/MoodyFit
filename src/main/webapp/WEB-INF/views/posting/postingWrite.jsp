@@ -104,55 +104,57 @@
 <script>
 	// 상품 상세 정보 로드 관련
 	function loadProductDetails(productIdx) {
-	    if (productIdx === "") {
-	        document.getElementById('productDetails').innerHTML = "";
-	        return;
+    if (productIdx === "") {
+        document.getElementById('productDetails').innerHTML = "";
+        return;
+    }
+
+    console.log("Selected Product IDX:", productIdx);
+
+    fetch('/storeMyPage/posting/getProductDetails?productIdx=' + productIdx)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+        		console.log("Data received:", data);
+            document.getElementById('productIdx').value = productIdx;
+            if (data.productInfoIdx) {
+                document.getElementById('productInfoIdx').value = data.productInfoIdx;
+            } else {
+                console.error('productInfoIdx is undefined');
+                document.getElementById('productInfoIdx').value = ''; // 기본값 설정
+            }
+            displayProductDetails(data);
+        })
+        .catch(error => console.error('Error fetching product details:', error));
+}
+
+	function displayProductDetails(data) {
+	    console.log("Data received:", data);
+	    const detailsDiv = document.getElementById('productDetails');
+	    let imagesHtml = '';
+	
+	    if (data.filePaths) {
+	        imagesHtml = data.filePaths.split(', ').map(filePath => {
+	            return '<img src="' + filePath + '" alt="' + data.name + 
+	            '" style="width: 100px; height: 100px; object-fit: cover; margin: 5px;">';
+	        }).join('');
 	    }
 	
-	    console.log("Selected Product IDX:", productIdx);
-	
-	    fetch('/storeMyPage/posting/getProductDetails?productIdx=' + productIdx)
-	        .then(response => {
-	            if (!response.ok) {
-	                throw new Error('Network response was not ok ' + response.statusText);
-	            }
-	            return response.json();
-	        })
-	        .then(data => {
-                document.getElementById('productIdx').value = productIdx;
-                if (data.productInfoIdx) {
-                    document.getElementById('productInfoIdx').value = data.productInfoIdx;
-                } else {
-                    console.error('productInfoIdx is undefined');
-                    document.getElementById('productInfoIdx').value = ''; // 기본값 설정
-                }
-                displayProductDetails(data);
-            })
-            .catch(error => console.error('Error fetching product details:', error));
-    }
-	
-	function displayProductDetails(data) {
-        console.log("Data received:", data);
-        const detailsDiv = document.getElementById('productDetails');
-        let imagesHtml = '';
+	    detailsDiv.innerHTML = `
+	        <h3>${data.name}</h3>
+	        <p>가격: ${data.price} 원</p>
+	        <p>색상: ${data.colors}</p>
+	        <p>사이즈: ${data.sizes}</p>
+	        <p>재고: ${data.quantities} 개</p>
+	        <div class="images">${imagesHtml}</div>
+	    `;
+	    console.log("HTML set to:", detailsDiv.innerHTML);
+	}
 
-        if (data.filePaths) {
-            imagesHtml = data.filePaths.split(', ').map(filePath => {
-                return '<img src="' + filePath + '" alt="' + data.name + 
-                '" style="width: 100px; height: 100px; object-fit: cover; margin: 5px;">';
-            }).join('');
-        }
-
-        detailsDiv.innerHTML = `
-            <h3>${data.name}</h3>
-            <p>가격: ${data.price} 원</p>
-            <p>색상: ${data.colors}</p>
-            <p>사이즈: ${data.sizes}</p>
-            <p>재고: ${data.quantities} 개</p>
-            <div class="images">${imagesHtml}</div>
-        `;
-        console.log("HTML set to:", detailsDiv.innerHTML);
-    }
 		
 	
 	

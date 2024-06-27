@@ -47,28 +47,24 @@ public class PostingService {
     
     
     @Transactional
-    public void createPosting(Long productIdx, Long productInfoIdx, String title, String content, List<MultipartFile> postingFiles) {
-        // Posting 테이블에 새 레코드 삽입
-        PostingDto postingDto = new PostingDto();
-        postingDto.setTitle(title);
-        postingDto.setContent(content);
-        postingDto.setState(1); // 상태를 게시글 등록 완료로 설정
+    public void createPosting(PostingDto postingDto) {
         postingMapper.insertPosting(postingDto);
 
         Long postingIdx = postingDto.getPostingIdx();
 
         // 파일 저장 및 DB에 파일 정보 삽입
-        if (postingFiles != null && !postingFiles.isEmpty()) {
-            for (MultipartFile file : postingFiles) {
+        if (postingDto.getPostingFiles() != null && !postingDto.getPostingFiles().isEmpty()) {
+            for (MultipartFile file : postingDto.getPostingFiles()) {
                 savePostingFile(postingIdx, file);
             }
         }
 
-        // Posting_Product 테이블에 상품 정보와 연결
-        PostingProductDto postingProductDto = new PostingProductDto();
-        postingProductDto.setPostingIdx(postingIdx);
-        postingProductDto.setProductInfoIdx(productInfoIdx);
-        postingMapper.insertPostingProduct(postingProductDto);
+        if (postingDto.getProductInfoIdx() != null) {
+            PostingProductDto postingProductDto = new PostingProductDto();
+            postingProductDto.setPostingIdx(postingIdx);
+            postingProductDto.setProductInfoIdx(postingDto.getProductInfoIdx());
+            postingMapper.insertPostingProduct(postingProductDto);
+        }
     }
 
     private void savePostingFile(Long postingIdx, MultipartFile file) {
@@ -78,7 +74,7 @@ public class PostingService {
 
         String originalFileName = file.getOriginalFilename();
         String newFileName = System.currentTimeMillis() + "_" + originalFileName;
-        String filePath = "/path/to/upload/directory/" + newFileName; // 실제 저장할 경로로 수정
+        String filePath = "/Users/sinminjae/dev/postingImage/" + newFileName;
 
         try {
             File dest = new File(filePath);
@@ -95,6 +91,7 @@ public class PostingService {
             e.printStackTrace();
         }
     }
+
     
     // 상품 상세 정보 & 다중 레코드 정보 로드
   	public List<Map<String, Object>> getAllProductDetailsWithInventory() {

@@ -16,8 +16,15 @@
         SELECT posting_product_seq.NEXTVAL FROM DUAL
     </selectKey>
     INSERT INTO posting_product (posting_product_idx, posting_idx, product_info_idx)
-    VALUES (#{postingProductIdx}, #{postingIdx}, #{productInfoIdx, jdbcType=INTEGER})
+    VALUES (#{postingProductIdx}, #{postingIdx}, 
+        <if test="productInfoIdx != null">
+            #{productInfoIdx}
+        </if>
+        <if test="productInfoIdx == null">
+            NULL
+        </if>)
 </insert>
+
 
 <insert id="insertPostingFile" parameterType="com.mf.dto.PostingFileDto">
     <selectKey keyProperty="postingFileIdx" resultType="long" order="BEFORE">
