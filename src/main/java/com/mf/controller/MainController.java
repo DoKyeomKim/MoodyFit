@@ -47,7 +47,7 @@ public class MainController {
 		// 그 안에서 서로다른 DTO를 가진 것들을 결과를 받고 List형태로 반환 하기위해 또 Map을 씀
 		Map<String, List<Map<String, Object>>> result = mainService.getPostingAll();
 		
-		// 채팅에 필요로한 채팅 추가
+		// 채팅에 필요로한 권한 추가
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.isAuthenticated()) {
 		    // 사용자의 권한 확인
