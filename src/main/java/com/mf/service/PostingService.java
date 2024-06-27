@@ -68,7 +68,7 @@ public class PostingService {
         PostingProductDto postingProductDto = new PostingProductDto();
         postingProductDto.setPostingIdx(postingIdx);
         postingProductDto.setProductInfoIdx(productInfoIdx);
-        postingMapper.insertPostingProduct(postingIdx, productIdx);
+        postingMapper.insertPostingProduct(postingProductDto);
     }
 
     private void savePostingFile(Long postingIdx, MultipartFile file) {

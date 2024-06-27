@@ -15,7 +15,7 @@ public interface PostingMapper {
 
 	void insertPosting(PostingDto postingDto);
 
-	 void insertPostingProduct(@Param("postingIdx") Long postingIdx, @Param("productIdx") Long productIdx);
+	 void insertPostingProduct(@Param("postingIdx") Long postingIdx, @Param("productInfoIdx") Long productInfoIdx);
 
     void insertPostingFile(PostingFileDto postingFileDto);
     

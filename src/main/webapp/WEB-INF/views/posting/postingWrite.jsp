@@ -76,6 +76,7 @@
 		
 		<form method="post" enctype="multipart/form-data" action="/storeMyPage/postingWrite">
    		<input type="hidden" id="productIdx" name="productIdx" value="">
+   		<input type="hidden" id="productInfoIdx" name="productInfoIdx" value="">
           <div class="form-group">
               <label for="title">판매글 제목</label>
               <input type="text" id="title" name="title" class="form-control" required>
@@ -89,7 +90,7 @@
           <div class="form-group">
 	            <label for="postingFiles"></label>
 	            <button type="button" id="addFileButton" class="btn btn-secondary mt-2">Image 추가</button>
-	            <input type="file" id="postingFile" name="postingFiles" class="form-control" style="display: none;">
+	            <input type="file" id="postingFile" class="form-control" style="display: none;" multiple>
 	            <div id="imagePreviewContainer" class="d-flex flex-wrap mt-2"></div>
 	        </div>
           
@@ -118,22 +119,27 @@
 	            return response.json();
 	        })
 	        .then(data => {
-	            console.log("Fetched product details:", data);
-	            document.getElementById('productIdx').value = productIdx;
-	            displayProductDetails(data);
-	        })
-	        .catch(error => console.error('Error fetching product details:', error));
-	}
+                document.getElementById('productIdx').value = productIdx;
+                if (data.productInfoIdx) {
+                    document.getElementById('productInfoIdx').value = data.productInfoIdx;
+                } else {
+                    console.error('productInfoIdx is undefined');
+                    document.getElementById('productInfoIdx').value = ''; // 기본값 설정
+                }
+                displayProductDetails(data);
+            })
+            .catch(error => console.error('Error fetching product details:', error));
+    }
 	
 	function displayProductDetails(data) {
         console.log("Data received:", data);
-
         const detailsDiv = document.getElementById('productDetails');
         let imagesHtml = '';
 
         if (data.filePaths) {
             imagesHtml = data.filePaths.split(', ').map(filePath => {
-                return '<img src="' + filePath + '" alt="' + data.name + '">';
+                return '<img src="' + filePath + '" alt="' + data.name + 
+                '" style="width: 100px; height: 100px; object-fit: cover; margin: 5px;">';
             }).join('');
         }
 
@@ -161,7 +167,8 @@
     });
 
     let filesArray = [];
-
+	
+    
     function handleFileSelect(event) {
         const files = event.target.files;
         const previewContainer = document.getElementById('imagePreviewContainer');
@@ -174,10 +181,11 @@
                 const img = document.createElement('img');
                 img.src = e.target.result;
                 img.style.width = '100px';
-                img.style.height = '100px';
+                img.style.height = '130px';
                 img.style.objectFit = 'cover';
                 img.style.margin = '5px';
                 
+                // 삭제 아이콘
                 const removeButton = document.createElement('span');
                 removeButton.innerHTML = '&times;';
                 removeButton.classList.add('btn', 'btn-danger', 'btn-sm', 'ml-2');

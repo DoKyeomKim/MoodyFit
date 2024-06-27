@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.PostingMapper">
 
+
 <insert id="insertPosting" parameterType="com.mf.dto.PostingDto">
     <selectKey keyProperty="postingIdx" resultType="long" order="BEFORE">
         SELECT posting_seq.NEXTVAL FROM DUAL
@@ -15,7 +16,7 @@
         SELECT posting_product_seq.NEXTVAL FROM DUAL
     </selectKey>
     INSERT INTO posting_product (posting_product_idx, posting_idx, product_info_idx)
-    VALUES (#{postingProductIdx}, #{postingIdx}, #{productInfoIdx})
+    VALUES (#{postingProductIdx}, #{postingIdx}, #{productInfoIdx, jdbcType=INTEGER})
 </insert>
 
 <insert id="insertPostingFile" parameterType="com.mf.dto.PostingFileDto">

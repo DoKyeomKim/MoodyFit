@@ -45,11 +45,11 @@ public class PostingContoller {
 
 	
 	@PostMapping("/postingWrite")
-    public String createPosting(@RequestParam("productIdx") Long productIdx,
-    							@RequestParam("productInfoIdx") Long productInfoIdx,
+    public String createPosting(@RequestParam(value="productIdx",required=false) Long productIdx,
+    							@RequestParam(value="productInfoIdx", required=false) Long productInfoIdx,
                                 @RequestParam("title") String title,
                                 @RequestParam("content") String content,
-                                @RequestParam("postingFiles") List<MultipartFile> postingFiles) {
+                                @RequestParam(value="postingFiles", required=false) List<MultipartFile> postingFiles) {
         // 새로운 판매글을 생성하는 서비스 메서드를 호출
         postingService.createPosting(productIdx, productInfoIdx, title, content, postingFiles);
         return "redirect:/storeMyPage/postingList"; 
