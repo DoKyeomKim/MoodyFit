@@ -20,19 +20,19 @@ public class MainService {
 	@Autowired
 	private MainMapper mainMapper;
 
-		// 임시로 만든 전체 포스팅 관련 내용 갖고오기
 	public Map<String, List<Map<String, Object>>> getPostingAll() {
 		// 리턴을 위한 객체 선언.
         Map<String, List<Map<String, Object>>> result = new HashMap<>();
 		
 		// 전체 포스팅 갖고오기(임시)
         // 후에는 editor's pick 뭐 이런걸로 변경예정
-		List<Map<String, Object>> all = mainMapper.getPostingAll();
+		List<Map<String, Object>> edtiorPick = mainMapper.getEdtiorPick();
+		
 		// 최신 포스팅 8개 갖고오기
 		List<Map<String, Object>> recent = mainMapper.getRecentPosting();
 
 		
-        result.put("all", all);
+        result.put("edtiorPick", edtiorPick);
         result.put("recent", recent);
 		
 		return result;
@@ -188,6 +188,20 @@ public class MainService {
 		mainMapper.deleteWish(postingIdx,userIdx);
 
 	}
+
+	//=========================================
+	// 채팅용 닉네임 들고오기
+	// 개인
+	public String getPNickNameByUserIdx(Long userIdx) {
+		 
+		return mainMapper.getPNickNameByUserIdx(userIdx);
+	}
+
+	// 가맹점
+	public String getSNickNameByUserIdx(Long userIdx) {
+		return mainMapper.getSNickNameByUserIdx(userIdx);
+	}
+	//=========================================
 
 	
 }

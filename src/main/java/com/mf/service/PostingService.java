@@ -102,4 +102,5 @@ public class PostingService {
 	public Map<String, Object> getProductDetailsByProductIdx(Long productIdx) {
 		return postingMapper.getProductDetailsByProductIdxForPosting(productIdx);
 	}
+	
 }

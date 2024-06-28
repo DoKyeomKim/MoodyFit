@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-
+    <script src="${pageContext.request.contextPath}/scripts.js"></script>
 <style>
  .sidenav {
     float: left;
@@ -17,7 +17,10 @@
     overflow-x: hidden;
     padding-top: 20px;
 }
-
+.sidenav.dark-mode {
+    background-color: #444444;
+    color: #fff;
+}
 /* Style the sidenav links and the dropdown button */
 .sidenav a, .dropdown-btn {
     padding: 10px 15px;
@@ -32,7 +35,9 @@
     outline: none;
     transition: 0.3s;
 }
-
+.sidenav.dark-mode a, .sidenav.dark-mode .dropdown-btn {
+    color: #fff;
+}
 /* On mouse-over */
 .sidenav a:hover, .dropdown-btn:hover {
     color: #c0c0c0;
@@ -47,7 +52,11 @@
 
 /* Add an active class to the active dropdown button */
 .active {
-    background-color: #white;
+    background-color: white;
+    color: #c0c0c0;
+}
+.sidenav.dark-mode .active {
+    background-color: #444;
     color: #c0c0c0;
 }
 
@@ -56,6 +65,9 @@
     display: none;
     background-color: #FFFFFF; /* White background for dropdown */
     padding-left: 8px;
+}
+.sidenav.dark-mode .dropdown-container {
+    background-color: #444;
 }
 
 /* Optional: Style the caret down icon */
@@ -97,9 +109,10 @@
      <button class="dropdown-btn">FAQ 관리 
       <i class="fa fa-caret-down"></i></button>
        <div class="dropdown-container">
-    <a href="adminFAQWrite">FAQ 등록</a>
-    <a href="adminFAQUpdate">FAQ 수정/삭제</a>
-  </div>
+    		<a href="adminFAQWrite">FAQ 등록</a>
+    		<a href="adminFAQUpdate">FAQ 수정/삭제</a>
+  		</div>
+    <a href="adminEditorPick">에디터픽</a>
   
     <script>
     const dropdownBtns = document.getElementsByClassName("dropdown-btn");
@@ -126,6 +139,10 @@
             dropdownContent.style.display = "block";
         }
     }
+    
+
+</script>
+<script>
 </script>
   </body>
 </html>

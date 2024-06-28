@@ -10,4 +10,11 @@ import com.mf.dto.AdminOrderDto;
 public interface AdminOrderMapper {
 
 	List<AdminOrderDto> getAllAdminOrders();
+
+
+
+
+
+
+	List<AdminOrderDto> searchOrdersById(String searchId);
 }

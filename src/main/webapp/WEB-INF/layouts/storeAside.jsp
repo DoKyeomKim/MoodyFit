@@ -12,21 +12,32 @@
     position: fixed;
     top: auto;
     left: 0;
-    height: 100%;
+    height: auto;
     width: 160px;
     overflow: auto;
-    background-color: #f1f1f1;
+    background-color: #F6F4EE !important;
     z-index: 1; 
+    color:#867B73 !important;
   }
  
 .main-container {
   margin-left: 160px; 
   padding: 16px;
 }
+
+body, .w3-button, .w3-bar-item {
+  font-family: 'Malgun Gothic', sans-serif;
+  font-size: 16px;
+}
+
 </style>
 </head>
 <body>
 <div class="fixed-sidebar w3-sidebar w3-bar-block w3-light-grey" style="width:160px;">
+  <div style="margin-top :30px; font-weight : bold;" ></div>
+  <button class="w3-button w3-block w3-left-align" onclick="toggleAccFunc('productAcc')">
+    마이페이지 <i class="fa fa-caret-down"></i>
+  </button>
   <div style="margin-top :30px;"></div>
   <button class="w3-button w3-block w3-left-align" onclick="toggleAccFunc('productAcc')">
     상품 관리 <i class="fa fa-caret-down"></i>
@@ -45,7 +56,7 @@
   </div>
 
   <a href="/storeUpdateForm" class="w3-bar-item w3-button">정보 수정</a>
-  <a href="/accountDeleteForm" class="w3-bar-item w3-button">회원 탈퇴</a>
+
 </div>
 <script>
 function toggleAccFunc(id) {

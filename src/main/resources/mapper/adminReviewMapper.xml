@@ -12,7 +12,90 @@
         ORDER BY POSTING_REVIEW_IDX ASC
                
     </select>
-    
+    <select id="searchReviewsById" resultType="com.mf.dto.AdminReviewDto">
+        SELECT  POSTING_REVIEW_IDX,
+    title,
+    content,
+    rating,
+    create_date
+        FROM POSTING_REVIEW       
+        <where>
+            <if test="searchId != null and searchId != ''">
+                title LIKE '%' || #{searchId, jdbcType=VARCHAR} || '%'
+            </if>
+        </where>
+    </select>
+  <insert id="addReview" parameterType="com.mf.dto.AdminReviewDto">
+    INSERT INTO posting_review  (
+        posting_review_idx,
+        title,
+        content,
+        rating,
+        create_date,
+        person_idx,
+        posting_idx,
+        height,
+        weight,
+        sizes,
+        foot,
+        color_satis,
+        sizes_satis )
+    VALUES (        
+        posting_review_seq.NEXTVAL,
+        #{title,jdbcType=VARCHAR},
+        #{content,jdbcType=VARCHAR},
+        #{rating,jdbcType=INTEGER},
+        default,
+        #{personIdx,jdbcType=BIGINT},
+        #{postingIdx,jdbcType=BIGINT},
+        #{height,jdbcType=INTEGER},
+        #{weight,jdbcType=INTEGER},
+        #{sizes,jdbcType=VARCHAR},
+        #{foot,jdbcType=VARCHAR},
+        #{colorSatis,jdbcType=INTEGER},
+        #{sizesSatis,jdbcType=INTEGER}
+    )
+</insert>
+  <insert id="addReviewFile">
+    INSERT INTO posting_review_file(
+        posting_review_file_idx,
+        file_path,
+        original_name,
+        file_size,
+        posting_review_idx)
+    VALUES(
+        posting_review_seq.NEXTVAL,
+        #{filePath,jdbcType=VARCHAR},
+        #{originalName,jdbcType=VARCHAR},
+        #{fileSize,jdbcType=INTEGER},
+        #{postingReviewIdx,jdbcType=BIGINT}
+    )
+</insert>
 
-  
+        <select id="findAll" resultType="com.mf.dto.AdminReviewDto">
+        SELECT 
+            ar.posting_review_idx AS postingReviewIdx,
+            ar.title,
+            ar.content,
+            ar.rating,
+            ar.create_date AS createDate,
+            ar.height,
+            ar.weight,
+            ar.sizes,
+            ar.foot,
+            ar.color_satis AS colorSatis,
+            ar.sizes_satis AS sizesSatis,
+            ar.posting_idx AS postingIdx,
+            ar.person_idx AS personIdx,
+            prf.file_path AS filePath,
+            prf.original_name AS originalName,
+            prf.file_size AS fileSize,
+            prf.posting_review_file_idx AS postingReviewFileIdx
+        FROM 
+            posting_review ar
+        LEFT JOIN 
+            posting_review_file prf ON ar.posting_review_idx = prf.posting_review_idx
+    </select>
+
+ 
     </mapper>

@@ -3,128 +3,145 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>1:1문의</title>
+    <style>
+        /* 전체 페이지 스타일 */
+        body {
+            font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
+            background-color: #F6F4EE;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
+        main {
+            width: 100%;
+            background-color: #F6F4EE;
+            padding: 80px;
+            font-size: 15px;
+            margin-top: 70px;
+        }
 
-    <title>Q&A 등록</title>
+        form {
+            width: 100%;
+            max-width: 900px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-<style>
-       /* 전체 페이지 스타일 */
-body {
-    font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
-}
-main {
-    width: 90%;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    font-size : 15px;
-  
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-.table td {
-        padding: 30px; /* 셀 내부 여백 조정 */
-        margin: 30px; /* 셀 외부 여백 조정 */
-    }
-.container {
-    display: flex;
-    flex-wrap: wrap;
-}
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
 
-.container > * {
-    flex: 1;
-    margin-right: 30px; /* Adjust as needed */
-}
+        th {
+            text-align: left;
+            background-color: #f9f9f9;
+        }
 
-.container > *:last-child {
-    margin-right: 0;
-}
-
-/* Adjust column widths as needed */
-.col-main {
-    flex: 3; /* Main content width */
-}
-
-.col-sidebar {
-    flex: 1; /* Sidebar content width */
-    margin-top:30px;
-}
-form {
-    margin-top: 20px;
-}
-table td {
-	height: 50px;
-    padding: 10px 0;
-    border-bottom: 1px solid #e5e5e5;
-    width:50%;
-}
-table td:first-child {
-    width: 150px;
-    font-weight: bold;
-}
-
-input[type="text"]
-{
-height:30px;
-width:300px;
-}
-
-input[type="submit"],
-input[type="button"] {
-    background-color: #111111;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-left:188%;
-}
-
-input[type="button"] {
-    background-color: #f4f4f4;
-    color: #333;
-}
- textarea {
-            width: 300%;
-            height: 100px;
-            padding: 8px 12px;
+        input[type="text"] {
+            width: calc(100% - 20px);
+            height: 30px;
+            padding: 5px 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 15px;
-            resize: vertical; /* 수직으로만 크기 조정 */
+            font-size: 14px;
         }
+
+        textarea {
+            width: calc(100% - 20px);
+            height: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        input[type="submit"],
+        input[type="button"] {
+            background-color: #111;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        input[type="button"] {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .link-button {
+            text-decoration: none;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: inline-block;
+            border: 1px solid #ddd;
+        }
+
+        .link-button:hover {
+            background-color: #e4e4e4;
+        }
+
     </style>
 </head>
 <body>
-    <%@include file="/WEB-INF/layouts/adminheader.jsp"%> 
-   <div class="col-sidebar">
-                <%@include file="/WEB-INF/layouts/adminsidebar.jsp"%>
-            </div>
+   <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
 <main>
-    <h2>Q&A 등록</h2>
-    <form action="/admin/qnaWrite" method="POST">
-        <table>
-            <tr>
-                <td>제목</td>
-                <td><input type="text" name="title" /></td>
-            </tr>
-             <tr>
-                <td>내용</td>
-                <td><textarea name="content"></textarea></td>
-            </tr>         
-            <tr>
-                <td colspan="2">
-                    <input type="submit" value="저장" />
-                 
-                </td>
-            </tr>
+    <h2 class="text-center" style="font-weight:bold; color: #867B73;">1:1문의</h2>
+    <form action="/qnaWrite" method="POST">
+        <table class="board_row" style="margin-top:20px; padding-bottom:15px;">
+            <colgroup>
+                <col style="width:10%;">
+                <col style="width:90%;">
+            </colgroup>
+            <tbody>
+                <tr class="bbaf">                        
+                    <th scope="row">제목</th>
+                    <td><input type="text" name="title" class="form_input subject" id="subject" placeholder="제목을 입력하세요"></td>
+                </tr>
+                <tr>
+                    <th scope="row" style="vertical-align: top">내용</th>
+                    <td>
+                        <textarea name="content" id="memo" placeholder="안녕하세요. 무디핏입니다 :)
+문의 사항 있으신가요?
+고객님 성함/연락처/주문번호를 적어주시면 보다 빠르고 정확한 상담처리 도와드리겠습니다.
+
+주문번호:
+성함:
+연락처:"></textarea>
+                    </td>
+                </tr>         
+            </tbody>
         </table>
+        <div class="button-container">
+            <a href="qna" class="link-button">목록으로</a>
+            <input type="submit" value="등록">
+        </div>
     </form>
 </main>
-
-
-
-
+<%@include file="/WEB-INF/layouts/footer.jsp"%>
 </body>
 </html>

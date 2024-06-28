@@ -138,31 +138,6 @@ function toggleAnswerContainer() {
             </div>
         </div>
     </main>
-     <script>
-        async function updateStatus(id, state) {
-            const response = await fetch('${pageContext.request.contextPath}/admin/updateStatus', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRF-TOKEN': '${_csrf.token}'
-                },
-                body: new URLSearchParams({
-                    id: id,
-                    state: state
-                })
-            });
-
-            if (response.ok) {
-                const statusCell = document.getElementById('status-' + id);
-                if (state == 1) {
-                    statusCell.innerText = '승인';
-                } else if (state == 2) {
-                    statusCell.innerText = '반려';
-                }
-            } else {
-                alert('상태 업데이트 실패');
-            }
-        }
-    </script>
+     
 </body>
 </html>

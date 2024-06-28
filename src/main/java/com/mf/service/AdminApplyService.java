@@ -19,6 +19,10 @@ public class AdminApplyService {
 	    public void updateStatus(Long postingIdx, String state) {
 	        adminApplyMapper.updateStatus(postingIdx, state);
 	    }
+	public List<AdminApplyDto> searchApplysById(String searchId) {
+		// TODO Auto-generated method stub
+		return adminApplyMapper.searchApplysById(searchId);
+	}
 
 	
 

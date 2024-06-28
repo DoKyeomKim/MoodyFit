@@ -6,19 +6,19 @@
 select count(o.order_idx)
 from orders o
 join person p on p.user_idx = #{userIdx}
-where o.state = 1
+where o.state = '배송중'
 </select>
 <select id="getOrderIng">
 select count(o.order_idx)
 from orders o
 join person p on p.user_idx = #{userIdx}
-where o.state = 2
+where o.state = '배송진행중'
 </select>
 <select id="getOrderDone">
 select count(o.order_idx)
 from orders o
 join person p on p.user_idx = #{userIdx}
-where o.state = 3
+where o.state = '배송완료'
 </select>
 
 <select id="getNickNameByUserIdx">

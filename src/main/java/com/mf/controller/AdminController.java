@@ -1,11 +1,14 @@
 package com.mf.controller;
 
+import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mf.dto.AdminAnswerDto;
@@ -23,7 +29,11 @@ import com.mf.dto.AdminReviewDto;
 import com.mf.dto.CategoryDto;
 import com.mf.dto.CsFaqDto;
 import com.mf.dto.CsQnaDto;
+import com.mf.dto.EditorPickDto;
+import com.mf.dto.Paging;
 import com.mf.dto.PersonDto;
+import com.mf.dto.PostingAnswerDto;
+import com.mf.dto.PostingQuestionDto;
 import com.mf.dto.StoreDto;
 import com.mf.dto.SubCategoryDto;
 import com.mf.service.AdminApplyService;
@@ -31,6 +41,7 @@ import com.mf.service.AdminOrderService;
 import com.mf.service.AdminQnaService;
 import com.mf.service.AdminReviewService;
 import com.mf.service.CategoryService;
+import com.mf.service.EditorPickService;
 import com.mf.service.FAQService;
 import com.mf.service.PersonService;
 import com.mf.service.StoreService;
@@ -60,7 +71,9 @@ public class AdminController {
 	private AdminOrderService adminOrderService;
 	@Autowired
 	private AdminApplyService adminApplyService;
- 
+	@Autowired
+	private EditorPickService editorPickService;
+
 	   
    //관리자 메인페이지
 	@GetMapping("/admin")
@@ -130,7 +143,12 @@ public class AdminController {
 		        return "redirect:/adminCategoryUpdate"; 
 		    }
 
-		
+		 @PostMapping("/admin/qna1")
+		 public String qna1(@RequestParam("questionIdx") Long questionIdx) {
+		     adminQnaService.qna1(questionIdx);
+		     return "redirect:/adminQnA";
+		 }
+
 
 	   
 	 //가맹점 회원 탈퇴
@@ -151,10 +169,95 @@ public class AdminController {
 		        adminApplyService.updateStatus(postingIdx, state);
 		        return "redirect:/adminApply";
 		    }
-		
-		
-		
-	
+		  @RequestMapping("/admin/paging")
+		    public String getPersons(@RequestParam(defaultValue = "1") int page, Model model) {
+		        int recordsPerPage = 10;
+		        int offset = (page - 1) * recordsPerPage;
+
+		        List<PersonDto> personList = personService.getPersons(offset, recordsPerPage);
+		        int noOfRecords = personService.getNoOfRecords();
+		        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+
+		        model.addAttribute("personList", personList);
+		        model.addAttribute("noOfPages", noOfPages);
+		        model.addAttribute("currentPage", page);
+
+		        return "adminPuser";
+		    }
+		  //개인회원 검색
+		  @GetMapping("/admin/userManagement")
+		    public String userManagement(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<PersonDto> personList = personService.searchUsersById(searchId);
+		        model.addAttribute("personList", personList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminPuser";
+		    }
+		  
+		  //가맹점회원 검색
+		  @GetMapping("/admin/userManagement2")
+		    public String cManagement(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<StoreDto> storeList = storeService.searchStoresById(searchId);
+		        model.addAttribute("storeList", storeList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminCuser";
+		    }
+		  
+		  
+		  //공고 검색
+		  @GetMapping("/admin/userManagement3")
+		    public String applySearch(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<AdminApplyDto> adminApplyList = adminApplyService.searchApplysById(searchId);
+		        model.addAttribute("adminApplyList", adminApplyList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminApply";
+		    }
+		  //Q&A검색
+		  @GetMapping("/admin/userManagement4")
+		    public String qnaSearch(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<AdminQuestionDto> AdminqnaList = adminQnaService.searchQnasById(searchId);
+		        model.addAttribute("AdminqnaList", AdminqnaList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminQnA";
+		    }
+		//Q&A검색
+		  @GetMapping("/admin/userManagement5")
+		    public String reviewSearch(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<AdminReviewDto> reviewList = adminReviewService.searchReviewsById(searchId);
+		        model.addAttribute("reviewList", reviewList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminReview";
+		    }
+		  
+		//주문내역검색
+		  @GetMapping("/admin/userManagement6")
+		    public String orderSearch(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<AdminOrderDto> adminOrderList = adminOrderService.searchOrdersById(searchId);
+		        model.addAttribute("adminOrderList", adminOrderList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminOrder";
+		    }
+		  
+		  @GetMapping("/admin/userManagement7")
+		    public String faqSearch(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<AdminQuestionDto> faqList = faqService.searchFaqsById(searchId);
+		        model.addAttribute("faqList", faqList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/faq";
+		    }
 
 		
 	//판매수익 페이지
@@ -178,6 +281,37 @@ public class AdminController {
 	    public ModelAndView adminFAQwrite() {
 	        ModelAndView mv = new ModelAndView("adminFAQWrite");
 	        mv.setViewName("/admin/adminFAQWrite");
+	        return mv;
+	    }
+	    @PostMapping("/reviewWrite")
+	    @ResponseBody
+	    public ResponseEntity<Map<String, Boolean>> addReview(@RequestPart("reviewDto") AdminReviewDto reviewDto, @RequestPart("file") MultipartFile file) {
+	        Map<String, Boolean> response = new HashMap<>();
+	        try {
+	            if (!file.isEmpty()) {
+	                reviewDto.setFilePath(file.getOriginalFilename());
+	                reviewDto.setFileSize(file.getSize());
+	                reviewDto.setOriginalName(file.getOriginalFilename());
+	            }
+	            adminReviewService.addReviewFile(reviewDto);
+	            adminReviewService.addReview(reviewDto);
+
+	            response.put("success", true);
+	            return ResponseEntity.ok(response);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            response.put("success", false);
+	            return ResponseEntity.status(500).body(response);
+	        }
+	    }
+
+
+	  
+	    
+	    @RequestMapping("/review")
+	    public ModelAndView review() {
+	        ModelAndView mv = new ModelAndView("review");
+	        mv.setViewName("/admin/review");
 	        return mv;
 	    }
 	
@@ -256,9 +390,47 @@ public class AdminController {
 			return mv;
 			
 		}
-
-
-
+	    
+	  //리뷰 리스트 페이지
+		@GetMapping("/reviewList")
+		public  ModelAndView   reviewList() {
+			ModelAndView    mv    = new ModelAndView("reviewList");
+			
+			mv.setViewName("/admin/reviewList");
+			return mv;
+		}
+		  //상품문의 페이지
+				@GetMapping("/qna2")
+				public  ModelAndView   qna2() {
+					ModelAndView    mv    = new ModelAndView("qna2");
+					 List<Map<String,Object>> qna2List = adminQnaService.getAllQna2s();
+					 mv.addObject("qna2List",qna2List);
+					mv.setViewName("/admin/qna2");
+					
+					return mv;
+				}
+				
+				
+			
+				   
+				
+				
+				
+				 //상품문의 페이지
+				@GetMapping("/qnaWrite2")
+				public  ModelAndView   qnaWrite2() {
+					ModelAndView    mv    = new ModelAndView("qnaWrite2");
+					
+					mv.setViewName("/admin/qnaWrite2");
+					return mv;
+				}
+				 //상품문의 작성 페이지
+				   @PostMapping("/qnaWrite2")
+				    public String addQuestion2(@ModelAttribute("qnaDTO") PostingQuestionDto qna2DTO, HttpSession session) {
+				        Long personIdx = (Long) session.getAttribute("personIdx");
+				        adminQnaService.addQuestion2(qna2DTO, personIdx);
+				        return "redirect:/qna2"; // qna 목록 페이지로 리다이렉트 
+				    }
 	    
 //가맹점회원 페이지
 	   @GetMapping("/adminCuser")
@@ -329,7 +501,7 @@ public class AdminController {
 	    }
 	   
 	   
-	   @GetMapping("/qnaWrite")
+	   @GetMapping("/qnaWriteform")
 			public  ModelAndView   qnaWrite() {
 				ModelAndView    mv    = new ModelAndView("qnaWrite");
 				
@@ -338,7 +510,7 @@ public class AdminController {
 			}
 	   
 	 //qna작성 페이지
-	    @PostMapping("/admin/qnaWrite")
+	    @PostMapping("/qnaWrite")
 	    public String addQuestion(@ModelAttribute("qnaDTO") AdminQuestionDto qnaDTO,HttpSession session,CsQnaDto csQna) {
 	        Long userIdx= (Long) session.getAttribute("userIdx");
 	        
@@ -378,6 +550,40 @@ public class AdminController {
 	        
 	        return "redirect:/qnaDetail?questionIdx=" + questionIdx;
 	    }
+	    
+	  //상품문의 상세 페이지
+	    @GetMapping("/qnaDetail2")
+	    public String getQnaDetail2(@RequestParam("postingQuestionIdx") Long postingQuestionIdx, Model model) {
+	        System.out.println("Received PostingQuestionIdx: " + postingQuestionIdx);
+	        
+	        // FAQ 객체를 가져와서 모델에 추가
+	        PostingQuestionDto qna2DTO = adminQnaService.getQna2ByPostingQuestionIdx(postingQuestionIdx);
+	        if (qna2DTO == null) {
+	            // questionIdx로 FAQ를 찾지 못한 경우 처리
+	            System.out.println("QnA not found for PostingQuestionIdx: " + postingQuestionIdx);
+	            return "errorPage"; // errorPage.jsp로 이동 (필요에 따라 수정)
+	        }
+	        model.addAttribute("qna2", qna2DTO);
+	        
+	        // 해당 QnA의 답변 리스트를 가져와서 모델에 추가
+	        List<PostingAnswerDto> answers2 = adminQnaService.getAnswers2ByPostingQuestionIdx(postingQuestionIdx);
+	        model.addAttribute("answers2", answers2);
+	        
+	        return "admin/qnaDetail2"; // qnaDetail.jsp 페이지로 이동
+	    }
+	    
+	    //상품문의 답변작성
+	    @PostMapping("/submitAnswer2")
+	    public String submitAnswer2(@RequestParam("postingQuestionIdx") Long postingQuestionIdx, @RequestParam("title") String title, @RequestParam("content") String content) {
+	        PostingAnswerDto answer2Dto = new PostingAnswerDto();
+	        answer2Dto.setPostingQuestionIdx(postingQuestionIdx);
+	        answer2Dto.setTitle(title);
+	        answer2Dto.setContent(content);
+	        
+	        adminQnaService.addAnswer2(answer2Dto);
+	        
+	        return "redirect:/qnaDetail2?postingQuestionIdx=" + postingQuestionIdx;
+	    }
 	   //주문 내역 페이지
 	   @GetMapping("/adminOrder")
 	   public ModelAndView adminOrder() {
@@ -387,5 +593,106 @@ public class AdminController {
 		   mv.setViewName("/admin/adminOrder");
 		   System.out.println(AdminOrderList);		
 		   return mv;
-}
+	   }
+
+//=========================================================================
+//==============================에디터 픽==================================
+//=========================================================================
+//=========================================================================
+
+
+
+	   
+	   // 에디터 픽 이동
+	   @GetMapping("/adminEditorPick")
+	   public ModelAndView editorPick(@RequestParam(value = "page", defaultValue = "1") int page) {
+		   ModelAndView mv = new ModelAndView();
+		   
+		   int pageSize = 5;
+		   int startIndex = (page - 1) * pageSize;
+		   
+		   // 에디터픽 리스트 갖고오기
+		   List<Map<String,Object>> editorPick = editorPickService.getEditorPick(pageSize,startIndex);
+		   // 페이징 처리
+		   Paging paging = editorPickService.calculatePagingInfo(page, pageSize);
+		   
+		   mv.addObject("prev", paging.isPrev());
+		   mv.addObject("next", paging.isNext());
+		   mv.addObject("startPageNum", paging.getStartPageNum());
+		   mv.addObject("endPageNum", paging.getEndPageNum());
+		   mv.addObject("totalPages", paging.getTotalPages());
+		   mv.addObject("currentPage", page);
+
+		   mv.addObject("editorPick", editorPick);
+		   mv.setViewName("admin/editorPick");
+		   return mv;
+	   }
+	   
+	   // 에디터 픽 작성 페이지 이동
+	   @GetMapping("/EPWriteForm")
+	   public ModelAndView EPWriteForm() {
+		   ModelAndView mv = new ModelAndView();
+		   // 임시용 전부 들고 오는 로직
+		   List<Map<String,Object>> posting = editorPickService.getPickPosting();
+		   
+		   
+		   
+		   mv.addObject("posting", posting);
+		   mv.setViewName("admin/editorPickWrite");
+		   return mv;
+	   }
+	   
+	   // 에디터 픽 작성
+	   @PostMapping("/EPWrite")
+	   public ModelAndView EPWrite(@RequestParam("file") MultipartFile file, EditorPickDto editorPick) {
+		   ModelAndView mv = new ModelAndView();
+		   // 에디터픽 작성 로직
+		   editorPickService.writeEditorPick(editorPick,file);
+		   
+		   mv.setViewName("redirect:/adminEditorPick");
+		   return mv;
+	   }
+	   
+	   // 에디터 픽 수정 페이지
+	   @GetMapping("/EPEditForm")
+	   public ModelAndView EPEditForm(@RequestParam("pickIdx") Long pickIdx,EditorPickDto editorPick) throws ParseException {
+		   ModelAndView mv = new ModelAndView();
+		   
+		   // 수정 페이지에 필요한 정보 들고오는 로직처리
+		   Map<String,Object> editPick = editorPickService.getEditPickByPickIdx(pickIdx,editorPick);
+		    
+		   mv.addObject("startDate",editPick.get("formattedStartDate"));
+		   mv.addObject("endDate",editPick.get("formattedEndDate"));
+		   mv.addObject("editorPick",editPick.get("editorPick"));
+		   mv.addObject("postingInfo",editPick.get("postingInfo"));
+		   mv.addObject("editPick", editPick);
+		   mv.setViewName("admin/editorPickEdit");
+		   return mv;
+	   }
+	  
+	   // 에디터픽 수정
+	   @PostMapping("/EPEdit")
+	   public ModelAndView EPEdit(@RequestParam("file") MultipartFile file,EditorPickDto editorPick) {
+		   ModelAndView mv = new ModelAndView();
+		   
+		   editorPickService.editorPickUpdate(file,editorPick);
+		   
+		   mv.setViewName("redirect:/adminEditorPick");
+		   return mv;
+	   }
+	   
+	   // 에디터픽 삭제
+	   @PostMapping("/EPDelete")
+	   public String EPDelete(@RequestParam("pickIdx") Long pickIdx) {
+		   
+		   editorPickService.editorPickDelete(pickIdx);
+		   
+		   return "redirect:/adminEditorPick";
+	   }
+//=========================================================================
+//=========================================================================
+//=========================================================================
+
+	   
+	   
 }

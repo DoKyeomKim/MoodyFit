@@ -9,6 +9,8 @@ import com.mf.dto.AdminAnswerDto;
 import com.mf.dto.AdminQuestionDto;
 import com.mf.dto.CategoryDto;
 import com.mf.dto.CsQnaDto;
+import com.mf.dto.PostingAnswerDto;
+import com.mf.dto.PostingQuestionDto;
 @Mapper
 public interface AdminQnaMapper {
 
@@ -29,9 +31,33 @@ public interface AdminQnaMapper {
 
 
 	void insertAnswer(AdminAnswerDto answerDto);
+
+
+	List<AdminQuestionDto> searchQnasById(String searchId);
+
+
+
+	    int qna1(Long questionIdx);
+
+
+		void addQuestion2(PostingQuestionDto qna2dto);
+
+
+		List<Map<String, Object>> getAllQna2s();
+
+
+		PostingQuestionDto getQna2ByquestionIdx(Long postingQuestionIdx);
+
+
+		List<PostingAnswerDto> getAnswers2ByPostingQuestionIdx(Long postingQuestionIdx);
+
+
+		void insertAnswer2(PostingAnswerDto answer2Dto);
+	}
+
 	
 			
-		}
+		
 
 	
 

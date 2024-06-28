@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mf.dto.AdminQuestionDto;
 import com.mf.dto.CsFaqDto;
 import com.mf.mapper.FAQMapper;
 
@@ -42,6 +43,10 @@ public class FAQService {
 	    public void deleteFAQ(Long faqIdx) {
 	        faqMapper.deleteFAQ(faqIdx);
 	    }
+		public List<AdminQuestionDto> searchFaqsById(String searchId) {
+			// TODO Auto-generated method stub
+			return faqMapper.searchFaqsById(searchId);
+		}
 
 		
 	}

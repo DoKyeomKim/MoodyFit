@@ -17,4 +17,18 @@ FROM
         SET state = #{state}
         WHERE posting_idx = #{postingIdx}
     </update>
+    
+     <select id="searchApplysById" resultType="com.mf.dto.AdminApplyDto">
+        SELECT  posting_idx,
+    title,
+    content,
+    update_date,
+    state
+        FROM posting       
+        <where>
+            <if test="searchId != null and searchId != ''">
+                title LIKE '%' || #{searchId, jdbcType=VARCHAR} || '%'
+            </if>
+        </where>
+    </select>
 </mapper>

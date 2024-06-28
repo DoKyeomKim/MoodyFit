@@ -4,7 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
+    <script src="${pageContext.request.contextPath}/scripts.js"></script>
+    <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 
 <style>
 body {
@@ -84,8 +86,8 @@ main {
                 </thead>
                 <tbody>
       
-<%--                     <c:forEach var="sales" items="${salesList}"> --%>
-                        <tr>
+<%--                     <c:forEach var="sales" items="${salesList}"> varStatus="status">--%>
+                       <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
                             <td>{sales.business_name}</td>
                             <td>{sales.business_number}</td>
                             <td>{sales.email}</td>

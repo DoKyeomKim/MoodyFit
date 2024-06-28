@@ -4,6 +4,7 @@
     <select id="getAllPersons" parameterType="com.mf.dto.PersonDto">
        SELECT 
     p.PERSON_IDX,
+    u.id,
     p.NAME,
     p.NICK_NAME,
     p.PHONE,
@@ -23,4 +24,26 @@ JOIN
       SET state = 3
       WHERE user_idx = #{userIdx}
    </update>
-</mapper>
+    <select id="getPersons" resultType="com.mf.dto.PersonDto">
+        SELECT * FROM person
+        ORDER BY person_idx
+        LIMIT #{offset}, #{noOfRecords}
+    </select>
+
+    <select id="getNoOfRecords" resultType="int">
+        SELECT COUNT(*) FROM person
+    </select>
+    
+     <select id="searchUsersById" resultType="com.mf.dto.PersonDto">
+        SELECT p.person_idx, p.name, p.nick_name, p.phone, p.email, p.address, p.detail_address, u.state, u.user_idx, u.id
+        FROM person p
+        LEFT JOIN users u ON p.user_idx = u.user_idx
+        <where>
+            <if test="searchId != null and searchId != ''">
+                u.id LIKE '%' || #{searchId, jdbcType=VARCHAR} || '%'
+            </if>
+        </where>
+    </select>
+    
+    </mapper>
+    

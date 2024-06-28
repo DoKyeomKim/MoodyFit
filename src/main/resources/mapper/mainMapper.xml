@@ -22,6 +22,16 @@ WHERE rnum <= 8
 ]]>
 </select>
 
+<select id="getPNickNameByUserIdx">
+select nick_name
+from person
+where user_idx = #{userIdx}
+</select>
+<select id="getSNickNameByUserIdx">
+select store_name
+from store
+where user_idx = #{userIdx}
+</select>
 
 <!-- 카테고리 첫 페이지가 All로 출력되게끔 -->
 <select id="getAllSubCategoryByCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
@@ -62,17 +72,13 @@ WHERE rnum <= 8
 </select>
 
 
-<select id="getPostingAll">
-SELECT DISTINCT a.posting_idx AS posting_idx,
-                a.title AS title,
-                d.price AS price,
-                e.file_path AS file_path
-FROM posting a
-JOIN posting_product b ON a.posting_idx = b.posting_idx
-JOIN product_info c ON b.product_info_idx = c.product_info_idx
-JOIN product d ON c.product_idx = d.product_idx
-join product_file e on e.product_info_idx = b.product_info_idx
-ORDER BY a.posting_idx ASC
+<select id="getEdtiorPick">
+SELECT ep.pick_idx, ep.file_path, ep.posting_idx, ep.start_date, ep.end_date
+FROM editor_pick ep
+JOIN posting p ON p.posting_idx = ep.posting_idx
+WHERE p.state = '1'
+AND CURRENT_DATE BETWEEN ep.start_date AND ep.end_date
+ORDER BY ep.pick_idx DESC
 </select>
 
 

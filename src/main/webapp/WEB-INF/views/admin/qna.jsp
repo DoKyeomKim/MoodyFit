@@ -9,7 +9,7 @@
 <style>
 body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
-    background-color: #f9f9f9;
+    background-color: #F6F4EE;
     margin: 0;
     padding: 0;
     display: flex;
@@ -18,79 +18,147 @@ body {
 }
 
 main {
-    width: 90%;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 60%;
+    background-color: #F6F4EE;
     padding: 20px;
     font-size: 15px;
-    margin-top: 20px;
+    margin-top: 70px;
 }
 
 table {
     width: 100%;
-    border-collapse: collapse;
     margin-top: 20px;
 }
 
 th, td {
-    border: 1px solid #ccc;
-    padding: 10px;
+    padding: 20px;
     text-align: left;
 }
 
-th {
-    background-color: #f2f2f2;
+thead {
+    background-color: white;
+    border-bottom: 2px solid #867B73;
 }
 
-.secret {
-    color: #ff0000;
+th {
     font-weight: bold;
+    background-color: #FFF;
+    border-bottom: 1px solid #867B73 !important;
+}
+
+td {
+    background-color: white;
+}
+
+tr {
+    background-color: #F6F4EE;
+}
+
+tr:hover td {
+    background-color: #f1f1f1;
 }
 
 .button-container {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 30px;
+}
+.table-container {
+    width: 100%;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.qna-style {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.qna-style a {
+    margin: 0 10px;
+    color: #A9A9A9;
+    text-decoration: none;
+    font-weight: normal;
+    transition: color 0.3s, border-bottom 0.3s;
+    padding-bottom: 5px;
+}
+
+.qna-style a.active, .qna-style a:hover {
+    color: #867B73;
+    border-bottom: 2px solid #867B73;
 }
 
 button {
-    padding: 10px 20px;
+    padding: 15px 40px;
     font-size: 16px;
+    border: none;
+    background-color: #E5AAA3;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px !important;
+}
+
+button:hover {
+    background-color: #E3AAA2;
 }
 </style>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const links = document.querySelectorAll('.qna-style a');
+    const currentPath = window.location.pathname;
+
+    links.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+        link.addEventListener('click', function() {
+            links.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+});
+</script>
 </head>
 <body>
-    <%@include file="/WEB-INF/layouts/header.jsp"%>
+    <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
     <main>
-        <h3 class="text-center">Q&A 리스트</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                    <th>수정일</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="qna" items="${AdminqnaList}">
+        <h2 class="text-center" style="font-weight:bold; color: #867B73;">1:1문의</h2>
+        <div class="qna-style">
+            <a href="/qna">관리자문의</a>
+            <a href="/qna2">상품문의</a>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
                     <tr>
-                        <td>${qna.QUESTION_IDX}</td>                     
-                       <td><a href="/qnaDetail?questionIdx=${qna.QUESTION_IDX}">${qna.TITLE}</a></td>            
-                        <td>${qna.ID}</td>                     
-                        <td>${qna.CREATE_DATE}</td>                                             
-                        <td>${qna.UPDATE_DATE}</td>                                                                                                                                                    
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                        <th>답변여부</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="qna" items="${AdminqnaList}">
+                        <tr>
+                            <td>${qna.QUESTION_IDX}</td>
+                            <td><a href="/qnaDetail?questionIdx=${qna.QUESTION_IDX}">${qna.TITLE}</a></td>
+                            <td>${qna.ID}</td>
+                            <td>${qna.CREATE_DATE}</td>
+                            <td>
+                            <c:choose>
+                                <c:when test="${qna.STATE==1}">답변대기</c:when>
+                                <c:when test="${qna.STATE==2}">답변완료</c:when>
+                            </c:choose>
+                            </td>
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
-            
-        </table>
+        </div>
         <div class="button-container">
-            <button onclick="window.location.href='qnaWrite'">새 질문 작성</button>
+            <button onclick="window.location.href='qnaWrite'">글쓰기</button>
         </div>
     </main>
+    <%@include file="/WEB-INF/layouts/footer.jsp"%>
 </body>
 </html>
