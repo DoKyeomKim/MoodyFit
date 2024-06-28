@@ -56,10 +56,10 @@ GROUP BY
         orders o
   </select>
 
-  <select id="getTotalRevenue" resultType="double">
+<select id="getTotalRevenue" resultType="double">
     SELECT 
-        SUM(o.total_price)
+        NVL(SUM(o.total_price), 0)
     FROM 
         orders o
-  </select>
+</select>
 </mapper>

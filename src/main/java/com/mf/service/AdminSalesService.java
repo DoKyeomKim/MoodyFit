@@ -27,7 +27,7 @@ public class AdminSalesService {
 	}
 
 	public double getTotalRevenue() {
-		return adminSalesMapper.getTotalRevenue();
+	    return adminSalesMapper.getTotalRevenue();
 	}
 
 
