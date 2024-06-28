@@ -46,6 +46,8 @@ public interface OrderMapper {
 	List<Integer> selectCartIdxByImpUid(String impUid);
 
 	void updateCartStateToComplete(Integer cartIdx);
+
+	List<OrdersDto> selectOrder2(Long personIdx);
 	
 
 }

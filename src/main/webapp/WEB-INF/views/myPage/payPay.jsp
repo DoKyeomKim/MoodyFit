@@ -90,7 +90,7 @@ main {
                         .then(data => {
                             console.log('Success:', data);
                             alert("결제가 완료되었습니다!");
-                            window.location.href = "/myPage";
+                            window.location.href = "/myPage/order";
                         })
                         .catch(error => {
                             console.error('Error:', error);
