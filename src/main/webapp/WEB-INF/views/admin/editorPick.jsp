@@ -13,13 +13,46 @@ body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
 }
 main {
-    width: 90%;
+    width: 100%;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
     font-size : 15px;
   
+}
+
+.editor-pick-table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+.editor-pick-table th, .editor-pick-table td {
+    padding: 10px;
+    text-align: center;
+}
+
+.editor-pick-table th {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.editor-pick-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.editorPick-info td {
+    vertical-align: middle;
+}
+
+.btn-margin-right {
+    margin-right: 5px;
+}
+.button-group {
+	margin-top : 20px;
+    display: flex;
+    justify-content: center;
 }
 </style>
 </head>
@@ -41,23 +74,57 @@ main {
                     <th>가맹점명</th>
                     <th>게시 시작일</th>
                     <th>게시 마감일</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="editorPick" items="${editorPick}">    
-                    <tr class="editorPick-info">
-                        <td>${editorPick.PICK_IDX}</td>
-                        <td>${editorPick.POSTING_IDX}</td>
-                        <td>${editorPick.TITLE}</td>
-                        <td>${editorPick.STORE_NAME}</td>
-                        <td class="start-date">${editorPick.START_DATE}</td>
-            			<td class="end-date">${editorPick.END_DATE}</td>
-                        <td><a href="#" class="btn btn-primary" style="margin-right:5px;">수정</a><a href="#" class="btn btn-danger">삭제</a></td>
-                    </tr>
-                </c:forEach>
+				<c:forEach var="editorPick" items="${editorPick}">
+				    <tr class="editorPick-info">
+				        <form id="deleteForm${editorPick.PICK_IDX}" method="post" action="/EPDelete">
+				            <input type="hidden" name="pickIdx" value="${editorPick.PICK_IDX}">
+				            <td>${editorPick.PICK_IDX}</td>
+				            <td>${editorPick.POSTING_IDX}</td>
+				            <td>${editorPick.TITLE}</td>
+				            <td>${editorPick.STORE_NAME}</td>
+				            <td class="start-date">${editorPick.START_DATE}</td>
+				            <td class="end-date">${editorPick.END_DATE}</td>
+				            <td>
+				                <a href="/EPEditForm?pickIdx=${editorPick.PICK_IDX}" class="btn btn-primary" style="margin-right:5px;">수정</a>
+				                <button type="button" class="btn btn-danger" onclick="confirmDelete(${editorPick.PICK_IDX})">삭제</button>
+				            </td>
+				        </form>
+				    </tr>
+				</c:forEach>
             </tbody>
         </table>
-        <a href="/EPWriteForm" class="btn btn-primary">작성하기</a>
+        
+		<nav aria-label="Page navigation" style="margin-top: 100px;">
+			<ul class="pagination justify-content-center">
+				<c:if test="${prev}">
+					<li class="page-item"><a class="page-link"
+						href="?page=${startPageNum - 1}" aria-label="Previous"> <span
+							aria-hidden="true" class="fas fa-angle-left"></span>
+					</a></li>
+				</c:if>
+				<c:forEach begin="${startPageNum}" end="${endPageNum}"
+					var="page">
+					<li class="page-item ${currentPage == page ? 'active' : ''}">
+						<a class="page-link" href="?page=${page}">${page}</a>
+					</li>
+				</c:forEach>
+				<c:if test="${next}">
+					<li class="page-item"><a class="page-link"
+						href="?page=${endPageNum + 1}"> <span aria-hidden="true"
+							class="fas fa-angle-right"></span>
+					</a></li>
+				</c:if>
+			</ul>
+		</nav>
+  
+        
+        <div class="button-group">
+        <a href="/EPWriteForm" class="btn btn-outline-primary" style="width : 500px;">작성하기</a>
+        </div>
 	</div>
 </main>
 
@@ -82,6 +149,19 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
-
+<script>
+function confirmDelete(pickIdx) {
+    var confirmDelete = confirm("정말로 삭제하시겠습니까?");
+    if (confirmDelete) {
+        // 확인을 눌렀을 때 삭제 진행
+        var form = document.getElementById("deleteForm" + pickIdx);
+        if (form) {
+            form.submit(); // 해당 폼을 서브밋하여 삭제 처리
+        }
+    } else {
+        // 취소했을 때 추가 작업 (여기서는 아무 작업 없음)
+    }
+}
+</script>
 </body>
 </html>

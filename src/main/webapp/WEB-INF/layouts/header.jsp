@@ -202,6 +202,11 @@ main {
                                         <a href="/storeMyPage" class="nav-link">마이페이지</a>
                                     </li>
                                 </c:when>
+                                <c:when test="${sessionScope.role == 'ROLE_ADMIN'}">
+                                    <li class="nav-item1">
+                                        <a href="/admin" class="nav-link">관리자페이지</a>
+                                    </li>
+                                </c:when>
                             </c:choose>
                             <li class="nav-item1">
                                 <a href="<c:url value='/logout' />" class="nav-link">로그아웃</a>

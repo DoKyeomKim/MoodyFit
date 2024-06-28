@@ -1,7 +1,6 @@
 package com.mf.controller;
 
-import java.io.File;
-import java.io.IOException;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,7 @@ import com.mf.dto.CategoryDto;
 import com.mf.dto.CsFaqDto;
 import com.mf.dto.CsQnaDto;
 import com.mf.dto.EditorPickDto;
+import com.mf.dto.Paging;
 import com.mf.dto.PersonDto;
 import com.mf.dto.PostingAnswerDto;
 import com.mf.dto.PostingQuestionDto;
@@ -593,15 +593,36 @@ public class AdminController {
 		   mv.setViewName("/admin/adminOrder");
 		   System.out.println(AdminOrderList);		
 		   return mv;
-}
+	   }
+
+//=========================================================================
+//==============================에디터 픽==================================
+//=========================================================================
+//=========================================================================
+
+
+
 	   
 	   // 에디터 픽 이동
 	   @GetMapping("/adminEditorPick")
-	   public ModelAndView editorPick() {
+	   public ModelAndView editorPick(@RequestParam(value = "page", defaultValue = "1") int page) {
 		   ModelAndView mv = new ModelAndView();
 		   
-		   List<Map<String,Object>> editorPick = editorPickService.getEditorPick();
+		   int pageSize = 5;
+		   int startIndex = (page - 1) * pageSize;
 		   
+		   // 에디터픽 리스트 갖고오기
+		   List<Map<String,Object>> editorPick = editorPickService.getEditorPick(pageSize,startIndex);
+		   // 페이징 처리
+		   Paging paging = editorPickService.calculatePagingInfo(page, pageSize);
+		   
+		   mv.addObject("prev", paging.isPrev());
+		   mv.addObject("next", paging.isNext());
+		   mv.addObject("startPageNum", paging.getStartPageNum());
+		   mv.addObject("endPageNum", paging.getEndPageNum());
+		   mv.addObject("totalPages", paging.getTotalPages());
+		   mv.addObject("currentPage", page);
+
 		   mv.addObject("editorPick", editorPick);
 		   mv.setViewName("admin/editorPick");
 		   return mv;
@@ -612,7 +633,7 @@ public class AdminController {
 	   public ModelAndView EPWriteForm() {
 		   ModelAndView mv = new ModelAndView();
 		   // 임시용 전부 들고 오는 로직
-		   List<Map<String,Object>> posting = editorPickService.getAllPosting();
+		   List<Map<String,Object>> posting = editorPickService.getPickPosting();
 		   
 		   
 		   
@@ -621,50 +642,57 @@ public class AdminController {
 		   return mv;
 	   }
 	   
+	   // 에디터 픽 작성
 	   @PostMapping("/EPWrite")
 	   public ModelAndView EPWrite(@RequestParam("file") MultipartFile file, EditorPickDto editorPick) {
 		   ModelAndView mv = new ModelAndView();
-		   
-		   
-		    //사진 파일 이름
-			String fileName = file.getOriginalFilename();
-			// 암호환 파일 이름 중복방지(그냥 시간 앞에 붙임)
-			String fileNameScret = System.currentTimeMillis() + "_" + fileName;
-
-			String filePath = "C:/dev/" + fileNameScret;
-			Long fileSize = file.getSize();
-			// 파일 해당 위치에 저장
-			File dest = new File("C:/dev/images/"+fileNameScret);
-			// 만약 해당 위치에 폴더가 없으면 생성
-			if (!dest.exists()) {
-				dest.mkdirs();
-	        }
-			
-			try {
-				// 파일을 지정된 경로로 저장
-				file.transferTo(dest);
-
-				// 데이터베이스에 저장할 이미지 경로 설정
-				editorPick.setFilePath("/images/" + fileNameScret);
-				editorPick.setOriginalName(fileName);
-				editorPick.setFileSize(fileSize);
-				// 이후 데이터베이스에 저장(경로로 저장)
-
-				editorPickService.writeEditorPick(editorPick);
-
-			} catch (IllegalStateException | IOException e) {
-				e.printStackTrace();
-				mv.addObject("error", "파일 업로드 실패.");
-				mv.setViewName("admin/editorPickWrite");
-				return mv;
-			}
-		   
+		   // 에디터픽 작성 로직
+		   editorPickService.writeEditorPick(editorPick,file);
 		   
 		   mv.setViewName("redirect:/adminEditorPick");
 		   return mv;
 	   }
 	   
-	   
+	   // 에디터 픽 수정 페이지
+	   @GetMapping("/EPEditForm")
+	   public ModelAndView EPEditForm(@RequestParam("pickIdx") Long pickIdx,EditorPickDto editorPick) throws ParseException {
+		   ModelAndView mv = new ModelAndView();
+		   
+		   // 수정 페이지에 필요한 정보 들고오는 로직처리
+		   Map<String,Object> editPick = editorPickService.getEditPickByPickIdx(pickIdx,editorPick);
+		    
+		   mv.addObject("startDate",editPick.get("formattedStartDate"));
+		   mv.addObject("endDate",editPick.get("formattedEndDate"));
+		   mv.addObject("editorPick",editPick.get("editorPick"));
+		   mv.addObject("postingInfo",editPick.get("postingInfo"));
+		   mv.addObject("editPick", editPick);
+		   mv.setViewName("admin/editorPickEdit");
+		   return mv;
+	   }
 	  
+	   // 에디터픽 수정
+	   @PostMapping("/EPEdit")
+	   public ModelAndView EPEdit(@RequestParam("file") MultipartFile file,EditorPickDto editorPick) {
+		   ModelAndView mv = new ModelAndView();
+		   
+		   editorPickService.editorPickUpdate(file,editorPick);
+		   
+		   mv.setViewName("redirect:/adminEditorPick");
+		   return mv;
+	   }
+	   
+	   // 에디터픽 삭제
+	   @PostMapping("/EPDelete")
+	   public String EPDelete(@RequestParam("pickIdx") Long pickIdx) {
+		   
+		   editorPickService.editorPickDelete(pickIdx);
+		   
+		   return "redirect:/adminEditorPick";
+	   }
+//=========================================================================
+//=========================================================================
+//=========================================================================
+
+	   
 	   
 }

@@ -47,7 +47,7 @@ public class MainController {
 		// 그 안에서 서로다른 DTO를 가진 것들을 결과를 받고 List형태로 반환 하기위해 또 Map을 씀
 		Map<String, List<Map<String, Object>>> result = mainService.getPostingAll();
 		
-		// 채팅에 필요로한 채팅 추가
+		// 채팅에 필요로한 권한 추가
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null && authentication.isAuthenticated()) {
 		    // 사용자의 권한 확인
@@ -134,8 +134,9 @@ public class MainController {
 	    int pageSize = 1; // 한 페이지에 표시할 게시글 수 확인용으로 1 해놓음 나중에 수정
 	    int startIndex = (page - 1) * pageSize;
         
-        // 서브 카테고리 이름이 All인 경우 해당 카테고리의 All 서브 카테고리 정보 가져옴
         SubCategoryDto selectedSubCategory = new SubCategoryDto();
+        
+        // 서브 카테고리 이름이 All인 경우 해당 카테고리의 All 서브 카테고리 정보 가져옴
         if ("all".equalsIgnoreCase(subCategoryName)) {
             selectedSubCategory = mainService.getAllSubCategoryByCategoryEngName(categoryEngName);
             

@@ -98,13 +98,13 @@
         </div>
 
 <ul class="nav">
-    <li><a href="/adminCategoryWrite" class="nav-link">
-        <br><span class="bold">Category</span></br>카테고리 작성<br><br>
-        <span class="light">상위, 하위 카테고리를 작성 할 수 있습니다.</span>
+    <li><a href="/adminEditorPick" class="nav-link">
+        <br><span class="bold">Editor's Pick</span></br>에디터 픽<br><br>
+        <span class="light">메인에 띄울 공고를 관리할 수 있습니다.</span>
     </a></li>
     <li><a href="/adminCategoryUpdate" class="nav-link">
-        <br><span class="bold">Category</span></br>카테고리 수정/삭제<br><br>
-        <span class="light">카테고리를 수정/삭제 할 수 있습니다.</span>
+        <br><span class="bold">Category</span></br>카테고리 관리<br><br>
+        <span class="light">카테고리를 관리 할 수 있습니다.</span>
     </a></li>
     <li><a href="/adminApply" class="nav-link">
         <br><span class="bold">Apply</span></br>가맹점 공고 관리<br><br>
