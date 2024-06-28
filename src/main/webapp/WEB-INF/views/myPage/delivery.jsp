@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <title>배송지 관리</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <style>
 main{
     width: 80%;
@@ -63,108 +64,172 @@ main{
             <c:forEach var="de" items="${deliveryList}">
 
                 <div class="box-container"
-                    style="border: 1px solid black; padding: 20px; margin: 5px 10px; display: flex; justify-content: space-evenly;">
-                    <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
-                        <div class="box" name="name">${de.name}</div>
-                        <div class="box" name="postCode">${de.postCode}</div>
-                        <div class="box" name="address">${de.address}</div>
-                        <div class="box" name="detailAddress">${de.detailAddress}</div>
-                        <div class="box" name="content">${de.content}</div>
+                    style="border: 1px solid black; padding: 2% 5%; margin: 2% 5%; display: flex; justify-content: space-evenly;">
+                    <div class="form-check" style="display: flex; flex-direction: column; justify-content: space-evenly; width:30%;">
+					  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault${de.deliveryIdx}" value="${de.isDefault}" ${de.isDefault == 1 ? 'checked' : ''}>
+					  <label class="form-check-label" for="flexRadioDefault${de.deliveryIdx}">기본 배송지 설정</label>
+					</div>
+                    <div style="display: flex; flex-direction: column; justify-content: space-evenly; width:50%;">
+                        <div class="box" name="name">이름 : ${de.name}</div>
+                        <div class="box" name="postCode">우편번호 : ${de.postCode}</div>
+                        <div class="box" name="address">주소 : ${de.address}</div>
+                        <div class="box" name="detailAddress">상세주소 : ${de.detailAddress}</div>
+                        <div class="box" name="content">요청사항 : ${de.content}</div>
                     </div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
+                    <div style="display: flex; flex-direction: column; justify-content: space-evenly; width:20%;">
                         <div class="box" name="deliveryName" 
-                        style="border: 1px solid black; border-radius: 80px; text-align: center;">${de.deliveryName}</div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div>
-                            <button type="button" onclick="removeItem(this)">수정</button>
-                            <button type="button" onclick="removeItem(this)">삭제</button>
+                        style="border: 1px solid black; border-radius: 80px; text-align: center;  font-size:large;
+                        display: flex; justify-content: space-evenly;">${de.deliveryName}</div>
+                        <div style="display: flex; align-items: center; justify-content: space-evenly;">
+                            <button type="button" class="btn btn-success" onclick="editDelivery('${de.deliveryIdx}')">수정</button>
+                            <button type="button" class="btn btn-danger" onclick="removeDelivery('${de.deliveryIdx}')">삭제</button>
                         </div>
                     </div>
                 </div>
 
             </c:forEach>
 			<button class="btn btn-primary" style="margin:20px;" onclick="addDelivery()">배송지 추가</button>
+			<button class="btn btn-primary" style="margin:20px;" onclick="updateDelivery()">기본 배송지 변경</button>
       
        <!-- Modal -->
-    <div id="deliveryModal" class="modal">
+<div id="deliveryModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-        	<div style="display:flex;">
-            <div style="text-align: left;"><h2>배송지 추가</h2></div>
-            <div style="text-align: right;"><button class="close" onclick="closeModal()" >&times;</button></div>
+            <div class="modal-header">
+                <h5 class="modal-title">배송지 추가</h5>
+                <button type="button" class="close" onclick="closeModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <hr> <!--action="/myPage/addDelivery"  -->
-            <form id="deliveryForm" method="post" onsubmit="submitForm(event)">
-            <input type="hidden" name="personIdx" value="${personIdx}" >
-            <div class="box-container"  style="display:flex; justify-content: space-evenly;">
-            		<div class="box-container"  style="display: flex; flex-direction: column; justify-content: space-evenly;">
-							<div>
-							<label for="name">수취인:</label>
-							<input type="text" id="name" name="name" required>
-							</div>
-							<div>
-							<label for="deliveryName">배송지 이름:</label>
-							<input type="text" id="deliveryName" name="deliveryName" required>
-							</div>
-							<div>
-							<label for="email">이메일:</label>
-							<input type="text" id="email" name="email">
-							</div>
-							<div>
-							<label for="phone">연락처:</label>
-							<input type="text" id="phone" name="phone" required>
-							</div>
-							<div>
-							<label for="content">요청사항:</label>
-							<input type="text" id="content" name="content" required>
-							</div>
-					</div>
-					<div class="box-container"  style="display: flex; flex-direction: column; justify-content: space-evenly;">		
-						<div>
-						<table>
-						<tr>
-							<th>우편번호</th>
-							<td><input type="text" name="postCode" id="sample6_postcode"
-								placeholder="우편번호" style="margin-right: 30px; width: 20%;"><input
-								type="button" class="btn btn-secondary"
-								onclick="sample6_execDaumPostcode()" value="우편번호 찾기"></td>
-						</tr>
-						<tr>
-							<th>주소</th>
-							<td><input type="text" name="address" id="sample6_address"
-								style="width: 60%;" placeholder="주소"></td>
-						</tr>
-						<tr>
-							<th>상세주소</th>
-							<td><input type="text" name="detailAddress"
-								id="sample6_detailAddress" style="width: 60%;"
-								placeholder="상세주소를 입력해주세요"></td>
-						</tr>
-						</table>
-						</div>
-							
-							<div >
-							<button type="submit">저장</button>
-							</div>
-						</div>
-						</div>
-					</form>
+            <div class="modal-body">
+                <form id="deliveryForm" method="post" onsubmit="submitForm(event)">
+                    <input type="hidden" name="personIdx" value="${personIdx}">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="name">수취인:</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="deliveryName">배송지 이름:</label>
+                            <input type="text" class="form-control" id="deliveryName" name="deliveryName" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="email">이메일:</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="phone">연락처:</label>
+                            <input type="text" class="form-control" id="phone" name="phone" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">요청사항:</label>
+                        <input type="text" class="form-control" id="content" name="content" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="sample6_postcode">우편번호:</label>
+                            <input type="text" class="form-control" name="postCode" id="sample6_postcode" placeholder="우편번호">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-secondary btn-block" onclick="sample6_execDaumPostcode()">우편번호 찾기</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sample6_address">주소:</label>
+                        <input type="text" class="form-control" name="address" id="sample6_address" placeholder="주소">
+                    </div>
+                    <div class="form-group">
+                        <label for="sample6_detailAddress">상세주소:</label>
+                        <input type="text" class="form-control" name="detailAddress" id="sample6_detailAddress" placeholder="상세주소를 입력해주세요">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">닫기</button>
+                        <button type="submit" class="btn btn-primary">저장</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+</div>
+
+       <!-- Modal -->
+<div id="deliveryModal2" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">배송지 추가</h5>
+                <button type="button" class="close" onclick="closeModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="deliveryForm" method="post" onsubmit="submitForm(event)">
+                    <input type="hidden" name="personIdx" value="${personIdx}">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="name">수취인:</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="deliveryName">배송지 이름:</label>
+                            <input type="text" class="form-control" id="deliveryName" name="deliveryName" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="email">이메일:</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="phone">연락처:</label>
+                            <input type="text" class="form-control" id="phone" name="phone" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">요청사항:</label>
+                        <input type="text" class="form-control" id="content" name="content" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="sample6_postcode">우편번호:</label>
+                            <input type="text" class="form-control" name="postCode" id="sample6_postcode" placeholder="우편번호">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>&nbsp;</label>
+                            <button type="button" class="btn btn-secondary btn-block" onclick="sample6_execDaumPostcode()">우편번호 찾기</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sample6_address">주소:</label>
+                        <input type="text" class="form-control" name="address" id="sample6_address" placeholder="주소">
+                    </div>
+                    <div class="form-group">
+                        <label for="sample6_detailAddress">상세주소:</label>
+                        <input type="text" class="form-control" name="detailAddress" id="sample6_detailAddress" placeholder="상세주소를 입력해주세요">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">닫기</button>
+                        <button type="submit" class="btn btn-primary">저장</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
    
 
     </main>
-	
-    <script>
+    <!-- jQuery Core -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Popper.js -->
+	<script	src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap JS -->
+	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script>
     var modal = document.getElementById("deliveryModal");
 
     function addDelivery() {
@@ -253,6 +318,89 @@ main{
             }
         }).open();
     }
+    
+    async function editDelivery(deliveryIdx) {
+        try {
+            const response = await fetch(`/myPage/getDelivery?deliveryIdx=${deliveryIdx}`);
+            if (!response.ok) {
+                throw new Error('배송지 정보를 가져오는 데 실패했습니다.');
+            }
+            const delivery = await response.json();
+            
+            // Modal2에 데이터 채우기
+            $('#deliveryModal2').modal('show'); // 모달2 열기
+            $('#deliveryForm input[name="personIdx"]').val(delivery.personIdx);
+            $('#deliveryForm input[name="name"]').val(delivery.name);
+            $('#deliveryForm input[name="deliveryName"]').val(delivery.deliveryName);
+            $('#deliveryForm input[name="email"]').val(delivery.email);
+            $('#deliveryForm input[name="phone"]').val(delivery.phone);
+            $('#deliveryForm input[name="content"]').val(delivery.content);
+            $('#deliveryForm input[name="postCode"]').val(delivery.postCode);
+            $('#deliveryForm input[name="address"]').val(delivery.address);
+            $('#deliveryForm input[name="detailAddress"]').val(delivery.detailAddress);
+        } catch (error) {
+            console.error('Error:', error.message);
+            alert('배송지 정보를 가져오는 데 실패했습니다.');
+        }
+    }
+
+    async function removeDelivery(deliveryIdx) {
+        try {
+            const response = await fetch('/myPage/deleteDelivery', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                },
+                body: JSON.stringify({ deliveryIdx: deliveryIdx })
+            });
+
+            if (!response.ok) {
+                throw new Error("삭제에 실패했습니다.");
+            }
+
+            const data = await response.json();
+            if (data.message === "success") {
+                alert("삭제되었습니다.");
+                location.reload(); // 페이지 새로고침
+            } else {
+                throw new Error("삭제에 실패했습니다.");
+            }
+        } catch (error) {
+            alert("삭제에 실패했습니다. " + error.message);
+        }
+    }
+
+
+    function updateDelivery() {
+        var selectedId = $("input[name='flexRadioDefault']:checked").attr("id").replace("flexRadioDefault", "");
+        
+        if (selectedId) {
+            // Set current default to 0 and selected to 1
+            $.ajax({
+                type: "POST",
+                url: "/myPage/updateDelivery",
+                data: { deliveryIdx: selectedId, isDefault: 1 },
+                success: function(response) {
+                    alert("기본 배송지가 변경되었습니다.");
+                    location.reload(); // Reload the page to reflect the changes
+                },
+                error: function(xhr, status, error) {
+                    alert("기본 배송지 변경에 실패했습니다.");
+                }
+            });
+        } else {
+            alert("기본 배송지를 선택하세요.");
+        }
+    }
+
+    // Ensure correct radio button is checked on page load
+    $(document).ready(function() {
+        $("input.form-check-input").each(function() {
+            if ($(this).val() == '1') {
+                $(this).prop("checked", true);
+            }
+        });
+    });
 </script>
     <script src="/js/bootstrap.bundle.min.js"></script>
 </body>

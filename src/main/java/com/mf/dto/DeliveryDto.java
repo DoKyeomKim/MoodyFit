@@ -21,6 +21,7 @@ public class DeliveryDto {
 	private String detailAddress;
 	private String content;
 	private int personIdx;
+	private int isDefault;
 	
 	
 	

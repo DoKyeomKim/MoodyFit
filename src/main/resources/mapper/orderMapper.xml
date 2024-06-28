@@ -81,11 +81,15 @@ select	d.delivery_idx,
         d.address,
         d.detail_address,
         d.person_idx,
-        d.content
+        d.content,
+        d.is_default
 from	delivery d
         join person p on d.person_idx = p.person_idx
         join users u on p.user_idx = u.user_idx
 where	u.user_idx = #{ userIdx }
+and		d.is_default = 1
+or		d.is_default = 0
+order by d.is_default desc
 
 </select>
 
@@ -106,6 +110,25 @@ from	delivery d
         join users u on p.user_idx = u.user_idx
 where	u.user_idx = #{ userIdx }
 and 	d.is_default = 1
+
+</select>
+
+<select id="selectDelivery3">
+
+select	d.delivery_idx,
+        d.name,
+        d.delivery_name,
+        d.email,
+        d.phone,
+        d.post_code,
+        d.address,
+        d.detail_address,
+        d.person_idx,
+        d.content
+from	delivery d
+        join person p on d.person_idx = p.person_idx
+        join users u on p.user_idx = u.user_idx
+where	d.delivery_idx = #{ deliveryIdx }
 
 </select>
 
@@ -307,6 +330,12 @@ update orders set imp_uid = #{ impUid }, state = '결제완료' where state = '�
 <update id="updateCartStateToComplete" parameterType="Integer">
 
 update cart set state = '결제완료' where cart_idx = #{ cartIdx }
+
+</update>
+
+<update id="deleteDelivery">
+
+update delivery set is_default = 2 where delivery_idx = #{ deliveryIdx }
 
 </update>
 
