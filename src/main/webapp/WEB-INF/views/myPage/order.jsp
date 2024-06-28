@@ -19,125 +19,77 @@ main{
 <body>
 
     <%@include file="/WEB-INF/layouts/header.jsp"%>
+    <hr>
     <h2 style="text-align:left; margin-top:30px; margin-left : 100px;"> 주문내역</h2>
     <hr>
     <%@include file="/WEB-INF/layouts/aside.jsp"%>
 
-    <main style="margin-top:30px; width:90%; ">
-    
+	<main style="margin-top: 30px; width: 90%;">
+		
+		<c:forEach var="item" items="${orderList}">
+			<div style="border: 2px solid black; padding: 20px; margin: 20px 10px;">
+				<div style="display:flex; margin:10px;">
+					<div class="box" style="font-size: medium; margin-right: 30px;">주문날짜 : ${fn:substring(item.orderDate, 0, 10)}</div>
+					<div class="box" style="font-size: medium;">주문번호 : ${item.merchantUid}</div>
+				</div>
+				<div class="box-container"
+					style="border: 1px solid black; padding: 10px; margin: 5px; display: flex; justify-content: space-evenly;">
+					<div style="display: flex; flex-direction: column; justify-content: space-evenly;">
+						<img src="${ item.filePath }" class="img-box"
+							style="width: 170px; height: 170px; border: 1px solid #CDCDCD;">
+					</div>
+					<div style="display: flex; flex-direction: column; justify-content: space-evenly;">
+						<div class="box" name="title" style="font-size: large;">${item.title}</div>
+						<div class="box" name="name" style="font-size: large;">${item.name}</div>
+						<div class="box" name="price" style="font-size: large;">상품 단가: <span class="price">${item.price}</span> 원</div>
 
-        <form id="cartForm" action="/mypage/paying" method="post">
-            <c:forEach var="item" items="${cartList}">
+					</div>
 
-                <div class="box-container"
-                    style="border: 1px solid black; padding: 10px; margin: 5px; display: flex; justify-content: space-evenly;">
-                    <div style="display: flex;">
-                        <input type="checkbox" name="selectedItems" value="${item.cartIdx}" class="itemCheckbox" onchange="updateBuyButton()">
-                    </div>
-                    <div>
-                        <img src="${ item.filePath }" class="img-box"
-                             style="width: 150px; height: 150px;border : 1px solid #CDCDCD;">
-                    </div>
-                    <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
-                        <div class="box" name="title">${item.title}</div>
-                        <div class="box" name="name">${item.name}</div>
-                        <div class="box" name="name">내일 ${formattedDate} 도착 보장</div>
-                        <div class="box" name="price">상품 단가: ${item.price} 원</div>
-                    </div>
-                    <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
-                        <div>
-                            <button type="button" class="quantityButton"
-                                    onclick="updateQuantity(this, -1)">-</button>
-                            <span class="itemQuantity" name="quantity">1</span>
-                            <button type="button" class="quantityButton"
-                                    onclick="updateQuantity(this, 1)">+</button>
-                        </div>
-                        <div>
-                            <button type="button" onclick="removeItem(this)">삭제</button>
-                        </div>
-                    </div>
-                    <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
-                    <div class="box" name="price">가격: <span class="itemPrice" data-price="${item.price}">${item.price}</span>원</div>
-                    </div>
-                </div>
+					<div style="display: flex; flex-direction: column; justify-content: space-evenly;">
+						<div class="box" style="color: green; font-size: large; font-weight:bold;">내일
+							도착 보장</div>
+						<div style="font-size: large;"> </div>
+						<div class="box" name="quantity" style="font-size: large;">상품 수량: ${item.quantity} 개</div>
+					</div>
 
-            </c:forEach>
-            
-		 <input type="submit" class="btn btn-primary" style="margin:20px;" id="buyButton" value="구매하기">  
-         <button type="button" class="btn btn-primary" style="margin-right: 5px;"
-										onclick="location.href='/myPage/payment'">결제페이지</button>
-       <!--     <button type="button" class="btn btn-primary" style="margin-right: 5px;"
-										onclick="location.href='/myPage/payment'">주문하기</button>   -->
-        </form>
-    </main>
-
+					<div style="display: flex; flex-direction: column; justify-content: space-evenly;">
+						<div class="box" style="font-size: x-large; color:blue;">${item.state}</div>
+						<div style="font-size: large;"> </div>
+						<div class="box" style="font-size: x-large; font-weight:bold;">가격:
+							<span class="price">${item.price * item.quantity}</span> 원</div>
+					</div>
+					<div
+						style="border-left: 1px solid black; display: flex; flex-direction: column; justify-content: space-evenly;">
+						<div class="box" style="font-size: large; text-align: center;">
+							<button type="button" class="btn btn-secondary" style="margin: 20px; width : 90%;">배송조회</button>
+						</div>
+						<div class="box" style="font-size: large; text-align: center;">
+							<button type="button" class="btn btn-secondary" style="margin: 20px; width : 90%;">교환,반품신청</button>
+						</div>
+						<div class="box" style="font-size: large; text-align: center;">
+							<button type="button" class="btn btn-secondary" style="margin: 20px; width : 90%;">리뷰 작성하기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</c:forEach>
+		<div style="margin: 0 auto; display: flex; justify-content: center;">
+									<%@include file="/WEB-INF/layouts/orderPaging.jsp"%>
+								</div>
+	</main>
+	<%@include file="/WEB-INF/layouts/footer.jsp"%>
     <script>
-   
+    document.addEventListener("DOMContentLoaded", function() {
+        // 모든 price 클래스 요소를 선택합니다.
+        var prices = document.querySelectorAll('.price');
 
-    	 // 수량을 업데이트하는 함수
-        function updateQuantity(button, change) {
-            const quantitySpan = button.parentElement.querySelector('.itemQuantity');
-            const priceSpan = button.closest('.box-container').querySelector('.itemPrice');
-            const basePrice = parseFloat(priceSpan.getAttribute('data-price'));
-            let currentQuantity = parseInt(quantitySpan.textContent);
-            currentQuantity = Math.max(1, currentQuantity + change); // Ensure quantity is at least 1
-            quantitySpan.textContent = currentQuantity;
-
-       		  // 해당 상품의 총 가격 업데이트
-            const newPrice = basePrice * currentQuantity;
-            priceSpan.textContent = newPrice.toLocaleString(); // Add comma as thousand separator if needed
-
-       		// 필요한 경우 여기서 총 가격 또는 다른 계산을 업데이트합니다.
-        }
-
-  	   // 상품을 삭제하는 함수
-        function removeItem(button) {
-            const itemContainer = button.closest('.box-container');
-            itemContainer.remove();
-
-            // Update the buy button count after removing an item
-            updateBuyButton();
-        }
-
-     // 폼 제출 처리
-        document.getElementById('cartForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // 기본 폼 제출 방지
-
-    const form = event.target;
-    const formData = new FormData();
-
-    // 체크된 항목에서 데이터 수집
-    document.querySelectorAll('.itemCheckbox:checked').forEach(checkbox => {
-        const container = checkbox.closest('.box-container');
-        const cartIdx = checkbox.value;
-        const quantity = container.querySelector('.itemQuantity').textContent;
-        const price = container.querySelector('.itemPrice').textContent.replace(/,/g, '');
-
-        formData.append('selectedItems', cartIdx);
-        formData.append('quantity_' + cartIdx, quantity);
-        formData.append('price_' + cartIdx, price);
+        // 각 요소에 대해 천 단위 쉼표를 추가합니다.
+        prices.forEach(function(price) {
+            var value = parseInt(price.textContent, 10);
+            price.textContent = value.toLocaleString();
+        });
     });
 
-    // fetch를 사용하여 수집된 데이터 제출
-    fetch(form.action, {
-        method: form.method,
-        body: formData
-    }).then(response => {
-        if (response.ok) {
-            // 성공적인 응답을 처리합니다.
-            window.location.href = response.url; // 응답 URL로 리다이렉트
-        } else {
-            // 오류 응답을 처리합니다.
-            alert('Error submitting form');
-        }
-    }).catch(error => {
-        console.error('Error:', error);
-        alert('Error submitting form');
-    });
-});
-
-     // 페이지 로드 시 올바른 수를 설정하기 위한 초기 업데이트
-        updateBuyButton();
     </script>
 
     <script src="/js/bootstrap.bundle.min.js"></script>

@@ -152,6 +152,43 @@ AND cart.cart_idx = (
 
 </select>
 
+<select id="selectOrder2">
+
+SELECT
+    orders.order_idx,
+    orders.quantity,
+    orders.merchant_uid,
+    orders.delivery_price,
+    orders.total_price,
+    orders.order_date,
+    orders.imp_uid,
+    orders.person_idx,
+    orders.delivery_idx,
+    orders.state,
+    product.price,
+    cart.quantity,
+    posting.title,
+    product.name,
+    product_file.file_path
+FROM orders
+    JOIN person ON orders.person_idx = person.person_idx
+    JOIN order_cart ON order_cart.order_idx = orders.order_idx
+    Join delivery on orders.delivery_idx = delivery.delivery_idx
+    JOIN cart ON order_cart.cart_idx = cart.cart_idx
+    JOIN posting_product ON cart.posting_product_idx = posting_product.posting_product_idx
+    JOIN product_info ON cart.product_info_idx = product_info.product_info_idx
+    JOIN product_file ON product_info.product_info_idx = product_file.product_info_idx
+    JOIN product ON product.product_idx = product_info.product_idx
+    JOIN posting ON posting.posting_idx = posting_product.posting_idx
+WHERE orders.person_idx = #{ personIdx }
+and orders.state = '결제완료'
+or orders.state = '배송준비중'
+or orders.state = '배송중'
+or orders.state = '배송완료'
+order by orders.order_date desc
+
+</select>
+
 <select id="selectOrderList">
 
 select o.order_idx,
