@@ -111,7 +111,6 @@ main {
         	<h2>제품 판매 순위</h2>
         </div>
     </main>
-	<script src="/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.add('loaded');

@@ -144,7 +144,7 @@ table.editor-pick-table tr.posting-info:active {
 </div>
 
 <main>
-<form action="/EPWrite" method="POST" enctype="multipart/form-data">
+<form action="/EPWrite" id="editorPickForm" method="POST" enctype="multipart/form-data">
     <div id="main-area">
         <h2>에디터 픽 작성페이지</h2>
         <div id="selected-posting" class="selected-posting">
@@ -160,11 +160,11 @@ table.editor-pick-table tr.posting-info:active {
         </div>
 		<div class="file-area">
 		    <label for="uploadInput" class="btn2">이미지 업로드</label>
-		    <input type="file" name="file" id="uploadInput" onchange="previewImage()" required>
+		    <input type="file" name="file" id="uploadInput" onchange="previewImage()">
 		    <span id="selectedFileName" class="selectedFileName"></span>
 		</div>
         <div class="posting-date">
-            <input type="date" name="startDate" required> ~ <input type="date" name="endDate" required>
+            <input type="date" name="startDate" required> ~ <input type="date" name="endDate">
         </div>
         <div class="button-group">
             <button type="submit" class="btn btn-primary">수정하기</button>
@@ -255,6 +255,30 @@ window.onload = function() {
         });
     });
 };
+
+document.getElementById('editorPickForm').addEventListener('submit', function(event) {
+    const postingIdx = document.getElementById('postingIdx').value;
+    const fileInput = document.getElementById('uploadInput').value;
+    const startDate = document.querySelector('input[name="startDate"]').value;
+    const endDate = document.querySelector('input[name="endDate"]').value;
+
+    if (!postingIdx) {
+        alert("공고를 선택해주세요.");
+        event.preventDefault();
+        return;
+    }
+
+    if (!fileInput) {
+        alert("이미지를 업로드해주세요.");
+        event.preventDefault();
+        return;
+    }
+
+    if (!startDate || !endDate) {
+        alert("날짜를 선택해주세요.");
+        event.preventDefault();
+    }
+});
 </script>
 </body>
 </html>
