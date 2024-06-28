@@ -13,14 +13,17 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+           
         }
 
         .container {
-            width: 90%;
+            width: 100%;
             margin-top: 80px;
-              font-size: 15px;
-   
+            font-size: 15px;
+            flex-grow: 1; /* This will make the container grow to fill the available space */
         }
 
         .header {
@@ -72,6 +75,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+            margin-bottom:70px;
         }
 
         .review-item {
@@ -133,19 +137,15 @@
             height: auto;
             margin-top: 10px;
         }
+      
     </style>
 </head>
- <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
+    <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
 <body>
     <div class="container">
-              <h1 class= "head" style=" font-size: 18px;
-            margin-top:30px ;">PHOTO REVIEW | 포토 리뷰</h1>
-        <div class="header">
-  
-           
-        </div>
+        <h1 class="head" style="font-size: 18px; margin-top: 30px;">PHOTO REVIEW | 포토 리뷰</h1>
+        <div class="header"></div>
         <div class="filter-bar">
-       
             <select id="category">
                 <option value="">카테고리를 선택해주세요</option>
                 <option value="OUTER">OUTER</option>
@@ -170,7 +170,7 @@
         </div>
         <div class="review-list" id="review-list"></div>
     </div>
-    
+ 
     <script>
         let reviews = [];
 
@@ -254,9 +254,9 @@
                         const reviewImage = document.createElement('img');
                         reviewImage.className = 'review-image';
                         reviewImage.src = review.filePath;
-                        reviewImage.alt =  review.filePath || 'Review Image';
+                        reviewImage.alt = review.filePath || 'Review Image';
                         reviewImage.onerror = function() {
-                            console.error('Failed to load image:', review.file);
+                            console.error('Failed to load image:', review.filePath);
                         };
                         reviewItem.appendChild(reviewImage);
                     }
@@ -268,7 +268,6 @@
                 alert('리뷰 리스트를 렌더링하는 도중 문제가 발생했습니다.');
             }
         }
-
 
         document.addEventListener('DOMContentLoaded', () => {
             fetchReviews();
@@ -307,12 +306,7 @@
                 console.error('리뷰 검색 및 필터링 도중 문제가 발생했습니다:', error);
             }
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchReviews();
-        });
     </script>
- 
 </body>
-
+<%@include file="/WEB-INF/layouts/footer.jsp"%>
 </html>
