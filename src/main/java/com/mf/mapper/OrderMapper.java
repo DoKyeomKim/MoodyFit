@@ -48,6 +48,10 @@ public interface OrderMapper {
 	void updateCartStateToComplete(Integer cartIdx);
 
 	List<OrdersDto> selectOrder2(Long personIdx);
+
+	void deleteDelivery(int deliveryIdx);
+
+	DeliveryDto selectDelivery3(Long deliveryIdx);
 	
 
 }

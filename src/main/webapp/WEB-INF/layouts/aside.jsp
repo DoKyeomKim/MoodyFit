@@ -52,7 +52,7 @@
             <ul>
                 <li><a href="/myPage" class="bold">마이페이지</a></li>
                 <li><a href="/personUpdateForm">정보 수정</a></li>
-                <li><a href="/myPage/Order">주문 정보</a></li>
+                <li><a href="/myPage/order">주문 정보</a></li>
                 <li><a href="/myPage/delivery">배송지 관리</a></li>
                 <li><a href="/myPage/wishList">관심상품</a></li>
                 <li><a href="/myPage/cart">장바구니</a></li>

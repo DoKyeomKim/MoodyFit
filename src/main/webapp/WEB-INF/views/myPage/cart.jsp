@@ -25,7 +25,7 @@ main {
         <c:choose>
             <c:when test="${empty cartList}">
                 <div style="text-align: center; margin-top: 50px;">
-                    <h3 style="margin:100px 30px;">장바구니가 비어있습니다.z</h3>
+                    <h3 style="margin:100px 30px;">장바구니가 비어있습니다.</h3>
                     <hr>
                 </div>
                 <div style="text-align : right; margin-right:20px;">
@@ -64,7 +64,6 @@ main {
                         </div>
                     </c:forEach>
                     <input type="submit" class="btn btn-primary" style="margin:20px;" id="buyButton" value="구매하기">
-                    <button type="button" class="btn btn-primary" style="margin-right: 5px;" onclick="location.href='/myPage/payment'">결제페이지</button>
                 </form>
             </c:otherwise>
         </c:choose>
