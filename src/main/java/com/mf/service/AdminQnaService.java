@@ -10,6 +10,8 @@ import com.mf.dto.AdminAnswerDto;
 import com.mf.dto.AdminQuestionDto;
 import com.mf.dto.CsFaqDto;
 import com.mf.dto.CsQnaDto;
+import com.mf.dto.PostingAnswerDto;
+import com.mf.dto.PostingQuestionDto;
 import com.mf.mapper.AdminQnaMapper;
 
 import jakarta.transaction.Transactional;
@@ -54,5 +56,34 @@ public class AdminQnaService {
 		        return adminQnaMapper.qna1(questionIdx);
 		    }
 
+		 public void addQuestion2(PostingQuestionDto qna2dto, Long personIdx) {
+		        qna2dto.setPersonIdx(personIdx);
+		        adminQnaMapper.addQuestion2(qna2dto);
+		    }
+
+		public List<Map<String, Object>> getAllQna2s() {
+			
+			return adminQnaMapper.getAllQna2s();
+		}
+
+		public PostingQuestionDto getQna2ByPostingQuestionIdx(Long postingQuestionIdx) {
+			
+			return adminQnaMapper.getQna2ByquestionIdx(postingQuestionIdx);
+		}
+
+		public List<PostingAnswerDto> getAnswers2ByPostingQuestionIdx(Long postingQuestionIdx) {
+			
+			return adminQnaMapper.getAnswers2ByPostingQuestionIdx(postingQuestionIdx);
+		}
+
+		public void addAnswer2(PostingAnswerDto answer2Dto) {
+			adminQnaMapper.insertAnswer2(answer2Dto);
+			
+		}
+
+	
+	
+
+	
 		
 }

@@ -21,11 +21,21 @@ public class AdminReviewService {
 		// TODO Auto-generated method stub
 		return adminReviewMapper.searchReviewsById(searchId);
 	}
-//	public void addReview(AdminReviewDto reviewDto) {
-//		// TODO Auto-generated method stub
-//		adminReviewMapper.addReview(reviewDto);
-//		adminReviewMapper.addReviewFile()
-//	}
-}
+	public void addReview(AdminReviewDto reviewDto) {
+
+	adminReviewMapper.addReview(reviewDto);
+	
+	}
+	public void addReviewFile(AdminReviewDto reviewDto) {
+		
+		adminReviewMapper.addReviewFile(reviewDto);
+	}
+	public List<AdminReviewDto> getAllReviews() {
+        return adminReviewMapper.findAll();
+    }
+
+	}
+
+		
 
 

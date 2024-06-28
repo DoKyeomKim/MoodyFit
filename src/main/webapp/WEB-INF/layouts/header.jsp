@@ -143,7 +143,7 @@ main {
 </style>
 </head>
 <body>
-
+ 
 
     <div class="fixed-header">
         <div class="header-container">
@@ -182,6 +182,7 @@ main {
                         <li><a class="dropdown-item" href="/faq">FAQ</a></li>
                         <li><a class="dropdown-item" href="/qna">QNA</a></li>
                         <li><a class="dropdown-item" href="/review">Review</a></li>
+                        <li><a class="dropdown-item" href="/reviewList">Review리스트</a></li>
                     </ul>
                 </div>
             </div>

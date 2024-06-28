@@ -57,7 +57,7 @@ body, .w3-button, .w3-bar-item {
   </div>
 
   <a href="/storeUpdateForm" class="w3-bar-item w3-button">정보 수정</a>
-  <a href="/accountDeleteForm" class="w3-bar-item w3-button">회원 탈퇴</a>
+
 </div>
 <script>
 function toggleAccFunc(id) {

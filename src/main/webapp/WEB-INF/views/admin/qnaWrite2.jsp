@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>1:1문의</title>
+    <title>상품문의</title>
     <style>
         /* 전체 페이지 스타일 */
         body {
@@ -110,8 +110,8 @@
 <body>
    <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
 <main>
-    <h2 class="text-center" style="font-weight:bold; color: #867B73;">1:1문의</h2>
-    <form action="/qnaWrite" method="POST">
+    <h2 class="text-center" style="font-weight:bold; color: #867B73;">상품문의</h2>
+    <form action="qnaWrite2" method="POST">
         <table class="board_row" style="margin-top:20px; padding-bottom:15px;">
             <colgroup>
                 <col style="width:10%;">
@@ -137,7 +137,7 @@
             </tbody>
         </table>
         <div class="button-container">
-            <a href="qna" class="link-button">목록으로</a>
+            <a href="qna2" class="link-button">목록으로</a>
             <input type="submit" value="등록">
         </div>
     </form>
