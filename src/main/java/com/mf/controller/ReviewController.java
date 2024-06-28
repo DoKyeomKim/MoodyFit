@@ -46,20 +46,21 @@ public class ReviewController {
 			Long userIdx = request.get("userIdx");
 			Long postingReviewIdx = request.get("postingReviewIdx");
 			
-			System.out.println(userIdx);
-			System.out.println(postingReviewIdx);
 			
 		try {
 			adminReviewService.addLikes(userIdx,postingReviewIdx);
+        	// 좋아요 count 업데이트하는 로직
+            int reviewLikeCount = adminReviewService.getReviewLikeCount(postingReviewIdx);
+            
 	        response.put("success", true);
+            response.put("reviewLikeCount", reviewLikeCount);
 			
-		}catch (Exception e) {
-	        response.put("success", false);
-	        response.put("message", e.getMessage());
-		}
-			
-			
-			return response;
+			}catch (Exception e) {
+		        response.put("success", false);
+		        response.put("message", e.getMessage());
+			}
+				
+				return response;
 		}
 		
 		
@@ -70,15 +71,18 @@ public class ReviewController {
 			Long userIdx = request.get("userIdx");
 			Long postingReviewIdx = request.get("postingReviewIdx");
 			
+		    try {
+	        	adminReviewService.deleteLikes(userIdx,postingReviewIdx);
+	        	// 좋아요 count 업데이트하는 로직
+	            int reviewLikeCount = adminReviewService.getReviewLikeCount(postingReviewIdx);
 
+	            response.put("success", true);
+	            response.put("reviewLikeCount", reviewLikeCount);
 
-		        try {
-		        	adminReviewService.deleteLikes(userIdx,postingReviewIdx);
-		            response.put("success", true);
 		        } catch (Exception e) {
 		            response.put("success", false);
 		            response.put("message", e.getMessage());
 		        }
 		        return response;
-		}
+			}
 }

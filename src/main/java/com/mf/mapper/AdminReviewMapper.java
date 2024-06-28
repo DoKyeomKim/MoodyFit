@@ -31,4 +31,6 @@ public interface AdminReviewMapper {
 
 	public void deleteLikes(Long userIdx, Long postingReviewIdx);
 
+	public int getReviewLikeCount(Long postingReviewIdx);
+
 	}

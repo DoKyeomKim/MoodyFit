@@ -140,5 +140,10 @@ where rl.posting_review_idx=#{postingReviewIdx} and p.user_idx=#{userIdx}
   where person_idx = (select person_idx from person where user_idx = #{userIdx})
   and posting_review_idx = #{postingReviewIdx}
 </delete>
+<select id="getReviewLikeCount">
+select count(review_like_idx)
+from review_likes
+where posting_review_idx=#{postingReviewIdx}
+</select>
  
 </mapper>
