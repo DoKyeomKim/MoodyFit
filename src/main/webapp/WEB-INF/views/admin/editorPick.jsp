@@ -84,7 +84,7 @@ main {
 				            <input type="hidden" name="pickIdx" value="${editorPick.PICK_IDX}">
 				            <td>${editorPick.PICK_IDX}</td>
 				            <td>${editorPick.POSTING_IDX}</td>
-				            <td>${editorPick.TITLE}</td>
+				            <td><a href="/postingDetail?postingIdx=${editorPick.PICK_IDX}">${editorPick.TITLE}</a></td>
 				            <td>${editorPick.STORE_NAME}</td>
 				            <td class="start-date">${editorPick.START_DATE}</td>
 				            <td class="end-date">${editorPick.END_DATE}</td>

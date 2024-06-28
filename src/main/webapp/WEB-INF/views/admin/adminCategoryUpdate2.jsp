@@ -46,26 +46,26 @@ main {
     color: #333;
 }
 .btn-delete {
-        background-color: #111111;
+    background-color: #111111;
     color: #fff;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
 }
-#updateModal {
-    position: absolute;
-    top: 0;
-    left: 40%; /* 본문 바로 오른쪽에 위치시키기 위해 left 사용 */
-    width: 33%;
-    height: 100%;
-    background-color: #fff;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    padding: 50px;
-    display: none;
-    z-index: 1000;
-    overflow-y: auto;
-    border-left: 1px solid #ddd; /* 본문과 모달 사이에 구분선 추가 */
-    margin-top:290px;
+
+.select-container {
+    display: flex;
+    align-items: center;
+    margin-left: 1000px;
+}
+
+select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -79,7 +79,7 @@ main {
     <div class="mt-3">
         <h3 class="text-center">하위 카테고리 관리</h3>
     </div>
-    <div style="margin:auto 0;">  
+    <div class="select-container">  
        <select onchange="navigateToPage(this)">
            <option value="">카테고리 분류</option>
            <option value="/adminCategoryUpdate">상위 카테고리</option>

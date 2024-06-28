@@ -91,11 +91,10 @@
             </style>
 </head>
 <body>
-<div id = "sales">
-
-            <h3>총 판매 건수: 건</h3>
-            <h3>총 주문 수익: 원</h3>
-        </div>
+<div id="sales">
+    <h3>총 판매 건수: ${totalOrderCount} 건</h3>
+     <h3>총 주문 수익: <span id="totalRevenueDisplay"></span> 원</h3>
+</div>
 
 <ul class="nav">
     <li><a href="/adminEditorPick" class="nav-link">
@@ -140,5 +139,17 @@
     </a></li>
   
 </ul>
+<script>
+    // Assuming totalRevenue is passed from the server side
+    var totalRevenue = ${totalRevenue};
+    
+    // Function to format the number with commas
+    function formatNumberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    
+    // Set the formatted total revenue to the span
+    document.getElementById("totalRevenueDisplay").innerText = formatNumberWithCommas(totalRevenue);
+</script>
 </body>
 </html>

@@ -41,7 +41,7 @@ public interface MyPageMapper {
 	void personSpecUpdate(PersonSpecDto personSpec);
 	
 	// 위시리스트 갖고 오기
-	List<Map<String, Object>> getWishList(Long userIdx);
+	List<Map<String, Object>> getWishList(Map<String, Object> params);
 	
 	
 	//=====================================================
@@ -61,6 +61,8 @@ public interface MyPageMapper {
 	//======================== 공통 ========================
 	// 회원 탈퇴
 	void userDelete(Long userIdx);
+
+	int getWishListCount(Long userIdx);
 
 
 

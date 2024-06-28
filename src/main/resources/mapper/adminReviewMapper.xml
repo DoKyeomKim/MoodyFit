@@ -62,13 +62,14 @@
         file_path,
         original_name,
         file_size,
-        posting_review_idx)
+        posting_review_idx
+        )
     VALUES(
-        posting_review_seq.NEXTVAL,
+        posting_review_file_seq.NEXTVAL,
         #{filePath,jdbcType=VARCHAR},
         #{originalName,jdbcType=VARCHAR},
         #{fileSize,jdbcType=INTEGER},
-        #{postingReviewIdx,jdbcType=BIGINT}
+        posting_review_seq.CURRVAL
     )
 </insert>
 

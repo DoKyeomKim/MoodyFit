@@ -199,3 +199,60 @@ table {
     padding: 15px !important; /* 셀 내부 여백 조정 */
     margin: 15px !important; /* 셀 외부 여백 조정 */
 }
+
+#updateModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    display: none;
+    overflow-y: auto;
+}
+#updateModal h2 {
+    margin-top: 0;
+    font-size: 24px;
+    border-bottom: 2px solid #f4f4f4;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+#updateModal label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+#updateModal input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+#updateModal .btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+#updateModal .btn-group button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+#updateModal .btn-group .btn-update {
+    background-color: #808080;
+    color: #fff;
+    margin-right: 10px;
+}
+#updateModal .btn-group .btn-cancel {
+    background-color: #808080;
+    color: #fff;
+}

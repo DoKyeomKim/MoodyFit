@@ -31,8 +31,17 @@ public class AdminReviewService {
 		adminReviewMapper.addReviewFile(reviewDto);
 	}
 	public List<AdminReviewDto> getAllReviews() {
+		System.out.println(adminReviewMapper.findAll());
+		System.out.println(adminReviewMapper.findAll());
+		System.out.println(adminReviewMapper.findAll());
+		System.out.println(adminReviewMapper.findAll());
+		System.out.println(adminReviewMapper.findAll());
         return adminReviewMapper.findAll();
     }
+	public Long getPersonIdxByUserIdx(Long userIdx) {
+		
+		return adminReviewMapper.getPersonIdxByUserIdx(userIdx);
+	}
 
 	}
 
