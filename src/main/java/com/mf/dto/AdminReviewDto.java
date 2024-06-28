@@ -25,6 +25,7 @@ public class AdminReviewDto {
     private Long personIdx;
     private String filePath;
     private String originalName;
-    private long fileSize;
+    private Long fileSize;
     private Long postingReviewFileIdx;
+    private int reviewLikeCount;
 }

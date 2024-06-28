@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mf.dto.AdminReviewDto;
 import com.mf.dto.PostingQuestionDto;
+import com.mf.dto.ReviewLikesDto;
 import com.mf.mapper.AdminReviewMapper;
 
 @Service
@@ -38,8 +39,18 @@ public class AdminReviewService {
 		
 		return adminReviewMapper.getPersonIdxByUserIdx(userIdx);
 	}
-
+	public boolean checkLikes(Long postingReviewIdx, Long userIdx) {
+		return adminReviewMapper.checkLikes(postingReviewIdx,userIdx) > 0;
 	}
+	public void addLikes(Long userIdx, Long postingReviewIdx) {
+		adminReviewMapper.addLikes(userIdx,postingReviewIdx);
+	}
+	
+	public void deleteLikes(Long userIdx, Long postingReviewIdx) {
+		adminReviewMapper.deleteLikes(userIdx,postingReviewIdx);
+	}
+
+}
 
 		
 
