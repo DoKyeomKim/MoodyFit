@@ -91,12 +91,48 @@ public class PostingContoller {
 	// ==================================================================
 	// ================ Editor 관련 컨트롤러 ===========================
 	// summernote 이미지 업로드 postingImage 폴더에 저장
-	@RequestMapping(value="SummerNoteImageFile", method = RequestMethod.POST)
-		public @ResponseBody JsonObject SummerNoteImageFile(@RequestParam("file") MultipartFile file) {
-			JsonObject jsonObject = pls.SummerNoteImageFile(file);
-			 System.out.println(jsonObject);
-			return jsonObject;
-		}
+	@RequestMapping(value = "/uploadSummernoteImageFile", produces = "application/json; charset=utf8")
+	@ResponseBody
+	public String uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile,
+	        HttpServletRequest request) {
+	    // JSON 객체 생성
+	    JsonObject jsonObject = new JsonObject();
+	    
+	    // 이미지 파일이 저장될 경로 설정
+	    String contextRoot = realPath + "/Users/sinminjae/dev/postingImage/";
+	    String fileRoot = contextRoot;
+	    
+	    // 업로드된 파일의 원본 파일명과 확장자 추출
+	    String originalFileName = multipartFile.getOriginalFilename();
+	    String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+	    
+	    // 새로운 파일명 생성 (고유한 식별자 + 확장자)
+	    String savedFileName = UUID.randomUUID() + extension;
+	    
+	    // 저장될 파일의 경로와 파일명을 나타내는 File 객체 생성
+	    File targetFile = new File(fileRoot + savedFileName);
+	    
+	    try {
+	        // 업로드된 파일의 InputStream 얻기
+	        java.io.InputStream fileStream = multipartFile.getInputStream();
+	        
+	        // 업로드된 파일을 지정된 경로에 저장
+	        FileUtils.copyInputStreamToFile(fileStream, targetFile);
+	        
+	        // JSON 객체에 이미지 URL과 응답 코드 추가
+	        jsonObject.addProperty("url", "/Users/sinminjae/dev/postingImage/" + savedFileName);
+	        jsonObject.addProperty("responseCode", "success");
+	    } catch (IOException e) {
+	        // 파일 저장 중 오류 발생시 해당 파일 삭제 및 에러 응답 코드 추가
+	        FileUtils.deleteQuietly(targetFile);
+	        jsonObject.addProperty("responseCode", "error");
+	        e.printStackTrace();
+	    }
+	    
+	    // JSON 객체를 문자열로 변환하여 반환
+	    String a = jsonObject.toString();
+	    return a;
+	}
 	
 	
 }
