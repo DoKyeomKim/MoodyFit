@@ -71,6 +71,9 @@ jQuery(document).ready(function() {
     color: white;
 }
 
+.container {
+	margin-top: 70px;
+}
 
 
 </style>

@@ -186,7 +186,7 @@ SELECT category_idx AS categoryIdx, kor_name AS korName, eng_name AS engName
   select sc.*
   	from sub_category sc
   	join category c on sc.category_idx = c.category_idx
-  	where c.kor_name = #{categoryCode}
+  	where c.kor_name = #{categoryCode} and sc.eng_name != 'All'
 </select>
 
 <select id="getCategoriesByKeyword" resultType="com.mf.dto.CategoryDto">
