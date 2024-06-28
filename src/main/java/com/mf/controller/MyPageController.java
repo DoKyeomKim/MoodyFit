@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mf.dto.Paging;
 import com.mf.dto.PersonDto;
 import com.mf.dto.PersonSpecDto;
 import com.mf.dto.StoreDto;
@@ -80,11 +82,21 @@ public class MyPageController {
 	
 	// 관심상품(찜 목록)
 	@GetMapping("/myPage/wishList")
-	public ModelAndView wishList(HttpSession session) {
+	public ModelAndView wishList(HttpSession session,@RequestParam(value = "page", defaultValue = "1") int page) {
 		ModelAndView mv = new ModelAndView();
 		Long userIdx = (Long) session.getAttribute("userIdx");
+		int pageSize = 1; // 페이징 확인용 1개만 들고옴
+		int startIndex = (page - 1) * pageSize;
 		
-		List<Map<String,Object>> wishList= myPageService.getWishList(userIdx);
+		List<Map<String,Object>> wishList= myPageService.getWishList(userIdx,pageSize,startIndex);
+		Paging paging = myPageService.calculatePagingInfo(page, pageSize,userIdx);
+		
+	    mv.addObject("prev", paging.isPrev());
+	    mv.addObject("next", paging.isNext());
+	    mv.addObject("startPageNum", paging.getStartPageNum());
+ 	    mv.addObject("endPageNum", paging.getEndPageNum());
+	    mv.addObject("totalPages", paging.getTotalPages());
+	    mv.addObject("currentPage", page);
 		
 		mv.addObject("wishList", wishList);
 		mv.setViewName("myPage/wishList");

@@ -140,21 +140,51 @@ WHERE USER_IDX = #{userIdx}
 </update>
 
 <select id="getWishList">
-SELECT 
-distinct p.posting_idx as posting_idx,
-p.title as title,
-prod.name as name,
-prod.manufacture_name as manufacture_name,
-prod.price as price,
-pf.file_path as file_path
-FROM posting p
-JOIN posting_product pp ON p.posting_idx = pp.posting_idx
-JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
-JOIN product prod ON pi.product_idx = prod.product_idx
-JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
-JOIN wish w on p.posting_idx = w.posting_idx
-join person per on w.person_idx = per.person_idx
-where per.user_idx = #{userIdx}
+select
+	posting_idx,
+	title,
+	name,
+	manufacture_name,
+	price,
+	file_path,
+	wish_idx
+FROM(
+	SELECT
+	posting_idx,
+	title,
+	name,
+	manufacture_name,
+	price,
+	file_path,
+	wish_idx,
+	ROWNUM as rnum
+	FROM (
+	SELECT 
+		distinct p.posting_idx as posting_idx,
+		p.title as title,
+		prod.name as name,
+		prod.manufacture_name as manufacture_name,
+		prod.price as price,
+		pf.file_path as file_path,
+		w.wish_idx as wish_idx
+		FROM posting p
+		JOIN posting_product pp ON p.posting_idx = pp.posting_idx
+		JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+		JOIN product prod ON pi.product_idx = prod.product_idx
+		JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
+		JOIN wish w on p.posting_idx = w.posting_idx
+		join person per on w.person_idx = per.person_idx
+		where per.user_idx = #{userIdx}
+	) inner_sub
+)
+where rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
+order by wish_idx desc
+</select>
+
+<select id="getWishListCount">
+select count(wish_idx) from wish w
+join person p on w.person_idx=p.person_idx
+where p.user_idx=#{userIdx}
 </select>
 
 </mapper>
