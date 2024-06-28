@@ -39,7 +39,7 @@ JOIN
 		#{userIdx}		
          )
     </insert>
-   <!-- 특정 FAQ 항목 가져오기 -->
+
   <select id="getQnaByquestionIdx" >
     SELECT 
         q.question_idx AS questionIdx,
@@ -98,6 +98,75 @@ WHERE
     SET state = 2
     WHERE question_idx = #{questionIdx}
 </update>
+<insert id="addQuestion2" parameterType="com.mf.dto.PostingQuestionDto">
+    INSERT INTO POSTING_QUESTION  (
+        POSTING_QUESTION_IDX,
+        TITLE, 
+        content,
+        STATE,
+        posting_idx,
+        person_idx
+    ) 
+    VALUES (
+        posting_question_seq.NEXTVAL,
+        #{title, jdbcType=VARCHAR},
+        #{content, jdbcType=VARCHAR},
+        1,
+        #{postingIdx, jdbcType=INTEGER},
+        #{personIdx, jdbcType=INTEGER}
+    )
+</insert>
     
     
+    <select id="getAllQna2s">
+   SELECT 
+        pq.POSTING_QUESTION_IDX,
+        pq.TITLE,
+ 
+        pq.CREATE_DATE,
+        pq.STATE,
+        p.NAME
+    FROM 
+        POSTING_QUESTION pq
+    JOIN 
+        PERSON p
+    ON 
+        pq.PERSON_IDX = p.PERSON_IDX
+</select>
+
+<select id="getQna2ByquestionIdx" >
+    SELECT 
+        q.posting_question_idx AS postingQuestionIdx,
+        q.title,
+        u.name AS name,
+        q.content,
+        q.create_date AS createDate
+        
+    FROM 
+        posting_question q
+    JOIN 
+        person u ON q.person_idx = u.person_idx
+    WHERE 
+        q.posting_question_idx = #{postingQuestionIdx}
+</select>
+
+<select id="getAnswers2ByPostingQuestionIdx" resultType="com.mf.dto.PostingAnswerDto">
+        SELECT 
+            posting_answer_idx AS posting_answerIdx,
+            title,
+            content,
+            create_date AS createDate,
+     
+            posting_question_idx AS posting_questionIdx
+        FROM 
+            posting_answer
+        
+        WHERE 
+            posting_question_idx = #{postingQuestionIdx}
+    </select>
+    
+   <insert id="insertAnswer2" parameterType="com.mf.dto.PostingAnswerDto">
+        INSERT INTO posting_answer (posting_answer_idx, title, content, create_date, posting_question_idx)
+        VALUES (posting_answer_seq.nextval, #{title}, #{content}, SYSDATE,  #{postingQuestionIdx})
+    </insert>
 </mapper>

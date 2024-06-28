@@ -16,4 +16,8 @@ public interface AdminReviewMapper {
 
 	public void addReview(AdminReviewDto reviewDto);
 
+	public void addReviewFile(AdminReviewDto reviewDto);
+
+	public List<AdminReviewDto> findAll();
+
 	}
