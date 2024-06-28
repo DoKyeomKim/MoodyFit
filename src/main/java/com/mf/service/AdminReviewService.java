@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mf.dto.AdminReviewDto;
+import com.mf.dto.PostingQuestionDto;
 import com.mf.mapper.AdminReviewMapper;
 
 @Service
@@ -31,11 +32,6 @@ public class AdminReviewService {
 		adminReviewMapper.addReviewFile(reviewDto);
 	}
 	public List<AdminReviewDto> getAllReviews() {
-		System.out.println(adminReviewMapper.findAll());
-		System.out.println(adminReviewMapper.findAll());
-		System.out.println(adminReviewMapper.findAll());
-		System.out.println(adminReviewMapper.findAll());
-		System.out.println(adminReviewMapper.findAll());
         return adminReviewMapper.findAll();
     }
 	public Long getPersonIdxByUserIdx(Long userIdx) {
