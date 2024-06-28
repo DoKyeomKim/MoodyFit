@@ -8,7 +8,6 @@
 <script src="${pageContext.request.contextPath}/scripts.js"></script>
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
-
 <style>
 body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
@@ -53,9 +52,6 @@ main {
     background-color: #f4f4f4;
     color: #333;
 }
-
-
-}
 </style>
 </head>
 <body>
@@ -93,21 +89,21 @@ main {
                 <tbody>
                     <c:forEach var="qna" items="${AdminqnaList}" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
-                            <td>${qna.QUESTION_IDX}</td>
-                            <td>${qna.ID}</td>
-                            <td>${qna.TITLE}</td>
-                            <td>${qna.CREATE_DATE}</td>
-                            <td>${qna.UPDATE_DATE}</td>
+                            <td>${qna.questionIdx}</td>
+                            <td>${qna.id}</td>
+                            <td>${qna.title}</td>
+                            <td>${qna.createDate}</td>
+                            <td>${qna.updateDate}</td>
                             <td>
                                 <c:choose>
-                                    <c:when test="${qna.STATE==1}">답변대기</c:when>
-                                    <c:when test="${qna.STATE==2}">답변완료</c:when>
+                                    <c:when test="${qna.state == 1}">답변대기</c:when>
+                                    <c:when test="${qna.state == 2}">답변완료</c:when>
                                 </c:choose>
                             </td>
                             <td>
-                                <button class="btn btn-delete" onclick="location.href='/qnaDetail?questionIdx=${qna.QUESTION_IDX}'">답변</button>
+                                <button class="btn btn-delete" onclick="location.href='/qnaDetail?questionIdx=${qna.questionIdx}'">답변</button>
                                 <form action="${pageContext.request.contextPath}/admin/qna1" method="post" style="display: inline;">
-                                    <input type="hidden" name="questionIdx" value="${qna.QUESTION_IDX}">
+                                    <input type="hidden" name="questionIdx" value="${qna.questionIdx}">
                                     <button type="submit" class="btn btn-delete" onclick="confirmComplit(event, this.form)">완료</button>
                                 </form>
                             </td>

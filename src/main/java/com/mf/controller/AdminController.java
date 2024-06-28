@@ -1,5 +1,7 @@
 package com.mf.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,6 +29,7 @@ import com.mf.dto.AdminApplyDto;
 import com.mf.dto.AdminOrderDto;
 import com.mf.dto.AdminQuestionDto;
 import com.mf.dto.AdminReviewDto;
+import com.mf.dto.AdminSalesDto;
 import com.mf.dto.CategoryDto;
 import com.mf.dto.CsFaqDto;
 import com.mf.dto.CsQnaDto;
@@ -40,6 +44,7 @@ import com.mf.service.AdminApplyService;
 import com.mf.service.AdminOrderService;
 import com.mf.service.AdminQnaService;
 import com.mf.service.AdminReviewService;
+import com.mf.service.AdminSalesService;
 import com.mf.service.CategoryService;
 import com.mf.service.EditorPickService;
 import com.mf.service.FAQService;
@@ -73,13 +78,19 @@ public class AdminController {
 	private AdminApplyService adminApplyService;
 	@Autowired
 	private EditorPickService editorPickService;
+	@Autowired
+	private AdminSalesService adminSalesService;
 
 	   
    //관리자 메인페이지
 	@GetMapping("/admin")
 	public  ModelAndView   home() {
 		ModelAndView    mv    = new ModelAndView("adminMain");
+		int totalOrderCount = adminSalesService.getTotalOrderCount();
+        double totalRevenue = adminSalesService.getTotalRevenue();
 		
+        mv.addObject("totalOrderCount", totalOrderCount);
+        mv.addObject("totalRevenue", totalRevenue);
 		mv.setViewName("/adminMain");
 		return mv;
 	}
@@ -206,7 +217,16 @@ public class AdminController {
 		        return "/admin/adminCuser";
 		    }
 		  
-		  
+		  //판매수익 검색
+		  @GetMapping("/admin/userManagement9")
+		    public String SalesSearch(@RequestParam(value = "searchId", required = false) String searchId,
+		                                 @RequestParam(value = "page", defaultValue = "1") int page,
+		                                 Model model) {
+		        List<AdminSalesDto> salesList = adminSalesService.searchSalessById(searchId);
+		        model.addAttribute("salesList", salesList);
+		        // 페이지네이션 관련 추가 코드
+		        return "/admin/adminSales";
+		    }
 		  //공고 검색
 		  @GetMapping("/admin/userManagement3")
 		    public String applySearch(@RequestParam(value = "searchId", required = false) String searchId,
@@ -260,15 +280,7 @@ public class AdminController {
 		    }
 
 		
-	//판매수익 페이지
-	@GetMapping("/adminSales")
-	public  ModelAndView   adminSales() {
-		ModelAndView    mv    = new ModelAndView("adminSales");
-		
-		mv.setViewName("/admin/adminSales");
-		return mv;
-		
-	}
+	
 
 		//FAQ작성 페이지
 	    @PostMapping("/admin/adminFAQWrite")
@@ -283,27 +295,61 @@ public class AdminController {
 	        mv.setViewName("/admin/adminFAQWrite");
 	        return mv;
 	    }
+	    
+	 
+	    //리뷰 작성
+	    @Transactional
 	    @PostMapping("/reviewWrite")
 	    @ResponseBody
-	    public ResponseEntity<Map<String, Boolean>> addReview(@RequestPart("reviewDto") AdminReviewDto reviewDto, @RequestPart("file") MultipartFile file) {
+	    public ResponseEntity<Map<String, Boolean>> addReview(@RequestPart("reviewDto") AdminReviewDto reviewDto, @RequestPart("file") MultipartFile file,
+	    		@ModelAttribute("qnaDTO") PostingQuestionDto qna2DTO, HttpSession session) {
 	        Map<String, Boolean> response = new HashMap<>();
-	        try {
 	            if (!file.isEmpty()) {
-	                reviewDto.setFilePath(file.getOriginalFilename());
-	                reviewDto.setFileSize(file.getSize());
-	                reviewDto.setOriginalName(file.getOriginalFilename());
-	            }
-	            adminReviewService.addReviewFile(reviewDto);
-	            adminReviewService.addReview(reviewDto);
+	                // 사진 파일 이름
+	                String fileName = file.getOriginalFilename();
+	                // 암호환 파일 이름 중복 방지(그냥 시간 앞에 붙임)
+	                String fileNameScret = System.currentTimeMillis() + "_" + fileName;
 
-	            response.put("success", true);
-	            return ResponseEntity.ok(response);
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            response.put("success", false);
-	            return ResponseEntity.status(500).body(response);
-	        }
+	                String filePath = "/images/" + fileNameScret;
+	                Long fileSize = file.getSize();
+	                // 파일 해당 위치에 저장
+	                File dest = new File("C:/dev/images/" + fileNameScret);
+	                // 만약 해당 위치에 폴더가 없으면 생성
+	                if (!dest.exists()) {
+	                    dest.mkdirs();
+	                }
+
+	                // 파일을 지정된 경로로 저장
+	                try {
+	                    file.transferTo(dest);
+	                    // 데이터베이스에 저장할 이미지 경로 설정
+	                    reviewDto.setFilePath(filePath);
+	                    reviewDto.setOriginalName(fileName);
+	                    reviewDto.setFileSize(fileSize);
+
+	                    adminReviewService.addReview(reviewDto);
+	                    adminReviewService.addReviewFile(reviewDto);
+					        Long userIdx = (Long) session.getAttribute("userIdx");
+					        Long personIdx = adminReviewService.getPersonIdxByUserIdx(userIdx);
+					        reviewDto.setPersonIdx(personIdx);
+					        adminQnaService.addQuestion2(qna2DTO, personIdx);
+					     
+					    
+	                    response.put("success", true);
+	                    return ResponseEntity.ok(response);
+	                } catch (IllegalStateException | IOException e) {
+	                    e.printStackTrace();
+	                    response.put("success", false);
+	                    return ResponseEntity.status(500).body(response);
+	                }
+	            } else {
+                    adminReviewService.addReview(reviewDto);
+	                response.put("success", false);
+	                return ResponseEntity.badRequest().body(response);
+	            }
+	            
 	    }
+
 
 
 	  
@@ -314,7 +360,16 @@ public class AdminController {
 	        mv.setViewName("/admin/review");
 	        return mv;
 	    }
-	
+	  //판매수익 페이지
+		@GetMapping("/adminSales")
+		public  ModelAndView   adminSales() {
+			ModelAndView    mv    = new ModelAndView("adminSales");
+			List<AdminSalesDto> salesList = adminSalesService.getAllSaless();
+			mv.addObject("salesList", salesList);
+			mv.setViewName("/admin/adminSales");
+			return mv;
+			
+		}
 	 
 	    
 	    //FAQ 게시판
@@ -427,7 +482,9 @@ public class AdminController {
 				 //상품문의 작성 페이지
 				   @PostMapping("/qnaWrite2")
 				    public String addQuestion2(@ModelAttribute("qnaDTO") PostingQuestionDto qna2DTO, HttpSession session) {
-				        Long personIdx = (Long) session.getAttribute("personIdx");
+				        Long userIdx = (Long) session.getAttribute("userIdx");
+				        Long personIdx = adminQnaService.getPersonIdxByUserIdx(userIdx);
+				        qna2DTO.setPersonIdx(personIdx);
 				        adminQnaService.addQuestion2(qna2DTO, personIdx);
 				        return "redirect:/qna2"; // qna 목록 페이지로 리다이렉트 
 				    }
