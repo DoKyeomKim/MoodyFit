@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Q&A 상세</title>
+<title>MOODYFIT</title>
 <style>
 body {
     font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
@@ -94,29 +94,29 @@ function toggleAnswerContainer() {
     <%@include file="/WEB-INF/layouts/header.jsp"%>
     <div class="col-sidebar"></div>
     <main>
-        <h3 class="mt-3 text-center">Q&A</h3>
+        <h3 class="mt-3 text-center">상품문의</h3>
         <hr class="mb-3">
         <div class="container mt-3">
             <div class="row">
                 <div>
                     <div class="flex-container">
-                        <div style="font-weight: bold;">${qna.title}</div>
+                        <div style="font-weight: bold;">${qna2.title}</div>
                         <div class="author">
-                            작성자: ${qna.id}
+                            작성자: ${qna2.name}
                         </div>
                     </div>
                     <hr>
-                    <p>${qna.content}</p>
+                    <p>${qna2.content}</p>
                     <div class="button-container">
                         <button onclick="window.history.back()">목록</button>
                     </div>
                     <div class="answer-list">
-                        <c:forEach var="answer" items="${answers}">
-                            <div class="answer">
-                                <h5>${answer.title}</h5>
-                                <p>${answer.content}</p>
+                        <c:forEach var="answer2" items="${answers2}">
+                            <div class="answer2">
+                                <h5>${answer2.title}</h5>
+                                <p>${answer2.content}</p>
                                 <div class="author">
-                                    작성일: ${answer.createDate}
+                                    작성일: ${answer2.createDate}
                                 </div>
                                 <hr>
                             </div>
@@ -126,10 +126,10 @@ function toggleAnswerContainer() {
                         <button onclick="toggleAnswerContainer()" >답변 작성</button>
                         <div id="answerContainer" class="answer-container">
                             <h4>답변 작성</h4>
-                            <form action="/submitAnswer" method="post">
+                            <form action="/submitAnswer2" method="post">
                                 <input type="text" name="title" placeholder="제목을 입력하세요" required>
                                 <textarea name="content" placeholder="답변을 입력하세요" required></textarea>
-                                <input type="hidden" name="questionIdx" value="${qna.questionIdx}">
+                                <input type="hidden" name="postingQuestionIdx" value="${qna2.postingQuestionIdx}">
                                 <button type="submit" class="submit-btn">답변 제출</button>
                             </form>
                         </div>
