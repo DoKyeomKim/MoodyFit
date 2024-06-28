@@ -71,11 +71,6 @@ where user_idx = #{userIdx}
   	where sub_category_idx = #{subCategoryId}
 </select>
 
-<select id="getAllProducts" resultType="com.mf.dto.ProductDto">
-	SELECT * form PRODUCT
-		WHERE product_idx = #{productIdx}
-</select>
-
 
 <select id="getEdtiorPick">
 SELECT ep.pick_idx, ep.file_path, ep.posting_idx, ep.start_date, ep.end_date

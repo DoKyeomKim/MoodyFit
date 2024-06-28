@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductColorDto {
-    private Long productColorIdx; // 색상 고유번호
-    private String color;         // 색상 이름
+    private Long productColorIdx;
+    private String color;       
 }

@@ -43,16 +43,15 @@ body, .w3-button, .w3-bar-item {
     상품 관리 <i class="fa fa-caret-down"></i>
   </button>
   <div id="productAcc" class="w3-hide w3-white w3-card">
-    <a href="/storeMypage/productList" class="w3-bar-item w3-button">상품 리스트</a>
-    <a href="/storeMypage/productWrite" class="w3-bar-item w3-button">상품 등록</a>
-    <a href="#" class="w3-bar-item w3-button">상품 신청 현황</a>
+    <a href="/storeMyPage/productList" class="w3-bar-item w3-button">상품 리스트</a>
+    <a href="/storeMyPage/productWrite" class="w3-bar-item w3-button">상품 등록</a>
   </div>
   <button class="w3-button w3-block w3-left-align" onclick="toggleAccFunc('saleAcc')">
     판매 글 관리 <i class="fa fa-caret-down"></i>
   </button>
   <div id="saleAcc" class="w3-hide w3-white w3-card">
-    <a href="/storeMypage/postingList" class="w3-bar-item w3-button">판매 글 리스트</a>
-    <a href="/storeMypage/postingWrite" class="w3-bar-item w3-button">판매 글 등록</a>
+    <a href="/storeMyPage/postingList" class="w3-bar-item w3-button">판매 글 리스트</a>
+    <a href="/storeMyPage/postingWrite" class="w3-bar-item w3-button">판매 글 등록</a>
     <a href="#" class="w3-bar-item w3-button">판매 글 신청 현황..?</a>
   </div>
 

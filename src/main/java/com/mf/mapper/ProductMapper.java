@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectKey;
 
 import com.mf.dto.ProductInfoDto;
+import com.mf.dto.ProductOptionDto;
 import com.mf.dto.ProductQuantityDto;
 import com.mf.dto.ProductSizeDto;
 import com.mf.dto.SubCategoryDto;
@@ -23,9 +24,9 @@ import com.mf.dto.ProductFileDto;
 @Mapper
 public interface ProductMapper {
 	
+	List<ProductDto> getAllProducts();
 	
 	// ============= 카테고리 ================
-	
 	List<CategoryDto> getCategory();
 	
 	List<CategoryDto> getCategoriesByKeyWord(@Param("keyword") String keyword);
@@ -38,9 +39,6 @@ public interface ProductMapper {
 	
 	// 다중 색상,사이즈,재고 
 	void insertProduct(ProductDto productDto);
-    void insertProductInfo(ProductInfoDto productInfoDto);
-    void insertProductQuantity(ProductQuantityDto productQuantityDto);
-	
 	
 	// Product 삽입 (ProductDetailsDto 사용)
     void insertProduct(ProductDetailsDto productDetailsDto);
@@ -54,11 +52,6 @@ public interface ProductMapper {
     	    @Param("quantity") int quantity
     	);
     
-    // ============= posting ==================== 
-    // posting 테이블에 새로운 판매글 삽입
-    void insertPosting(PostingDto postingDto);
-    // posting_product 테이블에 해당 제품 정보 삽입
-    void insertPostingProduct(PostingProductDto postingProductDto);
     
     // 특정 상품의 사이즈 목록 로드
     List<String> getProductSizes(Long productInfoIdx);
@@ -69,18 +62,12 @@ public interface ProductMapper {
     // 모든 상품 정보 로드
     List<ProductInfoDto> getAllProductInfo();
     
-    
 	List<ProductColorDto> getAllColors();
 	
 	List<ProductSizeDto> getAllSizes();
 
 	List<Map<String, Object>> getAllProductDetails(Long storeIdx); // 여기에 파일목록까지 포함 로드
-	
-	List<PostingProductDto> getPostingProduct(Long userIdx);
-	
-	
-	// 파일 목록 로드
-    // List<ProductFileDto> getProductFilesByProductIdx(Long productIdx);
+
 
 	// 파일 정보
 	void insertProductFile(ProductFileDto productFileDto);
@@ -92,6 +79,28 @@ public interface ProductMapper {
 	Long getProductInfoIdx();
 
 	Long getStoreIdxByUserIdx(@Param("userIdx") Long userIdx);
+
+	
+	// ==============================================================
+    // ====================== 상품 수정 =============================
+	void updateProduct(ProductDto productDto);
+	void updateProductInfo(ProductOptionDto productOptionDto);
+	void updateProductQuantity(ProductOptionDto productOptionDto);
+	
+	void deleteProductFile(Long productFileIdx);
+	void deleteProductInfosByProductIdx(Long productIdx);
+	void deleteProductFilesByProductIdx(Long productIdx);
+	
+	void insertProductInfo(ProductInfoDto productInfoDto);
+	void insertProductQuantity(ProductQuantityDto productQuantityDto);
+
+	List<ProductInfoDto> getProductInfosByProductIdx(Long productIdx);
+	List<ProductFileDto> getProductFilesByProductIdx(Long productIdx);
+
+	List<Map<String, Object>> getProductDetailsByProductIdx(Long productIdx);
+
+	void deleteProductInfo(Long productInfoIdx);
+	void deleteProductQuantity(Long productInfoIdx);
 
 	
 }

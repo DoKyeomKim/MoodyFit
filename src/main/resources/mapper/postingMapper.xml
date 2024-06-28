@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.PostingMapper">
+
+
+<insert id="insertPosting" parameterType="com.mf.dto.PostingDto">
+    <selectKey keyProperty="postingIdx" resultType="long" order="BEFORE">
+        SELECT posting_seq.NEXTVAL FROM DUAL
+    </selectKey>
+    INSERT INTO posting (posting_idx, title, content, update_date, state)
+    VALUES (#{postingIdx}, #{title}, #{content}, SYSDATE, #{state})
+</insert>
+
+<insert id="insertPostingProduct" parameterType="com.mf.dto.PostingProductDto">
+    <selectKey keyProperty="postingProductIdx" resultType="long" order="BEFORE">
+        SELECT posting_product_seq.NEXTVAL FROM DUAL
+    </selectKey>
+    INSERT INTO posting_product (posting_product_idx, posting_idx, product_info_idx)
+    VALUES (#{postingProductIdx}, #{postingIdx}, 
+        <if test="productInfoIdx != null">
+            #{productInfoIdx}
+        </if>
+        <if test="productInfoIdx == null">
+            NULL
+        </if>)
+</insert>
+
+
+<insert id="insertPostingFile" parameterType="com.mf.dto.PostingFileDto">
+    <selectKey keyProperty="postingFileIdx" resultType="long" order="BEFORE">
+        SELECT posting_file_seq.NEXTVAL FROM DUAL
+    </selectKey>
+    INSERT INTO posting_file (posting_file_idx, original_name, file_path, file_size, posting_idx)
+    VALUES (#{postingFileIdx}, #{originalName}, #{filePath}, #{fileSize}, #{postingIdx})
+</insert>
+
+<select id="getAllProductDetailsWithInventory" resultType="java.util.HashMap">
+    SELECT 
+        p.product_idx AS productIdx,
+        p.name AS name,
+        p.price AS price,
+        p.manufacture_name AS manufactureName,
+        c.kor_name AS category,
+        sc.kor_name AS subCategory,
+        LISTAGG(pc.color, ', ') WITHIN GROUP (ORDER BY pc.color) AS colors,
+        LISTAGG(ps.sizes, ', ') WITHIN GROUP (ORDER BY ps.sizes) AS sizes,
+        LISTAGG(pq.quantity, ', ') WITHIN GROUP (ORDER BY pq.quantity) AS quantities,
+        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS filePaths
+    FROM product p
+    JOIN product_info pi ON p.product_idx = pi.product_idx
+    LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
+    JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
+    JOIN category c ON sc.category_idx = c.category_idx
+    LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+    LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+    LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+    GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name
+</select>
+
+<select id="getProductDetailsByProductIdxForPosting" resultType="java.util.HashMap">
+    SELECT 
+        p.product_idx AS productIdx,
+        p.name AS name,
+        p.price AS price,
+        p.manufacture_name AS manufactureName,
+        LISTAGG(pc.color, ', ') WITHIN GROUP (ORDER BY pc.color) AS colors,
+        LISTAGG(ps.sizes, ', ') WITHIN GROUP (ORDER BY ps.sizes) AS sizes,
+        LISTAGG(pq.quantity, ', ') WITHIN GROUP (ORDER BY pq.quantity) AS quantities,
+        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS filePaths
+    FROM product p
+    JOIN product_info pi ON p.product_idx = pi.product_idx
+    LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
+    LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+    LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+    LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+    WHERE p.product_idx = #{productIdx}
+    GROUP BY p.product_idx, p.name, p.price, p.manufacture_name
+</select>
+
+</mapper>

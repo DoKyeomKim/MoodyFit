@@ -93,7 +93,7 @@
 }
 
 .table th:nth-child(3), .table td:nth-child(3) {
-    width: 200px;
+    width: 500px;
 }
 
 .table th:nth-child(4), .table td:nth-child(4) {
@@ -101,7 +101,7 @@
 }
 
 .table th:nth-child(5), .table td:nth-child(5) {
-    width: 150px; 
+    width: 50px; 
 }
 
 .table th:nth-child(6), .table td:nth-child(6) {
@@ -109,15 +109,15 @@
 }
 
 .table th:nth-child(7), .table td:nth-child(7) {
-    width: 100px; 
+    width: 150px; 
 }
 
 .table th:nth-child(8), .table td:nth-child(8) {
-    width: 150px; 
+    width: 70px; 
 }
 
 .table th:nth-child(9), .table td:nth-child(9) {
-    width: 150px; 
+    width: 100px; 
 }
 
 .table th:nth-child(10), .table td:nth-child(10) {
@@ -182,12 +182,27 @@
                 <td style="width: 10px;">${product.PRODUCT_IDX}</td>
                 	
                 <td style="width: 50px;">
-                  	<img src="${product.FILE_PATH}" >
+                    <c:choose>
+                        <c:when test="${!empty product.FILE_PATHS}">
+                            <c:forEach var="filePath" items="${product.FILE_PATHS}">
+                                <img src="${filePath}" alt="product image" style="max-width: 100%; max-height: 50px;">
+                                <!-- 첫 번째 이미지만 표시하려면 아래 break 사용 -->
+                                <c:if test="${status.index == 0}">
+                                </c:if>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <img src="/images/no_image.png" alt="no image available">
+                        </c:otherwise>
+                    </c:choose>
                 </td>
+                
                 <td>${product.NAME}</td>
                 <td>${product.PRICE}</td>
                 <td>${product.CATEGORY}/${product.SUB_CATEGORY}</td>
-                <td>${product.INVENTORY}</td>
+                <td>
+                	<c:out value="${product.INVENTORY}" escapeXml="false"/>
+                </td>
                 <td>${product.UPDATE_DATE}</td>
                 <td>
                		<button class="btn btn-primary" onclick="editProduct(${product.PRODUCT_IDX})">수정</button>
@@ -199,8 +214,8 @@
     </table>
 
     <div class="button-container">
-        <a href="/storeMypage/productWrite"><button>신규 상품 등록</button></a>
-        <a href="/storeMypage/productUpdate"><button>삭제</button></a>
+        <a href="/storeMyPage/productWrite"><button>신규 상품 등록</button></a>
+        <a href="/storeMyPage/productUpdate"><button>삭제</button></a>
     </div>
 </div>
 
@@ -237,9 +252,15 @@ document.getElementById('select-all').addEventListener('change', function() {
     });
 });
 
+// ===========================================================================================
+// =============================== 수정 & 삭제 ===============================================
+// 수정 페이지로 이동
+function editProduct(productIdx) {
+    window.location.href = "/storeMyPage/updateForm?productIdx=" + productIdx;
+}
+
+
 </script>
-
-
 
 </body>
 </html>

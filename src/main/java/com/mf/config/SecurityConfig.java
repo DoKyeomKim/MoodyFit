@@ -52,6 +52,7 @@ public class SecurityConfig {
 				.requestMatchers("/","/api/**","/findIdForm","/findId","/faq**","/qna","/category/**","/category/**", "/emailCheck",
 						"/oauth2/**","/postingDetail","/search**","/totalJoin","/login","/idCheck","/storeNameCheck",
 						"/nickNameCheck","/loginProcess", "/storeJoin","/storeJoinProcess","/join", 
+
 						"/joinProcess","/error","/loginFail","/review**").permitAll()
 				.requestMatchers("/admin/admin**","/admin**","/admin/**","/EP**").hasRole("ADMIN")
 				.requestMatchers("/myPage/**","/personUpdateForm","/personUpdate").hasAnyRole("ADMIN","PERSON")

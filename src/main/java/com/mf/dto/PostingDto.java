@@ -1,6 +1,8 @@
 package com.mf.dto;
 
-import java.sql.Date;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,8 +15,8 @@ public class PostingDto {
     private Long postingIdx;
     private String title;
     private String content;
-    private int state;
     private Long productInfoIdx;
     private Long storeIdx;
-    	
+    private Integer state;
+    private List<MultipartFile> postingFiles;
 }

@@ -2,48 +2,74 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.ProductMapper">
 
-
-
 <!-- 전체 상품 정보 -->
-<select id="getAllProductDetails">
-SELECT 
-        p.product_idx as product_idx,
-        p.name as name,
-        p.price as price,
-        p.manufacture_name as manufacture_name,
-        pf.file_path as file_path,
-        c.kor_name as category,
-        sc.kor_name as sub_category,
+<select id="getAllProductDetails" resultType="java.util.HashMap">
+    SELECT 
+        p.product_idx AS product_idx,
+        p.name AS name,
+        p.price AS price,
+        p.manufacture_name AS manufacture_name,
+        c.kor_name AS category,
+        sc.kor_name AS sub_category,
         LISTAGG('[' || pc.color || '] ' || ps.sizes || ', ' || pq.quantity || '개', ' / ') WITHIN GROUP (ORDER BY pc.color) AS inventory,
-        TO_CHAR(pi.update_date, 'YYYY.MM.DD') AS update_date
+        TO_CHAR(pi.update_date, 'YYYY.MM.DD') AS update_date,
+        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS file_paths -- 이미지 파일 결합
     FROM product p
     JOIN product_info pi ON p.product_idx = pi.product_idx
-    join product_file pf on pi.product_info_idx = pf.product_info_idx
+    LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx -- JOIN 변경
     JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
     JOIN category c ON sc.category_idx = c.category_idx
     LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
     LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
     LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
     WHERE p.store_idx = #{storeIdx}
-    GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name, pi.update_date, PF.FILE_PATH
+    GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name, pi.update_date
 </select>
+
+
+<select id="getProductDetailsByProductIdx" resultType="java.util.HashMap">
+    SELECT 
+        p.product_idx AS productIdx,
+        p.name AS name,
+        p.price AS price,
+        p.manufacture_name AS manufactureName,
+        c.kor_name AS category,
+        sc.kor_name AS subCategory,
+        LISTAGG(pc.color, ', ') WITHIN GROUP (ORDER BY pc.color) AS colors,
+        LISTAGG(ps.sizes, ', ') WITHIN GROUP (ORDER BY ps.sizes) AS sizes,
+        LISTAGG(pq.quantity, ', ') WITHIN GROUP (ORDER BY pq.quantity) AS quantities,
+        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS filePaths
+    FROM product p
+    JOIN product_info pi ON p.product_idx = pi.product_idx
+    LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
+    JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
+    JOIN category c ON sc.category_idx = c.category_idx
+    LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+    LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+    LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+    WHERE p.product_idx = #{productIdx}
+    GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name
+</select>
+
+
 
 <select id="getProductInfosByProductIdx" resultType="com.mf.dto.ProductInfoDto">
     SELECT 
-        pi.product_info_idx,
-        pi.product_color_idx,
-        pi.product_size_idx,
-        pi.product_idx,
+        pi.product_info_idx AS productInfoIdx,
+        pi.product_color_idx AS productColorIdx,
+        pi.product_size_idx AS productSizeIdx,
+        pi.product_idx AS productIdx,
         pc.color,
         ps.sizes,
-        pq.quantity,
-        TO_CHAR(pi.update_date, 'YYYY.MM.DD') AS updateDate
+        pq.quantity
     FROM product_info pi
     LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
     LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
     LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
     WHERE pi.product_idx = #{productIdx}
 </select>
+
+
 
 <select id="getProductFilesByProductIdx" resultType="com.mf.dto.ProductFileDto">
     SELECT 
@@ -56,7 +82,6 @@ SELECT
     JOIN product_info pi ON pf.product_info_idx = pi.product_info_idx
     WHERE pi.product_idx = #{productIdx}
 </select>
-
 
 
 <!-- storeIdx 조회 -->
@@ -101,6 +126,43 @@ where user_idx=#{userIdx}
 	INSERT INTO product_file (product_file_idx, original_name, file_path, file_size, product_info_idx)
 	VALUES (#{productFileIdx}, #{originalName}, #{filePath}, #{fileSize}, #{productInfoIdx})
 </insert>
+
+
+<!-- 수정 페이지에서 재고에 해당하는 부분 삭제 관련 쿼리문 -->
+
+<update id="updateProduct" parameterType="com.mf.dto.ProductDto">
+    UPDATE product
+    SET name = #{name},
+        price = #{price},
+        manufacture_name = #{manufactureName},
+        sub_category_idx = #{subCategoryIdx}
+    WHERE product_idx = #{productIdx}
+</update>
+
+<update id="updateProductInfo" parameterType="com.mf.dto.ProductOptionDto">
+    UPDATE product_info
+    SET product_color_idx = #{colorIdx},
+        product_size_idx = #{sizeIdx}
+    WHERE product_info_idx = #{productInfoIdx}
+</update>
+
+<update id="updateProductQuantity" parameterType="com.mf.dto.ProductOptionDto">
+    UPDATE product_quantity
+    SET quantity = #{quantity}
+    WHERE product_info_idx = #{productInfoIdx}
+</update>
+
+<!-- productInfo 삭제 -->
+<delete id="deleteProductInfosByProductIdx" parameterType="long">
+    DELETE FROM product_info WHERE product_idx = #{productIdx}
+</delete>
+
+<!-- productFile 삭제 -->
+<delete id="deleteProductFilesByProductIdx" parameterType="long">
+    DELETE FROM product_file WHERE product_info_idx IN (SELECT product_info_idx FROM product_info WHERE product_idx = #{productIdx})
+</delete>
+
+
 
 
 <!-- 새로운 Product ID를 가져옴 -->
@@ -148,26 +210,6 @@ SELECT category_idx AS categoryIdx, kor_name AS korName, eng_name AS engName
 <select id="getAllSizes" resultType="com.mf.dto.ProductSizeDto">
     SELECT product_size_idx AS productSizeIdx, sizes FROM product_size
 </select>
-
-
-
-<!-- ============ Posting =============== -->
-<!-- 판매글 삽입 -->
-<insert id="insertPosting" parameterType="com.mf.dto.PostingDto">
-	<selectKey keyProperty="postingIdx" resultType="long" order="AFTER">
-	    SELECT posting_seq.CURRVAL FROM DUAL
-	</selectKey>
-	INSERT INTO posting (posting_idx, title, content, update_date, state, store_idx)
-	VALUES (posting_seq.NEXTVAL, #{title}, #{content}, SYSDATE, #{state}, #{storeIdx})
-</insert>
-
-
-
-<!-- 판매글 제품 정보 삽입 -->
-<insert id="insertPostingProduct" parameterType="com.mf.dto.PostingProductDto">
-   INSERT INTO posting_product (posting_product_idx, posting_idx, product_info_idx)
-   VALUES (posting_product_seq.NEXTVAL, #{postingIdx}, #{productInfoIdx})
-</insert>
 
 
 
@@ -238,6 +280,31 @@ SELECT category_idx AS categoryIdx, kor_name AS korName, eng_name AS engName
   WHERE users.user_idx = #{userIdx} 
 
 </select>
+
+
+<!-- 상품 판매글 작성을 위한 전체 상품 정보 로드 쿼리문 -->
+<select id="getAllProducts" resultType="com.mf.dto.ProductDto">
+SELECT 
+    p.product_idx AS productIdx,
+    p.name AS name,
+    p.price AS price,
+    p.manufacture_name AS manufactureName,
+    c.kor_name AS category,
+    sc.kor_name AS subCategory,
+    LISTAGG('[' || pc.color || '] ' || ps.sizes || ', ' || pq.quantity || '개', ' / ') WITHIN GROUP (ORDER BY pc.color) AS inventory,
+    LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS filePaths
+FROM product p
+JOIN product_info pi ON p.product_idx = pi.product_idx
+LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
+JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
+JOIN category c ON sc.category_idx = c.category_idx
+LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name
+</select>
+
+
 
 
 
