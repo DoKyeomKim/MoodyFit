@@ -164,6 +164,11 @@
             posting_question_idx = #{postingQuestionIdx}
     </select>
 
+	<select id="getPersonIdxByUserIdx">
+    select person_idx
+    from person
+    where user_idx=#{userIdx}
+    </select>
     
    <insert id="insertAnswer2" parameterType="com.mf.dto.PostingAnswerDto">
         INSERT INTO posting_answer (posting_answer_idx, title, content, create_date, posting_question_idx)
