@@ -144,7 +144,11 @@
 
 .table-container a:hover .table {
     border: 2px solid lightgrey; 
-    background-color: #f0f8ff; 
+    background-color: #f0f8ff;
+}
+
+.w3-container {
+	margin-top: 70px;
 }
 
 

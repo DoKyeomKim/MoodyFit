@@ -4,24 +4,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>상품 등록</title>
-    <link href="/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <style>
-        .modal-dialog {
-            max-width: 800px;
-        }
+<meta charset="UTF-8">
+<title>상품 등록</title>
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<style>
+.modal-dialog {
+    max-width: 800px;
+}
 
-        .modal-body {
-            max-height: 400px;
-            overflow: auto;
-        }
-    </style>
+.modal-body {
+    max-height: 400px;
+    overflow: auto;
+}
+
+/* Image preview styling */
+#imagePreviewContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.image-preview {
+    position: relative;
+    width: 100px;
+    height: 130px;
+}
+.image-preview img {
+    width: 150px;
+    height: 180px;
+    object-fit: cover;
+}
+
+.remove-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 2px 6px;
+    font-size: 12px;
+}
+
+.selected-item {
+    color: blue;
+    font-weight: bold;
+}
+
+.container {
+	margin-top: 100px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.button-container button,
+.button-container a {
+    padding: 10px 20px;
+    font-size: 18px;
+}
+
+
+</style>
 </head>
 <body>
     <%@include file="/WEB-INF/layouts/header.jsp"%>
@@ -66,13 +119,12 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="categoryModalLabel">카테고리 선택</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
                                     <!-- 검색창 -->
-                                    <div id="selectedCategoryDisplay"></div>
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control" id="searchInput" placeholder="카테고리를 검색하세요">
                                         <div class="input-group-append">
@@ -92,9 +144,12 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                                    <button type="button" class="btn btn-primary" id="applyCategory">적용</button>
+                                <div class="modal-footer d-flex justify-content-between align-items-center">
+                                    <div id="selectedCategoryDisplay" class="selected-item"></div>
+                                    <div>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                        <button type="button" class="btn btn-primary" id="applyCategory">적용</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +158,6 @@
 
                 <div class="form-group">
                     <label for="color">색상</label>
-                    <div id="selectedColorDisplay"></div>
                     <div class="input-group">
                         <input type="text" class="form-control" id="colorInput" name="colorName" placeholder="색상을 선택하세요" readonly>
                         <input type="hidden" id="colorIdx" name="colorIdx">
@@ -111,11 +165,11 @@
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#colorModal">색상 선택</button>
                         </div>
                     </div>
+                    <div id="selectedColorDisplay" class="selected-item"></div>
                 </div>
                 
                 <div class="form-group">
                     <label for="size">사이즈</label>
-                    <div id="selectedSizeDisplay"></div>
                     <div class="input-group">
                         <input type="text" class="form-control" id="sizeInput" name="sizeName" placeholder="사이즈를 선택하세요" readonly>
                         <input type="hidden" id="sizeIdx" name="sizeIdx">
@@ -123,9 +177,11 @@
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sizeModal">사이즈 선택</button>
                         </div>
                     </div>
+                    <div id="selectedSizeDisplay" class="selected-item"></div>
                 </div>
                 <div class="form-group">
-                    <label for="quantity">재고</label> <input type="number" value="99" class="form-control" id="quantity" name="quantity" required>
+                    <label for="quantity">재고</label>
+                    <input type="number" value="99" class="form-control" id="quantity" name="quantity" required min="0">
                 </div>
                 <br><br>
                 <div class="form-group">
@@ -148,18 +204,18 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="productImages">상품 사진</label> 
-                    <input type="file" class="form-control" id="productImages" name="productImages" multiple>
+                    <label for="productImages"></label> 
+                    <button type="button" id="addFileButton" class="btn btn-secondary mt-2">Image 추가</button>
+                    <input type="file" class="form-control" id="productImages" name="productImages" style="display: none;">
+                    <div id="imagePreviewContainer" class="d-flex flex-wrap mt-2"></div>
                 </div>
-                <br>
-                <br>
-                 
-                 <br><br>
-                <button type="submit" class="btn btn-outline-primary">상품 등록</button>
-            </form>
-                <a href="/storeMyPage/productList"><button type="submit" class="btn btn-outline-dark">목록</button></a>
-        </div>
-    </div>
+                <br><br>
+                <div class="button-container">
+								    <button type="submit" class="btn btn-primary">상품 등록</button>
+								    <a href="/storeMyPage/productList" class="btn btn-outline-dark">목록</a>
+								</div>
+		        </div>
+		    </div>
     
     <!-- 색상 선택 모달 -->
     <div class="modal fade" id="colorModal" tabindex="-1" role="dialog" aria-labelledby="colorModalLabel" aria-hidden="true">
@@ -184,9 +240,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary" id="applyColor">적용</button>
+                <div class="modal-footer d-flex justify-content-between align-items-center">
+                    <div id="selectedColorModalDisplay" class="selected-item"></div>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-primary" id="applyColor">적용</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -215,9 +274,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary" id="applySize">적용</button>
+                <div class="modal-footer d-flex justify-content-between align-items-center">
+                    <div id="selectedSizeModalDisplay" class="selected-item"></div>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-primary" id="applySize">적용</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -236,6 +298,9 @@
         $(document).ready(function() {
             var selectedCategory = null;
             var selectedSubCategory = null;
+            var selectedColor = null;
+            var selectedSize = null;
+            var productInfoIndex = 0;
 
             $('#categoryModal').on('show.bs.modal', function () {
                 loadCategories();
@@ -306,10 +371,6 @@
                     alert('카테고리와 서브 카테고리를 선택하세요.');
                 }
             });
-        });
-
-        $(document).ready(function() {
-            var selectedColor = null;
 
             $('#colorModal').on('show.bs.modal', function () {
                 loadColors();
@@ -330,7 +391,7 @@
                             var colorId = $(this).data('id');
                             var colorName = $(this).data('name');
                             selectedColor = { id: colorId, name: colorName };
-                            $('#selectedColorDisplay').html(colorName);
+                            $('#selectedColorModalDisplay').html(colorName);
                         });
                     },
                     error: function() {
@@ -348,94 +409,180 @@
                     alert('색상을 선택하세요.');
                 }
             });
-        });
-
-        $(document).ready(function() {
-            var selectedSize = null;
 
             $('#sizeModal').on('show.bs.modal', function () {
+                if (!selectedCategory) {
+                    alert('카테고리를 먼저 선택해주세요.');
+                    $('#sizeModal').modal('hide');  // 모달 창을 닫음
+                    return;
+                }
                 loadSizes();
             });
 
             function loadSizes() {
-                $.ajax({
-                    url: '/storeMyPage/api/sizes',
-                    method: 'GET',
-                    success: function(sizes) {
-                        var sizeList = $('#sizeList');
-                        sizeList.empty();
-                        sizes.forEach(function(size) {
-                            sizeList.append('<tr><td>' + size.sizes + '</td><td><a href="#" class="size-item" data-id="' + size.productSizeIdx + '" data-name="' + size.sizes + '">선택</a></td></tr>');
-                        });
+                let sizes = [];
+                switch (selectedCategory.name) {
+                    case '아우터':
+                    case '상의':
+                    case '니트':
+                    case '셔츠':
+                        sizes = ['90 (S)', '95 (M)', '100 (L)', '105 (XL)', '110 (2XL)'];
+                        break;
+                    case '바지':
+                        sizes = Array.from({ length: 13 }, (_, i) => (i + 26).toString());
+                        break;
+                    case '신발':
+                        sizes = Array.from({ length: 11 }, (_, i) => (i * 10 + 200).toString());
+                        break;
+                    case '악세사리':
+                    case '가방':
+                    case '모자':
+                        sizes = ['free'];
+                        break;
+                    default:
+                        alert('올바른 카테고리를 선택해주세요.');
+                        return;
+                }
 
-                        $('.size-item').click(function() {
-                            var sizeId = $(this).data('id');
-                            var sizeName = $(this).data('name');
-                            selectedSize = { id: sizeId, name: sizeName };
-                            $('#selectedSizeDisplay').html(sizeName + ' <button type="button" class="btn btn-sm btn-danger" id="removeSelectedSize">x</button>');
+                var sizeList = $('#sizeList');
+                sizeList.empty();
+                sizes.forEach(function(size) {
+                    sizeList.append('<tr><td>' + size + '</td><td><a href="#" class="size-item" data-name="' + size + '">' + size + '</a></td></tr>');
+                });
 
-                            $('#removeSelectedSize').click(function() {
-                                selectedSize = null;
-                                $('#selectedSizeDisplay').empty();
-                            });
-                        });
-                    },
-                    error: function() {
-                        alert('사이즈를 불러오는 중 오류가 발생했습니다.');
-                    }
+                $('.size-item').click(function() {
+                    var sizeName = $(this).data('name');
+                    selectedSize = { name: sizeName };
+                    $('#selectedSizeModalDisplay').html(sizeName);
                 });
             }
 
             $('#applySize').click(function() {
                 if (selectedSize) {
                     $('#sizeInput').val(selectedSize.name);
-                    $('#sizeIdx').val(selectedSize.id);
+                    $('#sizeIdx').val(selectedSize.name);  // Assuming size name is the same as size ID
                     $('#sizeModal').modal('hide');
                 } else {
                     alert('사이즈를 선택하세요.');
                 }
             });
-        });
 
-        var productInfoIndex = 0;
-        
-        $('#addProductInfo').click(function() {
-            var color = $('#colorInput').val();
-            var colorIdx = $('#colorIdx').val();
-            var size = $('#sizeInput').val();
-            var sizeIdx = $('#sizeIdx').val();
-            var quantity = $('#quantity').val();
+            $('#addProductInfo').click(function() {
+                var color = $('#colorInput').val();
+                var colorIdx = $('#colorIdx').val();
+                var size = $('#sizeInput').val();
+                var sizeIdx = $('#sizeIdx').val();
+                var quantity = $('#quantity').val();
+                
+                if (!color || !size || !quantity) {
+                    alert("모든 필드를 입력하세요.");
+                    return;
+                }
+                
+                var row = '<tr>' +
+                '<td>' + color + '</td>' +
+                '<td>' + size + '</td>' +
+                '<td>' + quantity + '</td>' +
+                '<td><button type="button" class="btn btn-danger removeProductInfo">삭제</button></td>' +
+                '<input type="hidden" name="productInfos[' + productInfoIndex + '].colorIdx" value="' + colorIdx + '">' +
+                '<input type="hidden" name="productInfos[' + productInfoIndex + '].sizeIdx" value="' + sizeIdx + '">' +
+                '<input type="hidden" name="productInfos[' + productInfoIndex + '].quantity" value="' + quantity + '">' +
+                '</tr>';
             
-            if (!color || !size || !quantity) {
-                alert("모든 필드를 입력하세요.");
-                return;
-            }
-            
-            var row = '<tr>' +
-            '<td>' + color + '</td>' +
-            '<td>' + size + '</td>' +
-            '<td>' + quantity + '</td>' +
-            '<td><button type="button" class="btn btn-danger removeProductInfo">삭제</button></td>' +
-            '<input type="hidden" name="productInfos[' + productInfoIndex + '].colorIdx" value="' + colorIdx + '">' +
-            '<input type="hidden" name="productInfos[' + productInfoIndex + '].sizeIdx" value="' + sizeIdx + '">' +
-            '<input type="hidden" name="productInfos[' + productInfoIndex + '].quantity" value="' + quantity + '">' +
-            '</tr>';
-        
-            $('#productInfoTable tbody').append(row);
-            productInfoIndex++;
-        });
+                $('#productInfoTable tbody').append(row);
+                productInfoIndex++;
 
-        $(document).on('click', '.removeProductInfo', function() {
-            $(this).closest('tr').remove();
-            productInfoIndex--;
-            $('#productInfoTable tbody tr').each(function(index) {
-                $(this).find('input').each(function() {
-                    var name = $(this).attr('name');
-                    var newName = name.replace(/\[\d+\]/, '[' + index + ']');
-                    $(this).attr('name', newName);
+                // Clear input fields
+                $('#categoryInput').val('');
+                $('#subCategoryInput').val('');
+                $('#colorInput').val('');
+                $('#colorIdx').val('');
+                $('#sizeInput').val('');
+                $('#sizeIdx').val('');
+                $('#quantity').val('');
+                $('#selectedCategoryDisplay').html('');
+                $('#selectedColorModalDisplay').html('');
+                $('#selectedSizeModalDisplay').html('');
+                selectedCategory = null;
+                selectedSubCategory = null;
+                selectedColor = null;
+                selectedSize = null;
+            });
+
+            $(document).on('click', '.removeProductInfo', function() {
+                $(this).closest('tr').remove();
+                productInfoIndex--;
+                $('#productInfoTable tbody tr').each(function(index) {
+                    $(this).find('input').each(function() {
+                        var name = $(this).attr('name');
+                        var newName = name.replace(/\[\d+\]/, '[' + index + ']');
+                        $(this).attr('name', newName);
+                    });
                 });
             });
+
+            // Image preview and remove functionality
+            document.getElementById('addFileButton').addEventListener('click', function() {
+                document.getElementById('productImages').click();
+            });
+
+            document.getElementById('productImages').addEventListener('change', function(event) {
+                handleFileSelect(event);
+            });
+
+            function handleFileSelect(event) {
+                const file = event.target.files[0];  // Only handle single file
+                const previewContainer = document.getElementById('imagePreviewContainer');
+                previewContainer.innerHTML = '';  // Clear any existing previews
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.classList.add('image-preview');
+
+                        const removeButton = document.createElement('button');
+                        removeButton.classList.add('remove-button');
+                        removeButton.innerHTML = '&times;';
+                        removeButton.addEventListener('click', function() {
+                            previewContainer.innerHTML = '';  // Clear the preview
+                            document.getElementById('productImages').value = '';  // Clear the file input
+                        });
+
+                        const previewWrapper = document.createElement('div');
+                        previewWrapper.classList.add('image-preview');
+                        previewWrapper.appendChild(img);
+                        previewWrapper.appendChild(removeButton);
+                        previewContainer.appendChild(previewWrapper);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            // Prevent quantity from going below 0
+            document.getElementById('quantity').addEventListener('input', function() {
+                if (this.value < 0) {
+                    this.value = 0;
+                }
+            });
+
+            document.getElementById('quantity').addEventListener('change', function() {
+                if (this.value < 0) {
+                    this.value = 0;
+                }
+            });
+
+            // Prevent quantity from going below 0 with arrow keys
+            document.getElementById('quantity').addEventListener('keydown', function(e) {
+                // Prevent decrementing below 0
+                if (e.key === 'ArrowDown' && this.value <= 0) {
+                    e.preventDefault();
+                }
+            });
         });
+
+
     </script>
 </body>
 </html>

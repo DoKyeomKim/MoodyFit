@@ -18,6 +18,7 @@
     background-color: #F6F4EE !important;
     z-index: 1; 
     color:#867B73 !important;
+    margin-top: 300px;
   }
  
 .main-container {

@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,12 +95,12 @@ public class PostingContoller {
 	@ResponseBody
 	public String uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile,
 	        HttpServletRequest request) {
-		// JSON 객체 생성
+	    // JSON 객체 생성
 	    JsonObject jsonObject = new JsonObject();
 	    
-	    // 이미지 파일 저장 경로 설정 
+	    // 이미지 파일이 저장될 경로 설정
 	    String contextRoot = realPath + "/Users/sinminjae/dev/postingImage/";
-	    String fileRoot    = contextRoot;
+	    String fileRoot = contextRoot;
 	    
 	    // 업로드된 파일의 원본 파일명과 확장자 추출
 	    String originalFileName = multipartFile.getOriginalFilename();
@@ -122,7 +123,7 @@ public class PostingContoller {
 	        jsonObject.addProperty("url", "/Users/sinminjae/dev/postingImage/" + savedFileName);
 	        jsonObject.addProperty("responseCode", "success");
 	    } catch (IOException e) {
-	        // 파일 저장 중 오류가 발생한 경우 해당 파일 삭제 및 에러 응답 코드 추가
+	        // 파일 저장 중 오류 발생시 해당 파일 삭제 및 에러 응답 코드 추가
 	        FileUtils.deleteQuietly(targetFile);
 	        jsonObject.addProperty("responseCode", "error");
 	        e.printStackTrace();
@@ -131,7 +132,7 @@ public class PostingContoller {
 	    // JSON 객체를 문자열로 변환하여 반환
 	    String a = jsonObject.toString();
 	    return a;
-	   
 	}
+	
 	
 }
