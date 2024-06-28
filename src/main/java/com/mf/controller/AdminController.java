@@ -327,12 +327,12 @@ public class AdminController {
 	                    reviewDto.setOriginalName(fileName);
 	                    reviewDto.setFileSize(fileSize);
 
-	                    adminReviewService.addReview(reviewDto);
-	                    adminReviewService.addReviewFile(reviewDto);
+
 					        Long userIdx = (Long) session.getAttribute("userIdx");
 					        Long personIdx = adminReviewService.getPersonIdxByUserIdx(userIdx);
 					        reviewDto.setPersonIdx(personIdx);
-					        adminQnaService.addQuestion2(qna2DTO, personIdx);
+		                    adminReviewService.addReview(reviewDto);
+		                    adminReviewService.addReviewFile(reviewDto);
 					     
 					    
 	                    response.put("success", true);

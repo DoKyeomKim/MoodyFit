@@ -97,6 +97,11 @@
         LEFT JOIN 
             posting_review_file prf ON ar.posting_review_idx = prf.posting_review_idx
     </select>
-
+	
+	<select id="getPersonIdxByUserIdx">
+    select person_idx
+    from person
+    where user_idx=#{userIdx}
+    </select>
  
     </mapper>
