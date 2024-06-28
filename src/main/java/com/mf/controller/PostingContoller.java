@@ -48,11 +48,11 @@ public class PostingContoller {
 
 	
 	@PostMapping("/postingWrite")
-	public String createPosting(@RequestParam(value="productIdx",required=false) Long productIdx,
-	                            @RequestParam(value="productInfoIdx", required=false) Long productInfoIdx,
+	public String createPosting(@RequestParam("productIdx") Long productIdx,
+	                            @RequestParam("productInfoIdx") Long productInfoIdx,
 	                            @RequestParam("title") String title,
 	                            @RequestParam("content") String content,
-	                            @RequestParam(value="postingFiles", required=false) List<MultipartFile> postingFiles,
+	                            @RequestParam("postingFiles") List<MultipartFile> postingFiles,
 	                            HttpSession session) {
 	    Long userIdx = (Long) session.getAttribute("userIdx");
 	    Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);

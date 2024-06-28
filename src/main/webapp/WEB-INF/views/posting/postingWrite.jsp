@@ -7,6 +7,28 @@
 <meta charset="UTF-8">
 <title>상품 판매글 등록</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.css">
+<script type="text/JavaScript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script type="text/JavaScript" src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.js"></script>
+<script type="text/JavaScript" src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    jQuery("#summernote").summernote({
+          height : 550  // 에디터 높이
+        , minHeight : null  // 최소 높이
+        , maxHeight : null  // 최대 높이
+        , focus : true  // 에디터 로딩후 포커스를 맞출지 여부( true, false )
+        , lang : "ko-KR"    // 한글 설정
+        , placeholder : "게시글 작성" 
+        , fontNames : [ "맑은 고딕", "궁서", "굴림체", "굴림", "돋움체", "바탕체", "Arial", "Arial Black", "Comic Sans MS", "Courier New" ]
+        , fontNamesIgnoreCheck : ["맑은 고딕"]  // 기본 폰트 설정( 2024-06-28 동작하지 않음, 'sans-serif' 자동선택 )
+        , fontSizes : [ "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "28", "30", "36", "50", "72" ]
+    });
+});
+
+
+</script>
+
 <style>
 .product-list {
     display: flex;
@@ -48,6 +70,9 @@
     background-color: #007bff;
     color: white;
 }
+
+
+
 </style>
 </head>
 <body>
@@ -82,11 +107,18 @@
               <input type="text" id="title" name="title" class="form-control" required>
           </div>
           
+          
+          <!-- 에디터 영역 -->
+          <textarea id="summernote" name="editordata"></textarea>
+          
+              
+          <!--  
           <div class="form-group">
               <label for="content">판매글 내용</label>
               <textarea id="content" name="content" class="form-control" rows="5" required></textarea>
           </div>
-          
+          -->
+        
           <div class="form-group">
 	            <label for="postingFiles"></label>
 	            <button type="button" id="addFileButton" class="btn btn-secondary mt-2">Image 추가</button>
@@ -119,7 +151,7 @@
             return response.json();
         })
         .then(data => {
-        		console.log("Data received:", data);
+            console.log("Data received:", data);
             document.getElementById('productIdx').value = productIdx;
             if (data.productInfoIdx) {
                 document.getElementById('productInfoIdx').value = data.productInfoIdx;
@@ -130,7 +162,7 @@
             displayProductDetails(data);
         })
         .catch(error => console.error('Error fetching product details:', error));
-}
+	}
 
 	function displayProductDetails(data) {
 	    console.log("Data received:", data);
@@ -155,9 +187,55 @@
 	    console.log("HTML set to:", detailsDiv.innerHTML);
 	}
 
+		// ==================================================================================
+		// ======================= 에디터 영역 ============================================
+		$(document).ready(function() {
+			$('.summernote').summernote();
+		});
 		
-	
-	
+		
+		callbacks: {
+		    onImageUpload: function (files, editor, welEditable) {
+		        // 파일 업로드 (다중 업로드를 위해 반복문 사용)
+		        for (var i = files.length - 1; i >= 0; i--) {
+		            var fileName = files[i].name
+
+		            // 이미지 alt 속성 삽일을 위한 설정
+		            var caption = prompt('이미지 설명 :', fileName)
+		            if (caption == '') {
+		                caption = '이미지'
+		            }
+		            uploadSummernoteImageFile(files[i], this, caption)
+		        }
+		    },
+		},
+		})
+		})
+
+		// 이미지 업로드 함수 ajax 활용
+		    function uploadSummernoteImageFile(file, el, caption) {
+		        data = new FormData()
+		        data.append('file', file)
+		        $.ajax({
+		            data: data,
+		            type: 'POST',
+		            url: 'uploadSummernoteImageFile',
+		            contentType: false,
+		            enctype: 'multipart/form-data',
+		            processData: false,
+		            success: function (data) {
+		                $(el).summernote(
+		                    'editor.insertImage',
+		                    data.url,
+		                    function ($image) {
+		                        $image.attr('alt', caption) // 캡션 정보를 이미지의 alt 속성에 설정
+		                    }
+		                )
+		            },
+		        })
+		    }
+			
+
 		// ==================================================================================
 		// ======================= 판매글 파일 등록 관련 =====================================
     document.getElementById('addFileButton').addEventListener('click', function() {
