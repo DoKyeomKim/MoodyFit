@@ -53,6 +53,9 @@ public interface AdminQnaMapper {
 
 
 		void insertAnswer2(PostingAnswerDto answer2Dto);
+
+
+		Long getPersonIdxByUserIdx(Long userIdx);
 	}
 
 	

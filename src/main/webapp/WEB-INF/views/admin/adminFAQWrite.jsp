@@ -7,7 +7,7 @@
 
     <title>FAQ 등록</title>
         <script src="${pageContext.request.contextPath}/scripts.js"></script>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
+
 
 <style>
        /* 전체 페이지 스타일 */
@@ -57,7 +57,7 @@ form {
 table td {
 	height: 50px;
     padding: 10px 0;
-    border-bottom: 1px solid #e5e5e5;
+   
     width:50%;
 }
 table td:first-child {
@@ -88,7 +88,7 @@ input[type="button"] {
     color: #333;
 }
  textarea {
-            width: 300%;
+            width: 290%;
             height: 100px;
             padding: 8px 12px;
             border: 1px solid #ccc;
@@ -96,6 +96,7 @@ input[type="button"] {
             font-size: 15px;
             resize: vertical; /* 수직으로만 크기 조정 */
         }
+       
     </style>
 </head>
 <body>
@@ -108,7 +109,7 @@ input[type="button"] {
     <form action="/admin/adminFAQWrite" method="POST">
         <table>
             <tr>
-                <td>제목</td>
+                <td class= "text-title">제목</td>
                 <td><input type="text" name="title" /></td>
             </tr>
              <tr>

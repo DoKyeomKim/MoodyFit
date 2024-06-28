@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.AdminQnaMapper">
-    <select id="getAllAdminQnas">
-SELECT 
-    CS_QUESTION.QUESTION_IDX,
-    CS_QUESTION.TITLE,
-    CS_QUESTION.CONTENT,
-    CS_QUESTION.CREATE_DATE,
-    CS_QUESTION.UPDATE_DATE,
-    CS_QUESTION.STATE,
-    USERS.ID
-FROM 
-    CS_QUESTION
-JOIN 
-    USERS ON CS_QUESTION.USER_IDX = USERS.USER_IDX
-    </select>
+    <select id="getAllAdminQnas" resultType="com.mf.dto.AdminQuestionDto">
+    SELECT 
+        CS_QUESTION.QUESTION_IDX as questionIdx,
+        CS_QUESTION.TITLE as title,
+        CS_QUESTION.CONTENT as content,
+        CS_QUESTION.CREATE_DATE as createDate,
+        CS_QUESTION.UPDATE_DATE as updateDate,
+        CS_QUESTION.STATE as state,
+        USERS.ID as id
+    FROM 
+        CS_QUESTION
+    JOIN 
+        USERS ON CS_QUESTION.USER_IDX = USERS.USER_IDX
+</select>
     <insert id="setCsQna">
     insert into cs_qna(QNA_IDX,CS_IDX)
     values(cs_qna_seq.nextval,1)
@@ -76,22 +76,21 @@ JOIN
         WHERE 
             question_idx = #{questionIdx}
     </select>
-    <select id="searchQnasById" resultType="com.mf.dto.AdminQuestionDto">
-        SELECT 
-    cq.question_idx,
-    u.id,
-    cq.title,
-    cq.create_date,
-    cq.update_date,
-    cq.state
-FROM 
-    cs_question cq
-JOIN 
-    USERS u ON cq.USER_IDX = u.USER_IDX
-WHERE 
-    u.id LIKE '%' || #{searchId} || '%'
-
-    </select>
+<select id="searchQnasById" resultType="com.mf.dto.AdminQuestionDto">
+    SELECT 
+        cq.QUESTION_IDX as questionIdx,
+        u.ID as id,
+        cq.TITLE as title,
+        cq.CREATE_DATE as createDate,
+        cq.UPDATE_DATE as updateDate,
+        cq.STATE as state
+    FROM 
+        CS_QUESTION cq
+    JOIN 
+        USERS u ON cq.USER_IDX = u.USER_IDX
+    WHERE 
+        cq.TITLE LIKE '%' || #{searchId} || '%'
+</select>
     
     <update id="qna1">
     UPDATE cs_question
@@ -163,6 +162,11 @@ WHERE
         
         WHERE 
             posting_question_idx = #{postingQuestionIdx}
+    </select>
+    <select id="getPersonIdxByUserIdx">
+    select person_idx
+    from person
+    where user_idx=#{userIdx}
     </select>
     
    <insert id="insertAnswer2" parameterType="com.mf.dto.PostingAnswerDto">

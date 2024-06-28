@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.AdminSalesMapper">
+    <select id="getAllAdminSaless" parameterType="com.mf.dto.AdminSalesDto">
+SELECT 
+    s.store_name,
+    p.store_idx,
+    COUNT(o.order_idx) AS order_count,
+    SUM(o.total_price) AS total_price
+FROM 
+    orders o
+JOIN 
+    order_cart oc ON o.order_idx = oc.order_idx
+JOIN 
+    cart c ON oc.cart_idx = c.cart_idx
+JOIN 
+    posting_product pp ON c.posting_product_idx = pp.posting_product_idx
+JOIN 
+    posting p ON pp.posting_idx = p.posting_idx
+JOIN 
+    store s ON p.store_idx = s.store_idx
+GROUP BY 
+    s.store_name, p.store_idx
+
+    </select>
+ <select id="searchSalessById" resultType="com.mf.dto.AdminSalesDto">
+    SELECT  
+        s.store_name,
+        p.store_idx,
+        COUNT(o.order_idx) AS order_count,
+        SUM(o.total_price) AS total_price
+    FROM 
+        orders o
+    JOIN 
+        order_cart oc ON o.order_idx = oc.order_idx
+    JOIN 
+        cart c ON oc.cart_idx = c.cart_idx
+    JOIN 
+        posting_product pp ON c.posting_product_idx = pp.posting_product_idx
+    JOIN 
+        posting p ON pp.posting_idx = p.posting_idx
+    JOIN 
+        store s ON p.store_idx = s.store_idx
+    <where>
+        <if test="searchId != null and searchId != ''">
+            s.store_name LIKE '%' || #{searchId, jdbcType=VARCHAR} || '%'
+        </if>
+    </where>
+    GROUP BY 
+        s.store_name, p.store_idx
+</select>
+ <select id="getTotalOrderCount" resultType="int">
+    SELECT 
+        COUNT(o.order_idx)
+    FROM 
+        orders o
+  </select>
+
+  <select id="getTotalRevenue" resultType="double">
+    SELECT 
+        SUM(o.total_price)
+    FROM 
+        orders o
+  </select>
+</mapper>

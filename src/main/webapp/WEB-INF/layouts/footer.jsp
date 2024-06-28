@@ -100,8 +100,7 @@ footer {
         <p><a href="https://www.facebook.com/moodyfit" class="text-dark" style="text-decoration: none;">FACEBOOK @moodyfit</a></p>
     </div>
  </footer>
- <div class="bottom-links">
-    <a href="/">홈으로</a>
-</div>
+
+
 </body>
 </html>

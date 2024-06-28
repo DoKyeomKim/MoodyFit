@@ -98,7 +98,7 @@
       <i class="fa fa-caret-down"></i></button>
        <div class="dropdown-container">
     <a href="adminCategoryWrite">카테고리 등록</a>
-    <a href="adminCategoryUpdate">카테고리 수정/삭제</a>
+    <a href="adminCategoryUpdate">카테고리 수정</a>
 
     </div>
     <a href="adminApply">가맹점 공고 관리</a>

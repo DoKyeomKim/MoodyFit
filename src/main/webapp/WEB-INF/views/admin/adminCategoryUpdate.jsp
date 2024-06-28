@@ -26,10 +26,11 @@ main {
 }
 .container {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
 }
 .container > * {
-    flex: 1;
     margin-right: 30px; /* Adjust as needed */
 }
 .container > *:last-child {
@@ -47,26 +48,27 @@ main {
     color: #333;
 }
 .btn-delete {
-        background-color: #111111;
+    background-color: #111111;
     color: #fff;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
 }
-#updateModal {
-    position: absolute;
-    top: 0;
-    left: 40%; /* 본문 바로 오른쪽에 위치시키기 위해 left 사용 */
-    width: 33%;
-    height: 100%;
-    background-color: #fff;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    padding: 50px;
-    display: none;
-    z-index: 1000;
-    overflow-y: auto;
-    border-left: 1px solid #ddd; /* 본문과 모달 사이에 구분선 추가 */
-    margin-top:290px;
+
+
+.select-container {
+    display: flex;
+    align-items: center;
+    margin-left: 1000px;
+}
+
+select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -76,11 +78,11 @@ main {
     <%@include file="/WEB-INF/layouts/adminsidebar.jsp"%>
 </div>
 <main> 
-<div class="container" >
+<div class="container">
     <div class="mt-3">
         <h3 class="text-center">상위 카테고리 관리</h3>
     </div>
-    <div style="margin:auto 0;">  
+    <div class="select-container">  
        <select onchange="navigateToPage(this)">
            <option value="">카테고리 분류</option>
            <option value="/adminCategoryUpdate">상위 카테고리</option>
@@ -93,7 +95,7 @@ main {
 <div class="table-container">
     <div class="row">
         <div class="col-12">
-            <table class="table table-bordered" >
+            <table class="table table-bordered">
                 <thead class="table-secondary">
                     <tr>
                         <th>번호</th>
@@ -104,13 +106,12 @@ main {
                 </thead>
                 <tbody>
                     <c:forEach var="category" items="${categoryList}" varStatus="status">
-                         <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
+                        <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
                             <td>${category.categoryIdx }</td>
                             <td>${category.korName}</td>
                             <td>${category.engName}</td>
                             <td>
                                 <button class="btn btn-delete" onclick="openUpdateModal(${category.categoryIdx}, '${category.korName}', '${category.engName}')">수정</button>
-<%--                                 <button class="btn btn-delete" onclick="deleteCategory(${category.categoryIdx})">삭제</button> --%>
                             </td>
                         </tr>
                     </c:forEach>
@@ -122,15 +123,18 @@ main {
 
 <!-- 수정 모달 -->
 <div id="updateModal">
+  <h2>카테고리 수정</h2>
     <form id="updateForm" method="post" action="/updateCategory">
         <input type="hidden" name="categoryIdx" id="categoryIdx">
-        <label for="korName">카테고리 한글명:</label>
+    <label for="korName">카테고리 한글명:</label>
         <input type="text" name="korName" id="korName">
         <label for="engName">카테고리 영문명:</label>
         <input type="text" name="engName" id="engName">
-        <button type="submit">수정</button>
+        <div class="btn-group">
+            <button type="submit" class="btn-update">수정</button>
+            <button type="button" class="btn-cancel" onclick="closeUpdateModal()">취소</button>
+        </div>
     </form>
-    <button onclick="closeUpdateModal()">취소</button>
 </div>
 
 <script>

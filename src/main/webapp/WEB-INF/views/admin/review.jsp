@@ -80,23 +80,31 @@
             color: #aaa;
         }
         .rating {
-            display: flex;
-            gap: 5px;
-            justify-content: center;
-        }
-        .rating input {
-            display: none;
-        }
-        .rating label {
-            font-size: 24px;
-            color: #ddd;
-            cursor: pointer;
-        }
-        .rating input:checked ~ label,
-        .rating input:hover ~ label,
-        .rating label:hover ~ label {
-            color: #f5b301;
-        }
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    direction: rtl; /* Add this to reverse the order of stars */
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    font-size: 24px;
+    color: #ddd;
+    cursor: pointer;
+    direction: ltr; /* Ensure the stars are still left-to-right inside the reversed container */
+}
+
+.rating input:checked ~ label {
+    color: #f5b301;
+}
+
+.rating label:hover,
+.rating label:hover ~ label {
+    color: #f5b301;
+}
         .button-group {
             text-align: right;
         }
@@ -169,7 +177,7 @@
         <div class="modal" id="review-list">
             <div class="modal-header">구매한 상품은 어떠셨나요? 다른 회원님들께 구매후기를 전해주세요!</div>
             <div class="input-group no-border">
-                <label for="height">제목</label>
+                <label for="height">상품명</label>
                 <div class="input-wrapper">
                     <input type="text" id="title" name="title" >
                 </div>

@@ -140,14 +140,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 <tbody>
                     <c:forEach var="qna" items="${AdminqnaList}">
                         <tr>
-                            <td>${qna.QUESTION_IDX}</td>
-                            <td><a href="/qnaDetail?questionIdx=${qna.QUESTION_IDX}">${qna.TITLE}</a></td>
-                            <td>${qna.ID}</td>
-                            <td>${qna.CREATE_DATE}</td>
+                            <td>${qna.questionIdx}</td>
+                            <td><a href="/qnaDetail?questionIdx=${qna.questionIdx}">${qna.title}</a></td>
+                            <td>${qna.id}</td>
+                            <td>${qna.createDate}</td>
                             <td>
                             <c:choose>
-                                <c:when test="${qna.STATE==1}">답변대기</c:when>
-                                <c:when test="${qna.STATE==2}">답변완료</c:when>
+                                <c:when test="${qna.state == 1}">답변대기</c:when>
+                                <c:when test="${qna.state == 2}">답변완료</c:when>
                             </c:choose>
                             </td>
                         </tr>
@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function() {
             </table>
         </div>
         <div class="button-container">
-            <button onclick="window.location.href='qnaWrite'">글쓰기</button>
+            <button onclick="window.location.href='qnaWriteform'">글쓰기</button>
         </div>
     </main>
     <%@include file="/WEB-INF/layouts/footer.jsp"%>

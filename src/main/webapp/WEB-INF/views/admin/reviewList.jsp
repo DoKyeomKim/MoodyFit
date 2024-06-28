@@ -10,82 +10,17 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
-            padding: 20px;
-            margin-top: 70px;
-            width:80%;
-           
-            
-        }
-
-        .review-list {
+            margin: 0;
+            padding: 0;
             display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 70px;
+            justify-content: center;
         }
 
-        .review-item {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            width: 100%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        .review-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .review-header .details {
-            font-size: 14px;
-            margin-left: 10px;
-        }
-
-        .review-header .details div {
-            margin-bottom: 5px; /* 각 정보 요소 사이에 여백 추가 */
-        }
-
-        .review-header .rating {
-            font-size: 14px;
-            color: #f1c40f;
-            margin-left: auto;
-        }
-
-        .review-text {
-            font-size: 14px;
-            margin: 10px 0;
-        }
-
-        .review-options {
-            font-size: 12px;
-            color: #888;
-            margin: 10px 0;
-        }
-
-        .review-options span {
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        .review-stats {
-            font-size: 15px;
-            color: #a1a1a1;
-            margin-top: 10px;
-        }
-
-        .review-content {
-            font-size: 14px;
-            margin: 10px 0;
-        }
-
-        .review-image {
-            max-width: 200px;
-            height: auto;
-            margin-top: 10px;
+        .container {
+            width: 90%;
+            margin-top: 80px;
+              font-size: 15px;
+   
         }
 
         .header {
@@ -120,38 +55,121 @@
         .filter-bar select {
             width: 200px;
         }
+
+        .filter-bar input[type="text"] {
+            flex-grow: 1;
+        }
+
+        .filter-bar button {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #ddd;
+            cursor: pointer;
+        }
+
+        .review-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .review-item {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            width: calc(33.333% - 20px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .review-header .details {
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .review-header .details div {
+            margin-bottom: 5px;
+        }
+
+        .review-header .rating {
+            font-size: 14px;
+            color: #f1c40f;
+            margin-left: auto;
+        }
+
+        .review-options {
+            font-size: 12px;
+            color: #888;
+            margin: 10px 0;
+        }
+
+        .review-options span {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .review-stats {
+            font-size: 15px;
+            color: #a1a1a1;
+            margin-top: 10px;
+        }
+
+        .review-content {
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .review-image {
+            width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
     </style>
 </head>
+ <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
 <body>
-    <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
-    <div class="header" style="margin-top:70px;">
-        <h1>PHOTO REVIEW | 포토 리뷰</h1>
-    </div>
-    <div class="filter-bar">
-        <label for="category">카테고리별 보기</label>
-        <select id="category">
-            <option value="">카테고리를 선택해주세요</option>
-            <option value="OUTER">OUTER</option>
-            <option value="TOP">TOP</option>
-            <option value="KNIT">KNIT</option>
-            <option value="SHIRTS">SHIRTS</option>
-            <option value="PANTS">PANTS</option>
-            <option value="SHOES">SHOES</option>
-            <option value="BAG">BAG</option>
-            <option value="ACC">ACC</option>
-            <option value="HAT">HAT</option>
-        </select>
+    <div class="container">
+              <h1 class= "head" style=" font-size: 18px;
+            margin-top:30px ;">PHOTO REVIEW | 포토 리뷰</h1>
+        <div class="header">
+  
+           
+        </div>
+        <div class="filter-bar">
+       
+            <select id="category">
+                <option value="">카테고리를 선택해주세요</option>
+                <option value="OUTER">OUTER</option>
+                <option value="TOP">TOP</option>
+                <option value="KNIT">KNIT</option>
+                <option value="SHIRTS">SHIRTS</option>
+                <option value="PANTS">PANTS</option>
+                <option value="SHOES">SHOES</option>
+                <option value="BAG">BAG</option>
+                <option value="ACC">ACC</option>
+                <option value="HAT">HAT</option>
+            </select>
 
-        <select id="sort">
-            <option value="latest">최신순</option>
-            <option value="rating">별점순</option>
-            <option value="recommend">추천순</option>
-        </select>
+            <select id="sort">
+                <option value="latest">최신순</option>
+                <option value="rating">별점순</option>
+                <option value="recommend">추천순</option>
+            </select>
 
-        <input type="text" id="search" placeholder="검색어 입력">
-        <button type="button" onclick="searchReviews()">검색</button>
+            <input type="text" id="search" placeholder="검색어 입력">
+            <button type="button" onclick="searchReviews()">검색</button>
+        </div>
+        <div class="review-list" id="review-list"></div>
     </div>
-    <div class="review-list" id="review-list"></div>
     
     <script>
         let reviews = [];
@@ -163,7 +181,7 @@
                     throw new Error(`네트워크 응답에 문제가 있습니다: ${response.statusText}`);
                 }
                 reviews = await response.json();
-                console.log('Fetched Reviews:', reviews); // API 응답 출력
+                console.log('Fetched Reviews:', reviews);
                 renderReviews(reviews);
             } catch (error) {
                 console.error('리뷰 데이터를 가져오는 데 문제가 발생했습니다:', error);
@@ -177,7 +195,7 @@
                 reviewList.innerHTML = '';
 
                 reviews.forEach(review => {
-                    console.log('Review Data:', review); // 각 리뷰 데이터 확인용
+                    console.log('Review Data:', review);
 
                     const reviewItem = document.createElement('div');
                     reviewItem.className = 'review-item';
@@ -227,15 +245,21 @@
                     reviewContent.className = 'review-content';
                     reviewContent.textContent = review.content;
 
-                    const reviewImage = document.createElement('img');
-                    reviewImage.className = 'review-image';
-                    reviewImage.src = review.file;
-                    reviewImage.alt = review.originalName;
-
                     reviewItem.appendChild(reviewHeader);
                     reviewItem.appendChild(reviewOptions);
                     reviewItem.appendChild(reviewContent);
-                    reviewItem.appendChild(reviewImage);
+
+                    if (review.filePath) {
+                        console.log('Image file exists:', review.filePath);
+                        const reviewImage = document.createElement('img');
+                        reviewImage.className = 'review-image';
+                        reviewImage.src = review.filePath;
+                        reviewImage.alt =  review.filePath || 'Review Image';
+                        reviewImage.onerror = function() {
+                            console.error('Failed to load image:', review.file);
+                        };
+                        reviewItem.appendChild(reviewImage);
+                    }
 
                     reviewList.appendChild(reviewItem);
                 });
@@ -244,6 +268,7 @@
                 alert('리뷰 리스트를 렌더링하는 도중 문제가 발생했습니다.');
             }
         }
+
 
         document.addEventListener('DOMContentLoaded', () => {
             fetchReviews();
@@ -287,5 +312,7 @@
             fetchReviews();
         });
     </script>
+ 
 </body>
+
 </html>

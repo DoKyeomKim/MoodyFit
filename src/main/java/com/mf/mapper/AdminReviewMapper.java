@@ -20,4 +20,6 @@ public interface AdminReviewMapper {
 
 	public List<AdminReviewDto> findAll();
 
+	public Long getPersonIdxByUserIdx(Long userIdx);
+
 	}
