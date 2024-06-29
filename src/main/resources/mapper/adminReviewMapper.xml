@@ -133,12 +133,15 @@ where rl.posting_review_idx=#{postingReviewIdx} and p.user_idx=#{userIdx}
 </select>
 <insert id="addLikes">
   insert into review_likes (review_like_idx, person_idx, posting_review_idx)
-  values (review_like_seq.nextval, (select person_idx from person where user_idx = #{userIdx}), #{postingReviewIdx})
+  select review_like_seq.nextval, person_idx, #{postingReviewIdx}
+  from person
+  where user_idx = #{userIdx}
+  and person_idx is not null
 </insert>
 <delete id="deleteLikes">
   delete from review_likes
   where person_idx = (select person_idx from person where user_idx = #{userIdx})
-  and posting_review_idx = #{postingReviewIdx}
+  and posting_review_idx = #{postingReviewIdx} 
 </delete>
 <select id="getReviewLikeCount">
 select count(review_like_idx)

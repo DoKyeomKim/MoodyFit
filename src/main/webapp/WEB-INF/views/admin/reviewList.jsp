@@ -137,6 +137,10 @@
             height: auto;
             margin-top: 10px;
         }
+        
+        .review-like-area{
+        	margin-top : 10px;
+        }
       
     </style>
 </head>
@@ -250,43 +254,64 @@ function renderReviews(reviews) {
             reviewContent.className = 'review-content';
             reviewContent.textContent = review.content;
 
+            const reviewLikeArea = document.createElement('div');
+            reviewLikeArea.className = 'review-like-area';
+            reviewLikeArea.style.display = 'flex';
+            reviewLikeArea.style.justifyContent = 'center';
+            reviewLikeArea.style.alignItems = 'center';
+            
             const reviewLikeCount = document.createElement('div');
             reviewLikeCount.className = 'review-like-count';
             reviewLikeCount.textContent = review.reviewLikeCount;
+            reviewLikeCount.style.marginRight = '5px';
 
             const likeButton = document.createElement('button');
-            likeButton.className = 'like-button';
-            likeButton.textContent = '좋아요';
+            likeButton.className = 'btn btn-outline-secondary like-button';
+            likeButton.style.marginRight = '5px';
             likeButton.setAttribute('data-posting-review-idx', review.postingReviewIdx);
 
             const likeButtonSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            likeButtonSVG.setAttribute('width', '24');
-            likeButtonSVG.setAttribute('height', '24');
+            likeButtonSVG.setAttribute('width', '25px');
+            likeButtonSVG.setAttribute('height', '25px');
             likeButtonSVG.setAttribute('viewBox', '0 0 24 24');
             likeButtonSVG.setAttribute('fill', 'none');
             likeButtonSVG.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-            likeButtonSVG.innerHTML = `<path d="M12 21l-1-1.002M3 9.5a4 4 0 017.65-1.5l.35.5.35-.5A4 4 0 0121 9.5c0 5.5-9 10-9 10S3 15 3 9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+            likeButtonSVG.innerHTML = `
+                <path fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"/>
+            `;
+            
             likeButton.appendChild(likeButtonSVG);
+
+            reviewLikeArea.appendChild(reviewLikeCount);
+            reviewLikeArea.appendChild(likeButton);
             
             reviewItem.appendChild(reviewHeader);
             reviewItem.appendChild(reviewOptions);
             reviewItem.appendChild(reviewContent);
-            reviewItem.appendChild(reviewLikeCount);
-            reviewItem.appendChild(likeButton);
 
             if (review.filePath) {
                 console.log('Image file exists:', review.filePath);
+                const reviewImageArea = document.createElement('div');
+                reviewImageArea.className = 'review-image-area';
+                reviewImageArea.style.display = 'flex';
+                reviewImageArea.style.justifyContent = 'center';
+                reviewImageArea.style.alignItems = 'center';
+                
                 const reviewImage = document.createElement('img');
                 reviewImage.className = 'review-image';
                 reviewImage.src = review.filePath;
                 reviewImage.alt = review.filePath || 'Review Image';
+                reviewImage.style.width = 'auto';  // 원하는 너비로 설정
+                reviewImage.style.height = '300px'; // 원하는 높이로 설정
                 reviewImage.onerror = function() {
                     console.error('Failed to load image:', review.filePath);
                 };
-                reviewItem.appendChild(reviewImage);
+                reviewImageArea.appendChild(reviewImage);
+                reviewItem.appendChild(reviewImageArea);
             }
 
             reviewList.appendChild(reviewItem);
+            reviewItem.appendChild(reviewLikeArea);
         });
     } catch (error) {
         console.error('리뷰 리스트를 렌더링하는 도중 문제가 발생했습니다:', error);
@@ -294,8 +319,6 @@ function renderReviews(reviews) {
     }
     updateLikesSvgs();
 }
-
-
 
 function searchReviews() {
     try {
@@ -319,8 +342,8 @@ function searchReviews() {
 
         if (sortInput === 'rating') {
             filteredReviews = filteredReviews.sort((a, b) => b.rating - a.rating);
-        } else if (sortInput === 'recommend') {
-            filteredReviews = filteredReviews.sort((a, b) => b.recommend - a.recommend);
+        } else if (sortInput === 'review-like-count') {
+            filteredReviews = filteredReviews.sort((a, b) => b.reviewLikeCount  - a.reviewLikeCount);
         } else {
             filteredReviews = filteredReviews.sort((a, b) => new Date(b.createDate) - new Date(a.createDate));
         }
@@ -330,16 +353,24 @@ function searchReviews() {
         console.error('리뷰 검색 및 필터링 도중 문제가 발생했습니다:', error);
     }
 }
+
 function updateLikesSvgs() {
     const userIdx = document.getElementById('userIdx').value;
 
-    document.querySelectorAll('.like-button')
-    .forEach(button => {
-    	const postingReviewIdx = button.getAttribute('data-posting-review-idx');
+    if (userIdx === null || userIdx === '') {
+        // userIdx가 null이면 모든 버튼의 SVG fill을 'none'으로 설정
+        document.querySelectorAll('.like-button svg path').forEach(svgPath => {
+            svgPath.setAttribute('fill', 'none');
+        });
+        return; // 함수 종료
+    }
+
+    document.querySelectorAll('.like-button').forEach(button => {
+        const postingReviewIdx = button.getAttribute('data-posting-review-idx');
         
-    	console.log(postingReviewIdx)
+        console.log(postingReviewIdx);
         
-        fetch(`/api/checkLikes?postingReviewIdx=`+postingReviewIdx+`&userIdx=`+userIdx, {
+        fetch(`/api/checkLikes?postingReviewIdx=` + postingReviewIdx + `&userIdx=` + userIdx, {
             method: 'GET',
         })
         .then(response => response.json())
@@ -364,7 +395,7 @@ document.addEventListener('click', async function (e) {
         e.preventDefault();
         e.stopPropagation();
 
-    	const postingReviewIdx = button.getAttribute('data-posting-review-idx');
+        const postingReviewIdx = button.getAttribute('data-posting-review-idx');
         const isLiked = button.dataset.liked === 'true';
         const userIdx = document.getElementById('userIdx').value;
 
@@ -422,8 +453,8 @@ function updateLikeButtonAppearance(button, isLiked) {
         svg.setAttribute('fill', 'none'); // 좋아요 상태가 아닌 경우 비워둠
     }
 }
-
 </script>
+
 </body>
 <%@include file="/WEB-INF/layouts/footer.jsp"%>
 </html>
