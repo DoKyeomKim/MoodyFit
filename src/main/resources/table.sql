@@ -385,7 +385,26 @@ ADD CONSTRAINT fk_person_level_idx
 FOREIGN KEY (level_idx)
 REFERENCES person_level(level_idx);
 
+-----------------------------------------
+-- person_level 데이터.
+-- 더미가 아니라서 따로 관리
+INSERT INTO person_level (NAME, PURCHASE, BENEFIT)
+VALUES ('운영자', 999999999999999999999, 1);
 
+INSERT INTO person_level (NAME, PURCHASE, BENEFIT)
+VALUES ('브론즈', 0, 0);
+
+INSERT INTO person_level (NAME, PURCHASE, BENEFIT)
+VALUES ('실버', 70000, 0.01);
+
+INSERT INTO person_level (NAME, PURCHASE, BENEFIT)
+VALUES ('골드', 270000, 0.03);
+
+INSERT INTO person_level (NAME, PURCHASE, BENEFIT)
+VALUES ('플래티넘', 570000, 0.05);
+
+INSERT INTO person_level (NAME, PURCHASE, BENEFIT)
+VALUES ('다이아', 1070000, 0.1);
 -----------------------------------------
 
 
