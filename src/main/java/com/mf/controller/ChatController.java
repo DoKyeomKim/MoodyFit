@@ -12,7 +12,7 @@ import com.mf.websocketdemo.ChatMessage;
 public class ChatController {
 	
 
-	  @MessageMapping("/chat.sendMessage")
+	    @MessageMapping("/chat.sendMessage")
 	    @SendTo("/topic/public")
 	    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
 	        return chatMessage;
