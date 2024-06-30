@@ -369,6 +369,23 @@ CREATE TABLE REVIEW_LIKES (
     FOREIGN KEY (PERSON_IDX) REFERENCES PERSON(PERSON_IDX),
     FOREIGN KEY (POSTING_REVIEW_IDX) REFERENCES POSTING_REVIEW(POSTING_REVIEW_IDX)
 );
+
+CREATE TABLE person_level (
+    level_idx NUMBER PRIMARY KEY,              
+    name VARCHAR2(20) NOT NULL,					
+    purchase NUMBER NOT NULL,                  
+    benefit NUMBER						
+);
+
+ALTER TABLE PERSON
+ADD level_idx NUMBER;
+
+ALTER TABLE person
+ADD CONSTRAINT fk_person_level_idx
+FOREIGN KEY (level_idx)
+REFERENCES person_level(level_idx);
+
+
 -----------------------------------------
 
 

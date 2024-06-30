@@ -51,6 +51,8 @@ public interface UsersMapper {
 
 	String getEmail(String email);
 
+	String getLevel(Long userIdx);
+
 
 
 

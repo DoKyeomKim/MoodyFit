@@ -88,6 +88,11 @@ public class UsersService {
 		return usersMapper.getEmail(email);
 	}
 
+	// 로그인시 레벨 들고오기
+	public String getLevel(Long userIdx) {
+		return usersMapper.getLevel(userIdx);
+	}
+
 
 }
 
