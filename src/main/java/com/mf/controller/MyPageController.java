@@ -1,9 +1,16 @@
 package com.mf.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +23,9 @@ import com.mf.dto.PersonLevelDto;
 import com.mf.dto.PersonSpecDto;
 import com.mf.dto.StoreDto;
 import com.mf.dto.UsersDto;
+import com.mf.service.CustomUserDetails;
 import com.mf.service.MyPageService;
+import com.mf.service.UsersService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -25,7 +34,8 @@ public class MyPageController {
 	@Autowired
 	private MyPageService myPageService;
 
-
+	@Autowired
+	private UsersService usersService;
 
 //===========================================================================
 //================================ 개인 =====================================
@@ -50,6 +60,34 @@ public class MyPageController {
 //	        personLevel.put("formattedPurchase", formattedPurchase); // 형식화된 purchase를 맵에 추가
 //
 //	    }
+	    
+		// 등급 불러오기 위해서 시큐리티 인증 확인
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    if (authentication != null) {
+	        Object principal = authentication.getPrincipal();
+
+	        // 일반 회원 처리
+	        if (principal instanceof CustomUserDetails) {
+	            CustomUserDetails userDetails = (CustomUserDetails) principal;
+
+	            Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+	            for (GrantedAuthority authority : authorities) {
+	                if ("ROLE_PERSON".equals(authority.getAuthority())) {
+	                    String levelName = usersService.getLevel(userIdx);
+	                    mv.addObject("levelName", levelName);
+	                    break;
+	                }
+	            }
+	        } else if (principal instanceof OAuth2User) {
+	            OAuth2User oauth2User = (OAuth2User) principal;
+	            // 사용자의 역할(role)을 확인하여 "ROLE_PERSON"인 경우에만 처리
+	            if (oauth2User.getAuthorities().stream().anyMatch(auth -> "ROLE_PERSON".equals(auth.getAuthority()))) {
+	                // 사용자 등급 정보 가져오기
+	                String levelName = usersService	.getLevel(userIdx);
+	                mv.addObject("levelName", levelName);
+	            }
+	        }
+	    }
 	    
 		mv.addObject("person",person);
 		mv.addObject("personLevel",personLevels);
