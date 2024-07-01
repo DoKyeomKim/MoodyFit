@@ -80,6 +80,7 @@ public class PayController {
 			// 주문내역 DB 생성
 			boolean updateSuccess = cartService.insertOrder(basketData1);
 			if (updateSuccess) {
+				cartService.updatePersonLevel(personIdx);
 				
 				response.put("status", "success");
 			} else {

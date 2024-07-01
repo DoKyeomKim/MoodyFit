@@ -398,7 +398,7 @@ USING (
 ) t
 ON (p.person_idx = t.person_idx)
 WHEN MATCHED THEN
-    UPDATE SET p.level_idx = t.new_level_idx;
+    UPDATE SET p.level_idx = t.new_level_idx
 </update>
 
 </mapper>
