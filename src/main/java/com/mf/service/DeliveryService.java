@@ -24,7 +24,7 @@ public class DeliveryService {
 	@Autowired
 	private MyPageService myPageService;
 
-	public DeliveryDto getDeliveryById(Long deliveryIdx) {
+	public DeliveryDto getDeliveryById(Integer deliveryIdx) {
         return orderMapper.selectDelivery3(deliveryIdx); // DeliveryMapper를 통해 데이터베이스에서 데이터 조회
     }
 
