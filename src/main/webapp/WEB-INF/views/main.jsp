@@ -133,6 +133,11 @@ main {
 </div>
 
 <div class="container">
+    <h4 class="bold-text">Nearby Listings</h4>
+    <div class="light-text">가까운 매장의 상품입니다</div>
+
+</div>
+<div class="container">
     <h4 class="bold-text">WEEKLY BEST</h4>
     <div class="light-text">한주간 가장 인기있는 상품입니다</div>
 
