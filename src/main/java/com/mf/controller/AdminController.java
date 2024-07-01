@@ -735,7 +735,7 @@ public class AdminController {
  	   @GetMapping("/EPEditForm")
  	   public ModelAndView EPEditForm(@RequestParam("pickIdx") Long pickIdx,EditorPickDto editorPick) throws ParseException {
  		   ModelAndView mv = new ModelAndView();
- 		   // 에디터픽 스크랩 목록
+ 		   // 모달창 에디터픽 스크랩 목록
  		   List<Map<String,Object>> posting = editorPickService.getPickPosting();
 
  		   // 수정 페이지에 필요한 정보 들고오는 로직처리
@@ -755,6 +755,11 @@ public class AdminController {
  	   @PostMapping("/EPEdit")
  	   public ModelAndView EPEdit(@RequestParam("file") MultipartFile file,EditorPickDto editorPick) {
  		   ModelAndView mv = new ModelAndView();
+ 		   System.out.println(editorPick);
+ 		   System.out.println(editorPick);
+ 		   System.out.println(editorPick);
+ 		   System.out.println(editorPick);
+ 		   System.out.println(editorPick);
  		   
  		   editorPickService.editorPickUpdate(file,editorPick);
  		   

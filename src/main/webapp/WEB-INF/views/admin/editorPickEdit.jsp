@@ -157,7 +157,6 @@ table.editor-pick-table tr.posting-info:active {
             <p>공고번호: <span id="selected-posting-idx">${postingInfo.POSTING_IDX}</span></p>
             <p>공고명: <span id="selected-posting-title">${postingInfo.TITLE}</span></p>
             <p>가맹점명: <span id="selected-posting-store">${postingInfo.STORE_NAME}</span></p>
-            <!-- 버튼 타입을 button으로 변경 -->
             <button type="button" id="pick-posting" class="btn btn-primary pick-posting" data-bs-toggle="modal" data-bs-target="#pickModal">공고 선택</button>
         </div>
         <div class="preview-area" onclick="openFileInput()"> 
@@ -258,6 +257,17 @@ window.onload = function() {
             var modal = bootstrap.Modal.getInstance(document.getElementById('pickModal'));
             modal.hide();
         });
+    });
+    
+    // 변경되지 않을경우
+    document.getElementById('editForm').addEventListener('submit', function() {
+        var initialPostingIdx = document.getElementById('initialPostingIdx').value;
+        var currentPostingIdx = document.getElementById('postingIdx').value;
+
+        if (currentPostingIdx === '') {
+            // 선택된 postingIdx가 없을 경우 초기값 사용
+            document.getElementById('postingIdx').value = initialPostingIdx;
+        }
     });
 };
 </script>
