@@ -235,4 +235,21 @@ where user_idx = #{userIdx}
   where person_idx = (select person_idx from person where user_idx = #{userIdx})
   and posting_idx = #{postingIdx}
 </delete>
+
+<select id="checkEditorPick">
+select count(editor_scrap_idx)
+from editor_scrap
+where posting_idx=#{postingIdx} and user_idx=#{userIdx}
+</select>
+
+<insert id="addEditorPick">
+  insert into editor_scrap (editor_scrap_idx, user_idx, posting_idx)
+  values (editor_scrap_seq.nextval, #{userIdx}, #{postingIdx})
+</insert>
+
+<delete id="deleteEditorPick">
+  delete from editor_scrap
+  where user_idx = #{userIdx} and posting_idx = #{postingIdx}
+</delete>
+
 </mapper>

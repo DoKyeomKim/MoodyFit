@@ -66,6 +66,15 @@ public interface MainMapper {
 	String getSNickNameByUserIdx(Long userIdx);
 	//=========================================
 
+	// 에디터 픽 확인
+	int checkEditorPick(@Param("postingIdx") Long postingIdx, @Param("userIdx")  Long userIdx);
+
+	// 에디터픽 추가
+	void addEditorPick(@Param("postingIdx") Long postingIdx, @Param("userIdx")  Long userIdx);
+
+	// 에디터픽 삭제
+	void deleteEditorPick(@Param("postingIdx") Long postingIdx, @Param("userIdx")  Long userIdx);
+
 
 
 	

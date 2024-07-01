@@ -203,5 +203,19 @@ public class MainService {
 	}
 	//=========================================
 
+	// 에디터픽 확인
+	public boolean checkEditorPick(Long postingIdx, Long userIdx) {
+		return mainMapper.checkEditorPick(postingIdx,userIdx) > 0;
+	}
+
+	public void addEditorPick(Long postingIdx, Long userIdx) {
+		mainMapper.addEditorPick(postingIdx,userIdx);
+
+	}
+
+	public void deleteEditorPick(Long postingIdx, Long userIdx) {
+		mainMapper.deleteEditorPick(postingIdx,userIdx);
+	}
+
 	
 }

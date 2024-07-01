@@ -242,6 +242,71 @@ public class MainController {
 	}
 //======================================================================
 //======================================================================
+// 에디터 픽 비동기
+	
+    // 찜 목록 체크
+	@GetMapping("/checkEditorPick")
+	public ResponseEntity<Boolean> checkEditorPick(@RequestParam("postingIdx") Long postingIdx, @RequestParam("userIdx") Long userIdx){
+		boolean isWish = mainService.checkEditorPick(postingIdx,userIdx);
+		return ResponseEntity.ok(isWish);
+	}
+	
+	// 게시글 찜 하기
+	@PostMapping("/addEditorPick")
+	@ResponseBody
+	public Map<String, Object> addEditorPick(@RequestBody Map<String, Long> request){
+		Map<String,Object> response = new HashMap<>();
+		
+
+		// 맞는 DTO가 없기때문에 Map 사용했고
+		// Map에서 postingIdx userIdx 꺼내기.
+		Long postingIdx = request.get("postingIdx");
+		Long userIdx = request.get("userIdx");
+		
+		
+	try {
+		mainService.addEditorPick(postingIdx,userIdx);
+        response.put("success", true);
+		
+	}catch (Exception e) {
+        response.put("success", false);
+        response.put("message", e.getMessage());
+	}
+		
+		
+		return response;
+	}
+	
+	
+	// 게시글 찜 삭제
+	@DeleteMapping("/deleteEditorPick")
+	@ResponseBody
+	public Map<String, Object> deleteEditorPick(@RequestBody Map<String, Long> request){
+		Map<String, Object> response = new HashMap<>();
+		 
+		// 맞는 DTO가 없기때문에 Map 사용했고
+		// Map에서 postingIdx userIdx 꺼내기.
+		Long postingIdx = request.get("postingIdx");
+		Long userIdx = request.get("userIdx");
+			
+
+	        try {
+	        	mainService.deleteEditorPick(postingIdx,userIdx);
+	            response.put("success", true);
+	        } catch (Exception e) {
+	            response.put("success", false);
+	            response.put("message", e.getMessage());
+	        }
+	        return response;
+	}
+
+	
+	
+	
+	
+//======================================================================
+//======================================================================
+
 
     
     
