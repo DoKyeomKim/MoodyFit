@@ -173,7 +173,7 @@ button.header-search-btn i {
 </div>
 
 <div class="button-container">
-    <button onclick="window.location.href='qnaWrite'">문의 글쓰기</button>
+    <button onclick="window.location.href='qnaWriteform'">문의 글쓰기</button>
 </div>
 </main>
 </body>

@@ -14,6 +14,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+                 height: 100vh;
         }
 
         main {
@@ -73,36 +74,33 @@
             margin-top: 20px;
         }
 
-        input[type="submit"],
-        input[type="button"] {
-            background-color: #111;
-            color: #fff;
-            border: none;
+        input[type="submit"]{
+     
+             background-color: #f2eaeaa8;
+            color: #B68555;
+            border: 1px solid #B68555;
             padding: 10px 20px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
-            margin-left: 10px;
+            font-size: 16px;
         }
 
-        input[type="button"] {
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
+        
         .link-button {
             text-decoration: none;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: #EBDACB;
+            color: #B68555;
             padding: 10px 20px;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 16px;
             display: inline-block;
-            border: 1px solid #ddd;
+            border: 1px solid #B68555;
+            text-align: center;
         }
 
         .link-button:hover {
-            background-color: #e4e4e4;
+             input[type="submit"]:hover {
+            background-color: #D1C0B0;
         }
 
     </style>
@@ -114,8 +112,8 @@
     <form action="/qnaWrite" method="POST">
         <table class="board_row" style="margin-top:20px; padding-bottom:15px;">
             <colgroup>
-                <col style="width:10%;">
-                <col style="width:90%;">
+                <col style="width:20%;">
+                <col style="width:80%;">
             </colgroup>
             <tbody>
                 <tr class="bbaf">                        

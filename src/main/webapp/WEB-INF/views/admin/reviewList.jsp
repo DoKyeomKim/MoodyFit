@@ -139,13 +139,13 @@
         }
         
         .review-like-area{
-        	margin-top : 10px;
+           margin-top : 10px;
         }
     </style>
 </head>
     <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
 <body>
-	<input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
+   <input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
     <div class="container">
         <h1 class="head" style="font-size: 18px; margin-top: 30px;">PHOTO REVIEW | 포토 리뷰</h1>
         <div class="header"></div>
