@@ -187,4 +187,11 @@ join person p on w.person_idx=p.person_idx
 where p.user_idx=#{userIdx}
 </select>
 
+<select id="getPersonLevel">
+select name,purchase,benefit
+from person_level
+where level_idx != 6
+order by level_idx asc
+</select>
+
 </mapper>

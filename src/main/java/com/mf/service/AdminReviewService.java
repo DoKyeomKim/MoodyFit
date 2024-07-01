@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mf.dto.AdminReviewDto;
 import com.mf.dto.PostingQuestionDto;
+import com.mf.dto.ReviewLikesDto;
 import com.mf.mapper.AdminReviewMapper;
 
 @Service
@@ -38,8 +39,28 @@ public class AdminReviewService {
 		
 		return adminReviewMapper.getPersonIdxByUserIdx(userIdx);
 	}
-
+	
+	// 현재 좋아요 상태 확인
+	public boolean checkLikes(Long postingReviewIdx, Long userIdx) {
+		return adminReviewMapper.checkLikes(postingReviewIdx,userIdx) > 0;
 	}
+	
+	// 좋아요 하기
+	public void addLikes(Long userIdx, Long postingReviewIdx) {
+		adminReviewMapper.addLikes(userIdx,postingReviewIdx);
+	}
+	
+	// 좋아요 삭제
+	public void deleteLikes(Long userIdx, Long postingReviewIdx) {
+		adminReviewMapper.deleteLikes(userIdx,postingReviewIdx);
+	}
+	
+	// 좋아요 수 확인(업데이트용)
+	public int getReviewLikeCount(Long postingReviewIdx) {
+        return adminReviewMapper.getReviewLikeCount(postingReviewIdx);
+	}
+
+}
 
 		
 

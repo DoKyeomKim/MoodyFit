@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.UsersMapper">
+<select id="getLevel">
+	select pl.name 
+	from person p
+	join person_level pl on p.level_idx=pl.level_idx
+	where p.user_idx=#{userIdx}
+</select>
 
 <select id="findById" parameterType="string" resultType="com.mf.dto.UsersDto">
 	SELECT * FROM USERS WHERE ID = #{id} and state=1
@@ -25,7 +31,8 @@ NAME,
 NICK_NAME,
 EMAIL,
 SOCIAL,
-SOCIAL_ROOT
+SOCIAL_ROOT,
+LEVEL_IDX
 )
 VALUES(
 USER_SEQ.CURRVAL,
@@ -34,7 +41,8 @@ PERSON_SEQ.NEXTVAL,
 #{nickName},
 #{email},
 #{social},
-#{socialRoot}
+#{socialRoot},
+'1'
 )
 </insert>
 
@@ -74,7 +82,8 @@ PHONE,
 POST_CODE,
 ADDRESS,
 DETAIL_ADDRESS,
-SOCIAL
+SOCIAL,
+LEVEL_IDX
 )
 VALUES(
 USER_SEQ.CURRVAL,
@@ -86,7 +95,8 @@ PERSON_SEQ.NEXTVAL,
 #{postCode},
 #{address},
 #{detailAddress},
-'NO'
+'NO',
+1
 )
 </insert>
 <insert id="OAuthSpecJoin">

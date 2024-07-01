@@ -22,4 +22,5 @@ public class PersonDto {
 	private String socialRoot;
 	private int state;
 	private String id;
+	private Long levelIdx;
 }

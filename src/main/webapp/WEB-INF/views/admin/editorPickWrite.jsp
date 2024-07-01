@@ -167,7 +167,7 @@ table.editor-pick-table tr.posting-info:active {
             <input type="date" name="startDate" required> ~ <input type="date" name="endDate">
         </div>
         <div class="button-group">
-            <button type="submit" class="btn btn-primary">수정하기</button>
+            <button type="submit" class="btn btn-primary">작성하기</button>
             <a href="/adminEditorPick" class="btn btn-secondary">목록으로</a>
         </div>
     </div>

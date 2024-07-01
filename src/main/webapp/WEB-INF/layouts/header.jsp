@@ -139,6 +139,10 @@ main {
     display: flex;
     align-items: center;
 }
+#person-level{
+	height :50px;
+	width : auto;
+}
 
 </style>
 </head>
@@ -193,8 +197,9 @@ main {
                         <security:authorize access="isAuthenticated()">
                             <c:choose>
                                 <c:when test="${sessionScope.role == 'ROLE_PERSON'}">
+                                	
                                     <li class="nav-item1">
-                                        <a href="/myPage" class="nav-link">마이페이지</a>
+                                        <a href="/myPage" class="nav-link"><img src="/images/${levelName}.png" id="person-level"> 마이페이지</a>
                                     </li>
                                 </c:when>
                                 <c:when test="${sessionScope.role == 'ROLE_STORE'}">

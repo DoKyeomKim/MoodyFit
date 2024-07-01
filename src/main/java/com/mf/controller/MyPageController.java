@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mf.dto.Paging;
 import com.mf.dto.PersonDto;
+import com.mf.dto.PersonLevelDto;
 import com.mf.dto.PersonSpecDto;
 import com.mf.dto.StoreDto;
 import com.mf.dto.UsersDto;
@@ -41,9 +42,17 @@ public class MyPageController {
 		Map<String, Object> result = myPageService.getPersonMyPage(userIdx);
 		// 서비스에서 넘어온 person안에 들어가 있는 person_idx와 nickname 꺼내기
 		PersonDto person = (PersonDto) result.get("person");
-		
-		
+		// 레벨 설명을 위한 DB에서 값 불러오기
+	    List<PersonLevelDto> personLevels = myPageService.getPersonLevel();
+//	    for(PersonLevelDto personLevel:personLevels) {
+//	        String purchase = String.valueOf(personLevel.getPurchase());
+//	        String formattedPurchase = String.format("%,d", purchase); // purchase 값을 형식화하여 문자열로 변환
+//	        personLevel.put("formattedPurchase", formattedPurchase); // 형식화된 purchase를 맵에 추가
+//
+//	    }
+	    
 		mv.addObject("person",person);
+		mv.addObject("personLevel",personLevels);
 		mv.addObject("orderPrePare", result.get("orderPrePare"));
 		mv.addObject("orderIng", result.get("orderIng"));
 		mv.addObject("orderDone", result.get("orderDone"));

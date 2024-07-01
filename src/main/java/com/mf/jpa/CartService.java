@@ -158,6 +158,11 @@ public class CartService {
 	            for (Integer cartIdx : cartIdxArray) {
 	                orderCartRepository.insertOrderCart(orderIdx, cartIdx);
 	            }
+	            
+	            // 회원 등급 설정
+	            // 학원가면 확인해봐야함 어캐 변하는지 모름
+	            // DB에서는 정상적으로 작동 됨
+	            orderMapper.changePersonLevel(totalPrice,personIdx);
 
 	            return true;
 	        } catch (Exception e) {

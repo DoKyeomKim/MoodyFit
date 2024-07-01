@@ -53,17 +53,44 @@ html, body {
     margin: 5px 10px;
 }
 
-/* 새로운 스타일 추가 */
 .flex-container {
     display: flex;
-    flex-direction: row; /* 자식 요소들을 수평으로 정렬하기 위해 row로 설정 */
-    justify-content: center; /* 수평 가운데 정렬 */
-    align-items: center; /* 수직 가운데 정렬 */
-    width: 100%; /* 부모 요소를 꽉 채우도록 설정 */
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 .flex-item {
     width: 100%;
     margin-bottom: 20px;
+}
+
+.remember-find-container{
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 70%;
+    margin-bottom:15px;
+}
+.find-id{
+	text-decoration-line: none;
+	color: black;
+    font-size: 0.75rem;
+}
+.find-id:hover{
+	text-decoration-line: underline;
+	color: blue;
+}
+
+.join-container{
+	font-weight : bold;
+	text-decoration-line: none;
+	color : black;
+}
+
+.join-container:hover{
+	text-decoration-line: underline;
+	color: blue;
 }
 </style>
 </head>
@@ -107,13 +134,18 @@ html, body {
                             <button type="submit" id="btnLogin" class="btn btn-primary" style="height:90px;">로그인</button>
                         </div>
                     </div>
+                    <div class="remember-find-container">
+						<div class="form-group">
+						    <input type="checkbox" id="remember" name="remember_id">
+						    <label for="remember">아이디 기억하기</label>
+						</div>
+		                <small class="form-group" >
+		                    <a href="#" data-toggle="modal" data-target="#findIdModal" class="find-id">아이디 찾기</a>
+		                </small>
+		            </div>
                 </form>
-                <small class="center-align" style="margin-left:45px;">
-                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#findIdModal" style="text-decoration-line: none;">아이디 찾기</a>
-                </small>
-                
-                <div class="center-align" style="margin-left:45px;">
-                    <a href="/totalJoin" style="text-decoration-line: none;">회원 가입 하시겠습니까?</a>
+                <div class="center-align" style="margin-left:12%;">
+                    <a href="/totalJoin" class="join-container">회원 가입 하시겠습니까?</a>
                 </div>
             </div>
         </div>
@@ -127,7 +159,45 @@ html, body {
     </div>
 </div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var savedId = getCookie("rememberedId");
+        if (savedId) {
+            document.getElementById("username").value = savedId;
+            document.getElementById("remember").checked = true;
+        }
 
+        document.getElementById("loginForm").addEventListener("submit", function() {
+            if (document.getElementById("remember").checked) {
+                setCookie("rememberedId", document.getElementById("username").value, 30);
+            } else {
+                deleteCookie("rememberedId");
+            }
+        });
+    });
+
+    function setCookie(name, value, days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    function deleteCookie(name) {
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
+    }
+</script>
 
 </body>
 </html>

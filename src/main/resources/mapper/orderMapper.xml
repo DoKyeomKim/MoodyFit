@@ -339,4 +339,29 @@ update delivery set is_default = 2 where delivery_idx = #{ deliveryIdx }
 
 </update>
 
+<update id="changePersonLevel">
+MERGE INTO person p
+USING (
+    SELECT o.person_idx,
+           (SELECT MAX(pl.level_idx)
+            FROM person_level pl
+            WHERE o.total_sum BETWEEN pl.purchase AND (
+                SELECT MIN(p2.purchase) - 1
+                FROM person_level p2
+                WHERE p2.purchase > pl.purchase
+            )
+           ) AS new_level_idx
+    FROM (
+        SELECT person_idx, SUM(total_price) AS total_sum
+        FROM orders
+        WHERE person_idx = #{personIdx}
+        GROUP BY person_idx
+    ) o
+) t
+ON (p.person_idx = t.person_idx)
+WHEN MATCHED THEN
+    UPDATE SET p.level_idx = t.new_level_idx;
+</update>
+
+
 </mapper>

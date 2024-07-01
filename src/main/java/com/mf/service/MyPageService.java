@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.mf.dto.Paging;
 import com.mf.dto.PersonDto;
+import com.mf.dto.PersonLevelDto;
 import com.mf.dto.PersonSpecDto;
 import com.mf.dto.StoreDto;
 import com.mf.dto.UsersDto;
@@ -38,6 +39,8 @@ public class MyPageService {
 		// 배송 완료
 		OrderDto orderDone = myPageMapper.getOrderDone(userIdx);
 		
+		// 모달에 띄울 레벨 설명
+		
 		Map<String,Object> result = new HashMap<>();
 		
 		result.put("person", person);
@@ -46,6 +49,12 @@ public class MyPageService {
 		result.put("orderDone", orderDone);
 		return result;
 	}
+	
+	public List<PersonLevelDto> getPersonLevel() {
+		List<PersonLevelDto> personLevel = myPageMapper.getPersonLevel();
+		return personLevel;
+	}
+
 	
 	// 개인 정보 수정을 위한 전체 정보 들고 오기
 	public Map<String, Object> getPersonInfo(Long userIdx) {
@@ -173,6 +182,7 @@ public class MyPageService {
 		// 개인회원은 장바구니 삭제 정도?
 		// 주문(orders) 관련해서는 유지해야할듯
 	}
+
 
 	
 

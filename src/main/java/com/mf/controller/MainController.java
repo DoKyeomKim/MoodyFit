@@ -60,6 +60,10 @@ public class MainController {
 		            String nickName = mainService.getSNickNameByUserIdx(userIdx);
 		            mv.addObject("nickName", nickName);
 		            break; // 이미 닉네임을 설정했으면 루프 종료
+		        } else if ("ROLE_ADMIN".equals(authority.getAuthority())) {
+		        	String nickName = "운영자";
+		        	mv.addObject("nickName",nickName);
+		        	break;
 		        }
 		    }
 		}

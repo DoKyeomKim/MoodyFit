@@ -73,35 +73,80 @@
     )
 </insert>
 
-        <select id="findAll" resultType="com.mf.dto.AdminReviewDto">
-        SELECT 
-            ar.posting_review_idx AS postingReviewIdx,
-            ar.title,
-            ar.content,
-            ar.rating,
-            ar.create_date AS createDate,
-            ar.height,
-            ar.weight,
-            ar.sizes,
-            ar.foot,
-            ar.color_satis AS colorSatis,
-            ar.sizes_satis AS sizesSatis,
-            ar.posting_idx AS postingIdx,
-            ar.person_idx AS personIdx,
-            prf.file_path AS filePath,
-            prf.original_name AS originalName,
-            prf.file_size AS fileSize,
-            prf.posting_review_file_idx AS postingReviewFileIdx
-        FROM 
-            posting_review ar
-        LEFT JOIN 
-            posting_review_file prf ON ar.posting_review_idx = prf.posting_review_idx
-    </select>
-	
-	<select id="getPersonIdxByUserIdx">
-    select person_idx
-    from person
-    where user_idx=#{userIdx}
-    </select>
+<select id="findAll" resultType="com.mf.dto.AdminReviewDto">
+	SELECT 
+	    ar.posting_review_idx AS postingReviewIdx,
+	    ar.title,
+	    ar.content,
+	    ar.rating,
+	    ar.create_date AS createDate,
+	    ar.height,
+	    ar.weight,
+	    ar.sizes,
+	    ar.foot,
+	    ar.color_satis AS colorSatis,
+	    ar.sizes_satis AS sizesSatis,
+	    ar.posting_idx AS postingIdx,
+	    ar.person_idx AS personIdx,
+	    prf.file_path AS filePath,
+	    prf.original_name AS originalName,
+	    prf.file_size AS fileSize,
+	    prf.posting_review_file_idx AS postingReviewFileIdx,
+	    COUNT(rl.review_like_idx) AS reviewLikeCount
+	FROM 
+	    posting_review ar
+	LEFT JOIN 
+	    posting_review_file prf ON ar.posting_review_idx = prf.posting_review_idx
+	LEFT JOIN 
+	    review_likes rl ON rl.posting_review_idx = ar.posting_review_idx
+	GROUP BY 
+	    ar.posting_review_idx,
+	    ar.title,
+	    ar.content,
+	    ar.rating,
+	    ar.create_date,
+	    ar.height,
+	    ar.weight,
+	    ar.sizes,
+	    ar.foot,
+	    ar.color_satis,
+	    ar.sizes_satis,
+	    ar.posting_idx,
+	    ar.person_idx,
+	    prf.file_path,
+	    prf.original_name,
+	    prf.file_size,
+	    prf.posting_review_file_idx
+</select>
+
+<select id="getPersonIdxByUserIdx">
+   select person_idx
+   from person
+   where user_idx=#{userIdx}
+</select>
+
+<select id="checkLikes">
+select count(REVIEW_LIKE_IDX)
+from review_likes rl
+join person p on p.person_idx = rl.person_idx
+where rl.posting_review_idx=#{postingReviewIdx} and p.user_idx=#{userIdx}
+</select>
+<insert id="addLikes">
+  insert into review_likes (review_like_idx, person_idx, posting_review_idx)
+  select review_like_seq.nextval, person_idx, #{postingReviewIdx}
+  from person
+  where user_idx = #{userIdx}
+  and person_idx is not null
+</insert>
+<delete id="deleteLikes">
+  delete from review_likes
+  where person_idx = (select person_idx from person where user_idx = #{userIdx})
+  and posting_review_idx = #{postingReviewIdx} 
+</delete>
+<select id="getReviewLikeCount">
+select count(review_like_idx)
+from review_likes
+where posting_review_idx=#{postingReviewIdx}
+</select>
  
-    </mapper>
+</mapper>
