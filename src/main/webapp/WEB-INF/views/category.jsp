@@ -64,7 +64,7 @@
 								<div class="card">
 									<img src="${allPosting.FILE_PATH}" class="img-fluid">
 									<div class="card-body">
-										<span>${allPosting.POSTING_IDX}</span><br> 
+										<input type='hidden' value="${allPosting.POSTING_IDX}"> 
 										<span>제조사: ${allPosting.MANUFACTURE_NAME}</span><br> 
 										<span>공고 제목	: ${allPosting.TITLE}</span><br> 
 										<span>가격 :${allPosting.PRICE}</span>
@@ -110,10 +110,10 @@
 								<div class="card">
 									<img src="${selectedPosting.FILE_PATH}" class="img-fluid">
 									<div class="card-body">
-										<span>${selectedPosting.POSTING_IDX}</span><br> <span>제조사
-											: ${selectedPosting.MANUFACTURE_NAME}</span><br> <span>공고
-											제목 : ${selectedPosting.TITLE}</span><br> <span>가격 :
-											${selectedPosting.PRICE}</span>
+										<input type='hidden' value="${selectedPosting.POSTING_IDX}"> 
+										<span>제조사 : ${selectedPosting.MANUFACTURE_NAME}</span><br> 
+										<span>공고제목 : ${selectedPosting.TITLE}</span><br> 
+										<span>가격 : ${selectedPosting.PRICE}</span>
 										<security:authorize access="hasRole('ROLE_PERSON')">
 											<button class="btn btn-outline-secondary wishBtn" style="margin-right: 5px;" data-user-idx="${sessionScope.userIdx}" data-posting-idx="${selectedPosting.POSTING_IDX}">
 											    <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
