@@ -64,6 +64,6 @@ public interface OrderMapper {
 	void deleteCart2(Integer cartIdx);
 	
 	// 가격으로 person_level 변경
-	void changePersonLevel(int totalPrice, Long personIdx);
+	void changePersonLevel(Long personIdx);
 
 }
