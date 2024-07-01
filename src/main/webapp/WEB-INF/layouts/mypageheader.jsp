@@ -24,9 +24,10 @@ body {
     transition: background 0.3s ease, box-shadow 0.3s ease; /* 애니메이션 추가 */
 }
 .fixed-header.scrolled {
-    background: #000; /* 스크롤 시 헤더 배경을 검은색으로 변경 */
+    background: #FFFFFF; /* 스크롤 시 헤더 배경을 검은색으로 변경 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 스크롤 시 그림자 강화 */
-    color: white; /* 스크롤 시 글자 색을 흰색으로 변경 */
+    color: #A19993; /* 스크롤 시 글자 색을 흰색으로 변경 */
+    
 }
 
 .header-container {
@@ -123,7 +124,7 @@ main {
 .fixed-header.scrolled .nav-link,
 .fixed-header.scrolled .header-search-txt,
 .fixed-header.scrolled .header-search-btn i {
-    color: white !important; /* 스크롤 시 글자 색을 흰색으로 변경 */
+    color: #867B73 !important; /* 스크롤 시 글자 색을 흰색으로 변경 */
 }
 
 .fixed-header.scrolled .header-search-btn {
@@ -230,18 +231,6 @@ main {
         if (!searchInput) {
             alert('검색어를 입력해주세요!');
             event.preventDefault(); // 폼 제출을 막음
-        }
-    });
-
-    window.addEventListener('scroll', function() {
-        var header = document.querySelector('.fixed-header');
-        var logo = document.getElementById('logo');
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-            logo.src = '/images/white_logo.png'; // Change the logo to the white version
-        } else {
-            header.classList.remove('scrolled');
-            logo.src = '/images/logo.png'; // Revert back to the original logo
         }
     });
 
