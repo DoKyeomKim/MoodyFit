@@ -134,6 +134,9 @@ public class TokenController {
 	                	 for (Integer cartIdx : cartIdxs) {
 	                         orderMapper.updateCartStateToComplete(cartIdx);
 	                     }
+	                	 
+	                	// 회원등급 수정
+	     				cartService.updatePersonLevel(personIdx);
 	                    return ResponseEntity.ok("Success");
 	                } else {
 	                	System.out.println("결제 내역과 주문내역의 금액이 다르다1");
