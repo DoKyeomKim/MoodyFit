@@ -20,6 +20,9 @@
     main {
         width: 80%;
         margin: 70px auto;
+        
+        
+        
     }
 
     h3 {
@@ -38,7 +41,6 @@
         border-top: 1px solid #ddd; /* 상단 구분선 추가 */
         border-bottom: 1px solid #ddd; /* 하단 구분선 추가 */
         border-radius: 8px;
-        font-size: 10px; /* 폰트 사이즈를 12px로 설정 */
     }
 
     .order-header {
@@ -75,7 +77,7 @@
 
     .order-details div {
         margin-bottom: 5px;
-        font-size: large;
+        font-size: 15px;
     }
 
     .order-status {
@@ -83,10 +85,11 @@
         flex-direction: column;
         justify-content: center;
         text-align: right;
+        margin-right:50px;
     }
 
     .order-status div {
-        font-size: large;
+        font-size: 15px;
         margin-bottom: 5px;
     }
 
@@ -102,6 +105,11 @@
         margin-bottom: 10px;
         width: 150px;
         align-self: center;
+         background-color: #E5AAA3;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px !important;
+    border: none;
     }
 
     .price {
@@ -120,15 +128,16 @@
     .text-blue {
         color: blue;
     }
+  
 </style>
 </head>
-<body>
+<body style="background-color:#F6F4EE !important;">
 
-    <%@include file="/WEB-INF/layouts/header.jsp"%>
+    <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
     <%@include file="/WEB-INF/layouts/aside.jsp"%>
 
     <main>
-        <h3>주문내역조회</h3>
+        <h3 style="font-weight:bold;">주문내역조회</h3>
    
 
         <c:forEach var="item" items="${orderList}">
@@ -137,18 +146,17 @@
                     <div>주문날짜: ${fn:substring(item.orderDate, 0, 10)}</div>
                     <div>주문번호: ${item.merchantUid}</div>
                 </div>
-                <div class="order-item">
+                <div class="order-item" >
                     <img src="${item.filePath}" alt="상품 이미지">
                     <div class="order-details">
                         <div>${item.title}</div>
                         <div>${item.name}</div>
-                        <div>KRW <span class="price">${item.price}</span> </div>
-                        <div>상품 수량: ${item.quantity} 개</div>
+                        <div>QTY: ${item.quantity} 개</div>
                     </div>
                     <div class="order-status">
-                        <div>내일 도착 보장</div>
+         
                         <div>${item.state}</div>
-                        <div>KRW <span class="price">${item.price * item.quantity}</span> 원</div>
+                        <div>KRW <span class="price">${item.price * item.quantity}</span> </div>
                     </div>
                     <div class="order-actions">
                         <button type="button" class="btn btn-secondary">배송조회</button>
@@ -162,8 +170,8 @@
         <div style="margin: 0 auto; display: flex; justify-content: center;">
             <%@include file="/WEB-INF/layouts/orderPaging.jsp"%>
         </div>
-        <%@include file="/WEB-INF/layouts/footer.jsp"%>
     </main>
+        <%@include file="/WEB-INF/layouts/footer.jsp"%>
 
     <script>
     document.addEventListener("DOMContentLoaded", function() {

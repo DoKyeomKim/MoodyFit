@@ -69,8 +69,7 @@ margin-left:10px;
             </div>
             <div class="col-3 profile-stats text-right">
                 <ul>
-                    <li>쿠폰 <span>${user.couponCount}</span>개</li>
-                    <li>적립금 <span>${user.points}</span>원</li>
+                    <li>총결제금액 <span>${user.points}</span>원</li>
                     <li>장바구니 <span>${user.cartItems}</span>개</li>
                 </ul>
             </div>
