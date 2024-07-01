@@ -66,6 +66,31 @@
 		WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
 		ORDER BY pick_idx DESC
 	</select>
+	<select id="getEditorPickScrap">
+		select
+		posting_idx, title, store_name
+		from
+			(
+			select
+			posting_idx, title, store_name,
+			ROWNUM AS rnum
+				from (
+					select p.posting_idx, p.title, s.store_name
+					from editor_scrap es
+					join posting p on es.posting_idx = p.posting_idx
+					join store   s on p.store_idx = s.store_idx
+					where p.state='1'
+					order by p.posting_idx desc
+				) inner_sub
+			)
+			WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
+			ORDER BY posting_idx DESC
+	</select>
+	<select id="getEPScrapCount">
+		select count(editor_scrap_idx) from editor_scrap es
+		JOIN posting p ON p.posting_idx = es.posting_idx
+		where p.state = '1'
+	</select>
 	
 	<select id="getEditorPickCount">
 	select count(ep.pick_idx) from editor_pick ep
