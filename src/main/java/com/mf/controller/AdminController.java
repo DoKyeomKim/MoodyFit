@@ -659,10 +659,6 @@ public class AdminController {
 	 //==============================에디터 픽==================================
 	 //=========================================================================
 	 //=========================================================================
-
-
-
-	 	   
 	 	   // 에디터 픽 이동
 	 	   @GetMapping("/adminEditorPick")
 	 	   public ModelAndView editorPick(@RequestParam(value = "page", defaultValue = "1") int page) {
@@ -692,10 +688,9 @@ public class AdminController {
 	 	   @GetMapping("/EPWriteForm")
 	 	   public ModelAndView EPWriteForm() {
 	 		   ModelAndView mv = new ModelAndView();
-	 		   // 임시용 전부 들고 오는 로직
+	 		   
+	 		   //에디터가 스크랩한 공고 들고오기
 	 		   List<Map<String,Object>> posting = editorPickService.getPickPosting();
-	 		   
-	 		   
 	 		   
 	 		   mv.addObject("posting", posting);
 	 		   mv.setViewName("admin/editorPickWrite");
@@ -717,10 +712,13 @@ public class AdminController {
 	 	   @GetMapping("/EPEditForm")
 	 	   public ModelAndView EPEditForm(@RequestParam("pickIdx") Long pickIdx,EditorPickDto editorPick) throws ParseException {
 	 		   ModelAndView mv = new ModelAndView();
-	 		   
+	 		   // 에디터픽 스크랩 목록
+	 		   List<Map<String,Object>> posting = editorPickService.getPickPosting();
+
 	 		   // 수정 페이지에 필요한 정보 들고오는 로직처리
 	 		   Map<String,Object> editPick = editorPickService.getEditPickByPickIdx(pickIdx,editorPick);
-	 		    
+
+	 		   mv.addObject("posting", posting);
 	 		   mv.addObject("startDate",editPick.get("formattedStartDate"));
 	 		   mv.addObject("endDate",editPick.get("formattedEndDate"));
 	 		   mv.addObject("editorPick",editPick.get("editorPick"));

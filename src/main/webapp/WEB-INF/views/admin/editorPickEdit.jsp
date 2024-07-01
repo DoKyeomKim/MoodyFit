@@ -215,6 +215,7 @@ table.editor-pick-table tr.posting-info:active {
 function openFileInput() {
     document.getElementById('uploadInput').click();
 }
+
 function previewImage() {
     const fileInput = document.getElementById('uploadInput');
     const imagePreview = document.getElementById('imagePreview');
@@ -233,46 +234,30 @@ function previewImage() {
 }
 
 window.onload = function() {
-    // "공고 선택" 버튼 클릭 시 모달 열기
-    document.getElementById('pick-posting').addEventListener('click', function() {
-        var modal = new bootstrap.Modal(document.getElementById('pickModal'));
-        modal.show();
-    });
+    var today = new Date();
+    var year = today.getFullYear();
+    var month = ('0' + (today.getMonth() + 1)).slice(-2);
+    var day = ('0' + today.getDate()).slice(-2);
+    var formattedDate = year + '-' + month + '-' + day;
+    
+    document.querySelector('input[name="startDate"]').value = formattedDate;
 
-    // 테이블에서 공고 선택 시 처리
+    // tr 클릭 이벤트 추가
     document.querySelectorAll('.posting-info').forEach(function(row) {
         row.addEventListener('click', function() {
             var postingIdx = this.cells[0].innerText;
             var postingTitle = this.cells[1].innerText;
             var postingStore = this.cells[2].innerText;
 
-            // 선택된 공고 정보 업데이트
             document.getElementById('postingIdx').value = postingIdx;
             document.getElementById('selected-posting-idx').innerText = postingIdx;
             document.getElementById('selected-posting-title').innerText = postingTitle;
             document.getElementById('selected-posting-store').innerText = postingStore;
-            document.getElementById('initialPostingIdx').value = postingIdx; // 초기값 업데이트
 
             // 모달 닫기
             var modal = bootstrap.Modal.getInstance(document.getElementById('pickModal'));
             modal.hide();
-
-            // 배경 회색 복구
-            document.body.classList.remove('modal-open');
-            var backdrop = document.getElementsByClassName('modal-backdrop')[0];
-            backdrop.remove(); // 또는 backdrop.style.display = 'none';으로 설정
         });
-    });
-
-    // 폼 제출 시 초기 postingIdx 값이 변경되지 않았을 경우 처리
-    document.getElementById('editForm').addEventListener('submit', function() {
-        var initialPostingIdx = document.getElementById('initialPostingIdx').value;
-        var currentPostingIdx = document.getElementById('postingIdx').value;
-
-        if (currentPostingIdx === '') {
-            // 선택된 postingIdx가 없을 경우 초기값 사용
-            document.getElementById('postingIdx').value = initialPostingIdx;
-        }
     });
 };
 </script>
