@@ -3,6 +3,7 @@ package com.mf.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.mf.dto.AdminReviewDto;
 import com.mf.dto.ReviewLikesDto;
@@ -23,13 +24,11 @@ public interface AdminReviewMapper {
 
 	public Long getPersonIdxByUserIdx(Long userIdx);
 
-	public int checkLikes(Long postingReviewIdx, Long userIdx);
+	public int checkLikes(@Param(value = "userIdx")Long postingReviewIdx, @Param(value = "postingReviewIdx") Long userIdx);
 
-	public void deleteLikes(ReviewLikesDto reviewLikesDto);
+	public void addLikes(@Param(value = "userIdx") Long userIdx, @Param(value = "postingReviewIdx") Long postingReviewIdx);
 
-	public void addLikes(Long userIdx, Long postingReviewIdx);
-
-	public void deleteLikes(Long userIdx, Long postingReviewIdx);
+	public void deleteLikes(@Param(value = "userIdx") Long userIdx, @Param(value = "postingReviewIdx") Long postingReviewIdx);
 
 	public int getReviewLikeCount(Long postingReviewIdx);
 

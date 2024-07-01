@@ -44,6 +44,11 @@ public class ReviewController {
 			Long userIdx = request.get("userIdx");
 			Long postingReviewIdx = request.get("postingReviewIdx");
 			
+			System.out.println(postingReviewIdx);
+			System.out.println(postingReviewIdx);
+			System.out.println(postingReviewIdx);
+			System.out.println(postingReviewIdx);
+			System.out.println(postingReviewIdx);
 			
 		try {
 			adminReviewService.addLikes(userIdx,postingReviewIdx);

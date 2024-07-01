@@ -368,7 +368,6 @@ function updateLikesSvgs() {
     document.querySelectorAll('.like-button').forEach(button => {
         const postingReviewIdx = button.getAttribute('data-posting-review-idx');
         
-        console.log(postingReviewIdx);
         
         fetch(`/api/checkLikes?postingReviewIdx=` + postingReviewIdx + `&userIdx=` + userIdx, {
             method: 'GET',
