@@ -167,12 +167,15 @@ FROM orders
     JOIN posting ON posting.posting_idx = posting_product.posting_idx
 WHERE users.user_idx = #{ userIdx }
 AND orders.state = '결제중'
+AND orders.order_idx = (
+SELECT MAX(orders.order_idx)
+    FROM orders
+    WHERE state = '결제중')
 AND cart.state = '결제중'
 AND cart.cart_idx = (
     SELECT MIN(cart_idx)
     FROM cart
     WHERE state = '결제중')
-
 </select>
 
 <select id="selectOrder2">

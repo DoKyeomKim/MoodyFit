@@ -20,7 +20,7 @@ main {
     <%@include file="/WEB-INF/layouts/aside.jsp"%>
 
     <main style="margin-top:30px; width:90%;">
-        <h2 style="text-align:left; margin-top:30px; margin-left:100px;">결제진행중~</h2>
+        <h2 style="text-align:left; margin-top:30px; margin-left:100px;">결제진행중</h2>
         <hr>
         
         <div style="text-align: right;">
@@ -79,24 +79,29 @@ main {
                         buyer_postcode: myPostCode
                     },
                     (response) => {
-                        fetch(`/api/postToken?impUid=${response.imp_uid}`, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                impUid: response.imp_uid
-                            }),
-                        })
-                        .then(res => res.ok ? res.text() : Promise.reject(res.statusText))
-                        .then(data => {
-                            console.log('Success:', data);
-                            alert("결제가 완료되었습니다!");
-                            window.location.href = "/myPage/order";
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert("결제 실패!");
+                        if (response.success) {
+                            fetch(`/api/postToken?impUid=${response.imp_uid}`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    impUid: response.imp_uid
+                                }),
+                            })
+                            .then(res => res.ok ? res.text() : Promise.reject(res.statusText))
+                            .then(data => {
+                                console.log('Success:', data);
+                                alert("결제가 완료되었습니다!");
+                                window.location.href = "/myPage/order";
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert("결제 실패!");
+                                window.location.href = "/myPage/payment";
+                            });
+                        } else {
+                            alert("결제가 취소되었습니다!");
                             window.location.href = "/myPage/payment";
-                        });
+                        }
                     });
             }
         </script>
