@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mf.dto.CartDto;
 import com.mf.dto.DeliveryDto;
 import com.mf.dto.OrderDetailDto;
 import com.mf.dto.PersonDto;
@@ -115,6 +115,7 @@ public class OrderRestController {
 		    // 마이페이지 로직 처리
 		    Map<String, Object> result = myPageService.getPersonMyPage(userIdx);
 		    PersonDto person = (PersonDto) result.get("person");
+		    
 
 		    System.out.println(deliveryIdx);
 		    System.out.println(deliveryIdx);
@@ -129,8 +130,132 @@ public class OrderRestController {
 		}
 	 
 	// Get delivery details by ID
-	 @GetMapping("/myPage/getDelivery")
-	 public DeliveryDto getDelivery(@RequestParam("deliveryIdx") Long deliveryIdx) {
+	 @PostMapping("/myPage/getDelivery")
+	 public DeliveryDto getDelivery(@RequestBody DeliveryRequest request) {
+		 Integer deliveryIdx = request.getDeliveryIdx();
 	        return deliveryService.getDeliveryById(deliveryIdx);
 	    }
+	 
+	 public static class CartRequest {
+	        private Integer cartIdx;
+
+	        public Integer getCartIdx() {
+	            return cartIdx;
+	        }
+
+	        public void setCartIdx(Integer cartIdx) {
+	            this.cartIdx = cartIdx;
+	        }
+	    }
+	 @RequestMapping("/myPage/editDelivery")
+	 public ResponseEntity<Map<String, String>> editDelivery(HttpSession session, DeliveryDto deliveryDto,
+			 	@RequestParam("deliveryIdx") Integer deliveryIdx,
+			 	@RequestParam("name") String name,
+		        @RequestParam("deliveryName") String deliveryName,
+		        @RequestParam("email") String email,
+		        @RequestParam("phone") String phone,
+		        @RequestParam("postCode") String postCode,
+		        @RequestParam("address") String address,
+		        @RequestParam("detailAddress") String detailAddress,
+		        @RequestParam("content") String content) {
+		 // 
+		 Long userIdx = (Long) session.getAttribute("userIdx");
+		 
+		 // 세션에 userIdx가 제대로 설정되어 있는지 확인
+		 if (userIdx == null) {
+			 throw new IllegalArgumentException("User is not logged in.");
+		 }
+		 // 마이페이지 로직 처리
+		 Map<String, Object> result = myPageService.getPersonMyPage(userIdx);
+		 PersonDto person = (PersonDto) result.get("person");
+		 
+		 orderMapper.editDelivery(deliveryDto);
+		 // JSON 형식의 응답 생성
+		 Map<String, String> response = new HashMap<>();
+		 response.put("message", "success");
+		 
+		 return ResponseEntity.ok(response);
+	 }
+	 
+	 @RequestMapping("/myPage/deleteCart")
+		public ResponseEntity<Map<String, String>> deleteCart(HttpSession session,
+				CartDto cartDto, @RequestBody CartRequest request ) {
+			// 
+		 Integer cartIdx = request.getCartIdx();
+			Long userIdx = (Long) session.getAttribute("userIdx");
+
+		    // 세션에 userIdx가 제대로 설정되어 있는지 확인
+		    if (userIdx == null) {
+		        throw new IllegalArgumentException("User is not logged in.");
+		    }
+
+		    // 마이페이지 로직 처리
+		    Map<String, Object> result = myPageService.getPersonMyPage(userIdx);
+		    PersonDto person = (PersonDto) result.get("person");
+		    	System.out.println(cartIdx);
+		    	System.out.println(cartIdx);
+		    	System.out.println(cartIdx);
+
+			   orderMapper.deleteCart(cartIdx);
+			// JSON 형식의 응답 생성
+			    Map<String, String> response = new HashMap<>();
+			    response.put("message", "success");
+
+			    return ResponseEntity.ok(response);
+		}
+	 
+	 @RequestMapping("/myPage/deleteCart2")
+	 public ResponseEntity<Map<String, String>> deleteCart2(HttpSession session,
+			 CartDto cartDto, @RequestBody CartRequest request ) {
+		 // 
+		 Integer cartIdx = request.getCartIdx();
+		 Long userIdx = (Long) session.getAttribute("userIdx");
+		 
+		 // 세션에 userIdx가 제대로 설정되어 있는지 확인
+		 if (userIdx == null) {
+			 throw new IllegalArgumentException("User is not logged in.");
+		 }
+		 
+		 // 마이페이지 로직 처리
+		 Map<String, Object> result = myPageService.getPersonMyPage(userIdx);
+		 PersonDto person = (PersonDto) result.get("person");
+		 
+		 orderMapper.deleteCart2(cartIdx);
+		 // JSON 형식의 응답 생성
+		 Map<String, String> response = new HashMap<>();
+		 response.put("message", "success");
+		 
+		 return ResponseEntity.ok(response);
+	 }
+	 
+	 
+	 @RequestMapping("/myPage/updateDelivery")
+	 public ResponseEntity<Map<String, String>> updateDelivery2(HttpSession session,
+			 DeliveryDto deliveryDto, @RequestBody DeliveryRequest request ) {
+		 // 
+		 Integer deliveryIdx = request.getDeliveryIdx();
+		 Long userIdx = (Long) session.getAttribute("userIdx");
+		 
+		 // 세션에 userIdx가 제대로 설정되어 있는지 확인
+		 if (userIdx == null) {
+			 throw new IllegalArgumentException("User is not logged in.");
+		 }
+		 
+		 // 마이페이지 로직 처리
+		 Map<String, Object> result = myPageService.getPersonMyPage(userIdx);
+		 PersonDto person = (PersonDto) result.get("person");
+		 Long personIdx = person.getPersonIdx();
+		 
+		 orderMapper.updateDelivery(personIdx);
+		 orderMapper.updateDelivery2(deliveryIdx);
+
+		 // JSON 형식의 응답 생성
+		 Map<String, String> response = new HashMap<>();
+		 response.put("message", "success");
+		 
+		 return ResponseEntity.ok(response);
+	 }
+	 
+	
+	 
 }

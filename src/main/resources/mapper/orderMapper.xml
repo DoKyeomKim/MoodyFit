@@ -339,6 +339,44 @@ update delivery set is_default = 2 where delivery_idx = #{ deliveryIdx }
 
 </update>
 
+<update id="editDelivery">
+
+update delivery set name = #{ name },
+					content = #{content},
+					delivery_name = #{ deliveryName },
+					email = #{ email },
+					phone = #{ phone },
+					post_code = #{ postCode },
+					address = #{ address },
+					detail_address = #{ detailAddress }
+				where delivery_idx = #{ deliveryIdx }
+
+</update>
+
+<update id="updateDelivery">
+
+ update delivery set is_default = 0 where person_idx = #{ personIdx } and is_default = 1
+
+</update>
+
+<update id="updateDelivery2">
+
+ update delivery set is_default = 1 where delivery_idx = #{ deliveryIdx }
+
+</update>
+
+<update id="deleteCart2">
+
+ update cart set state = '장바구니' where cart_idx = #{ cartIdx }
+
+</update>
+
+<delete id="deleteCart">
+
+delete from cart where cart_idx = #{ cartIdx }
+
+</delete>
+
 <update id="changePersonLevel">
 MERGE INTO person p
 USING (
@@ -362,6 +400,5 @@ ON (p.person_idx = t.person_idx)
 WHEN MATCHED THEN
     UPDATE SET p.level_idx = t.new_level_idx;
 </update>
-
 
 </mapper>

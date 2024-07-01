@@ -51,10 +51,19 @@ public interface OrderMapper {
 
 	void deleteDelivery(int deliveryIdx);
 
-	DeliveryDto selectDelivery3(Long deliveryIdx);
+	DeliveryDto selectDelivery3(Integer deliveryIdx);
 
+	void deleteCart(int cartIdx);
+
+	void editDelivery(DeliveryDto deliveryDto);
+
+	void updateDelivery(Long personIdx);
+
+	void updateDelivery2(Integer deliveryIdx);
+
+	void deleteCart2(Integer cartIdx);
+	
 	// 가격으로 person_level 변경
 	void changePersonLevel(int totalPrice, Long personIdx);
-	
 
 }

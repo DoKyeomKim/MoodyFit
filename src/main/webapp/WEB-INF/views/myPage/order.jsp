@@ -76,6 +76,7 @@ main{
 		<div style="margin: 0 auto; display: flex; justify-content: center;">
 									<%@include file="/WEB-INF/layouts/orderPaging.jsp"%>
 								</div>
+								<%@include file="/WEB-INF/layouts/footer.jsp"%>
 	</main>
 	<%@include file="/WEB-INF/layouts/footer.jsp"%>
     <script>

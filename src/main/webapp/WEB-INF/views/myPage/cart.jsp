@@ -29,7 +29,7 @@ main {
                     <hr>
                 </div>
                 <div style="text-align : right; margin-right:20px;">
-                	<button type="button" class="btn btn-info" style="margin-right: 5px;" onclick="location.href='/'">메인으로</button>
+                	<button type="button" class="btn btn-info" style="margin: 20px;" onclick="location.href='/'">메인으로</button>
                 </div>
             </c:when>
             <c:otherwise>
@@ -55,7 +55,7 @@ main {
                                     <button type="button" class="quantityButton" onclick="updateQuantity(this, 1)">+</button>
                                 </div>
                                 <div>
-                                    <button type="button" onclick="removeItem(this)">삭제</button>
+                                    <button type="button" onclick="removeItem('${item.cartIdx}')">삭제</button>
                                 </div>
                             </div>
                             <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
@@ -68,7 +68,7 @@ main {
             </c:otherwise>
         </c:choose>
     </main>
-
+<%@include file="/WEB-INF/layouts/footer.jsp"%>
     <script>
         // 수량을 업데이트하는 함수
         function updateQuantity(button, change) {
@@ -85,14 +85,31 @@ main {
         }
 
         // 상품을 삭제하는 함수
-        function removeItem(button) {
-            const itemContainer = button.closest('.box-container');
-            itemContainer.remove();
+        async function removeItem(cartIdx) {
+            try {
+                const response = await fetch('/myPage/deleteCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    },
+                    body: JSON.stringify({ cartIdx: cartIdx })
+                });
 
-            // Update the buy button count after removing an item
-            updateBuyButton();
+                if (!response.ok) {
+                    throw new Error("삭제에 실패했습니다.");
+                }
+
+                const data = await response.json();
+                if (data.message === "success") {
+                    alert("삭제되었습니다.");
+                    location.reload(); // 페이지 새로고침
+                } else {
+                    throw new Error("삭제에 실패했습니다.");
+                }
+            } catch (error) {
+                alert("삭제에 실패했습니다. " + error.message);
+            }
         }
-
         // 폼 제출 처리
         document.getElementById('cartForm').addEventListener('submit', function(event) {
             event.preventDefault(); // 기본 폼 제출 방지
