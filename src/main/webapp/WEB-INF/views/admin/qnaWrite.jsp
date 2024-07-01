@@ -46,7 +46,7 @@
 
         th {
             text-align: left;
-            background-color: #f9f9f9;
+            
         }
 
         input[type="text"] {
@@ -72,6 +72,7 @@
             display: flex;
             justify-content: flex-end;
             margin-top: 20px;
+            margin-right:33px;
         }
 
         input[type="submit"]{
