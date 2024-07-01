@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 
 import com.mf.dto.PersonDto;
+import com.mf.dto.PersonLevelDto;
 import com.mf.dto.PersonSpecDto;
 import com.mf.dto.StoreDto;
 import com.mf.dto.UsersDto;
@@ -63,6 +64,8 @@ public interface MyPageMapper {
 	void userDelete(Long userIdx);
 
 	int getWishListCount(Long userIdx);
+
+	List<PersonLevelDto> getPersonLevel();
 
 
 

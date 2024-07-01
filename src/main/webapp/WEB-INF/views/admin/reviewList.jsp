@@ -141,7 +141,6 @@
         .review-like-area{
         	margin-top : 10px;
         }
-      
     </style>
 </head>
     <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
@@ -175,7 +174,6 @@
         </div>
         <div class="review-list" id="review-list"></div>
     </div>
- 
 <script>
 let reviews = [];
 

@@ -83,6 +83,7 @@ html, body {
 }
 
 .join-container{
+	font-weight : bold;
 	text-decoration-line: none;
 	color : black;
 }
@@ -143,7 +144,7 @@ html, body {
 		                </small>
 		            </div>
                 </form>
-                <div class="center-align" style="margin-left:45px;">
+                <div class="center-align" style="margin-left:12%;">
                     <a href="/totalJoin" class="join-container">회원 가입 하시겠습니까?</a>
                 </div>
             </div>
