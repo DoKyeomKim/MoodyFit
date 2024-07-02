@@ -86,6 +86,54 @@ main{
     justify-content: center;
     margin-bottom:100px;
 }
+
+.result-posting {
+    text-align: left;
+    margin: 20px;
+    border: 0.5px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.result-posting:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.result-post-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.result-post-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+.result-price {
+    font-size: 17px;
+    font-weight: bold;
+}
+.result-store-name {
+    opacity: 0.7;
+}
+.result-post-image {
+    height: 260px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+}
+
+.result-post-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    margin: 0;
+}
+
 </style>
 
 </head>
@@ -97,19 +145,23 @@ main{
   <div class="row">
   <c:choose>
 	  <c:when test="${not empty result}">
-		  <c:forEach var="result" items="${result }">
-			    <div class="col-md-3">
-				  	<a href="/postingDetail?postingIdx=${result.POSTING_IDX }">
-				      <div class="image-container" data-posting-idx="${result.POSTING_IDX}" data-price="${result.PRICE}" data-title="${result.TITLE}">
-				        <img src="${result.FILE_PATH }" class="img-fluid" alt="Image 1">
-				        <div class="overlay">
-				          <div class="info"></div>
-				        </div>
-				      </div>
-				    </a>
-			    </div>
-		    </c:forEach>
-		    
+	  <h4 style="text-align:center;"> 검색 결과 총 ${totalCount }개 입니다.</h4>
+        <c:forEach var="result" items="${result}">
+            <div class="col-md-3 mt-3 mb-3 result-posting-area">
+                <div class="result-posting">
+                    <a class="text-decoration-none text-dark" href="/postingDetail?postingIdx=${result.POSTING_IDX}">
+                        <div class="result-post-image">
+                            <img src="${result.FILE_PATH}" class="img-fluid" alt="${result.TITLE}">
+                        </div>
+                        <div class="result-post-title">${result.TITLE}</div>
+                        <div class="result-post-info">
+                            <div class="result-price">${result.PRICE}원</div>
+                            <div class="result-store-name">${result.STORE_NAME}</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </c:forEach>
 	<nav aria-label="Page navigation"  style="margin-top:100px;">
 		<ul class="pagination justify-content-center">
         
@@ -163,25 +215,6 @@ main{
 </main>
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-	  const imageContainers = document.querySelectorAll('.image-container');
-
-	  imageContainers.forEach(container => {
-	    container.addEventListener('mouseover', function() {
-	      const postingIdx = this.dataset.postingIdx;
-	      const price = this.dataset.price;
-	      const title = this.dataset.title;
-	      const infoDiv = this.querySelector('.info');
-
-	      // 가격을 파싱하여 포맷팅하는 함수
-	      const formattedPrice = Number(price).toLocaleString();
-
-	      infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + '원</div>';
-	    });
-	  });
-	});
-</script>
-<script>
 document.getElementById('searched-box').addEventListener('submit', function(event) {
     var searchInput = document.getElementById('searched-txt').value;
     if (!searchInput) {
@@ -189,6 +222,18 @@ document.getElementById('searched-box').addEventListener('submit', function(even
         event.preventDefault();
     }
 });
-</script>				
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var resultPrices = document.querySelectorAll(".result-price");
+
+        resultPrices.forEach(function(priceElement) {
+            var priceText = priceElement.textContent;
+            var price = parseFloat(priceText.replace(/[^\d.-]/g, '')); // 숫자 이외의 문자 제거 후 숫자로 변환
+            var formattedPrice = price.toLocaleString("ko-KR"); // 한국 통화 형식으로 포맷팅
+            priceElement.textContent = formattedPrice + " 원";
+        });
+    });
+</script>
 </body>
 </html>

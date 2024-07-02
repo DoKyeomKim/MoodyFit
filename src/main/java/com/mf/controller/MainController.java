@@ -93,7 +93,6 @@ public class MainController {
 	    // 검색 결과 비즈니스 로직 처리
 		List<Map<String,Object>> result = mainService.getSearchResult(keyword,startIndex,pageSize);
 		
-		int totalCount = mainService.getPostingCountByKeyword(keyword);
 		
 	    // 페이징 된 로직 처리
 	    Paging paging = mainService.calculatePagingInfo(keyword, page, pageSize);
@@ -103,7 +102,7 @@ public class MainController {
 	    mv.addObject("startPageNum", paging.getStartPageNum());
 	    mv.addObject("endPageNum", paging.getEndPageNum());
 	    mv.addObject("totalPages", paging.getTotalPages());
-
+	    mv.addObject("totalCount", paging.getTotalCount());
 		
 		mv.addObject("keyword", keyword);
 		mv.addObject("result", result);

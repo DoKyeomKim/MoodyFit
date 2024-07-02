@@ -33,6 +33,7 @@ main {
     align-items: center;
     text-align: center;
     margin-top : 40px;
+    margin-bottom : 40px;
 }
 .overlay {
     position: absolute;
@@ -90,53 +91,100 @@ main {
     padding: 0;
     z-index: 9999;
 }
-    .weekly-best-container {
-        overflow: hidden;
-        white-space: nowrap;
-        width: 100%;
-    }
+.weekly-best-container {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+}
 
-    .weekly-best-wrapper {
-        display: flex;
-        animation: slide 10s linear infinite;
-        animation-play-state: running; /* 애니메이션의 기본 상태를 재생 중으로 설정 */
-        width: 100%;
-    }
+.weekly-best-wrapper {
+    display: flex;
+    animation: slide 10s linear infinite;
+    animation-play-state: running; /* 애니메이션의 기본 상태를 재생 중으로 설정 */
+    width: 100%;
+}
 
-    .weekly-best-slide {
-        display: inline-block;
-        width: 30%; /* 슬라이드의 너비를 설정 (전체 화면의 20%) */
-        box-sizing: border-box;
-        margin-right: 50px; /* 슬라이드 간 간격을 설정 */
-    }
+.weekly-best-slide {
+    display: inline-block;
+    width: 30%; /* 슬라이드의 너비를 설정 (전체 화면의 20%) */
+    box-sizing: border-box;
+    margin-right: 50px; /* 슬라이드 간 간격을 설정 */
+}
 
-    @keyframes slide {
-        0% {
-            transform: translateX(100%);
-        }
-        100% {
-            transform: translateX(-100%);
-        }
+@keyframes slide {
+    0% {
+        transform: translateX(100%);
     }
+    100% {
+        transform: translateX(-100%);
+    }
+}
 
-    .image-container {
-        position: relative;
-        width: 100%;
-    }
+.image-container {
+    position: relative;
+    width: 100%;
+}
 
-    .overlay {
-        position: absolute;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        color: #fff;
-        width: 100%;
-        text-align: center;
-    }
+.overlay {
+    position: absolute;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    width: 100%;
+    text-align: center;
+}
 
-    .info {
-        padding: 10px;
-        font-size : 20px;
-    }
+.info {
+    padding: 10px;
+    font-size : 20px;
+}
+.recent-posting {
+    text-align: left;
+    margin: 20px;
+    border: 0.5px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.recent-posting:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.recent-post-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.recent-post-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+.recent-price {
+    font-size: 17px;
+    font-weight: bold;
+}
+.recent-store-name {
+    opacity: 0.7;
+}
+.recent-post-image {
+    height: 260px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+}
+
+.recent-post-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    margin: 0;
+}
+
 </style>
 </head>
 <body>
@@ -207,9 +255,26 @@ main {
 </div>
 
 <div class="container">
-    <h4 class="bold-text" >NEW ARRIVALS</h4>
-    <div class="light-text">새롭게 업데이트된 상품입니다</div>
-
+    <h4 class="font-weight-bold">NEW ARRIVALS</h4>
+    <div class="text-muted">새롭게 업데이트된 상품입니다</div>
+    <div class="row">
+        <c:forEach var="recent" items="${recent}">
+            <div class="col-md-3 mt-3 mb-3 recent-posting-area">
+                <div class="recent-posting">
+                    <a class="text-decoration-none text-dark" href="/postingDetail?postingIdx=${recent.POSTING_IDX}">
+                        <div class="recent-post-image">
+                            <img src="${recent.FILE_PATH}" class="img-fluid" alt="${recent.TITLE}">
+                        </div>
+                        <div class="recent-post-title">${recent.TITLE}</div>
+                        <div class="recent-post-info">
+                            <div class="recent-price">${recent.PRICE}원</div>
+                            <div class="recent-store-name">${recent.STORE_NAME}</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
 </div>
 </main>
 <%@include file="/WEB-INF/layouts/footer.jsp"%>
@@ -283,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // 가격을 파싱하여 포맷팅하는 함수
             const formattedPrice = Number(price).toLocaleString();
 
-            infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + '원</div><div>' + storeName +'</div>';
+            infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + ' 원</div><div>' + storeName +'</div>';
 
             // 애니메이션을 일시 정지
             weeklyBestWrapper.style.animationPlayState = 'paused';
@@ -295,6 +360,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var recentPrices = document.querySelectorAll(".recent-price");
+
+        recentPrices.forEach(function(priceElement) {
+            var priceText = priceElement.textContent;
+            var price = parseFloat(priceText.replace(/[^\d.-]/g, '')); // 숫자 이외의 문자 제거 후 숫자로 변환
+            var formattedPrice = price.toLocaleString("ko-KR"); // 한국 통화 형식으로 포맷팅
+            priceElement.textContent = formattedPrice + " 원";
+        });
+    });
 </script>
 </body>
 </html>

@@ -50,9 +50,6 @@ public class MainService {
 	    return mainMapper.getSearchResult(params);
 	}
 	
-	public int getPostingCountByKeyword(String keyword) {
-		return mainMapper.getPostingCountByKeyword(keyword);
-	}
 
 
 	public Paging calculatePagingInfo(String keyword, int page, int pageSize) {
@@ -78,6 +75,7 @@ public class MainService {
 	    paging.setEndPageNum(endPageNum);
 	    paging.setPrev(prev);
 	    paging.setNext(next);
+	    paging.setTotalCount(totalCount);
 		
 		return paging;
 	}

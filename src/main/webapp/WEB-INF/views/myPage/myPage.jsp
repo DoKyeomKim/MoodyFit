@@ -158,7 +158,7 @@ margin-left:10px;
                     <c:forEach var="personLevel" items="${personLevel}">
 	                    <tr class="posting-info">
 	                        <td><span class="person-level-name"><img src="/images/${personLevel.name }.png" class="level-img" alt="level-img">${personLevel.name }</span></td>
-        					<td><span id="purchase">${personLevel.purchase}원 이상</span></td>
+        					<td><span class="purchase">${personLevel.purchase}원 이상</span></td>
 	                        <td>${Math.round(personLevel.benefit * 100)}%</td>
 	                    </tr>
                     </c:forEach>
@@ -177,6 +177,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var purchaseElements = document.querySelectorAll(".purchase");
 
+            purchaseElements.forEach(function(purchaseElement) {
+                var purchaseText = purchaseElement.textContent.trim();
+                var purchaseValue = parseFloat(purchaseText.replace(/[^\d.-]/g, '')); // 숫자 이외의 문자 제거 후 숫자로 변환
+                var formattedPurchase = purchaseValue.toLocaleString("ko-KR"); // 한국 통화 형식으로 포맷팅
+                purchaseElement.textContent = formattedPurchase + "원 이상";
+            });
+        });
+    </script>
 </body>
 </html>
