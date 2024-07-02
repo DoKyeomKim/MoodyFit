@@ -58,7 +58,7 @@
 }
 
 .container {
-	margin-top: 100px;
+    margin-top: 100px;
 }
 
 .button-container {
@@ -72,7 +72,6 @@
     padding: 10px 20px;
     font-size: 18px;
 }
-
 
 </style>
 </head>
@@ -179,6 +178,7 @@
                     </div>
                     <div id="selectedSizeDisplay" class="selected-item"></div>
                 </div>
+                
                 <div class="form-group">
                     <label for="quantity">재고</label>
                     <input type="number" value="99" class="form-control" id="quantity" name="quantity" required min="0">
@@ -211,11 +211,12 @@
                 </div>
                 <br><br>
                 <div class="button-container">
-								    <button type="submit" class="btn btn-primary">상품 등록</button>
-								    <a href="/storeMyPage/productList" class="btn btn-outline-dark">목록</a>
-								</div>
-		        </div>
-		    </div>
+                    <button type="submit" class="btn btn-primary">상품 등록</button>
+                    <a href="/storeMyPage/productList" class="btn btn-outline-dark">목록</a>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <!-- 색상 선택 모달 -->
     <div class="modal fade" id="colorModal" tabindex="-1" role="dialog" aria-labelledby="colorModalLabel" aria-hidden="true">
@@ -294,7 +295,7 @@
                 timeout = setTimeout(() => func.apply(context, args), wait);
             };
         }
-        
+
         $(document).ready(function() {
             var selectedCategory = null;
             var selectedSubCategory = null;
@@ -413,7 +414,7 @@
             $('#sizeModal').on('show.bs.modal', function () {
                 if (!selectedCategory) {
                     alert('카테고리를 먼저 선택해주세요.');
-                    $('#sizeModal').modal('hide');  // 모달 창을 닫음
+                    $('#sizeModal').modal('hide'); 
                     return;
                 }
                 loadSizes();
@@ -429,7 +430,7 @@
                         sizes = ['90 (S)', '95 (M)', '100 (L)', '105 (XL)', '110 (2XL)'];
                         break;
                     case '바지':
-                        sizes = Array.from({ length: 13 }, (_, i) => (i + 26).toString());
+                        sizes = Array.from({ length: 13 }, (_, i) => (i + 30).toString());
                         break;
                     case '신발':
                         sizes = Array.from({ length: 11 }, (_, i) => (i * 10 + 200).toString());
@@ -447,20 +448,24 @@
                 var sizeList = $('#sizeList');
                 sizeList.empty();
                 sizes.forEach(function(size) {
-                    sizeList.append('<tr><td>' + size + '</td><td><a href="#" class="size-item" data-name="' + size + '">' + size + '</a></td></tr>');
+                    var sizeIdx = size.split(' ')[0];  // 숫자 부분만 추출
+                    sizeList.append('<tr><td>' + size + '</td><td><a href="#" class="size-item" data-id="' + sizeIdx + '" data-name="' + size + '">' + size + '</a></td></tr>');
                 });
 
                 $('.size-item').click(function() {
+                    var sizeId = $(this).data('id');
                     var sizeName = $(this).data('name');
-                    selectedSize = { name: sizeName };
-                    $('#selectedSizeModalDisplay').html(sizeName);
+                    selectedSize = { sizeIdx: sizeId, sizes: sizeName };
+                    $('#selectedSizeModalDisplay').text(sizeName);
+                    $('#sizeInput').val(sizeName);
+                    $('#sizeIdx').val(sizeId);  // sizeIdx를 hidden 필드에 설정
                 });
             }
 
             $('#applySize').click(function() {
                 if (selectedSize) {
-                    $('#sizeInput').val(selectedSize.name);
-                    $('#sizeIdx').val(selectedSize.name);  // Assuming size name is the same as size ID
+                    $('#sizeInput').val(selectedSize.sizes);
+                    $('#sizeIdx').val(selectedSize.sizeIdx);
                     $('#sizeModal').modal('hide');
                 } else {
                     alert('사이즈를 선택하세요.');
@@ -492,21 +497,6 @@
                 $('#productInfoTable tbody').append(row);
                 productInfoIndex++;
 
-                // Clear input fields
-                $('#categoryInput').val('');
-                $('#subCategoryInput').val('');
-                $('#colorInput').val('');
-                $('#colorIdx').val('');
-                $('#sizeInput').val('');
-                $('#sizeIdx').val('');
-                $('#quantity').val('');
-                $('#selectedCategoryDisplay').html('');
-                $('#selectedColorModalDisplay').html('');
-                $('#selectedSizeModalDisplay').html('');
-                selectedCategory = null;
-                selectedSubCategory = null;
-                selectedColor = null;
-                selectedSize = null;
             });
 
             $(document).on('click', '.removeProductInfo', function() {
@@ -521,7 +511,6 @@
                 });
             });
 
-            // Image preview and remove functionality
             document.getElementById('addFileButton').addEventListener('click', function() {
                 document.getElementById('productImages').click();
             });
@@ -531,9 +520,9 @@
             });
 
             function handleFileSelect(event) {
-                const file = event.target.files[0];  // Only handle single file
+                const file = event.target.files[0];  
                 const previewContainer = document.getElementById('imagePreviewContainer');
-                previewContainer.innerHTML = '';  // Clear any existing previews
+                previewContainer.innerHTML = '';  
 
                 if (file) {
                     const reader = new FileReader();
@@ -546,8 +535,8 @@
                         removeButton.classList.add('remove-button');
                         removeButton.innerHTML = '&times;';
                         removeButton.addEventListener('click', function() {
-                            previewContainer.innerHTML = '';  // Clear the preview
-                            document.getElementById('productImages').value = '';  // Clear the file input
+                            previewContainer.innerHTML = '';  
+                            document.getElementById('productImages').value = '';  
                         });
 
                         const previewWrapper = document.createElement('div');
@@ -560,7 +549,6 @@
                 }
             }
 
-            // Prevent quantity from going below 0
             document.getElementById('quantity').addEventListener('input', function() {
                 if (this.value < 0) {
                     this.value = 0;
@@ -572,17 +560,13 @@
                     this.value = 0;
                 }
             });
-
-            // Prevent quantity from going below 0 with arrow keys
+            
             document.getElementById('quantity').addEventListener('keydown', function(e) {
-                // Prevent decrementing below 0
                 if (e.key === 'ArrowDown' && this.value <= 0) {
                     e.preventDefault();
                 }
             });
         });
-
-
     </script>
 </body>
 </html>

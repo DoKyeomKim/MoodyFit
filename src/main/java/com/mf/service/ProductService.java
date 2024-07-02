@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mapping.AccessOptions.SetOptions.Propagation;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,31 +58,48 @@ public class ProductService {
  	
     
  	// 다중 레코드(색상, 사이즈 재고), 이미지 추가 부분
- 	 @Transactional
-     public void addProduct(ProductDto productDto, List<ProductOptionDto> productInfos, List<MultipartFile> productImages) {
-         // Product 테이블에 삽입
-         productMapper.insertProduct(productDto);
-         Long productIdx = productDto.getProductIdx();
-         
+ 	@Transactional
+ 	public void addProduct(ProductDto productDto, List<ProductOptionDto> productInfos, List<MultipartFile> productImages) {
+ 	    // Product 테이블에 삽입
+ 	    productMapper.insertProduct(productDto);
+ 	    Long productIdx = productDto.getProductIdx();
 
-         for (ProductOptionDto productOptionDto : productInfos) {
-             ProductInfoDto productInfoDto = new ProductInfoDto();
-             productInfoDto.setProductColorIdx(productOptionDto.getColorIdx());
-             productInfoDto.setProductSizeIdx(productOptionDto.getSizeIdx());
-             productInfoDto.setProductIdx(productIdx);
+ 	    // 로그 추가
+ 	    System.out.println("Inserted Product ID: " + productIdx);
 
-             productMapper.insertProductInfo(productInfoDto);
+ 	    // product_idx가 제대로 생성되었는지 확인
+ 	    if (productIdx == null || productIdx <= 0) {
+ 	        throw new RuntimeException("Product ID is invalid: " + productIdx);
+ 	    }
 
-             Long productInfoIdx = productInfoDto.getProductInfoIdx();
-             ProductQuantityDto productQuantityDto = new ProductQuantityDto();
-             productQuantityDto.setProductInfoIdx(productInfoIdx);
-             productQuantityDto.setQuantity(productOptionDto.getQuantity());
-             productMapper.insertProductQuantity(productQuantityDto);
-             
-             saveProductImages(productInfoIdx, productImages);
-         }
-     }
- 	 
+ 	    for (ProductOptionDto productOptionDto : productInfos) {
+ 	        ProductInfoDto productInfoDto = new ProductInfoDto();
+ 	        productInfoDto.setProductColorIdx(productOptionDto.getColorIdx());
+ 	        productInfoDto.setProductSizeIdx(productOptionDto.getSizeIdx());
+ 	        productInfoDto.setProductIdx(productIdx);
+
+ 	        // ProductInfo 테이블에 삽입
+ 	        productMapper.insertProductInfo(productInfoDto);
+
+ 	        Long productInfoIdx = productInfoDto.getProductInfoIdx();
+ 	        System.out.println("Inserted Product Info ID: " + productInfoIdx);
+
+ 	        ProductQuantityDto productQuantityDto = new ProductQuantityDto();
+ 	        productQuantityDto.setProductInfoIdx(productInfoIdx);
+ 	        productQuantityDto.setQuantity(productOptionDto.getQuantity());
+
+ 	        // ProductQuantity 테이블에 삽입
+ 	        productMapper.insertProductQuantity(productQuantityDto);
+ 	        System.out.println("Inserted Product Quantity ID: " + productQuantityDto.getProductQuantityIdx());
+
+ 	        saveProductImages(productInfoIdx, productImages);
+ 	    }
+ 	}
+
+
+
+
+
     private void saveProductImages(Long productInfoIdx, List<MultipartFile> productImages) {
     	for (MultipartFile file : productImages) {
     		// 파일 이름 변경 및 저장 위치 설정
@@ -204,22 +222,24 @@ public class ProductService {
 	public List<ProductFileDto> getProductFilesByProductIdx(Long productIdx) {
 	    return productMapper.getProductFilesByProductIdx(productIdx);
 	}
-
+	
+	
 	@Transactional
-	public Map<String, Object> getProductDetailsByProductIdx(Long productIdx) {
+	public List<Map<String, Object>> getProductDetailsByProductIdx(Long productIdx) {
 	    if (productIdx == null) {
 	        throw new IllegalArgumentException("productIdx는 null이 될 수 없습니다.");
 	    }
-	    List<Map<String, Object>> productDetailsList = productMapper.getProductDetailsByProductIdx(productIdx);
+	    List<Map<String, Object>> productDetailsList = productMapper.getProductDetailsByProductIdxForPosting(productIdx);
 	    if (productDetailsList == null || productDetailsList.isEmpty()) {
 	        System.out.println("상품 정보가 없습니다.");
-	        return Collections.emptyMap();
+	        return Collections.emptyList();
 	    } else {
 	        System.out.println("상품 정보 로드 성공: " + productDetailsList);
-	        // 단일 상품 정보이므로 첫 번째 항목을 반환
-	        return productDetailsList.get(0);
+	        return productDetailsList;
 	    }
 	}
+
+
 
 	public void updateProductPrice(Long productIdx, int price) {
 		if (price < 0) price = 0; // 0보다 작은 값을 0으로 변경

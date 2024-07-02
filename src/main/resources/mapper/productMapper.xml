@@ -92,31 +92,42 @@ where user_idx=#{userIdx}
 </select>
 
 
-<!-- 다중 색상,사이즈,재고 삽입 -->
 <insert id="insertProduct" parameterType="com.mf.dto.ProductDto">
-    <!-- 시퀀스 값을 미리 가져와서 productIdx에 설정 -->
     <selectKey keyProperty="productIdx" resultType="long" order="BEFORE">
-        SELECT product_seq.NEXTVAL FROM DUAL
+        SELECT PRODUCT_SEQ.NEXTVAL FROM DUAL
     </selectKey>
-    INSERT INTO product (product_idx, name, price, manufacture_name, sub_category_idx, store_idx)
-    VALUES (#{productIdx}, #{name}, #{price}, #{manufactureName}, #{subCategoryIdx}, #{storeIdx})
+    INSERT INTO product (product_idx, manufacture_name, name, price, sub_category_idx, store_idx, state)
+    VALUES (#{productIdx}, #{manufactureName}, #{name}, #{price}, #{subCategoryIdx}, #{storeIdx}, #{state})
 </insert>
 
 <insert id="insertProductInfo" parameterType="com.mf.dto.ProductInfoDto">
     <selectKey keyProperty="productInfoIdx" resultType="long" order="BEFORE">
-        SELECT product_info_seq.NEXTVAL FROM DUAL
+        SELECT PRODUCT_INFO_SEQ.NEXTVAL FROM DUAL
     </selectKey>
-    INSERT INTO product_info (product_info_idx, product_color_idx, product_size_idx, product_idx)
-    VALUES (#{productInfoIdx}, #{productColorIdx}, #{productSizeIdx}, #{productIdx})
+    INSERT INTO product_info (product_info_idx, product_color_idx, product_size_idx, product_idx, update_date)
+    VALUES (#{productInfoIdx}, #{productColorIdx}, #{productSizeIdx}, #{productIdx}, SYSDATE)
 </insert>
+
 
 <insert id="insertProductQuantity" parameterType="com.mf.dto.ProductQuantityDto">
     <selectKey keyProperty="productQuantityIdx" resultType="long" order="BEFORE">
-        SELECT product_quantity_seq.NEXTVAL FROM DUAL
+        SELECT PRODUCT_QUANTITY_SEQ.NEXTVAL FROM DUAL
     </selectKey>
-    INSERT INTO product_quantity (product_quantity_idx, product_info_idx, quantity, update_date)
-    VALUES (#{productQuantityIdx}, #{productInfoIdx}, #{quantity}, SYSDATE)
+    INSERT INTO product_quantity (product_quantity_idx, quantity, update_date, product_info_idx)
+    VALUES (#{productQuantityIdx}, #{quantity}, SYSDATE, #{productInfoIdx})
 </insert>
+
+
+<insert id="insertProductSize" parameterType="com.mf.dto.ProductSizeDto">
+    <selectKey keyProperty="productSizeIdx" resultType="long" order="BEFORE">
+        SELECT PRODUCT_SIZE_SEQ.NEXTVAL FROM DUAL
+    </selectKey>
+    INSERT INTO product_size (product_size_idx, sizes)
+    VALUES (#{productSizeIdx}, #{sizes})
+</insert>
+
+
+
 
 <!-- 파일 정보 삽입 -->
 <insert id="insertProductFile" parameterType="com.mf.dto.ProductFileDto">
@@ -126,42 +137,6 @@ where user_idx=#{userIdx}
 	INSERT INTO product_file (product_file_idx, original_name, file_path, file_size, product_info_idx)
 	VALUES (#{productFileIdx}, #{originalName}, #{filePath}, #{fileSize}, #{productInfoIdx})
 </insert>
-
-
-<!-- 수정 페이지에서 재고에 해당하는 부분 삭제 관련 쿼리문 -->
-
-<update id="updateProduct" parameterType="com.mf.dto.ProductDto">
-    UPDATE product
-    SET name = #{name},
-        price = #{price},
-        manufacture_name = #{manufactureName},
-        sub_category_idx = #{subCategoryIdx}
-    WHERE product_idx = #{productIdx}
-</update>
-
-<update id="updateProductInfo" parameterType="com.mf.dto.ProductOptionDto">
-    UPDATE product_info
-    SET product_color_idx = #{colorIdx},
-        product_size_idx = #{sizeIdx}
-    WHERE product_info_idx = #{productInfoIdx}
-</update>
-
-<update id="updateProductQuantity" parameterType="com.mf.dto.ProductOptionDto">
-    UPDATE product_quantity
-    SET quantity = #{quantity}
-    WHERE product_info_idx = #{productInfoIdx}
-</update>
-
-<!-- productInfo 삭제 -->
-<delete id="deleteProductInfosByProductIdx" parameterType="long">
-    DELETE FROM product_info WHERE product_idx = #{productIdx}
-</delete>
-
-<!-- productFile 삭제 -->
-<delete id="deleteProductFilesByProductIdx" parameterType="long">
-    DELETE FROM product_file WHERE product_info_idx IN (SELECT product_info_idx FROM product_info WHERE product_idx = #{productIdx})
-</delete>
-
 
 
 
@@ -304,6 +279,67 @@ LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
 GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name
 </select>
 
+
+<select id="getProductDetailsByProductIdxForPosting" resultType="java.util.HashMap">
+    SELECT 
+        pi.product_info_idx AS productInfoIdx,
+        p.product_idx AS productIdx,
+        p.name AS name,
+        p.price AS price,
+        p.manufacture_name AS manufactureName,
+        c.kor_name AS category,
+        sc.kor_name AS subCategory,
+        pc.color AS colors,
+        ps.sizes AS sizes,
+        pq.quantity AS quantities,
+        pf.file_path AS filePaths
+    FROM product p
+    JOIN product_info pi ON p.product_idx = pi.product_idx
+    LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
+    LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+    LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+    LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+    JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
+    JOIN category c ON sc.category_idx = c.category_idx
+    WHERE p.product_idx = #{productIdx}
+</select>
+
+
+
+
+<!-- 수정 페이지에서 재고에 해당하는 부분 삭제 관련 쿼리문 -->
+
+<update id="updateProduct" parameterType="com.mf.dto.ProductDto">
+    UPDATE product
+    SET name = #{name},
+        price = #{price},
+        manufacture_name = #{manufactureName},
+        sub_category_idx = #{subCategoryIdx}
+    WHERE product_idx = #{productIdx}
+</update>
+
+<update id="updateProductInfo" parameterType="com.mf.dto.ProductOptionDto">
+    UPDATE product_info
+    SET product_color_idx = #{colorIdx},
+        product_size_idx = #{sizeIdx}
+    WHERE product_info_idx = #{productInfoIdx}
+</update>
+
+<update id="updateProductQuantity" parameterType="com.mf.dto.ProductOptionDto">
+    UPDATE product_quantity
+    SET quantity = #{quantity}
+    WHERE product_info_idx = #{productInfoIdx}
+</update>
+
+<!-- productInfo 삭제 -->
+<delete id="deleteProductInfosByProductIdx" parameterType="long">
+    DELETE FROM product_info WHERE product_idx = #{productIdx}
+</delete>
+
+<!-- productFile 삭제 -->
+<delete id="deleteProductFilesByProductIdx" parameterType="long">
+    DELETE FROM product_file WHERE product_info_idx IN (SELECT product_info_idx FROM product_info WHERE product_idx = #{productIdx})
+</delete>
 
 
 

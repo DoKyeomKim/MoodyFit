@@ -18,4 +18,5 @@ public class ProductDto {
     private String sizes;
     private Integer quantity;
     private String filePaths;
+    private int state;
 }

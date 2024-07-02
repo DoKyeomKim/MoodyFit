@@ -12,7 +12,7 @@ public class ProductInfoDto {
     private Long productColorIdx;    
     private Long productSizeIdx;     
     private Long productIdx;              
-    private int quantity;
+    private Integer quantity;
     private String color;
     private String sizes;
 }

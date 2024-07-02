@@ -72,6 +72,7 @@ public interface ProductMapper {
 	// 파일 정보
 	void insertProductFile(ProductFileDto productFileDto);
 	
+	
 	ProductDetailsDto getProductDetailsByProductInfoIdx(@Param("productInfoIdx") Long productInfoIdx);
 	
 	Long getProductIdx();
@@ -79,6 +80,9 @@ public interface ProductMapper {
 	Long getProductInfoIdx();
 
 	Long getStoreIdxByUserIdx(@Param("userIdx") Long userIdx);
+	
+	
+	List<Map<String, Object>> getProductDetailsByProductIdxForPosting(Long productIdx);
 
 	
 	// ==============================================================

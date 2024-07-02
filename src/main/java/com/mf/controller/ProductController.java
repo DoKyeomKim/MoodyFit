@@ -83,29 +83,31 @@ public class ProductController {
                 return "redirect:/storeMyPage/productList";
             }
 
-            // 상품 세부 정보 로드
-            Map<String, Object> productDetails = productService.getProductDetailsByProductIdx(productIdx);
+            // 병합된 상품 세부 정보 로드
+            List<Map<String, Object>> productDetails = productService.getProductDetailsByProductIdx(productIdx);
             if (productDetails.isEmpty()) {
                 System.out.println("상품 정보를 찾을 수 없습니다.");
                 return "redirect:/storeMyPage/productList";
             }
 
-            // 모델에 상품 세부 정보 추가
+            // 모델에 병합된 상품 세부 정보 추가
             model.addAttribute("productDetails", productDetails);
-            System.out.println("상품 정보 로드 성공: " + productDetails);
+            System.out.println("병합된 상품 정보 로드 성공: " + productDetails);
 
             // 상품의 추가 정보 로드 (색상, 사이즈, 재고)
             List<ProductInfoDto> productInfos = productService.getProductInfosByProductIdx(productIdx);
             model.addAttribute("productInfos", productInfos);
             System.out.println("상품 추가 정보 로드 성공: " + productInfos);
-            
+
             return "product/productUpdateForm";
         } catch (Exception e) {
             System.out.println("오류 발생: " + e.getMessage());
             return "redirect:/storeMyPage/productList";
         }
     }
-    
+
+
+
     @PostMapping("/products/update")
     public String updateProduct(
             @RequestParam("productIdx") Long productIdx,
