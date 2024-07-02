@@ -32,6 +32,7 @@ main {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    margin-top : 40px;
 }
 .overlay {
     position: absolute;
@@ -89,7 +90,53 @@ main {
     padding: 0;
     z-index: 9999;
 }
+    .weekly-best-container {
+        overflow: hidden;
+        white-space: nowrap;
+        width: 100%;
+    }
 
+    .weekly-best-wrapper {
+        display: flex;
+        animation: slide 10s linear infinite;
+        animation-play-state: running; /* 애니메이션의 기본 상태를 재생 중으로 설정 */
+        width: 100%;
+    }
+
+    .weekly-best-slide {
+        display: inline-block;
+        width: 30%; /* 슬라이드의 너비를 설정 (전체 화면의 20%) */
+        box-sizing: border-box;
+        margin-right: 50px; /* 슬라이드 간 간격을 설정 */
+    }
+
+    @keyframes slide {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
+    .image-container {
+        position: relative;
+        width: 100%;
+    }
+
+    .overlay {
+        position: absolute;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        width: 100%;
+        text-align: center;
+    }
+
+    .info {
+        padding: 10px;
+        font-size : 20px;
+    }
 </style>
 </head>
 <body>
@@ -137,29 +184,32 @@ main {
     <div class="light-text">가까운 매장의 상품입니다</div>
 
 </div>
+
 <div class="container">
     <h4 class="bold-text">WEEKLY BEST</h4>
     <div class="light-text">한주간 가장 인기있는 상품입니다</div>
-
+    <div class="weekly-best-container">
+        <div class="weekly-best-wrapper">
+            <c:forEach var="topPosting" items="${topPosting}">
+                <div class="weekly-best-slide">
+                    <a href="/postingDetail?postingIdx=${topPosting.POSTING_IDX}">
+                        <div class="image-container" data-store-name="${topPosting.STORE_NAME}" data-posting-idx="${topPosting.POSTING_IDX}" data-price="${topPosting.PRICE}" data-title="${topPosting.TITLE}" data-date="${topPosting.UPDATE_DATE}">
+                            <img src="${topPosting.FILE_PATH}" class="img-fluid" alt="Image 1" style="height: auto; width: 100%;">
+                            <div class="overlay">
+                                <div class="info"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
 </div>
 
 <div class="container">
     <h4 class="bold-text" >NEW ARRIVALS</h4>
     <div class="light-text">새롭게 업데이트된 상품입니다</div>
-    <div class="row">
-        <c:forEach var="recent" items="${recent}">
-            <div class="col-md-3 mt-5 mb-5" style="text-align:center;">
-                <a href="/postingDetail?postingIdx=${recent.POSTING_IDX}">
-                    <div class="image-container" data-posting-idx="${recent.POSTING_IDX}" data-price="${recent.PRICE}" data-title="${recent.TITLE}" data-date="${recent.UPDATE_DATE}">
-                        <img src="${recent.FILE_PATH}" class="img-fluid" alt="Image 1" style="height: 260px; width:334px;">
-                        <div class="overlay">
-                            <div class="info"></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </c:forEach>
-    </div>
+
 </div>
 </main>
 <%@include file="/WEB-INF/layouts/footer.jsp"%>
@@ -215,6 +265,35 @@ document.addEventListener('DOMContentLoaded', function() {
 // 페이지가 로드된 후에 body에 'loaded' 클래스를 추가
 window.addEventListener('load', function() {
     document.body.classList.add('loaded');
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageContainers = document.querySelectorAll('.image-container');
+    const weeklyBestWrapper = document.querySelector('.weekly-best-wrapper');
+
+    imageContainers.forEach(container => {
+        container.addEventListener('mouseover', function() {
+            const postingIdx = this.dataset.postingIdx;
+            const price = this.dataset.price;
+            const title = this.dataset.title;
+            const storeName = this.dataset.storeName;
+            const infoDiv = this.querySelector('.info');
+
+            // 가격을 파싱하여 포맷팅하는 함수
+            const formattedPrice = Number(price).toLocaleString();
+
+            infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + '원</div><div>' + storeName +'</div>';
+
+            // 애니메이션을 일시 정지
+            weeklyBestWrapper.style.animationPlayState = 'paused';
+        });
+
+        container.addEventListener('mouseout', function() {
+            // 애니메이션을 다시 재생
+            weeklyBestWrapper.style.animationPlayState = 'running';
+        });
+    });
 });
 </script>
 </body>

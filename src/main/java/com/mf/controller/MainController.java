@@ -69,10 +69,12 @@ public class MainController {
 		}
 		
         List<Map<String, Object>> edtiorPick = result.get("edtiorPick");
+        List<Map<String, Object>> topPosting = result.get("topPosting");
         List<Map<String, Object>> recent = result.get("recent");
         
 		
 		mv.addObject("edtiorPick", edtiorPick);
+		mv.addObject("topPosting", topPosting);
 		mv.addObject("recent", recent);
 		mv.setViewName("/main");
 		return mv;

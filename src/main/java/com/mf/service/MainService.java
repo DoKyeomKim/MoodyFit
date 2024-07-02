@@ -24,15 +24,18 @@ public class MainService {
 		// 리턴을 위한 객체 선언.
         Map<String, List<Map<String, Object>>> result = new HashMap<>();
 		
-		// 전체 포스팅 갖고오기(임시)
-        // 후에는 editor's pick 뭐 이런걸로 변경예정
+        // 에디터픽 들고오기
 		List<Map<String, Object>> edtiorPick = mainMapper.getEdtiorPick();
+		
+		// 최고 매출 포스팅 20개 들고 오기
+		List<Map<String, Object>> topPosting = mainMapper.getTopPosting();
 		
 		// 최신 포스팅 8개 갖고오기
 		List<Map<String, Object>> recent = mainMapper.getRecentPosting();
 
 		
         result.put("edtiorPick", edtiorPick);
+        result.put("topPosting", topPosting);
         result.put("recent", recent);
 		
 		return result;

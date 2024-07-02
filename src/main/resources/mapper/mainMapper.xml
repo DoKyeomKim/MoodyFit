@@ -2,6 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.MainMapper">
 
+<select id="getTopPosting">
+<![CDATA[
+	SELECT * FROM (
+	    SELECT p.posting_idx AS posting_idx,
+	           p.update_date,
+	           p.title AS title,
+	           pro.price AS price,
+	           s.store_name AS store_name,
+	           MAX(pf.file_path) AS file_path,
+	           ROW_NUMBER() OVER (ORDER BY SUM(o.total_price) DESC) AS rnum
+	    FROM orders o
+	    JOIN cart c ON o.order_idx = c.order_idx 
+	    JOIN posting_product pp ON c.posting_product_idx = pp.posting_product_idx
+	    JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+	    JOIN product pro ON pi.product_idx = pro.product_idx
+	    JOIN store s on pro.store_idx = s.store_idx
+	    JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
+	    JOIN posting p ON p.posting_idx = pp.posting_idx
+	    GROUP BY p.posting_idx, p.update_date, p.title, pro.price,s.store_name
+	)
+	WHERE rnum <= 10
+]]>
+</select>
+
 <select id="getRecentPosting">
 <![CDATA[
 SELECT * FROM (
@@ -9,16 +33,18 @@ SELECT * FROM (
     	   a.update_date,
            a.title AS title,
            d.price AS price,
+           s.store_name as store_name,
            e.file_path AS file_path,
            ROW_NUMBER() OVER (ORDER BY a.update_date DESC) AS rnum
     FROM posting a
     JOIN posting_product b ON a.posting_idx = b.posting_idx
     JOIN product_info c ON b.product_info_idx = c.product_info_idx
     JOIN product d ON c.product_idx = d.product_idx
+    JOIN store s on d.store_idx = s.store_idx
     JOIN product_file e ON e.product_info_idx = b.product_info_idx
-    GROUP BY a.posting_idx, a.title, d.price, e.file_path, a.update_date
+    GROUP BY a.posting_idx, a.title, d.price, e.file_path, a.update_date, s.store_name
 ) subquery
-WHERE rnum <= 8
+WHERE rnum <= 10
 ]]>
 </select>
 
