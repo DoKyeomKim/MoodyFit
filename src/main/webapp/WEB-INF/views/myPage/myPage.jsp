@@ -11,6 +11,11 @@
 #person-level{
 margin-left:10px;
 }
+.row {
+	display:flex;
+	justify-content: center;
+	align-items: center;
+}
 .modal-btn{
 	border : none;
 	background-color: transparent; 
@@ -69,8 +74,8 @@ margin-left:10px;
             </div>
             <div class="col-3 profile-stats text-right">
                 <ul>
-                    <li>총결제금액 <span>${user.points}</span>원</li>
-                    <li>장바구니 <span>${user.cartItems}</span>개</li>
+                    <li>총 결제금액 <span class="userTotalPurchase">${price.SUM_PRICE }</span></li>
+                    <li>장바구니 <span></span>개</li>
                 </ul>
             </div>
         </div>
@@ -180,12 +185,19 @@ document.addEventListener('DOMContentLoaded', function() {
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var purchaseElements = document.querySelectorAll(".purchase");
+            var userTotalPurchaseElements = document.querySelectorAll(".userTotalPurchase");
 
             purchaseElements.forEach(function(purchaseElement) {
                 var purchaseText = purchaseElement.textContent.trim();
-                var purchaseValue = parseFloat(purchaseText.replace(/[^\d.-]/g, '')); // 숫자 이외의 문자 제거 후 숫자로 변환
-                var formattedPurchase = purchaseValue.toLocaleString("ko-KR"); // 한국 통화 형식으로 포맷팅
+                var purchaseValue = parseFloat(purchaseText.replace(/[^\d.-]/g, ''));
+                var formattedPurchase = purchaseValue.toLocaleString("ko-KR");
                 purchaseElement.textContent = formattedPurchase + "원 이상";
+            });
+            userTotalPurchaseElements.forEach(function(userTotalPurchaseElements) {
+                var userTotalPurchaseText =  userTotalPurchaseElements.textContent.trim();
+                var userTotalPurchaseValue = parseFloat(userTotalPurchaseText.replace(/[^\d.-]/g, ''));
+                var formattedUserTotalPurchaseText = userTotalPurchaseValue.toLocaleString("ko-KR");
+                userTotalPurchaseElements.textContent = formattedUserTotalPurchaseText + " 원";
             });
         });
     </script>

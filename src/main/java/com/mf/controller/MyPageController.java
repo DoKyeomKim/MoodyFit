@@ -88,6 +88,7 @@ public class MyPageController {
 		mv.addObject("orderPrePare", result.get("orderPrePare"));
 		mv.addObject("orderIng", result.get("orderIng"));
 		mv.addObject("orderDone", result.get("orderDone"));
+		mv.addObject("price", result.get("price"));
 		mv.setViewName("myPage/myPage");
 		return mv;
 	}
