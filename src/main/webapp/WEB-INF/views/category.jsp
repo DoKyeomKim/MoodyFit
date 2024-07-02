@@ -131,7 +131,7 @@
 }
 
 .sort-button:hover {
-    background-color: #0056b3;
+    background-color: #616161;
 }
 </style>
 </head>
