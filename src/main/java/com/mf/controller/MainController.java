@@ -129,7 +129,7 @@ public class MainController {
     public ModelAndView category(@PathVariable("categoryEngName") String categoryEngName,
                                  @PathVariable("subCategoryName") String subCategoryName,
                                  @RequestParam(value = "page", defaultValue = "1") int page,
-                                 @RequestParam(value = "orderBy", defaultValue = "oldest") String orderBy
+                                 @RequestParam(value = "orderBy", defaultValue = "newest") String orderBy
     							) {
     	
         ModelAndView mv = new ModelAndView();

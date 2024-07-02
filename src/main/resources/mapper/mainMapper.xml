@@ -170,8 +170,11 @@ ORDER BY a.posting_idx DESC
         SELECT posting_idx, title, price, store_name, file_path, total_price,
                ROW_NUMBER() OVER (ORDER BY
                    <choose>
-                       <when test="orderBy == 'price'">
+                       <when test="orderBy == 'expensive'">
                            price DESC
+                       </when>
+                       <when test="orderBy == 'chip'">
+                           price ASC
                        </when>
                        <when test="orderBy == 'newest'">
                            posting_idx DESC
@@ -229,8 +232,11 @@ where g.eng_name = #{categoryEngName}
         SELECT posting_idx, title, price, store_name, file_path, total_price,
                ROW_NUMBER() OVER (ORDER BY
                    <choose>
-                       <when test="orderBy == 'price'">
+                       <when test="orderBy == 'expensive'">
                            price DESC
+                       </when>
+                       <when test="orderBy == 'chip'">
+                           price ASC
                        </when>
                        <when test="orderBy == 'newest'">
                            posting_idx DESC
