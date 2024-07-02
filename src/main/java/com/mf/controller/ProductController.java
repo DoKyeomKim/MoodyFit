@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.mf.dto.CategoryDto;
 import com.mf.dto.ProductColorDto;
 import com.mf.dto.ProductDto;
+import com.mf.dto.ProductFileDto;
 import com.mf.dto.ProductInfoDto;
 import com.mf.dto.ProductInfoList;
 import com.mf.dto.ProductOptionDto;
@@ -75,37 +76,20 @@ public class ProductController {
     
     // =======================================================================
     // =========================== 상품 수정 =================================
+    // 상품 상세 정보를 조회하는 메서드
     @GetMapping("/updateForm")
-    public String showUpdateForm(@RequestParam("productIdx") Long productIdx, Model model) {
-        try {
-            if (productIdx == null) {
-                System.out.println("productIdx가 null입니다.");
-                return "redirect:/storeMyPage/productList";
-            }
+    public String getProductUpdateForm(@RequestParam("productIdx") Long productIdx, Model model) {
+        ProductDto product = productService.getProductByIdx(productIdx);
+        model.addAttribute("productDetails", product);
 
-            // 병합된 상품 세부 정보 로드
-            List<Map<String, Object>> productDetails = productService.getProductDetailsByProductIdx(productIdx);
-            if (productDetails.isEmpty()) {
-                System.out.println("상품 정보를 찾을 수 없습니다.");
-                return "redirect:/storeMyPage/productList";
-            }
+        List<ProductInfoDto> productInfos = productService.getProductInfosByProductIdx(productIdx);
+        model.addAttribute("productInfos", productInfos);
 
-            // 모델에 병합된 상품 세부 정보 추가
-            model.addAttribute("productDetails", productDetails);
-            System.out.println("병합된 상품 정보 로드 성공: " + productDetails);
+        List<ProductFileDto> productFiles = productService.getProductFilesByProductIdx(productIdx);
+        model.addAttribute("productFiles", productFiles);
 
-            // 상품의 추가 정보 로드 (색상, 사이즈, 재고)
-            List<ProductInfoDto> productInfos = productService.getProductInfosByProductIdx(productIdx);
-            model.addAttribute("productInfos", productInfos);
-            System.out.println("상품 추가 정보 로드 성공: " + productInfos);
-
-            return "product/productUpdateForm";
-        } catch (Exception e) {
-            System.out.println("오류 발생: " + e.getMessage());
-            return "redirect:/storeMyPage/productList";
-        }
+        return "/product/productUpdateForm";
     }
-
 
 
     @PostMapping("/products/update")

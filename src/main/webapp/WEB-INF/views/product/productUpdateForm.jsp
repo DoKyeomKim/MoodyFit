@@ -63,11 +63,10 @@
     padding: 2px 6px;
     font-size: 12px;
 }
-
 </style>
 </head>
 <body>
-    <%@include file="/WEB-INF/layouts/header.jsp"%>
+<%@include file="/WEB-INF/layouts/header.jsp"%>
 <%@include file="/WEB-INF/layouts/storeAside.jsp"%>
 
 <div class="w3-container" style="margin-left: 160px">
@@ -75,26 +74,26 @@
         <h3>상품 수정</h3>
         
         <form id="updateForm" action="${pageContext.request.contextPath}/storeMyPage/products/update" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="productIdx" value="${productDetails[0].productIdx}">
+            <input type="hidden" name="productIdx" value="${productDetails.productIdx}">
         
             <div class="form-group">
                 <label for="pname">상품명</label> 
-                <input type="text" value="${productDetails['NAME']}" class="form-control" id="pname" name="pname" readonly>
+                <input type="text" value="${productDetails.name}" class="form-control" id="pname" name="pname" readonly>
             </div>
     
             <div class="form-group">
                 <label for="unitprice">상품 판매가</label>
-                <input type="number" value="${productDetails['PRICE']}" class="form-control" id="unitprice" name="unitprice" min="0" required>
+                <input type="number" value="${productDetails.price}" class="form-control" id="unitprice" name="unitprice" min="0" required>
             </div>
     
             <div class="form-group">
                 <label for="menufecturer">제조사</label>
-                <input type="text" value="${productDetails['MANUFACTURENAME']}" class="form-control" id="menufecturer" name="manufactureName" readonly>
+                <input type="text" value="${productDetails.manufactureName}" class="form-control" id="menufecturer" name="manufactureName" readonly>
             </div>
     
             <div class="form-group">
                 <label for="category">카테고리</label>
-                <input type="text" value="${productDetails['CATEGORY']}/${productDetails['SUBCATEGORY']}" class="form-control" id="categoryInput" name="category" readonly>    
+                <input type="text" value="${productDetails.category}/${productDetails.subCategory}" class="form-control" id="categoryInput" name="category" readonly>    
             </div>
 
             <div class="form-group">
@@ -109,14 +108,14 @@
                     <tbody>
                         <c:forEach var="info" items="${productInfos}" varStatus="status">
                             <tr>
-                                <td>${info['color']}</td>
-                                <td>${info['sizes']}</td>
+                                <td>${info.color}</td>
+                                <td>${info.sizes}</td>
                                 <td>
-                                    <input type="number" name="productInfos[${status.index}].quantity" value="${info['quantity']}" class="form-control">
-                                    <input type="hidden" name="productInfos[${status.index}].productInfoIdx" value="${info['productInfoIdx']}">
-                                    <input type="hidden" name="productInfos[${status.index}].colorIdx" value="${info['productColorIdx']}">
-                                    <input type="hidden" name="productInfos[${status.index}].sizeIdx" value="${info['productSizeIdx']}">
-                                    <c:if test="${info['quantity'] == 0}">
+                                    <input type="number" name="productInfos[${status.index}].quantity" value="${info.quantity}" class="form-control">
+                                    <input type="hidden" name="productInfos[${status.index}].productInfoIdx" value="${info.productInfoIdx}">
+                                    <input type="hidden" name="productInfos[${status.index}].colorIdx" value="${info.productColorIdx}">
+                                    <input type="hidden" name="productInfos[${status.index}].sizeIdx" value="${info.productSizeIdx}">
+                                    <c:if test="${info.quantity == 0}">
                                         <span class="badge badge-danger">품절</span>
                                     </c:if>
                                 </td>
@@ -127,18 +126,17 @@
             </div>
 
             <div class="form-group">
-						    <label for="productImages"></label> 
-						    <button type="button" id="addFileButton" class="btn btn-secondary mt-2">Image 추가</button>
-						    <input type="file" class="form-control" id="productImages" name="productImages" style="display: none;" multiple>
-						    <div id="imagePreviewContainer" class="d-flex flex-wrap mt-2"></div>
-						    <c:forEach var="file" items="${productFiles}">
-						        <div>
-						            <img src="${file.filePath}" alt="${file.originalName}" width="50">
-						            <input type="checkbox" name="deleteFiles" value="${file.productFileIdx}"> 삭제
-						        </div>
-						    </c:forEach>
-						</div>
-
+                <label for="productImages"></label> 
+                <button type="button" id="addFileButton" class="btn btn-secondary mt-2">Image 추가</button>
+                <input type="file" class="form-control" id="productImages" name="productImages" style="display: none;" multiple>
+                <div id="imagePreviewContainer" class="d-flex flex-wrap mt-2"></div>
+                <c:forEach var="file" items="${productFiles}">
+                    <div class="image-preview">
+                        <img src="${file.filePath}" alt="${file.originalName}">
+                        <input type="checkbox" name="deleteFiles" value="${file.productFileIdx}"> 삭제
+                    </div>
+                </c:forEach>
+            </div>
 
             <div class="button-container">
                 <button type="submit" class="btn btn-primary">수정 완료</button>
@@ -148,43 +146,54 @@
     </div>
 </div>
 
-
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
-
-// ===================================================================================
-// ===============================  스크립트 =========================================
+$(document).ready(function() {
+    // Add image preview handler
+    document.getElementById('addFileButton').addEventListener('click', function() {
+        document.getElementById('productImages').click();
+    });
     
-    function toggleAccFunc(id) {
-        var x = document.getElementById(id);
+    document.getElementById('productImages').addEventListener('change', function(event) {
+        handleFileSelect(event);
+    });
+    
+    function handleFileSelect(event) {
+        const files = event.target.files;
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        previewContainer.innerHTML = '';  // Clear any existing previews
 
-        // 모든 드롭다운 메뉴 닫기
-        var dropdowns = document.getElementsByClassName("w3-hide");
-        for (var i = 0; i < dropdowns.length; i++) {
-            if (dropdowns[i].id !== id) {
-                dropdowns[i].className = dropdowns[i].className.replace(
-                        " w3-show", "");
-                if (dropdowns[i].previousElementSibling) {
-                    dropdowns[i].previousElementSibling.className = dropdowns[i].previousElementSibling.className
-                            .replace(" w3-lightgrey", "");
-                }
+        for (let file of files) {
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('image-preview');
+                    
+                    const removeButton = document.createElement('button');
+                    removeButton.classList.add('remove-button');
+                    removeButton.innerHTML = '&times;';
+                    removeButton.addEventListener('click', function() {
+                        img.remove();
+                        removeButton.remove();
+                    });
+
+                    const previewWrapper = document.createElement('div');
+                    previewWrapper.classList.add('image-preview');
+                    previewWrapper.appendChild(img);
+                    previewWrapper.appendChild(removeButton);
+                    previewContainer.appendChild(previewWrapper);
+                };
+                reader.readAsDataURL(file);
             }
-        }
-
-        // 선택한 드롭다운 메뉴 상태 토글
-        if (x.className.indexOf("w3-show") == -1) {
-            x.className += " w3-show";
-            x.previousElementSibling.className += " w3-lightgrey";
-        } else {
-            x.className = x.className.replace(" w3-show", "");
-            x.previousElementSibling.className = x.previousElementSibling.className
-                    .replace(" w3-lightgrey", "");
         }
     }
 
-    document.getElementById('updateForm').onsubmit = function() {
+    // Validation on form submit
+    $('#updateForm').submit(function(event) {
         var quantities = document.querySelectorAll('input[name^="productInfos"][name$="quantity"]');
         for (var i = 0; i < quantities.length; i++) {
             if (quantities[i].value.trim() === "") {
@@ -193,86 +202,23 @@
             }
         }
         return true;
-    };
+    });
 
+    // Ensure quantity inputs don't go below 0
     document.querySelectorAll('input[name^="productInfos"][name$="quantity"]').forEach(input => {
         input.addEventListener('input', function() {
             if (this.value < 0) {
-                this.value = 0; // 값이 0 미만으로 내려가면 0으로 설정
+                this.value = 0;
             }
         });
-    
-    // 화살표 키로 값을 조정할 때 제어
-    input.addEventListener('keydown', function(event) {
-        if (event.key === 'ArrowDown' && this.value <= 0) {
-            event.preventDefault(); // 값이 0 이하로 내려가는 것을 방지
-        }
+
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowDown' && this.value <= 0) {
+                event.preventDefault();
+            }
+        });
     });
 });
-    
-    // ================ ajax form 관련 ======================
-    $(document).ready(function() {
-        $('#updateForm').submit(function(event) {
-            event.preventDefault(); // 기본 폼 제출 방지
-
-            // 폼 데이터를 직렬화
-            var formData = new FormData(this);
-
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    window.location.href = '/storeMyPage/productList';
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('AJAX error: ', textStatus, errorThrown);
-                    alert('수정 중 오류가 발생했습니다. 다시 시도해주세요.');
-                }
-            });
-				
-        // 사진 미리보기
-        document.getElementById('addFileButton').addEventListener('click', function() {
-				    document.getElementById('productImages').click();
-				});
-				
-				document.getElementById('productImages').addEventListener('change', function(event) {
-				    handleFileSelect(event);
-				});
-				
-				function handleFileSelect(event) {
-				    const file = event.target.files[0];  // Only handle single file
-				    const previewContainer = document.getElementById('imagePreviewContainer');
-				    previewContainer.innerHTML = '';  // Clear any existing previews
-				
-				    if (file) {
-				        const reader = new FileReader();
-				        reader.onload = function(e) {
-				            const img = document.createElement('img');
-				            img.src = e.target.result;
-				            img.classList.add('image-preview');
-				
-				            const removeButton = document.createElement('button');
-				            removeButton.classList.add('remove-button');
-				            removeButton.innerHTML = '&times;';
-				            removeButton.addEventListener('click', function() {
-				                previewContainer.innerHTML = '';  // Clear the preview
-				                document.getElementById('productImages').value = '';  // Clear the file input
-				            });
-				
-				            const previewWrapper = document.createElement('div');
-				            previewWrapper.classList.add('image-preview');
-				            previewWrapper.appendChild(img);
-				            previewWrapper.appendChild(removeButton);
-				            previewContainer.appendChild(previewWrapper);
-				        };
-				        reader.readAsDataURL(file);
-				    }
-				}
-    });
-    
 </script>
 </body>
 </html>

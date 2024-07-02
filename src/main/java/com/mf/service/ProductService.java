@@ -213,15 +213,18 @@ public class ProductService {
 	    }
 	    saveProductImages(productDto.getProductIdx(), productImages);
 	}
+	
+	public ProductDto getProductByIdx(Long productIdx) {
+        return productMapper.selectProductByIdx(productIdx);
+    }
 
+    public List<ProductInfoDto> getProductInfosByProductIdx(Long productIdx) {
+        return productMapper.getProductInfosByProductIdx(productIdx);
+    }
 
-	public List<ProductInfoDto> getProductInfosByProductIdx(Long productIdx) {
-	    return productMapper.getProductInfosByProductIdx(productIdx);
-	}
-
-	public List<ProductFileDto> getProductFilesByProductIdx(Long productIdx) {
-	    return productMapper.getProductFilesByProductIdx(productIdx);
-	}
+    public List<ProductFileDto> getProductFilesByProductIdx(Long productIdx) {
+        return productMapper.getProductFilesByProductIdx(productIdx);
+    }
 	
 	
 	@Transactional

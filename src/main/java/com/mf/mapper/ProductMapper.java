@@ -105,6 +105,12 @@ public interface ProductMapper {
 
 	void deleteProductInfo(Long productInfoIdx);
 	void deleteProductQuantity(Long productInfoIdx);
+	
+	
+	ProductDto selectProductByIdx(@Param("productIdx") Long productIdx);
+    List<ProductInfoDto> selectProductInfosByProductIdx(@Param("productIdx") Long productIdx);
+    List<ProductFileDto> selectProductFilesByProductIdx(@Param("productIdx") Long productIdx);
+	   
 
 	
 }
