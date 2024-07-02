@@ -128,7 +128,9 @@ public class MainController {
     @GetMapping("/category/{categoryEngName}/{subCategoryName}")
     public ModelAndView category(@PathVariable("categoryEngName") String categoryEngName,
                                  @PathVariable("subCategoryName") String subCategoryName,
-                                 @RequestParam(value = "page", defaultValue = "1") int page) {
+                                 @RequestParam(value = "page", defaultValue = "1") int page,
+                                 @RequestParam(value = "orderBy", defaultValue = "oldest") String orderBy
+    							) {
     	
         ModelAndView mv = new ModelAndView();
         
@@ -136,7 +138,7 @@ public class MainController {
         // 해당 카테고리의 모든 서브 카테고리 목록을 가져옴
         List<SubCategoryDto> subCategories = mainService.getSubCategoriesByCategoryEngName(categoryEngName);
         
-	    int pageSize = 1; // 한 페이지에 표시할 게시글 수 확인용으로 1 해놓음 나중에 수정
+	    int pageSize = 2; // 한 페이지에 표시할 게시글 수 확인용으로 1 해놓음 나중에 수정
 	    int startIndex = (page - 1) * pageSize;
         
         SubCategoryDto selectedSubCategory = new SubCategoryDto();
@@ -146,7 +148,7 @@ public class MainController {
             selectedSubCategory = mainService.getAllSubCategoryByCategoryEngName(categoryEngName);
             
             // 같은 카테고리 안의 전체 공고 들고 오는 로직처리
-            List<Map<String,Object>> allPosting = mainService.getAllPostingByCategory(categoryEngName,pageSize,startIndex);
+            List<Map<String,Object>> allPosting = mainService.getAllPostingByCategory(categoryEngName,pageSize,startIndex,orderBy);
             // 페이징 처리
             Paging paging = mainService.calculatePagingInfoByCategory(categoryEngName, page, pageSize);
             
@@ -161,7 +163,7 @@ public class MainController {
             selectedSubCategory = mainService.getSubCategoryByNameAndCategoryEngName(subCategoryName, categoryEngName);
             
             // 같은 세부 카테고리 안의 공고 들고 오는 로직 처리
-            List<Map<String,Object>> selectedPosting = mainService.getSelectedPostingBySubCategory(subCategoryName,pageSize,startIndex);
+            List<Map<String,Object>> selectedPosting = mainService.getSelectedPostingBySubCategory(subCategoryName,pageSize,startIndex,orderBy);
             
             // 페이징 처리
             Paging paging = mainService.calculatePagingInfoBySubCategory(subCategoryName, page, pageSize);
@@ -174,6 +176,7 @@ public class MainController {
             mv.addObject("selectedPosting", selectedPosting);
         }
         
+        mv.addObject("orderBy", orderBy);
 	    mv.addObject("currentPage", page);
         mv.addObject("subCategories", subCategories);
         mv.addObject("categoryEngName", categoryEngName);

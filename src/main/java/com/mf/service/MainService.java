@@ -81,21 +81,23 @@ public class MainService {
 	}
 
 	// 카테고리가 같은 공고 전체 갖고 오기(All)
-	public List<Map<String, Object>> getAllPostingByCategory(String categoryEngName, int pageSize, int startIndex) {
+	public List<Map<String, Object>> getAllPostingByCategory(String categoryEngName, int pageSize, int startIndex, String orderBy) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("categoryEngName", categoryEngName);
 		params.put("startIndex", startIndex);
 		params.put("pageSize", pageSize);
+		params.put("orderBy", orderBy);
 		return mainMapper.getAllPostingByCategory(params);
 	}
 	
 	
 	// 카테고리가 같은 공고 중 서브카테리가 같은 공고 갖고오기
-		public List<Map<String, Object>> getSelectedPostingBySubCategory(String subCategoryName, int pageSize, int startIndex) {
+		public List<Map<String, Object>> getSelectedPostingBySubCategory(String subCategoryName, int pageSize, int startIndex, String orderBy) {
 		    Map<String, Object> params = new HashMap<>();
 		    params.put("subCategoryName", subCategoryName);
 		    params.put("startIndex", startIndex);
 		    params.put("pageSize", pageSize);
+			params.put("orderBy", orderBy);
 			return mainMapper.getSelectedPostingBySubCategory(params);
 		}
 	
