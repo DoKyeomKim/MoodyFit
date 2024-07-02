@@ -54,12 +54,6 @@ public class MyPageController {
 		PersonDto person = (PersonDto) result.get("person");
 		// 레벨 설명을 위한 DB에서 값 불러오기
 	    List<PersonLevelDto> personLevels = myPageService.getPersonLevel();
-//	    for(PersonLevelDto personLevel:personLevels) {
-//	        String purchase = String.valueOf(personLevel.getPurchase());
-//	        String formattedPurchase = String.format("%,d", purchase); // purchase 값을 형식화하여 문자열로 변환
-//	        personLevel.put("formattedPurchase", formattedPurchase); // 형식화된 purchase를 맵에 추가
-//
-//	    }
 	    
 		// 등급 불러오기 위해서 시큐리티 인증 확인
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
