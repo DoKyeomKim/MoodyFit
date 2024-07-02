@@ -91,30 +91,35 @@ public interface ProductMapper {
 	void updateProductInfo(ProductOptionDto productOptionDto);
 	void updateProductQuantity(ProductOptionDto productOptionDto);
 	
-	void deleteProductFile(Long productFileIdx);
-	void deleteProductInfosByProductIdx(Long productIdx);
-	void deleteProductFilesByProductIdx(Long productIdx);
-	
 	void insertProductInfo(ProductInfoDto productInfoDto);
 	void insertProductQuantity(ProductQuantityDto productQuantityDto);
+	
+	void deleteProductFile(Long fileId);
 
 	List<ProductInfoDto> getProductInfosByProductIdx(Long productIdx);
 	List<ProductFileDto> getProductFilesByProductIdx(Long productIdx);
 
 	List<Map<String, Object>> getProductDetailsByProductIdx(Long productIdx);
-
-	void deleteProductInfo(Long productInfoIdx);
-	void deleteProductQuantity(Long productInfoIdx);
 	
 	
 	ProductDto selectProductByIdx(@Param("productIdx") Long productIdx);
     List<ProductInfoDto> selectProductInfosByProductIdx(@Param("productIdx") Long productIdx);
     List<ProductFileDto> selectProductFilesByProductIdx(@Param("productIdx") Long productIdx);
-
+    
     
     
     Map<String, String> getCategoryAndSubCategoryBySubCategoryIdx(@Param("subCategoryIdx") Long subCategoryIdx);
-	   
-
 	
+    
+
+    // ====================== 상품 상태 =============================
+    // product state 업데이트
+    void updateProductState(@Param("productIdx") Long productIdx, @Param("state") int state);
+
+    List<Map<String, Object>> getOnHoldProductDetails(Long storeIdx);
+
+
+    
+    
+   
 }

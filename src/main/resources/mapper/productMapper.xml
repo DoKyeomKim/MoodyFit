@@ -333,6 +333,11 @@
     WHERE product_info_idx = #{productInfoIdx}
 </update>
 
+<!-- product_file 삭제 -->
+<delete id="deleteProductFilesByProductIdx" parameterType="long">
+    DELETE FROM product_file WHERE product_info_idx IN (SELECT product_info_idx FROM product_info WHERE product_idx = #{productIdx})
+</delete>
+
 
 <select id="getCategoryAndSubCategoryBySubCategoryIdx" parameterType="long" resultType="java.util.HashMap">
     SELECT c.kor_name AS category, sc.kor_name AS subCategory
@@ -342,14 +347,39 @@
 </select>
 
 
-<!-- productInfo 삭제 -->
-<delete id="deleteProductInfosByProductIdx" parameterType="long">
-    DELETE FROM product_info WHERE product_idx = #{productIdx}
-</delete>
+<!-- ================== 상태 관련 쿼리문 ===================== -->
+<update id="updateProductState" parameterType="map">
+    UPDATE product
+    SET state = #{state}
+    WHERE product_idx = #{productIdx}
+</update>
 
-<!-- productFile 삭제 -->
-<delete id="deleteProductFilesByProductIdx" parameterType="long">
-    DELETE FROM product_file WHERE product_info_idx IN (SELECT product_info_idx FROM product_info WHERE product_idx = #{productIdx})
-</delete>
+<select id="getOnHoldProductDetails" parameterType="long" resultType="java.util.HashMap">
+    SELECT 
+        p.product_idx AS product_idx,
+        p.name AS name,
+        p.price AS price,
+        p.manufacture_name AS manufacture_name,
+        c.kor_name AS category,
+        sc.kor_name AS sub_category,
+        LISTAGG('[' || pc.color || '] ' || ps.sizes || ', ' || pq.quantity || '개', ' / ') WITHIN GROUP (ORDER BY pc.color) AS inventory,
+        TO_CHAR(pi.update_date, 'YYYY.MM.DD') AS update_date,
+        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS file_paths,
+        p.state AS state
+    FROM product p
+    JOIN product_info pi ON p.product_idx = pi.product_idx
+    LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
+    JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
+    JOIN category c ON sc.category_idx = c.category_idx
+    LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+    LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+    LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+    WHERE p.store_idx = #{storeIdx} AND p.state != 0
+    GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name, pi.update_date, p.state
+</select>
+
+
+
+
 
 </mapper>

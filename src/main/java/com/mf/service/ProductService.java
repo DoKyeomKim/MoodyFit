@@ -129,11 +129,6 @@ public class ProductService {
      	}
 	}
     
-    // 모든 상품 정보 가져오기
-    public List<Map<String, Object>> getAllProductDetails(Long storeIdx) {	
-    	return productMapper.getAllProductDetails(storeIdx);
-    }
-    
     // ==============================================================
     // ====================== 상품 등록 =============================
 	@Transactional
@@ -305,6 +300,21 @@ public class ProductService {
 	// 특정 상품 정보 로드
 	public ProductDetailsDto getProductDetailsByProductInfoIdx(Long productInfoIdx) {
 	    return productMapper.getProductDetailsByProductInfoIdx(productInfoIdx);
+	}
+	
+	
+	// ======================== 상품 상태 관련 ====================================
+	@Transactional
+	public void updateProductState(Long productIdx, int state) {
+	    productMapper.updateProductState(productIdx, state);
+	}
+
+	public List<Map<String, Object>> getAllProductDetails(Long storeIdx) {
+	    return productMapper.getAllProductDetails(storeIdx);
+	}
+
+	public List<Map<String, Object>> getOnHoldProductDetails(Long storeIdx) {
+	    return productMapper.getOnHoldProductDetails(storeIdx);
 	}
 
 

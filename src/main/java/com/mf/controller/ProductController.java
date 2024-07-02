@@ -2,10 +2,12 @@ package com.mf.controller;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -128,6 +130,17 @@ public class ProductController {
 
         return "redirect:/storeMyPage/productList";
     }
+    
+    
+    // ============== 상품 상태 =====================
+    @PostMapping("/updateProductState")
+    @ResponseBody
+    public ResponseEntity<Void> updateProductState(@RequestParam("productIdx") Long productIdx, @RequestParam("state") int state) {
+        productService.updateProductState(productIdx, state);
+        return ResponseEntity.ok().build();
+    }
+
+    
 
         /* 이미지 변경 및 삭제 처리
         productService.updateProduct(productDto, productInfos, productImages, deleteFileIds);
@@ -135,17 +148,15 @@ public class ProductController {
         return "redirect:/storeMyPage/productList";
         */
 
- 
-    
     @GetMapping("/productList")
     public ModelAndView productList(HttpSession session) {
         ModelAndView mv = new ModelAndView();
-    	Long userIdx = (Long) session.getAttribute("userIdx");
-    	Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
+        Long userIdx = (Long) session.getAttribute("userIdx");
+        Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
 
-    	List<Map<String,Object>> products = productService.getAllProductDetails(storeIdx);
-    	
-    	// 이미지 파일 경로를 분할하여 리스트로 저장
+        List<Map<String, Object>> products = productService.getAllProductDetails(storeIdx);
+        List<Map<String, Object>> onHoldProducts = productService.getOnHoldProductDetails(storeIdx);
+
         for (Map<String, Object> product : products) {
             String filePaths = (String) product.get("FILE_PATHS");
             if (filePaths != null) {
@@ -154,13 +165,57 @@ public class ProductController {
                 product.put("FILE_PATHS", Collections.emptyList());
             }
         }
-        
+
+        for (Map<String, Object> product : onHoldProducts) {
+            String filePaths = (String) product.get("FILE_PATHS");
+            if (filePaths != null) {
+                product.put("FILE_PATHS", Arrays.asList(filePaths.split(", ")));
+            } else {
+                product.put("FILE_PATHS", Collections.emptyList());
+            }
+        }
+
         mv.addObject("products", products);
+        mv.addObject("onHoldProducts", onHoldProducts);
         mv.setViewName("product/productList");
         return mv;
     }
 
-    
+    @GetMapping("/productListData")
+    @ResponseBody
+    public Map<String, Object> productListData(HttpSession session) {
+        Long userIdx = (Long) session.getAttribute("userIdx");
+        Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
+
+        List<Map<String, Object>> products = productService.getAllProductDetails(storeIdx);
+        List<Map<String, Object>> onHoldProducts = productService.getOnHoldProductDetails(storeIdx);
+
+        for (Map<String, Object> product : products) {
+            String filePaths = (String) product.get("FILE_PATHS");
+            if (filePaths != null) {
+                product.put("FILE_PATHS", Arrays.asList(filePaths.split(", ")));
+            } else {
+                product.put("FILE_PATHS", Collections.emptyList());
+            }
+        }
+
+        for (Map<String, Object> product : onHoldProducts) {
+            String filePaths = (String) product.get("FILE_PATHS");
+            if (filePaths != null) {
+                product.put("FILE_PATHS", Arrays.asList(filePaths.split(", ")));
+            } else {
+                product.put("FILE_PATHS", Collections.emptyList());
+            }
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("products", products);
+        response.put("onHoldProducts", onHoldProducts);
+        return response;
+    }
+
+
+
     // 색상 데이터를 JSON 형식으로 제공하는 메소드
     @GetMapping("/api/colors")
     @ResponseBody
