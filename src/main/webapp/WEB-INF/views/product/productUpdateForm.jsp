@@ -93,7 +93,7 @@
     
             <div class="form-group">
                 <label for="category">카테고리</label>
-                <input type="text" value="${productDetails.category}/${productDetails.subCategory}" class="form-control" id="categoryInput" name="category" readonly>    
+                <input type="text" value="${category}/${subCategory}" class="form-control" id="categoryInput" name="category" readonly>    
             </div>
 
             <div class="form-group">
@@ -133,7 +133,7 @@
                 <c:forEach var="file" items="${productFiles}">
                     <div class="image-preview">
                         <img src="${file.filePath}" alt="${file.originalName}">
-                        <input type="checkbox" name="deleteFiles" value="${file.productFileIdx}"> 삭제
+                        <button type="button" class="remove-button" data-file-idx="${file.productFileIdx}">&times;</button>
                     </div>
                 </c:forEach>
             </div>
@@ -151,7 +151,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
 $(document).ready(function() {
-    // Add image preview handler
+
     document.getElementById('addFileButton').addEventListener('click', function() {
         document.getElementById('productImages').click();
     });
@@ -163,7 +163,7 @@ $(document).ready(function() {
     function handleFileSelect(event) {
         const files = event.target.files;
         const previewContainer = document.getElementById('imagePreviewContainer');
-        previewContainer.innerHTML = '';  // Clear any existing previews
+        previewContainer.innerHTML = ''; 
 
         for (let file of files) {
             if (file) {
@@ -192,7 +192,16 @@ $(document).ready(function() {
         }
     }
 
-    // Validation on form submit
+    $(document).on('click', '.remove-button', function() {
+        const fileIdx = $(this).data('file-idx');
+        $(this).closest('.image-preview').remove();
+        $('<input>').attr({
+            type: 'hidden',
+            name: 'deleteFiles',
+            value: fileIdx
+        }).appendTo('#updateForm');
+    });
+
     $('#updateForm').submit(function(event) {
         var quantities = document.querySelectorAll('input[name^="productInfos"][name$="quantity"]');
         for (var i = 0; i < quantities.length; i++) {
@@ -204,7 +213,7 @@ $(document).ready(function() {
         return true;
     });
 
-    // Ensure quantity inputs don't go below 0
+    // 재고 0 밑으로 안 떨어지게
     document.querySelectorAll('input[name^="productInfos"][name$="quantity"]').forEach(input => {
         input.addEventListener('input', function() {
             if (this.value < 0) {

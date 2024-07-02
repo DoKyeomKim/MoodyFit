@@ -225,7 +225,14 @@ public class ProductService {
     public List<ProductFileDto> getProductFilesByProductIdx(Long productIdx) {
         return productMapper.getProductFilesByProductIdx(productIdx);
     }
-	
+    
+    // 수정 시 카테고리&서브카테고리 로드 메소드
+    public Map<String, String> getCategoryAndSubCategoryBySubCategoryIdx(Long subCategoryIdx) {
+        Map<String, String> categoryMap = productMapper.getCategoryAndSubCategoryBySubCategoryIdx(subCategoryIdx);
+        System.out.println("Category and SubCategory Map: " + categoryMap);
+        return categoryMap;
+    }
+
 	
 	@Transactional
 	public List<Map<String, Object>> getProductDetailsByProductIdx(Long productIdx) {

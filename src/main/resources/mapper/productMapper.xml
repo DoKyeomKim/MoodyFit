@@ -265,7 +265,35 @@
     WHERE p.product_idx = #{productIdx}
 </select>
 
-<!-- 수정 관련 쿼리문 -->
+
+
+<!-- ================== 수정 관련 쿼리문 ===================== -->
+
+<select id="getProductDetailsByProductIdxForUpdate" resultType="java.util.HashMap">
+    SELECT 
+        p.product_idx AS productIdx,
+        p.name AS name,
+        p.price AS price,
+        p.manufacture_name AS manufactureName,
+        c.kor_name AS category,
+        sc.kor_name AS subCategory,
+        LISTAGG(pc.color, ', ') WITHIN GROUP (ORDER BY pc.color) AS colors,
+        LISTAGG(ps.sizes, ', ') WITHIN GROUP (ORDER BY ps.sizes) AS sizes,
+        LISTAGG(pq.quantity, ', ') WITHIN GROUP (ORDER BY pq.quantity) AS quantities,
+        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS filePaths
+    FROM product p
+    JOIN product_info pi ON p.product_idx = pi.product_idx
+    LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
+    JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
+    JOIN category c ON sc.category_idx = c.category_idx
+    LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+    LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+    LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+    WHERE p.product_idx = #{productIdx}
+    GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name
+</select>
+
+
 <select id="selectProductByIdx" parameterType="long" resultType="com.mf.dto.ProductDto">
     SELECT * FROM product WHERE product_idx = #{productIdx}
 </select>
@@ -282,12 +310,15 @@
 
 <update id="updateProduct" parameterType="com.mf.dto.ProductDto">
     UPDATE product
-    SET name = #{name},
-        price = #{price},
-        manufacture_name = #{manufactureName},
-        sub_category_idx = #{subCategoryIdx}
-    WHERE product_idx = #{productIdx}
+    <set>
+        <if test="name != null">name = #{name,jdbcType=VARCHAR},</if>
+        <if test="price != null">price = #{price,jdbcType=INTEGER},</if>
+        <if test="manufactureName != null">manufacture_name = #{manufactureName,jdbcType=VARCHAR},</if>
+        <if test="subCategoryIdx != null">sub_category_idx = #{subCategoryIdx,jdbcType=INTEGER},</if>
+    </set>
+    WHERE product_idx = #{productIdx,jdbcType=INTEGER}
 </update>
+
 
 <update id="updateProductInfo" parameterType="com.mf.dto.ProductOptionDto">
     UPDATE product_info
@@ -301,6 +332,15 @@
     SET quantity = #{quantity}
     WHERE product_info_idx = #{productInfoIdx}
 </update>
+
+
+<select id="getCategoryAndSubCategoryBySubCategoryIdx" parameterType="long" resultType="java.util.HashMap">
+    SELECT c.kor_name AS category, sc.kor_name AS subCategory
+    FROM category c
+    JOIN sub_category sc ON c.category_idx = sc.category_idx
+    WHERE sc.sub_category_idx = #{subCategoryIdx}
+</select>
+
 
 <!-- productInfo 삭제 -->
 <delete id="deleteProductInfosByProductIdx" parameterType="long">

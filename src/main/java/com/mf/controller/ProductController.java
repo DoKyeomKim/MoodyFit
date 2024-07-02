@@ -79,14 +79,23 @@ public class ProductController {
     // 상품 상세 정보를 조회하는 메서드
     @GetMapping("/updateForm")
     public String getProductUpdateForm(@RequestParam("productIdx") Long productIdx, Model model) {
+        // 상품 기본 정보 조회
         ProductDto product = productService.getProductByIdx(productIdx);
         model.addAttribute("productDetails", product);
 
+        // 상품 상세 정보 조회
         List<ProductInfoDto> productInfos = productService.getProductInfosByProductIdx(productIdx);
         model.addAttribute("productInfos", productInfos);
 
+        // 상품 이미지 파일 정보 조회
         List<ProductFileDto> productFiles = productService.getProductFilesByProductIdx(productIdx);
         model.addAttribute("productFiles", productFiles);
+
+        // 카테고리 및 서브 카테고리 정보 추가
+        Map<String, String> categoryMap = productService.getCategoryAndSubCategoryBySubCategoryIdx(product.getSubCategoryIdx());
+        System.out.println("Category Map: " + categoryMap);  // 로그 추가
+        model.addAttribute("category", categoryMap.get("category"));
+        model.addAttribute("subCategory", categoryMap.get("subCategory"));
 
         return "/product/productUpdateForm";
     }
@@ -172,7 +181,7 @@ public class ProductController {
         return sizes;
     }
     
- // 카테고리 데이터를 JSON 형식으로 제공하는 메소드
+    // 카테고리 데이터를 JSON 형식으로 제공하는 메소드
     @GetMapping("/api/categories")
     @ResponseBody
     public List<CategoryDto> getCategories(@RequestParam(value = "keyword", required = false) String keyword) {

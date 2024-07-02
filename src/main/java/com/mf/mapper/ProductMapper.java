@@ -110,6 +110,10 @@ public interface ProductMapper {
 	ProductDto selectProductByIdx(@Param("productIdx") Long productIdx);
     List<ProductInfoDto> selectProductInfosByProductIdx(@Param("productIdx") Long productIdx);
     List<ProductFileDto> selectProductFilesByProductIdx(@Param("productIdx") Long productIdx);
+
+    
+    
+    Map<String, String> getCategoryAndSubCategoryBySubCategoryIdx(@Param("subCategoryIdx") Long subCategoryIdx);
 	   
 
 	
