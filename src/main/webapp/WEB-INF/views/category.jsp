@@ -120,7 +120,7 @@
 }
 
 .sort-button {
-    padding: 5px 15px;
+    padding: 3.5px 15px;
     font-size: 16px;
     color: #ffffff;
     background-color: black;
