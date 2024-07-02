@@ -180,7 +180,7 @@ ORDER BY a.posting_idx DESC
                            total_price DESC
                        </when>
                        <otherwise>
-                           posting_idx DESC
+                           posting_idx ASC
                        </otherwise>
                    </choose>
                ) AS rnum
