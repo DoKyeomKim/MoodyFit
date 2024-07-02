@@ -118,21 +118,6 @@
     border-color: #80bdff;
     outline: none;
 }
-
-.sort-button {
-    padding: 3.5px 15px;
-    font-size: 16px;
-    color: #ffffff;
-    background-color: black;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.sort-button:hover {
-    background-color: #616161;
-}
 </style>
 </head>
 <body style="margin-top:70px;">
@@ -158,16 +143,15 @@
 			<div class="row">
 				<c:choose>
 					<c:when test="${not empty allPosting}">
-						<form method="get" action="/category/${categoryEngName}/${subCategoryName}" class="sort-form">
-						    <select id="orderBy" name="orderBy" class="sort-select">
-						        <option value="newest" ${orderBy == 'newest' ? 'selected' : ''}>최신순</option>
-						        <option value="oldest" ${orderBy == 'oldest' ? 'selected' : ''}>오래된 순</option>
-						        <option value="expensive" ${orderBy == 'expensive' ? 'selected' : ''}>비싼 순</option>
-						        <option value="chip" ${orderBy == 'chip' ? 'selected' : ''}>저렴한 순</option>
-						        <option value="sales" ${orderBy == 'sales' ? 'selected' : ''}>매출순</option>
-						    </select>
-						    <button type="submit" class="sort-button">정렬</button>
-						</form>
+					<form method="get" action="/category/${categoryEngName}/${subCategoryName}" class="sort-form">
+					    <select id="orderBy" name="orderBy" class="sort-select" onchange="this.form.submit()">
+					        <option value="newest" ${orderBy == 'newest' ? 'selected' : ''}>최신순</option>
+					        <option value="oldest" ${orderBy == 'oldest' ? 'selected' : ''}>오래된 순</option>
+					        <option value="expensive" ${orderBy == 'expensive' ? 'selected' : ''}>비싼 순</option>
+					        <option value="chip" ${orderBy == 'chip' ? 'selected' : ''}>저렴한 순</option>
+					        <option value="sales" ${orderBy == 'sales' ? 'selected' : ''}>매출순</option>
+					    </select>
+					</form>
 					<c:forEach var="allPosting" items="${allPosting}">
 				            <div class="col-md-3 mt-3 mb-3 all-posting-area">
 				                <div class="all-posting">
@@ -230,14 +214,13 @@
 					</c:when>
 					<c:when test="${not empty selectedPosting}">
 						<form method="get" action="/category/${categoryEngName}/${subCategoryName}" class="sort-form">
-						    <select id="orderBy" name="orderBy" class="sort-select">
+						    <select id="orderBy" name="orderBy" class="sort-select" onchange="this.form.submit()">
 						        <option value="newest" ${orderBy == 'newest' ? 'selected' : ''}>최신순</option>
 						        <option value="oldest" ${orderBy == 'oldest' ? 'selected' : ''}>오래된 순</option>
 						        <option value="expensive" ${orderBy == 'expensive' ? 'selected' : ''}>비싼 순</option>
 						        <option value="chip" ${orderBy == 'chip' ? 'selected' : ''}>저렴한 순</option>
 						        <option value="sales" ${orderBy == 'sales' ? 'selected' : ''}>매출순</option>
 						    </select>
-						    <button type="submit" class="sort-button">정렬</button>
 						</form>
 						<c:forEach var="selectedPosting" items="${selectedPosting}">
 				            <div class="col-md-3 mt-3 mb-3 all-posting-area">
