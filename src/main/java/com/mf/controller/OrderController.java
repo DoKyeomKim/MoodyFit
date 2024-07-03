@@ -1,13 +1,11 @@
 package com.mf.controller;
 
-import java.util.Collections;
-
-
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,14 +14,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mf.dto.CartDto;
 import com.mf.dto.DeliveryDto;
+import com.mf.dto.NearbyDto;
 import com.mf.dto.OrdersDto;
 import com.mf.dto.PersonDto;
 import com.mf.jpa.CartService;
 import com.mf.mapper.OrderMapper;
-import com.mf.paging.Pagination;
-import com.mf.paging.PagingMapper;
-import com.mf.paging.PagingResponse;
-import com.mf.paging.SearchVo;
 import com.mf.service.MyPageService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -90,47 +85,6 @@ public class OrderController {
 		mv.setViewName("myPage/delivery");
 		return mv;
 	}
-
-	// 배송지 관리 페이지
-	/*
-	 * @RequestMapping("/myPage/addDelivery") public String addDelivery(HttpSession
-	 * session, DeliveryDto deliveryDto, Model model,
-	 * 
-	 * @RequestParam("name") String name,
-	 * 
-	 * @RequestParam("deliveryName") String deliveryName,
-	 * 
-	 * @RequestParam("email") String email,
-	 * 
-	 * @RequestParam("phone") String phone,
-	 * 
-	 * @RequestParam("postCode") String postCode,
-	 * 
-	 * @RequestParam("address") String address,
-	 * 
-	 * @RequestParam("personIdx") int personIdx,
-	 * 
-	 * @RequestParam("detailAddress") String detailAddress,
-	 * 
-	 * @RequestParam("content") String content) { ModelAndView mv = new
-	 * ModelAndView(); Long userIdx = (Long) session.getAttribute("userIdx");
-	 * 
-	 * // 세션에 userIdx가 제대로 설정되어 있는지 확인 if (userIdx == null) { throw new
-	 * IllegalArgumentException("User is not logged in."); }
-	 * 
-	 * // 마이페이지 로직 처리 Map<String, Object> result =
-	 * myPageService.getPersonMyPage(userIdx); PersonDto person = (PersonDto)
-	 * result.get("person");
-	 * 
-	 * orderMapper.insertDelivery(deliveryDto);
-	 * 
-	 * List<DeliveryDto> deliveryList = orderMapper.selectDelivery(userIdx);
-	 * 
-	 * 
-	 * model.addAttribute("message", "Delivery added successfully");
-	 * 
-	 * return "redirect:/myPage/delivery"; }
-	 */
 
 	// 결제하는 페이지
 	@RequestMapping("/myPage/payment")
@@ -202,35 +156,23 @@ public class OrderController {
 
 		List<OrdersDto> orderList = orderMapper.selectOrder2(personIdx);
 
-		/*
-		// 페이징
-		int count = pagingMapper.count(personIdx);
-		PagingResponse<OrdersDto> response = null;
-		if (count < 1) {
-			response = new PagingResponse<>(Collections.emptyList(), null);
-		}
-
-		// 페이징을 위한 초기설정값
-		SearchVo searchVo = new SearchVo();
-		searchVo.setPage(nowpage);
-		searchVo.setPageSize(10); // 기본10개 -> 20개
-
-		// Pagination 객체를 생성해서 페이지 정보 계산 후 SearchDto 타입의 객체인 params에 계산된 페이지 정보 저장
-		Pagination pagination = new Pagination(count, searchVo);
-		searchVo.setPagination(pagination);
-		int offset = pagination.getLimitStart();
-		int pageSize = searchVo.getRecordSize();
-
-		// 계산된 페이지 정보의 일부 (limitStart, recordSize)를 기준으로 리스트 데이터 조회 후 응답 데이터 변환
-		List<OrdersDto> list = pagingMapper.getOrderPagingList(personIdx, offset, pageSize);
-		response = new PagingResponse<>(list, pagination);
-*/
-//						Map<Long, List<OrdersDto>> groupedOrderItems = orderList.stream()
-//				                .collect(Collectors.groupingByConcurrent(orderList::getOrderIdx));
-//						
-		// mv.addObject("response", response);
+		
 		mv.addObject("orderList", orderList);
 		mv.setViewName("myPage/order");
 		return mv;
 	}
+	
+	//지역별 리스트 페이지
+	@GetMapping("/nearbyList")
+	public  ModelAndView  nearbyList() {
+		ModelAndView mv = new ModelAndView();
+		
+		// 포스팅(날짜, 추천)
+		List<NearbyDto> postingList = orderMapper.selectPosting();
+		
+		mv.addObject("postingList", postingList);
+		mv.setViewName("/nearbyList");
+		return mv;
+	}
+	
 }

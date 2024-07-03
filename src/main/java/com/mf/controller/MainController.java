@@ -1,5 +1,6 @@
 package com.mf.controller;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,9 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.mf.dto.NearbyDto;
 import com.mf.dto.Paging;
+import com.mf.dto.PersonDto;
 import com.mf.dto.SubCategoryDto;
+import com.mf.mapper.OrderMapper;
+import com.mf.mapper.PersonMapper;
 import com.mf.service.MainService;
+import com.mf.service.MyPageService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -33,10 +39,18 @@ public class MainController {
     @Autowired
     private MainService mainService;
 
+    @Autowired
+    private PersonMapper personMapper;
+    
+    @Autowired
+    private OrderMapper orderMapper;
+    
+    @Autowired
+    private MyPageService myPageService;
  
 	// 메인 페이지
 	@GetMapping("/")
-	public ModelAndView main(HttpSession session) {
+	public ModelAndView main(HttpSession session, PersonDto personDto) {
 		ModelAndView mv = new ModelAndView();
 
 		// 시큐리티 로그인하면서 세션에 저장되게 한 userIdx 갖고오기
@@ -53,7 +67,18 @@ public class MainController {
 		    // 사용자의 권한 확인
 		    for (GrantedAuthority authority : authentication.getAuthorities()) {
 		        if ("ROLE_PERSON".equals(authority.getAuthority())) {
+		        	
+		        	Map<String, Object> result2 = myPageService.getPersonMyPage(userIdx);
+		    		PersonDto person = (PersonDto) result2.get("person");
+		    		Long personIdx = person.getPersonIdx();
+		        	
 		            String nickName = mainService.getPNickNameByUserIdx(userIdx);
+		            List<PersonDto> personList = personMapper.selectPerson(userIdx);
+		            List<NearbyDto> postingList2 = orderMapper.selectPosting2(personIdx);
+		            Collections.shuffle(postingList2);
+		            
+		            mv.addObject("postingList",postingList2);
+		            mv.addObject("p", personList);
 		            mv.addObject("nickName", nickName);
 		            break; // 이미 닉네임을 설정했으면 루프 종료
 		        } else if ("ROLE_STORE".equals(authority.getAuthority())) {
@@ -67,11 +92,12 @@ public class MainController {
 		        }
 		    }
 		}
-		
+		List<NearbyDto> postingList = orderMapper.selectPosting();
+		Collections.shuffle(postingList);
         List<Map<String, Object>> edtiorPick = result.get("edtiorPick");
         List<Map<String, Object>> recent = result.get("recent");
         
-		
+		mv.addObject("pl",postingList);
 		mv.addObject("edtiorPick", edtiorPick);
 		mv.addObject("recent", recent);
 		mv.setViewName("/main");
@@ -243,7 +269,7 @@ public class MainController {
 //======================================================================
 //======================================================================
 
-    
+	
     
 }
 
