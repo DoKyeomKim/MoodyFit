@@ -21,49 +21,26 @@ public class PostingService {
 
     @Autowired
     private PostingMapper postingMapper;
-    
-    @Transactional
-    public void addPosting(PostingDto postingDto) {
-    	// null 값일 경우 기본 storeIdx 설정
-    	if (postingDto.getStoreIdx() == null) {
-    		throw new IllegalArgumentException("storeIdx cannot be null");
-        }
-    	
-    	// posting 테이블에 새로운 판매글 삽입
-    	postingMapper.insertPosting(postingDto);
-    	
-    	// posting_product 테이블에 해당 제품 정보 삽입
-        if (postingDto.getProductInfoIdx() != null) {
-            PostingProductDto postingProductDto = new PostingProductDto();
-            postingProductDto.setPostingIdx(postingDto.getPostingIdx());
-            postingProductDto.setProductInfoIdx(postingDto.getProductInfoIdx());
-            postingMapper.insertPostingProduct(postingProductDto);
-        }
-    }
-    
-    public List<PostingProductDto> getPostingProduct(Long userIdx) {
-		return postingMapper.getPostingProduct(userIdx);
-	}
-    
-    
-    @Transactional
-    public void createPosting(PostingDto postingDto) {
-        postingMapper.insertPosting(postingDto);
 
+    @Transactional
+    public void createPosting(PostingDto postingDto, String productInfoIdxs) {
+        postingMapper.insertPosting(postingDto);
         Long postingIdx = postingDto.getPostingIdx();
 
-        // 파일 저장 및 DB에 파일 정보 삽입
         if (postingDto.getPostingFiles() != null && !postingDto.getPostingFiles().isEmpty()) {
             for (MultipartFile file : postingDto.getPostingFiles()) {
                 savePostingFile(postingIdx, file);
             }
         }
 
-        if (postingDto.getProductInfoIdx() != null) {
-            PostingProductDto postingProductDto = new PostingProductDto();
-            postingProductDto.setPostingIdx(postingIdx);
-            postingProductDto.setProductInfoIdx(postingDto.getProductInfoIdx());
-            postingMapper.insertPostingProduct(postingProductDto);
+        if (productInfoIdxs != null && !productInfoIdxs.isEmpty()) {
+            String[] productInfoIdxArray = productInfoIdxs.split(", ");
+            for (String productInfoIdx : productInfoIdxArray) {
+                PostingProductDto postingProductDto = new PostingProductDto();
+                postingProductDto.setPostingIdx(postingIdx);
+                postingProductDto.setProductInfoIdx(Long.parseLong(productInfoIdx));
+                postingMapper.insertPostingProduct(postingProductDto);
+            }
         }
     }
 
@@ -80,7 +57,6 @@ public class PostingService {
             File dest = new File(filePath);
             file.transferTo(dest);
 
-            // 파일 정보를 DB에 저장
             PostingFileDto postingFileDto = new PostingFileDto();
             postingFileDto.setOriginalName(originalFileName);
             postingFileDto.setFilePath(filePath);
@@ -92,11 +68,7 @@ public class PostingService {
         }
     }
 
-    
-    // 상품 상세 정보 & 다중 레코드 정보 로드
-  	public List<Map<String, Object>> getAllProductDetailsWithInventory() {
-  		return postingMapper.getAllProductDetailsWithInventory();
-  	}
-
-	
+    public List<Map<String, Object>> getAllProductDetailsWithInventory() {
+        return postingMapper.getAllProductDetailsWithInventory();
+    }
 }

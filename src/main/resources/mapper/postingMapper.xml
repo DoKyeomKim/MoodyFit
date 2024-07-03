@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.PostingMapper">
-
 
 <insert id="insertPosting" parameterType="com.mf.dto.PostingDto">
     <selectKey keyProperty="postingIdx" resultType="long" order="BEFORE">
@@ -16,15 +15,8 @@
         SELECT posting_product_seq.NEXTVAL FROM DUAL
     </selectKey>
     INSERT INTO posting_product (posting_product_idx, posting_idx, product_info_idx)
-    VALUES (#{postingProductIdx}, #{postingIdx}, 
-        <if test="productInfoIdx != null">
-            #{productInfoIdx}
-        </if>
-        <if test="productInfoIdx == null">
-            NULL
-        </if>)
+    VALUES (#{postingProductIdx}, #{postingIdx}, #{productInfoIdx})
 </insert>
-
 
 <insert id="insertPostingFile" parameterType="com.mf.dto.PostingFileDto">
     <selectKey keyProperty="postingFileIdx" resultType="long" order="BEFORE">
@@ -56,6 +48,5 @@
     LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
     GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name
 </select>
-
 
 </mapper>
