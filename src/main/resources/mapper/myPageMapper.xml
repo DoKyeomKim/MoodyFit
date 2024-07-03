@@ -14,7 +14,7 @@ WHERE o.state != '결제중' AND p.user_idx =#{userIdx}
 select count(o.order_idx)
 from orders o
 join person p on p.person_idx = o.person_idx
-where o.state = '배송중' and p.user_idx=#{userIdx}
+where o.state = '배송준비중' and p.user_idx=#{userIdx}
 </select>
 
 <select id="getOrderIng">

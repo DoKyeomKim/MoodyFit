@@ -79,29 +79,24 @@ main {
                         buyer_postcode: myPostCode
                     },
                     (response) => {
-                        if (response.success) {
-                            fetch(`/api/postToken?impUid=${response.imp_uid}`, {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({
-                                    impUid: response.imp_uid
-                                }),
-                            })
-                            .then(res => res.ok ? res.text() : Promise.reject(res.statusText))
-                            .then(data => {
-                                console.log('Success:', data);
-                                alert("결제가 완료되었습니다!");
-                                window.location.href = "/myPage/order";
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert("결제 실패!");
-                                window.location.href = "/myPage/payment";
-                            });
-                        } else {
-                            alert("결제가 취소되었습니다!");
+                        fetch(`/api/postToken?impUid=${response.imp_uid}`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                impUid: response.imp_uid
+                            }),
+                        })
+                        .then(res => res.ok ? res.text() : Promise.reject(res.statusText))
+                        .then(data => {
+                            console.log('Success:', data);
+                            alert("결제가 완료되었습니다!");
+                            window.location.href = "/myPage/order";
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert("결제 실패!");
                             window.location.href = "/myPage/payment";
-                        }
+                        });
                     });
             }
         </script>
