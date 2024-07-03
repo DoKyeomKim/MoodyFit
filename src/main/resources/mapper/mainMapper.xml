@@ -4,7 +4,7 @@
 
 <select id="getTopPosting">
 <![CDATA[
-	SELECT * FROM (
+SELECT * FROM (
 	    SELECT p.posting_idx AS posting_idx,
 	           p.update_date,
 	           p.title AS title,
@@ -13,7 +13,8 @@
 	           MAX(pf.file_path) AS file_path,
 	           ROW_NUMBER() OVER (ORDER BY SUM(o.total_price) DESC) AS rnum
 	    FROM orders o
-	    JOIN cart c ON o.order_idx = c.order_idx 
+        JOIN order_cart oc on o.order_idx = oc.order_idx
+        join cart c on c.cart_idx = oc.cart_idx
 	    JOIN posting_product pp ON c.posting_product_idx = pp.posting_product_idx
 	    JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
 	    JOIN product pro ON pi.product_idx = pro.product_idx
@@ -204,7 +205,8 @@ ORDER BY a.posting_idx DESC
             JOIN sub_category f ON d.sub_category_idx = f.sub_category_idx
             JOIN category g ON g.category_idx = f.category_idx
             LEFT JOIN cart c ON c.posting_product_idx = b.posting_product_idx
-            LEFT JOIN orders o ON o.order_idx = c.order_idx
+            LEFT JOIN order_cart oc on c.cart_idx = oc.cart_idx
+            LEFT JOIN orders o ON o.order_idx = oc.order_idx
             WHERE g.eng_name = #{categoryEngName}
             GROUP BY a.posting_idx, a.title, d.price, s.store_name, e.file_path
         ) inner_sub
@@ -265,7 +267,8 @@ where g.eng_name = #{categoryEngName}
 			join product_file e on e.product_info_idx = b.product_info_idx
 			join sub_category f on d.sub_category_idx = f.sub_category_idx
             LEFT JOIN cart c ON c.posting_product_idx = b.posting_product_idx
-            LEFT JOIN orders o ON o.order_idx = c.order_idx
+            LEFT JOIN order_cart oc on c.cart_idx = oc.cart_idx
+            LEFT JOIN orders o ON o.order_idx = oc.order_idx
 			where f.eng_name = #{subCategoryName}
             GROUP BY a.posting_idx, a.title, d.price, s.store_name, e.file_path
         ) inner_sub
