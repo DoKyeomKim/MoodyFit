@@ -77,9 +77,6 @@ public class MainController {
 		            List<NearbyDto> postingList2 = orderMapper.selectPosting2(personIdx);
 		            Collections.shuffle(postingList2);
 		            
-		            System.out.println(personList);
-		            System.out.println(postingList2);
-		            
 		            mv.addObject("postingList",postingList2);
 		            mv.addObject("p", personList);
 		            mv.addObject("nickName", nickName);
