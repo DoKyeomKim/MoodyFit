@@ -7,13 +7,26 @@
 <meta charset="UTF-8">
 <title>카테고리 - ${categoryEngName}</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <style>
-
+.category-best-item{
+	background-color :#fafafa;
+}
 .cateDefault {
 	text-align: center;
 	background-color :#fafafa;
+    position: relative;
+    height: 50vh;
+    overflow: hidden;
+    z-index: 1;
 }
 
+.category-name{
+	text-align:center;
+	margin-top : 100px;
+	margin-bottom : 30px;
+}
 .subCateDefault {
 	text-align: center;
 }
@@ -118,17 +131,130 @@
     border-color: #80bdff;
     outline: none;
 }
+
+.swiper-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.swiper-pagination {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}
+
+.swiper-pagination-progressbar {
+  	z-index: 10;
+  	position:relative;
+    height: 100%;
+    margin-bottom : 100px;
+}
+.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+    background: black; /* 원하는 색상으로 변경 */
+}
+.image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.image-container .overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.image-container:hover .overlay {
+    height: 25%;
+}
+
+.image-container .overlay .info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    text-align: left;
+}
+
+.image-container .title, .image-container .price, .image-container .store-name {
+    margin: 0;
+}
+
+.image-container .title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.image-container .price {
+    font-size: 16px;
+    color: #ffcc00;
+}
+
+.image-container .store-name {
+    font-size: 14px;
+    opacity: 0.7;
+}
 </style>
 </head>
 <body style="margin-top:70px;">
 	<%@include file="/WEB-INF/layouts/header.jsp"%>
-	<br>
-	<br>
-	<div class="cateDefault" >
-		<h3>${categoryEngName}</h3>
-		Best Item<br></br>
-	</div>
+
+
+    <c:choose>
+        <c:when test="${not empty topPosting}">
+        <div class="category-best-item">
+	        <div class="category-name">
+			    <h3 style="padding-top:30px;">${categoryEngName} BEST ITEM</h3>
+			</div>	
+			<div class="cateDefault">
+	            <div class="swiper-container">
+	                <div class="swiper-wrapper">
+					<c:forEach var="topPosting" items="${topPosting}">
+					    <div class="swiper-slide">
+					        <div class="image-container" data-store-name="${topPosting.STORE_NAME}" data-posting-idx="${topPosting.POSTING_IDX}" data-price="${topPosting.PRICE}" data-title="${topPosting.TITLE}" data-date="${topPosting.UPDATE_DATE}">
+					            <a href="/postingDetail?postingIdx=${topPosting.POSTING_IDX}">
+						            <img src="${topPosting.FILE_PATH}" class="img-fluid" alt="Image 1" style="height: 400px; width: auto;">
+						            <div class="overlay">
+						                <div class="info">
+						                    <h3 class="title">${topPosting.TITLE}</h3>
+						                    <p class="price top-posting">${topPosting.PRICE}</p>
+						                    <p class="store-name">${topPosting.STORE_NAME}</p>
+						                </div>
+						            </div>
+					            </a>
+					        </div>
+					    </div>
+					</c:forEach>
+	                </div>
+	            </div>
+			</div>
+			<div class="best-progressbar">
+				<div class="swiper-pagination swiper-pagination-progressbar"></div>
+			</div>
+		</div>
+        </c:when>
+        <c:otherwise>
+        </c:otherwise>
+    </c:choose>
 	<input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
+    <div class="category-name">
+	    <h3>${categoryEngName}</h3>
+	</div>	
 	<div class="subCateDefault">
 		<c:forEach var="subCategory" items="${subCategories}">
 			<a href="/category/${categoryEngName}/${subCategory.engName}"> <c:choose>
@@ -490,5 +616,40 @@
         });
     });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 2, // 한 번에 보여줄 슬라이드의 개수
+        spaceBetween: 5, // 슬라이드 사이의 간격 (픽셀 단위)
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            type: 'progressbar', // Progressbar 형식의 페이지네이션
+        },
+        loop: true, // 무한 루프
+        autoplay: {
+            delay: 5000, // 자동 재생 시간 (밀리초 단위)
+            disableOnInteraction: false,
+        },
+        speed: 1000 
+    });
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var topPostingPrices = document.querySelectorAll(".price.top-posting");
+
+        topPostingPrices.forEach(function(priceElement) {
+            var priceText = priceElement.textContent;
+            var price = parseFloat(priceText.replace(/[^\d.-]/g, '')); // 숫자 이외의 문자 제거 후 숫자로 변환
+            var formattedPrice = price.toLocaleString("ko-KR"); // 한국 통화 형식으로 포맷팅
+            priceElement.textContent = formattedPrice + " 원";
+        });
+    });
+</script>
+
 </body>
 </html>

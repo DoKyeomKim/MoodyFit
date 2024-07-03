@@ -78,6 +78,9 @@ public interface MainMapper {
 	// 에디터픽 삭제
 	void deleteEditorPick(@Param("postingIdx") Long postingIdx, @Param("userIdx")  Long userIdx);
 
+	// 카테고리 내 상위 품목 갖고오기
+	List<Map<String, Object>> getTopPostingByCategoryEngName(String categoryEngName);
+
 
 
 

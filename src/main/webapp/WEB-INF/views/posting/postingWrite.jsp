@@ -94,7 +94,6 @@ $(document).ready(function() {
     </div>
 
     <div id="productDetails">
-
     </div>
 
     <form method="post" enctype="multipart/form-data" action="/storeMyPage/postingWrite">
@@ -167,10 +166,6 @@ $(document).ready(function() {
 		        console.log("HTML set to:", detailsDiv.innerHTML);
 		    });
 		}
-
-
-
-
 </script>
 
 </body>
