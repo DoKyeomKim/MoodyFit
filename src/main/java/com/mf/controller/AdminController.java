@@ -656,102 +656,128 @@ public class AdminController {
 	   }
 
 	 //=========================================================================
-	 //==============================에디터 픽==================================
-	 //=========================================================================
-	 //=========================================================================
+//==============================에디터 픽==================================
+//=========================================================================
+//=========================================================================
+   	   // 에디터 픽 스크랩 이동
+	   @GetMapping("/adminEPScrap")
+	   public ModelAndView adminEPScrap(@RequestParam(value = "page", defaultValue = "1") int page) {
+ 		  ModelAndView mv = new ModelAndView();
+ 		  
+		   int pageSize = 5;
+		   int startIndex = (page - 1) * pageSize;
+		   
+		   List<Map<String,Object>> EPScrap = editorPickService.getEditorPickScrap(pageSize,startIndex);
+		   Paging paging = editorPickService.calculateEPScrapPagingInfo(page, pageSize);
+		   
+ 		   mv.addObject("prev", paging.isPrev());
+ 		   mv.addObject("next", paging.isNext());
+ 		   mv.addObject("startPageNum", paging.getStartPageNum());
+ 		   mv.addObject("endPageNum", paging.getEndPageNum());
+ 		   mv.addObject("totalPages", paging.getTotalPages());
+ 		   mv.addObject("currentPage", page);
+ 		   
+ 		   mv.addObject("EPScrap", EPScrap);
+ 		   mv.setViewName("admin/editorPickScrap");
+ 		   return mv;
+	   }
+   		
+ 	   // 에디터 픽 이동
+ 	   @GetMapping("/adminEditorPick")
+ 	   public ModelAndView editorPick(@RequestParam(value = "page", defaultValue = "1") int page) {
+ 		   ModelAndView mv = new ModelAndView();
+ 		   
+ 		   int pageSize = 5;
+ 		   int startIndex = (page - 1) * pageSize;
+ 		   
+ 		   // 에디터픽 리스트 갖고오기
+ 		   List<Map<String,Object>> editorPick = editorPickService.getEditorPick(pageSize,startIndex);
+ 		   // 페이징 처리
+ 		   Paging paging = editorPickService.calculatePagingInfo(page, pageSize);
+ 		   
+ 		   mv.addObject("prev", paging.isPrev());
+ 		   mv.addObject("next", paging.isNext());
+ 		   mv.addObject("startPageNum", paging.getStartPageNum());
+ 		   mv.addObject("endPageNum", paging.getEndPageNum());
+ 		   mv.addObject("totalPages", paging.getTotalPages());
+ 		   mv.addObject("currentPage", page);
 
+ 		   mv.addObject("editorPick", editorPick);
+ 		   mv.setViewName("admin/editorPick");
+ 		   return mv;
+ 	   }
+ 	   
+ 	   // 에디터 픽 작성 페이지 이동
+ 	   @GetMapping("/EPWriteForm")
+ 	   public ModelAndView EPWriteForm() {
+ 		   ModelAndView mv = new ModelAndView();
+ 		   
+ 		   //에디터가 스크랩한 공고 들고오기
+ 		   List<Map<String,Object>> posting = editorPickService.getPickPosting();
+ 		   
+ 		   mv.addObject("posting", posting);
+ 		   mv.setViewName("admin/editorPickWrite");
+ 		   return mv;
+ 	   }
+ 	   
+ 	   // 에디터 픽 작성
+ 	   @PostMapping("/EPWrite")
+ 	   public ModelAndView EPWrite(@RequestParam("file") MultipartFile file, EditorPickDto editorPick) {
+ 		   ModelAndView mv = new ModelAndView();
+ 		   // 에디터픽 작성 로직
+ 		   editorPickService.writeEditorPick(editorPick,file);
+ 		   
+ 		   mv.setViewName("redirect:/adminEditorPick");
+ 		   return mv;
+ 	   }
+ 	   
+ 	   // 에디터 픽 수정 페이지
+ 	   @GetMapping("/EPEditForm")
+ 	   public ModelAndView EPEditForm(@RequestParam("pickIdx") Long pickIdx,EditorPickDto editorPick) throws ParseException {
+ 		   ModelAndView mv = new ModelAndView();
+ 		   // 모달창 에디터픽 스크랩 목록
+ 		   List<Map<String,Object>> posting = editorPickService.getPickPosting();
 
+ 		   // 수정 페이지에 필요한 정보 들고오는 로직처리
+ 		   Map<String,Object> editPick = editorPickService.getEditPickByPickIdx(pickIdx,editorPick);
 
-	 	   
-	 	   // 에디터 픽 이동
-	 	   @GetMapping("/adminEditorPick")
-	 	   public ModelAndView editorPick(@RequestParam(value = "page", defaultValue = "1") int page) {
-	 		   ModelAndView mv = new ModelAndView();
-	 		   
-	 		   int pageSize = 5;
-	 		   int startIndex = (page - 1) * pageSize;
-	 		   
-	 		   // 에디터픽 리스트 갖고오기
-	 		   List<Map<String,Object>> editorPick = editorPickService.getEditorPick(pageSize,startIndex);
-	 		   // 페이징 처리
-	 		   Paging paging = editorPickService.calculatePagingInfo(page, pageSize);
-	 		   
-	 		   mv.addObject("prev", paging.isPrev());
-	 		   mv.addObject("next", paging.isNext());
-	 		   mv.addObject("startPageNum", paging.getStartPageNum());
-	 		   mv.addObject("endPageNum", paging.getEndPageNum());
-	 		   mv.addObject("totalPages", paging.getTotalPages());
-	 		   mv.addObject("currentPage", page);
-
-	 		   mv.addObject("editorPick", editorPick);
-	 		   mv.setViewName("admin/editorPick");
-	 		   return mv;
-	 	   }
-	 	   
-	 	   // 에디터 픽 작성 페이지 이동
-	 	   @GetMapping("/EPWriteForm")
-	 	   public ModelAndView EPWriteForm() {
-	 		   ModelAndView mv = new ModelAndView();
-	 		   // 임시용 전부 들고 오는 로직
-	 		   List<Map<String,Object>> posting = editorPickService.getPickPosting();
-	 		   
-	 		   
-	 		   
-	 		   mv.addObject("posting", posting);
-	 		   mv.setViewName("admin/editorPickWrite");
-	 		   return mv;
-	 	   }
-	 	   
-	 	   // 에디터 픽 작성
-	 	   @PostMapping("/EPWrite")
-	 	   public ModelAndView EPWrite(@RequestParam("file") MultipartFile file, EditorPickDto editorPick) {
-	 		   ModelAndView mv = new ModelAndView();
-	 		   // 에디터픽 작성 로직
-	 		   editorPickService.writeEditorPick(editorPick,file);
-	 		   
-	 		   mv.setViewName("redirect:/adminEditorPick");
-	 		   return mv;
-	 	   }
-	 	   
-	 	   // 에디터 픽 수정 페이지
-	 	   @GetMapping("/EPEditForm")
-	 	   public ModelAndView EPEditForm(@RequestParam("pickIdx") Long pickIdx,EditorPickDto editorPick) throws ParseException {
-	 		   ModelAndView mv = new ModelAndView();
-	 		   
-	 		   // 수정 페이지에 필요한 정보 들고오는 로직처리
-	 		   Map<String,Object> editPick = editorPickService.getEditPickByPickIdx(pickIdx,editorPick);
-	 		    
-	 		   mv.addObject("startDate",editPick.get("formattedStartDate"));
-	 		   mv.addObject("endDate",editPick.get("formattedEndDate"));
-	 		   mv.addObject("editorPick",editPick.get("editorPick"));
-	 		   mv.addObject("postingInfo",editPick.get("postingInfo"));
-	 		   mv.addObject("editPick", editPick);
-	 		   mv.setViewName("admin/editorPickEdit");
-	 		   return mv;
-	 	   }
-	 	  
-	 	   // 에디터픽 수정
-	 	   @PostMapping("/EPEdit")
-	 	   public ModelAndView EPEdit(@RequestParam("file") MultipartFile file,EditorPickDto editorPick) {
-	 		   ModelAndView mv = new ModelAndView();
-	 		   
-	 		   editorPickService.editorPickUpdate(file,editorPick);
-	 		   
-	 		   mv.setViewName("redirect:/adminEditorPick");
-	 		   return mv;
-	 	   }
-	 	   
-	 	   // 에디터픽 삭제
-	 	   @PostMapping("/EPDelete")
-	 	   public String EPDelete(@RequestParam("pickIdx") Long pickIdx) {
-	 		   
-	 		   editorPickService.editorPickDelete(pickIdx);
-	 		   
-	 		   return "redirect:/adminEditorPick";
-	 	   }
-	 //=========================================================================
-	 //=========================================================================
-	 //=========================================================================
+ 		   mv.addObject("posting", posting);
+ 		   mv.addObject("startDate",editPick.get("formattedStartDate"));
+ 		   mv.addObject("endDate",editPick.get("formattedEndDate"));
+ 		   mv.addObject("editorPick",editPick.get("editorPick"));
+ 		   mv.addObject("postingInfo",editPick.get("postingInfo"));
+ 		   mv.addObject("editPick", editPick);
+ 		   mv.setViewName("admin/editorPickEdit");
+ 		   return mv;
+ 	   }
+ 	  
+ 	   // 에디터픽 수정
+ 	   @PostMapping("/EPEdit")
+ 	   public ModelAndView EPEdit(@RequestParam("file") MultipartFile file,EditorPickDto editorPick) {
+ 		   ModelAndView mv = new ModelAndView();
+ 		   System.out.println(editorPick);
+ 		   System.out.println(editorPick);
+ 		   System.out.println(editorPick);
+ 		   System.out.println(editorPick);
+ 		   System.out.println(editorPick);
+ 		   
+ 		   editorPickService.editorPickUpdate(file,editorPick);
+ 		   
+ 		   mv.setViewName("redirect:/adminEditorPick");
+ 		   return mv;
+ 	   }
+ 	   
+ 	   // 에디터픽 삭제
+ 	   @PostMapping("/EPDelete")
+ 	   public String EPDelete(@RequestParam("pickIdx") Long pickIdx) {
+ 		   
+ 		   editorPickService.editorPickDelete(pickIdx);
+ 		   
+ 		   return "redirect:/adminEditorPick";
+ 	   }
+//=========================================================================
+//=========================================================================
+//=========================================================================
 
 	   
 }

@@ -8,9 +8,11 @@ import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 
 import com.mf.dto.CartDto;
 import com.mf.dto.DeliveryDto;
+import com.mf.dto.NearbyDto;
 import com.mf.dto.OrderDetailDto;
 import com.mf.dto.OrderRequest;
 import com.mf.dto.OrdersDto;
+import com.mf.dto.PostingDto;
 
 @Mapper
 public interface OrderMapper {
@@ -64,6 +66,10 @@ public interface OrderMapper {
 	void deleteCart2(Integer cartIdx);
 	
 	// 가격으로 person_level 변경
-	void changePersonLevel(int totalPrice, Long personIdx);
+	void changePersonLevel(Long personIdx);
+
+	List<NearbyDto> selectPosting();
+
+	List<NearbyDto> selectPosting2(Long personIdx);
 
 }

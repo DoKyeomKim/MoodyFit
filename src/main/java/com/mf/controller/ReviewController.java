@@ -34,6 +34,7 @@ public class ReviewController {
 		@GetMapping("/checkLikes")
 		public ResponseEntity<Boolean> checkLikes(@RequestParam("postingReviewIdx") Long postingReviewIdx, @RequestParam("userIdx") Long userIdx){
 			boolean isLikes = adminReviewService.checkLikes(postingReviewIdx,userIdx);
+			
 			return ResponseEntity.ok(isLikes);
 		}
 		

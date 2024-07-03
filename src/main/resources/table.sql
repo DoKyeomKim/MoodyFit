@@ -541,3 +541,7 @@ CREATE SEQUENCE sub_category_seq
     CREATE SEQUENCE review_like_seq
 	START WITH 1
 	INCREMENT BY 1;
+	
+    CREATE SEQUENCE editor_scrap_seq
+	START WITH 1
+	INCREMENT BY 1;

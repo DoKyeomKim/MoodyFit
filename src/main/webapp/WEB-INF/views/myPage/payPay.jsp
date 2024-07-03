@@ -20,7 +20,7 @@ main {
     <%@include file="/WEB-INF/layouts/aside.jsp"%>
 
     <main style="margin-top:30px; width:90%;">
-        <h2 style="text-align:left; margin-top:30px; margin-left:100px;">결제진행중~</h2>
+        <h2 style="text-align:left; margin-top:30px; margin-left:100px;">결제진행중</h2>
         <hr>
         
         <div style="text-align: right;">

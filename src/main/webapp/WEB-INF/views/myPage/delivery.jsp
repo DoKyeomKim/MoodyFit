@@ -10,10 +10,30 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <style>
-main{
-    width: 80%;
-    padding-left:200px;
-}
+ body {
+        font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
+        background-color: #F6F4EE;
+        margin: 0;
+        padding: 0;
+    }
+
+    main {
+        width: 80%;
+        margin: 70px auto;
+        
+        
+        
+    }
+    .box-container{
+     border-top: 1px solid #ccc; /* 상단 구분선 추가 */
+        border-bottom: 1px solid #ccc; /* 하단 구분선 추가 */
+       padding: 2% 5%; display: flex; justify-content: space-evenly; 
+
+    }
+    h3 {
+        text-align: left;
+        margin-left: 30px;
+    }
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -52,19 +72,20 @@ main{
 </style>
 
 </head>
-<body>
-    <%@include file="/WEB-INF/layouts/header.jsp"%>
-        <h2 style="text-align:left; margin-top:30px; margin-left : 100px;"> 배송지 관리</h2>
-        <hr>
+    <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
+<body style="background-color:#F6F4EE !important;">
+  <main>
+       <h3 style="font-weight:bold;"> 배송지 관리</h3>
+    
     <%@include file="/WEB-INF/layouts/aside.jsp"%>
 
-    <main style="margin-top:30px; width:90%; ">
+  
 
        
             <c:forEach var="de" items="${deliveryList}">
 
                 <div class="box-container"
-                    style="border: 1px solid black; padding: 2% 5%; margin: 2% 5%; display: flex; justify-content: space-evenly;">
+                    >
                     <div class="form-check" style="display: flex; flex-direction: column; justify-content: space-evenly; width:30%;">
 					  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault${de.deliveryIdx}" value="${de.isDefault}" ${de.isDefault == 1 ? 'checked' : ''}>
 					  <label class="form-check-label" for="flexRadioDefault${de.deliveryIdx}">기본 배송지 설정</label>
@@ -222,8 +243,8 @@ main{
     </div>
 </div>
    
-<%@include file="/WEB-INF/layouts/footer.jsp"%>
     </main>
+
     <!-- jQuery Core -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Popper.js -->
@@ -445,4 +466,5 @@ main{
 </script>
     <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
+<%@include file="/WEB-INF/layouts/footer.jsp"%>
 </html>

@@ -183,6 +183,7 @@ main {
                         COMMUNITY
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="communityDropdown">
+                        <li><a class="dropdown-item" href="/nearbyList">지역별 검색</a></li>
                         <li><a class="dropdown-item" href="/faq">FAQ</a></li>
                         <li><a class="dropdown-item" href="/qna">QNA</a></li>
                         <li><a class="dropdown-item" href="/review">Review</a></li>
@@ -199,7 +200,7 @@ main {
                                 <c:when test="${sessionScope.role == 'ROLE_PERSON'}">
                                 	
                                     <li class="nav-item1">
-                                        <a href="/myPage" class="nav-link"><img src="/images/${levelName}.png" id="person-level"> 마이페이지</a>
+                                        <a href="/myPage" class="nav-link">마이페이지</a>
                                     </li>
                                 </c:when>
                                 <c:when test="${sessionScope.role == 'ROLE_STORE'}">

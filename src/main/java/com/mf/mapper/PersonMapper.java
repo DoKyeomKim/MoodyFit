@@ -14,5 +14,7 @@ public interface PersonMapper {
 	 List<PersonDto> getPersons(@Param("offset") int offset, @Param("noOfRecords") int noOfRecords);
 	    int getNoOfRecords();
 	    List<PersonDto> searchUsersById(@Param("searchId") String searchId);
+
+		List<PersonDto> selectPerson(Long userIdx);
 	    
 }
