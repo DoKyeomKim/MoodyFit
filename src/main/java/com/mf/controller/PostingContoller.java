@@ -50,6 +50,7 @@ public class PostingContoller {
 	@ResponseBody
 	public List<Map<String, Object>> getProductDetails(@RequestParam("productIdx") Long productIdx) {
 	    List<Map<String, Object>> productDetails = productService.getProductDetailsByProductIdx(productIdx);
+	    
 	    return productDetails;
 	}
 
