@@ -103,6 +103,7 @@
     background-color: #f0f8ff;
 }
 
+
 .w3-bar {
     margin-bottom: 10px;
     margin-top: 100px;
