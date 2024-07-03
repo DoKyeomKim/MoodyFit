@@ -2,10 +2,12 @@ package com.mf.controller;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.mf.dto.CategoryDto;
 import com.mf.dto.ProductColorDto;
 import com.mf.dto.ProductDto;
+import com.mf.dto.ProductFileDto;
 import com.mf.dto.ProductInfoDto;
 import com.mf.dto.ProductInfoList;
 import com.mf.dto.ProductOptionDto;
@@ -75,37 +78,31 @@ public class ProductController {
     
     // =======================================================================
     // =========================== 상품 수정 =================================
+    // 상품 상세 정보를 조회하는 메서드
     @GetMapping("/updateForm")
-    public String showUpdateForm(@RequestParam("productIdx") Long productIdx, Model model) {
-        try {
-            if (productIdx == null) {
-                System.out.println("productIdx가 null입니다.");
-                return "redirect:/storeMyPage/productList";
-            }
+    public String getProductUpdateForm(@RequestParam("productIdx") Long productIdx, Model model) {
+        // 상품 기본 정보 조회
+        ProductDto product = productService.getProductByIdx(productIdx);
+        model.addAttribute("productDetails", product);
 
-            // 상품 세부 정보 로드
-            Map<String, Object> productDetails = productService.getProductDetailsByProductIdx(productIdx);
-            if (productDetails.isEmpty()) {
-                System.out.println("상품 정보를 찾을 수 없습니다.");
-                return "redirect:/storeMyPage/productList";
-            }
+        // 상품 상세 정보 조회
+        List<ProductInfoDto> productInfos = productService.getProductInfosByProductIdx(productIdx);
+        model.addAttribute("productInfos", productInfos);
 
-            // 모델에 상품 세부 정보 추가
-            model.addAttribute("productDetails", productDetails);
-            System.out.println("상품 정보 로드 성공: " + productDetails);
+        // 상품 이미지 파일 정보 조회
+        List<ProductFileDto> productFiles = productService.getProductFilesByProductIdx(productIdx);
+        model.addAttribute("productFiles", productFiles);
 
-            // 상품의 추가 정보 로드 (색상, 사이즈, 재고)
-            List<ProductInfoDto> productInfos = productService.getProductInfosByProductIdx(productIdx);
-            model.addAttribute("productInfos", productInfos);
-            System.out.println("상품 추가 정보 로드 성공: " + productInfos);
-            
-            return "product/productUpdateForm";
-        } catch (Exception e) {
-            System.out.println("오류 발생: " + e.getMessage());
-            return "redirect:/storeMyPage/productList";
-        }
+        // 카테고리 및 서브 카테고리 정보 추가
+        Map<String, String> categoryMap = productService.getCategoryAndSubCategoryBySubCategoryIdx(product.getSubCategoryIdx());
+        System.out.println("Category Map: " + categoryMap);  // 로그 추가
+        model.addAttribute("category", categoryMap.get("category"));
+        model.addAttribute("subCategory", categoryMap.get("subCategory"));
+
+        return "/product/productUpdateForm";
     }
-    
+
+
     @PostMapping("/products/update")
     public String updateProduct(
             @RequestParam("productIdx") Long productIdx,
@@ -133,6 +130,17 @@ public class ProductController {
 
         return "redirect:/storeMyPage/productList";
     }
+    
+    
+    // ============== 상품 상태 =====================
+    @PostMapping("/updateProductState")
+    @ResponseBody
+    public ResponseEntity<Void> updateProductState(@RequestParam("productIdx") Long productIdx, @RequestParam("state") int state) {
+        productService.updateProductState(productIdx, state);
+        return ResponseEntity.ok().build();
+    }
+
+    
 
         /* 이미지 변경 및 삭제 처리
         productService.updateProduct(productDto, productInfos, productImages, deleteFileIds);
@@ -140,17 +148,15 @@ public class ProductController {
         return "redirect:/storeMyPage/productList";
         */
 
- 
-    
     @GetMapping("/productList")
     public ModelAndView productList(HttpSession session) {
         ModelAndView mv = new ModelAndView();
-    	Long userIdx = (Long) session.getAttribute("userIdx");
-    	Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
+        Long userIdx = (Long) session.getAttribute("userIdx");
+        Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
 
-    	List<Map<String,Object>> products = productService.getAllProductDetails(storeIdx);
-    	
-    	// 이미지 파일 경로를 분할하여 리스트로 저장
+        List<Map<String, Object>> products = productService.getAllProductDetails(storeIdx);
+        List<Map<String, Object>> onHoldProducts = productService.getOnHoldProductDetails(storeIdx);
+
         for (Map<String, Object> product : products) {
             String filePaths = (String) product.get("FILE_PATHS");
             if (filePaths != null) {
@@ -159,13 +165,57 @@ public class ProductController {
                 product.put("FILE_PATHS", Collections.emptyList());
             }
         }
-        
+
+        for (Map<String, Object> product : onHoldProducts) {
+            String filePaths = (String) product.get("FILE_PATHS");
+            if (filePaths != null) {
+                product.put("FILE_PATHS", Arrays.asList(filePaths.split(", ")));
+            } else {
+                product.put("FILE_PATHS", Collections.emptyList());
+            }
+        }
+
         mv.addObject("products", products);
+        mv.addObject("onHoldProducts", onHoldProducts);
         mv.setViewName("product/productList");
         return mv;
     }
 
-    
+    @GetMapping("/productListData")
+    @ResponseBody
+    public Map<String, Object> productListData(HttpSession session) {
+        Long userIdx = (Long) session.getAttribute("userIdx");
+        Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
+
+        List<Map<String, Object>> products = productService.getAllProductDetails(storeIdx);
+        List<Map<String, Object>> onHoldProducts = productService.getOnHoldProductDetails(storeIdx);
+
+        for (Map<String, Object> product : products) {
+            String filePaths = (String) product.get("FILE_PATHS");
+            if (filePaths != null) {
+                product.put("FILE_PATHS", Arrays.asList(filePaths.split(", ")));
+            } else {
+                product.put("FILE_PATHS", Collections.emptyList());
+            }
+        }
+
+        for (Map<String, Object> product : onHoldProducts) {
+            String filePaths = (String) product.get("FILE_PATHS");
+            if (filePaths != null) {
+                product.put("FILE_PATHS", Arrays.asList(filePaths.split(", ")));
+            } else {
+                product.put("FILE_PATHS", Collections.emptyList());
+            }
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("products", products);
+        response.put("onHoldProducts", onHoldProducts);
+        return response;
+    }
+
+
+
     // 색상 데이터를 JSON 형식으로 제공하는 메소드
     @GetMapping("/api/colors")
     @ResponseBody
@@ -186,7 +236,7 @@ public class ProductController {
         return sizes;
     }
     
- // 카테고리 데이터를 JSON 형식으로 제공하는 메소드
+    // 카테고리 데이터를 JSON 형식으로 제공하는 메소드
     @GetMapping("/api/categories")
     @ResponseBody
     public List<CategoryDto> getCategories(@RequestParam(value = "keyword", required = false) String keyword) {

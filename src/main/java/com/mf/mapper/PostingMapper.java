@@ -23,8 +23,6 @@ public interface PostingMapper {
     void insertPostingProduct(PostingProductDto postingProductDto);
     
     List<Map<String, Object>> getAllProductDetailsWithInventory();
-
-	Map<String, Object> getProductDetailsByProductIdxForPosting(Long productIdx);
     
 	
 	List<PostingProductDto> getPostingProduct(Long userIdx);
