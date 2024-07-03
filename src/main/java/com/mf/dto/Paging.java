@@ -14,4 +14,5 @@ public class Paging {
     private boolean prev;
     private boolean next;
     private String keyword;
+    private int totalCount;
 }

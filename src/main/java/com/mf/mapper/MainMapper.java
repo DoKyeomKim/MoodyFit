@@ -23,6 +23,9 @@ public interface MainMapper {
 
 	// 총 검색 결과량
 	int getPostingCountByKeyword(String keyword);
+	
+	// 최고 매출 들고오기
+	List<Map<String, Object>> getTopPosting();
 
 	// 최근 공고 갖고오기
 	List<Map<String, Object>> getRecentPosting();
@@ -65,6 +68,17 @@ public interface MainMapper {
 	// 가맹점
 	String getSNickNameByUserIdx(Long userIdx);
 	//=========================================
+
+	// 에디터 픽 확인
+	int checkEditorPick(@Param("postingIdx") Long postingIdx, @Param("userIdx")  Long userIdx);
+
+	// 에디터픽 추가
+	void addEditorPick(@Param("postingIdx") Long postingIdx, @Param("userIdx")  Long userIdx);
+
+	// 에디터픽 삭제
+	void deleteEditorPick(@Param("postingIdx") Long postingIdx, @Param("userIdx")  Long userIdx);
+
+
 
 
 

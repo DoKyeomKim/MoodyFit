@@ -20,11 +20,11 @@ public interface MyPageMapper {
 
 	// ========== 주문 현황 갖고오기 ==========
 	// 배송 준비중
-	OrderDto getOrderPrePare(Long userIdx);
+	int getOrderPrePare(Long userIdx);
 	// 배송중
-	OrderDto getOrderIng(Long userIdx);
+	int getOrderIng(Long userIdx);
 	// 배송 완료
-	OrderDto getOrderDone(Long userIdx);
+	int getOrderDone(Long userIdx);
 	// ========================================
 	
 	// 개인회원 정보 전체 갖고 오기(정보수정용)
@@ -66,6 +66,8 @@ public interface MyPageMapper {
 	int getWishListCount(Long userIdx);
 
 	List<PersonLevelDto> getPersonLevel();
+
+	Map<String, Object> getAllUserPurchase(Long userIdx);
 
 
 

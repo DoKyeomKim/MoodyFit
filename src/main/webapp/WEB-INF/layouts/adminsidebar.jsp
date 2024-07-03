@@ -112,7 +112,12 @@
     		<a href="adminFAQWrite">FAQ 등록</a>
     		<a href="adminFAQUpdate">FAQ 수정/삭제</a>
   		</div>
-    <a href="adminEditorPick">에디터픽</a>
+     <button class="dropdown-btn">에디터픽 
+      <i class="fa fa-caret-down"></i></button>
+       <div class="dropdown-container">
+    		<a href="adminEditorPick">리스트 관리</a>
+    		<a href="adminEPScrap">스크랩 관리</a>
+  		</div>
   
     <script>
     const dropdownBtns = document.getElementsByClassName("dropdown-btn");

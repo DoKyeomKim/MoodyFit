@@ -240,6 +240,7 @@ body {
             <div class="pagination" id="pagination"></div>
         </c:if>
     </div>
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <script>
         function filterItems() {
             var addressFilter = document.getElementById("address").value.toLowerCase();

@@ -24,15 +24,18 @@ public class MainService {
 		// 리턴을 위한 객체 선언.
         Map<String, List<Map<String, Object>>> result = new HashMap<>();
 		
-		// 전체 포스팅 갖고오기(임시)
-        // 후에는 editor's pick 뭐 이런걸로 변경예정
+        // 에디터픽 들고오기
 		List<Map<String, Object>> edtiorPick = mainMapper.getEdtiorPick();
+		
+		// 최고 매출 포스팅 20개 들고 오기
+		List<Map<String, Object>> topPosting = mainMapper.getTopPosting();
 		
 		// 최신 포스팅 8개 갖고오기
 		List<Map<String, Object>> recent = mainMapper.getRecentPosting();
 
 		
         result.put("edtiorPick", edtiorPick);
+        result.put("topPosting", topPosting);
         result.put("recent", recent);
 		
 		return result;
@@ -47,9 +50,6 @@ public class MainService {
 	    return mainMapper.getSearchResult(params);
 	}
 	
-	public int getPostingCountByKeyword(String keyword) {
-		return mainMapper.getPostingCountByKeyword(keyword);
-	}
 
 
 	public Paging calculatePagingInfo(String keyword, int page, int pageSize) {
@@ -75,26 +75,29 @@ public class MainService {
 	    paging.setEndPageNum(endPageNum);
 	    paging.setPrev(prev);
 	    paging.setNext(next);
+	    paging.setTotalCount(totalCount);
 		
 		return paging;
 	}
 
 	// 카테고리가 같은 공고 전체 갖고 오기(All)
-	public List<Map<String, Object>> getAllPostingByCategory(String categoryEngName, int pageSize, int startIndex) {
+	public List<Map<String, Object>> getAllPostingByCategory(String categoryEngName, int pageSize, int startIndex, String orderBy) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("categoryEngName", categoryEngName);
 		params.put("startIndex", startIndex);
 		params.put("pageSize", pageSize);
+		params.put("orderBy", orderBy);
 		return mainMapper.getAllPostingByCategory(params);
 	}
 	
 	
 	// 카테고리가 같은 공고 중 서브카테리가 같은 공고 갖고오기
-		public List<Map<String, Object>> getSelectedPostingBySubCategory(String subCategoryName, int pageSize, int startIndex) {
+		public List<Map<String, Object>> getSelectedPostingBySubCategory(String subCategoryName, int pageSize, int startIndex, String orderBy) {
 		    Map<String, Object> params = new HashMap<>();
 		    params.put("subCategoryName", subCategoryName);
 		    params.put("startIndex", startIndex);
 		    params.put("pageSize", pageSize);
+			params.put("orderBy", orderBy);
 			return mainMapper.getSelectedPostingBySubCategory(params);
 		}
 	
@@ -202,6 +205,20 @@ public class MainService {
 		return mainMapper.getSNickNameByUserIdx(userIdx);
 	}
 	//=========================================
+
+	// 에디터픽 확인
+	public boolean checkEditorPick(Long postingIdx, Long userIdx) {
+		return mainMapper.checkEditorPick(postingIdx,userIdx) > 0;
+	}
+
+	public void addEditorPick(Long postingIdx, Long userIdx) {
+		mainMapper.addEditorPick(postingIdx,userIdx);
+
+	}
+
+	public void deleteEditorPick(Long postingIdx, Long userIdx) {
+		mainMapper.deleteEditorPick(postingIdx,userIdx);
+	}
 
 	
 }

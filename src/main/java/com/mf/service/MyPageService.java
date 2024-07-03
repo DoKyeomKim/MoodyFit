@@ -30,14 +30,15 @@ public class MyPageService {
 	public Map<String, Object> getPersonMyPage(Long userIdx) {
 		// 닉네임과 personIdx 갖고오기
 		PersonDto person = myPageMapper.getNickNameByUserIdx(userIdx);
+		Map<String,Object> price = myPageMapper.getAllUserPurchase(userIdx);
 		
 		// 배송 준비중인 물품 갖고오기
 		// 배송 준비중
-		OrderDto orderPrePare = myPageMapper.getOrderPrePare(userIdx);
+		int orderPrePare = (int) myPageMapper.getOrderPrePare(userIdx);
 		// 배송중
-		OrderDto orderIng = myPageMapper.getOrderIng(userIdx);
+		int orderIng = (int) myPageMapper.getOrderIng(userIdx);
 		// 배송 완료
-		OrderDto orderDone = myPageMapper.getOrderDone(userIdx);
+		int orderDone = (int) myPageMapper.getOrderDone(userIdx);
 		
 		// 모달에 띄울 레벨 설명
 		
@@ -47,6 +48,7 @@ public class MyPageService {
 		result.put("orderPrePare", orderPrePare);
 		result.put("orderIng", orderIng);
 		result.put("orderDone", orderDone);
+		result.put("price", price);
 		return result;
 	}
 	

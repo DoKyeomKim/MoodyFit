@@ -33,5 +33,10 @@ public interface EditorPickMapper {
 	void editorPickUpdateWithoutFile(EditorPickDto editorPick);
 	// 에디터픽 삭제
 	void editorPickDelete(Long pickIdx);
+	
+	// 에디터픽 스크랩한 리스트 들고 오기
+	List<Map<String, Object>> getEditorPickScrap(Map<String, Object> params);
+	// 에디터픽 스크랩 갯수
+	int getEPScrapCount();
 
 }
