@@ -269,7 +269,7 @@ main {
 		        }
 		    } catch (error) {
 		        console.error('Error:', error);
-		        alert('그냥 실패!');
+		        alert('실패!');
 		        window.location.href = '/myPage/payment';
 		    }
 		});

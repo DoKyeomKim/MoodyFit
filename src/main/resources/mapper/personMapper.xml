@@ -45,5 +45,15 @@ JOIN
         </where>
     </select>
     
+    <select id="selectPerson">
+    
+   select p.post_code,
+			p.address,
+			p.detail_address
+	from person p join users u on p.user_idx = u.user_idx
+	where u.user_idx = #{ userIdx }
+    
+    </select>
+    
     </mapper>
     

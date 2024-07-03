@@ -1,24 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.OrderMapper">
-<!--  
- <resultMap id="OrderDetailMap" type="OrderDetailDTO">
-        <id property="orderIdx" column="order_idx"/>
-        <result property="quantity" column="quantity"/>
-        <result property="merchantUid" column="merchant_uid"/>
-        <result property="deliveryPrice" column="delivery_price"/>
-        <result property="totalPrice" column="total_price"/>
-        <result property="orderDate" column="order_date"/>
-        <result property="impUid" column="imp_uid"/>
-        <result property="personIdx" column="person_idx"/>
-        <result property="deliveryIdx" column="delivery_idx"/>
-        <result property="deliveryName" column="deliveryName"/>
-        <result property="deliveryEmail" column="deliveryEmail"/>
-        <result property="deliveryAddress" column="deliveryAddress"/>
-        <result property="deliveryPostCode" column="deliveryPostCode"/>
-        <result property="deliveryDetailAddress" column="deliveryDetailAddress"/>
-        <result property="productName" column="productName"/>
-    </resultMap> -->
+
 
 <select id="selectCart" >
 
@@ -253,6 +236,8 @@ select total_price
      join users on person.user_idx = users.user_idx
     where orders.state = '결제중'
     and users.user_idx = #{ userIdx }
+    and orders.order_idx = (select max(order_idx) from orders join person on person.person_idx = orders.person_idx
+     join users on person.user_idx = users.user_idx where users.user_idx = #{ userIdx })
 
 </select>
 
@@ -263,6 +248,135 @@ from cart
 JOIN order_cart ON cart.cart_idx = order_cart.cart_idx
 JOIN orders ON order_cart.order_idx = orders.order_idx
 WHERE orders.imp_uid = #{ impUid }
+
+</select>
+
+<select id="selectPosting">
+
+WITH RankedPostings AS (
+    SELECT 
+        p.posting_idx,
+        s.store_name,
+        p.title,
+        p.store_idx,
+        s.address,
+        s.detail_address,
+        pf.file_path,
+        pr.price,
+        c.eng_name,
+        p.update_date,
+        COALESCE(por.rating, 0) AS rating,
+        ROW_NUMBER() OVER (PARTITION BY p.posting_idx ORDER BY p.update_date DESC) AS rn,
+        COALESCE(COUNT(por.posting_review_idx) OVER (PARTITION BY p.posting_idx), 0) AS reviewCount
+    FROM 
+        posting p
+        JOIN store s ON p.store_idx = s.store_idx
+        JOIN posting_product pp ON pp.posting_idx = p.posting_idx
+        JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+        JOIN product pr ON pr.product_idx = pi.product_idx
+        JOIN product_file pf ON pf.product_info_idx = pi.product_info_idx
+        JOIN sub_category sc ON sc.sub_category_idx = pr.sub_category_idx
+        JOIN category c ON c.category_idx = sc.category_idx
+        LEFT JOIN posting_review por ON por.posting_idx = p.posting_idx
+),
+ReviewCounts AS (
+    SELECT 
+        p.posting_idx,
+        COALESCE(COUNT(por.posting_review_idx), 0) AS count1
+    FROM 
+        posting p
+        LEFT JOIN posting_review por ON por.posting_idx = p.posting_idx
+    GROUP BY 
+        p.posting_idx
+)
+SELECT 
+    rp.posting_idx,
+    rp.store_name,
+    rp.title,
+    rp.store_idx,
+    rp.address,
+    rp.detail_address,
+    rp.file_path,
+    rp.price,
+    rp.eng_name,
+    rp.update_date,
+    rp.rating,
+    rc.count1 AS reviewCount
+FROM 
+    RankedPostings rp
+JOIN 
+    ReviewCounts rc ON rp.posting_idx = rc.posting_idx
+WHERE 
+    rp.rn = 1
+
+
+</select>
+
+<select id="selectPosting2">
+
+WITH RankedPostings AS (
+    SELECT 
+        p.posting_idx,
+        s.store_name,
+        p.title,
+        p.store_idx,
+        s.address,
+        s.detail_address,
+        pf.file_path,
+        pr.price,
+        c.eng_name,
+        p.update_date,
+        COALESCE(por.rating, 0) AS rating,
+        ROW_NUMBER() OVER (PARTITION BY p.posting_idx ORDER BY p.update_date DESC) AS rn,
+        COALESCE(COUNT(por.posting_review_idx) OVER (PARTITION BY p.posting_idx), 0) AS reviewCount
+    FROM 
+        posting p
+        JOIN store s ON p.store_idx = s.store_idx
+        JOIN posting_product pp ON pp.posting_idx = p.posting_idx
+        JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+        JOIN product pr ON pr.product_idx = pi.product_idx
+        JOIN product_file pf ON pf.product_info_idx = pi.product_info_idx
+        JOIN sub_category sc ON sc.sub_category_idx = pr.sub_category_idx
+        JOIN category c ON c.category_idx = sc.category_idx
+        LEFT JOIN posting_review por ON por.posting_idx = p.posting_idx
+),
+ReviewCounts AS (
+    SELECT 
+        p.posting_idx,
+        COALESCE(COUNT(por.posting_review_idx), 0) AS count1
+    FROM 
+        posting p
+        LEFT JOIN posting_review por ON por.posting_idx = p.posting_idx
+    GROUP BY 
+        p.posting_idx
+)
+SELECT 
+    rp.posting_idx,
+    rp.store_name,
+    rp.title,
+    rp.store_idx,
+    rp.address,
+    rp.detail_address,
+    rp.file_path,
+    rp.price,
+    rp.eng_name,
+    rp.update_date,
+    rp.rating,
+    rc.count1 AS reviewCount
+FROM 
+    RankedPostings rp
+JOIN 
+    ReviewCounts rc ON rp.posting_idx = rc.posting_idx
+WHERE 
+    rp.rn = 1
+    AND rp.address LIKE '%' || (
+        SELECT 
+            REGEXP_SUBSTR(address, '([^ ]+광역시|[^ ]+특별시|[^ ]+시|[^ ]+군)', 1, 1, NULL, 1) AS city_name
+        FROM 
+            person
+        WHERE 
+            person_idx = #{ personIdx }
+    ) || '%'
 
 </select>
 
@@ -326,7 +440,9 @@ insert into orders (
 
 <update id="updateImpUid">
 
-update orders set imp_uid = #{ impUid }, state = '결제완료' where state = '결제중' and person_idx = #{ personIdx }
+update orders set imp_uid = #{ impUid }, state = '배송준비중' where state = '결제중' and person_idx = #{ personIdx }
+and orders.order_idx = (select max(order_idx) from orders join person on person.person_idx = orders.person_idx
+     where person.person_idx = #{ personIdx })
 
 </update>
 

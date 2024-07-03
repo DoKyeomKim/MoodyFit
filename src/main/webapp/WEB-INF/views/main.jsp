@@ -90,6 +90,29 @@ main {
     z-index: 9999;
 }
 
+.items-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+}
+
+.item {
+	width: calc(20% - 10px);
+	height: 400px;
+	margin: 10px 5px;
+	box-sizing: border-box;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s;
+}
+
+
+.item:hover {
+	transform: scale(1.05);
+}
+
 </style>
 </head>
 <body>
@@ -131,12 +154,53 @@ main {
         <div class="swiper-pagination"></div>
     </div>
 </div>
-
+<c:choose>
+<c:when test="${not empty sessionScope.userIdx }">
 <div class="container">
     <h4 class="bold-text">Nearby Listings</h4>
-    <div class="light-text">가까운 매장의 상품입니다</div>
-
+    <c:forEach items="${p}" var="p">
+    <div class="light-text">가까운 매장의 상품입니다
+    <span>(현재 고객님의 주소는 ${p.address} ${p.detailAddress} 입니다)</span>
+    </div>
+    </c:forEach>
+    <div class="item-wrapper" style="display:flex; flex-wrap: wrap; justify-content: flex-start;">
+                <c:forEach items="${postingList}" var="pl">
+                    <div class="item">
+                        <div>
+                            <img src="${pl.filePath}" alt="${pl.title}" style="width:100%; height:auto;">
+                        </div>
+                        <div style="padding: 10px; text-align: center; margin-top : 30px;">
+                            <h4>${pl.title}</h4>
+                            <p style="font-size:small;">${pl.storeName}</p>
+                                <span class="address" style="font-size: medium;">주소 : ${pl.address} ${pl.detailAddress}</span>
+                        </div>
+                    </div>
+                </c:forEach>
+    </div>
 </div>
+</c:when>
+<c:otherwise>
+<div class="container" >
+    <h4 class="bold-text">Nearby Listings</h4>
+    <div class="light-text">지역별 매장의 상품입니다 </div>
+    <div class="item-wrapper" style="display:flex; flex-wrap: wrap; justify-content: flex-start;">
+                <c:forEach items="${pl}" var="pl">
+                    <div class="item">
+                        <div>
+                            <img src="${pl.filePath}" alt="${pl.title}" style="width:100%; height:auto;">
+                        </div>
+                        <div style="padding: 10px; text-align: center; margin-top : 30px;">
+                            <h4>${pl.title}</h4>
+                            <p style="font-size:small;">${pl.storeName}</p>
+                                <span class="address" style="font-size: medium;">주소 : ${pl.address} ${pl.detailAddress}</span>
+                        </div>
+                    </div>
+                </c:forEach>
+    </div>
+</div>
+</c:otherwise>
+</c:choose>
+
 <div class="container">
     <h4 class="bold-text">WEEKLY BEST</h4>
     <div class="light-text">한주간 가장 인기있는 상품입니다</div>
