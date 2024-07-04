@@ -79,6 +79,12 @@ public class MainService {
 		
 		return paging;
 	}
+	
+	// 카테고리 내 상위 품목 갖고오기
+	public List<Map<String, Object>> getTopPostingByCategoryEngName(String categoryEngName) {
+		List<Map<String, Object>> result = mainMapper.getTopPostingByCategoryEngName(categoryEngName);
+		return result;
+	}
 
 	// 카테고리가 같은 공고 전체 갖고 오기(All)
 	public List<Map<String, Object>> getAllPostingByCategory(String categoryEngName, int pageSize, int startIndex, String orderBy) {
@@ -219,6 +225,7 @@ public class MainService {
 	public void deleteEditorPick(Long postingIdx, Long userIdx) {
 		mainMapper.deleteEditorPick(postingIdx,userIdx);
 	}
+
 
 	
 }

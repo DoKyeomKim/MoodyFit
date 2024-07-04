@@ -33,9 +33,11 @@
         </select>
     </div>
 
+
     <div id="productDetails"></div>
 
     <form id="postingForm" method="post" enctype="multipart/form-data" action="/storeMyPage/postingWrite">
+
         <input type="hidden" id="productIdx" name="productIdx" value="">
         <input type="hidden" id="productInfoIdx" name="productInfoIdx" value="">
         <div class="form-group">
@@ -78,6 +80,7 @@ $(document).ready(function() {
             $('#productDetails').html('');
             return;
         }
+
 
         $.ajax({
             url: '/storeMyPage/posting/getProductDetails',
