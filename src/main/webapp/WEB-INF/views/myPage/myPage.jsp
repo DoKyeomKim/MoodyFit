@@ -74,8 +74,8 @@ margin-left:10px;
             </div>
             <div class="col-3 profile-stats text-right">
                 <ul>
-                    <li>총 결제금액 <span class="userTotalPurchase">${price.SUM_PRICE }</span></li>
-                    <li>장바구니 <span></span>개</li>
+                    <li><a href="/myPage/order" style="text-decoration: none; color:#867B73;">총 결제금액 <span class="userTotalPurchase">${price.SUM_PRICE }</span></a></li>
+                    <li><a href="/myPage/cart" style="text-decoration: none; color:#867B73;">장바구니 <span>${cartCount }</span>개</a></li>
                 </ul>
             </div>
         </div>
@@ -125,9 +125,9 @@ margin-left:10px;
                         </div>
                         <div class="col text-center">
                             <ul>
-                                <li>취소: ${orderCanceled}</li>
-                                <li>교환: ${orderExchanged}</li>
-                                <li>환불: ${orderRefunded}</li>
+                                <li>취소: 0</li>
+                                <li>교환: 1</li>
+                                <li>환불: 3</li>
                             </ul>
                         </div>
                     </div>

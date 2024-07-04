@@ -82,7 +82,9 @@ public class MyPageController {
 	            }
 	        }
 	    }
+	    int cartCount =  (int) result.get("cartCount");
 	    
+	    mv.addObject("cartCount",cartCount);
 		mv.addObject("person",person);
 		mv.addObject("personLevel",personLevels);
 		mv.addObject("orderPrePare", result.get("orderPrePare"));

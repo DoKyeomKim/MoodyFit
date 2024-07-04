@@ -1,7 +1,6 @@
 package com.mf.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -132,15 +131,15 @@ public class LoginController {
 	public String findId(@RequestParam("findIdMethod") String findIdMethod,
 	                     @RequestParam("phone") String phone,
 	                     @RequestParam("email") String email) {
-	    String id = null;
+	    List<String> ids = null;
 
 	    if ("email".equals(findIdMethod) && email != null) {
-	        id = usersService.getIdByEmail(email);
+	        ids = usersService.getIdByEmail(email);
 	    } else if ("phone".equals(findIdMethod) && phone != null) {
-	        id = usersService.getIdByPhone(phone);
+	        ids = usersService.getIdByPhone(phone);
 	    } 
-	    return id != null ? "<small>찾으시는 ID는</small><div style='color:green; font-size: 20px;'>" + 
-	    id + "</div><small>입니다.</small>" 
+	    return ids != null ? "<small>찾으시는 ID는</small><div style='color:green; font-size: 20px;'>" + 
+	    ids + "</div><small>입니다.</small>" 
 	    : "<small style='color:red;'>찾으시는 ID가 없습니다.<br> 다시 확인해주세요.</small>";
 	}
 	

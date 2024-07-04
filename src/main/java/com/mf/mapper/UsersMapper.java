@@ -1,5 +1,7 @@
 package com.mf.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.mf.dto.PersonDto;
@@ -45,9 +47,9 @@ public interface UsersMapper {
 	// OAuth 회원탈퇴 후 정보 겹치는거 방지
 	UsersDto getUserByIdAndState(String id);
 
-	String getIdByEmail(String email);
+	List<String> getIdByEmail(String email);
 
-	String getIdByPhone(String phone);
+	List<String> getIdByPhone(String phone);
 
 	String getEmail(String email);
 
