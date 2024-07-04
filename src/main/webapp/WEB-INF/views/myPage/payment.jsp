@@ -13,7 +13,13 @@
 main {
 	padding-left: 200px;
 }
-
+.delete-btn{
+ background: none;
+    border: none;
+    color: #FF6F61;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;}
 .modal-lg {
 	max-width: 800px;
 }
@@ -37,142 +43,150 @@ main {
 .card-text {
 	margin-bottom: 0.5rem;
 }
+
+.table thead th {
+    text-align: center;
+    vertical-align: middle;
+    border-top: 2px solid #dee2e6;
+    border-bottom: 2px solid #dee2e6;
+    font-size:14px;
+}
+
+.table tbody td {
+    text-align: center;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+    font-size:16px;
+}
+.box-container{
+ border-top: 1px solid #ccc; /* 상단 구분선 추가 */
+        border-bottom: 1px solid #ccc; /* 하단 구분선 추가 */
+        padding: 2% 5%;
+        display: flex;
+        justify-content: space-evenly;
+        font-size: 15px;}
 </style>
 
-
-
 </head>
-<body>
-	<%@include file="/WEB-INF/layouts/header.jsp"%>
+<body style="background-color:#F6F4EE !important;">
+	<%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
 
 	<%@include file="/WEB-INF/layouts/aside.jsp"%>
 
-	<main style="margin-top: 30px; width: 90%;">
+	<main style="width: 80%;">
 
-		<h2 style="text-align: left; margin-top: 30px; margin-left: 100px;">결제</h2>
-		<hr>
-		<h4 style="text-align: left; margin-top: 30px; margin-left: 100px;">주문목록</h4>
-		<c:choose>
-			<c:when test="${empty cartList}">
-				<div style="text-align: center; margin-top: 50px;">
-					<h3 style="margin: 100px 30px;">주문목록이 비어있습니다.</h3>
-					<hr>
-				</div>
-				<div style="text-align: right; margin-right: 20px;">
-					<button type="button" class="btn btn-info" style="margin: 20px;"
-						onclick="location.href='/'">메인으로</button>
-				</div>
-			</c:when>
-			<c:otherwise>
-				<!-- 총 주문 금액을 저장할 변수를 선언 -->
-				<c:set var="totalOrderPrice" value="0" scope="page" />
-				<form action="/myPage/cartQuantity" method="post" id="quantituyForm">
-					<c:forEach var="item" items="${cartList}">
-						<input type="hidden" value="${item.cartIdx}" class="hiddenCartIdx">
-						<c:set var="itemTotalPrice" value="${item.price * item.quantity}" />
-						<c:set var="totalOrderPrice"
-							value="${totalOrderPrice + itemTotalPrice}" />
-						<c:set var="totalQuantity"
-							value="${totalQuantity + item.quantity}" />
-						<div class="box-container"
-							style="border: 1px solid black; padding: 10px; margin: 5px; display: flex; justify-content: space-evenly;">
-							<div>
-								<img src="${item.filePath}" class="img-box"
-									style="width: 150px; height: 150px; border: 1px solid #CDCDCD;">
-							</div>
-							<div
-								style="display: flex; flex-direction: column; justify-content: space-evenly;">
-								<div class="box">${item.title}</div>
-								<div class="box">${item.name}</div>
-								<div class="box">${item.price}</div>
-							</div>
-							<div
-								style="display: flex; flex-direction: column; justify-content: space-evenly;">
-								<div>수량 : ${item.quantity}</div>
-								<div class="box">
-									총 상품 가격: <span>${item.price * item.quantity}</span>원
-								</div>
-								<div>
-									<button type="button" class="btn btn-danger"
-										onclick="removeItem('${item.cartIdx}')">삭제</button>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</form>
-				
-			<!-- 	<hr style="border: 1px solid black;">  -->
-				
-				
-				<h4 style="text-align: left; margin-top: 30px; margin-left: 100px;">배송지</h4>
-				<!-- 배송지 정보를 표시하는 곳 -->
-<div class="box-container"
-     style="border: 1px solid black; padding: 20px; margin: 5px 10px; display: flex; justify-content: space-evenly;">
-    <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
-        <div class="box" style="display:none;" name="deliveryIdx">${deliveryDto.deliveryIdx}</div>
-        <div class="box" name="name">${deliveryDto.name}</div>
-        <div class="box" name="postCode">${deliveryDto.postCode}</div>
-        <div class="box" name="address">${deliveryDto.address}</div>
-        <div class="box" name="detailAddress">${deliveryDto.detailAddress}</div>
-        <div class="box" name="content">${deliveryDto.content}</div>
-    </div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
-        <div class="box" name="deliveryName"
-             style="border: 1px solid black; border-radius: 80px; text-align: center;">
-            ${deliveryDto.deliveryName}
-        </div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div>
-            <button type="button" class="btn btn-secondary" onclick="showAddressModal()">배송지 변경</button>
-        </div>
-    </div>
-</div>
+        <h3 style="font-weight: bold; text-align: center;">주문서작성</h3>
+        
+        <h4 style="text-align: left; font-weight: bold; margin-top: 30px; margin-left: 100px;">주문상품</h4>
+    <div class="order-container" style="background-color:white; padding: 20px; margin: 20px; border-radius: 20px;">
+        
+        <c:choose>
+            <c:when test="${empty cartList}">
+                <div style="text-align: center; margin-top: 50px;">
+                    <h3 style="margin: 100px 30px;">주문목록이 비어있습니다.</h3>
+                    <hr>
+                </div>
+                <div style="text-align: right; margin-right: 20px;">
+                    <button type="button" class="btn btn-info" style="margin: 20px;" onclick="location.href='/'">메인으로</button>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="payment-container" style="background-color:white;">
+                    <c:set var="totalOrderPrice" value="0" scope="page" />
+                    <form action="/myPage/cartQuantity" method="post" id="quantituyForm">
+                        <table class="table ">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>상품정보</th>
+                                    <th>상품명</th>
+                               
+                                    <th>가격</th>
+                                    <th>수량</th>
+                                    <th>총 금액</th>
+                                   <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="item" items="${cartList}">
+                                    <input type="hidden" value="${item.cartIdx}" class="hiddenCartIdx">
+                                    <c:set var="itemTotalPrice" value="${item.price * item.quantity}" />
+                                    <c:set var="totalOrderPrice" value="${totalOrderPrice + itemTotalPrice}" />
+                                    <c:set var="totalQuantity" value="${totalQuantity + item.quantity}" />
+                                    <tr>
+                                        <td><img src="${item.filePath}" style="width: 110px; height: 110px;"/></td>
+                                        <td>${item.title}</td>
+                                        <td>${item.name}</td>
+                                        
+                                        <td>${item.price}원</td>
+                                        <td>${item.quantity}개</td>
+                                        <td>${item.price * item.quantity}원</td>
+                                        <td><button type="button" class="delete-btn" onclick="removeItem('${item.cartIdx}')">X</button></td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
 
-				<hr style="border: 3px solid black;">
-				<div class="box-container"
-					style="border: 1px solid black; padding: 20px; margin: 5px 10px; display: flex; justify-content: space-evenly; flex-direction: column;">
-					<div
-						style="display: flex; flex-direction: column; justify-content: space-evenly;">
-						<form action="/myPage/orderMake" method="post" id="purchaseForm">
-							<div class="box" style="text-align: left;">
-								<h4>주문예상금액</h4>
-							</div>
-							<div
-								style="display: flex; flex-direction: column; justify-content: space-evenly;">
-								<input type="hidden" name="deliveryIdx"	value="${deliveryDto.deliveryIdx}">
-								<input type="hidden" name="personIdx" value="${deliveryDto.personIdx}">
-								<div style="text-align: right;">총 상품 금액: <input type="text" name="price" 
-										value="${totalOrderPrice}" readonly> 원</div>
-								<div style="text-align: right;">총 수량: <input type="text" name="quantity"
-										value="${totalQuantity}" readonly> 개</div>
-								<div style="text-align: right;">배송비: <input type="text" name="deliveryPrice" value="3000"
-										readonly> 원</div>
-								<div style="text-align: right;">할인금액: <input type="text" name="discount" value="70000"
-										readonly> 원</div>
-										
-								<hr style="border: 1px solid black;">
-								<div style="text-align: right;">
-									결제할 금액: <input type="text" value="${totalOrderPrice + 3000 + 70000}"
-										id="finalPrice" readonly> 원
-								</div>
-							</div>
-							<button type="button" id="addToCartButton"
-								class="btn btn-primary" style="margin: 20px;">결제하기</button>
-						</form>
-					</div>
-				</div>
-			</c:otherwise>
-		</c:choose>
+                <h4 style="text-align: left; margin-top: 50px; margin-left: 50px; font-size:16px ; font-weight:bold;">배송지</h4>
+                <div class="box-container" style="background-color:white; padding: 20px; margin: 5px 10px; display: flex; justify-content: space-evenly;">
+                    <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
+                        <div class="box" style="display:none;" name="deliveryIdx">${deliveryDto.deliveryIdx}</div>
+                        <div class="box" name="name">이름 : ${deliveryDto.name}</div>
+                        <div class="box" name="postCode">우편번호 : ${deliveryDto.postCode}</div>
+                        <div class="box" name="address">주소 : ${deliveryDto.address}</div>
+                        <div class="box" name="detailAddress">상세주소 : ${deliveryDto.detailAddress}</div>
+                        <div class="box" name="content">요청사항 : ${deliveryDto.content}</div>
+                    </div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
+                        <div class="box" name="deliveryName" style="border: 1px solid black; border-radius: 80px; text-align: center;">
+                            ${deliveryDto.deliveryName}
+                        </div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div>
+                            <button type="button" class="btn btn-secondary" onclick="showAddressModal()">배송지 변경</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box-container" style="background-color:white; padding: 20px; margin: 5px 10px; display: flex; justify-content: space-evenly; flex-direction: column;">
+                    <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
+                        <form action="/myPage/orderMake" method="post" id="purchaseForm">
+                            <div class="box" style="text-align: left;">
+                                <h4 style="text-align: left; margin-top: 50px; margin-left: 20px; font-size:16px ; font-weight:bold;">주문예상금액</h4>
+                            </div>
+                            <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
+                                <input type="hidden" name="deliveryIdx" value="${deliveryDto.deliveryIdx}">
+                                <input type="hidden" name="personIdx" value="${deliveryDto.personIdx}">
+                                <div style="text-align: right;">총 상품 금액: <input type="text" name="price" value="${totalOrderPrice}" readonly> 원</div>
+                                <div style="text-align: right;">총 수량: <input type="text" name="quantity" value="${totalQuantity}" readonly> 개</div>
+                                <div style="text-align: right;">배송비: <input type="text" name="deliveryPrice" value="3000" readonly> 원</div>
+                                <div style="text-align: right;">할인금액: <input type="text" name="discount" value="70000" readonly> 원</div>
+                                <hr style="border: 1px solid black;">
+                                <div style="text-align: right;">
+                                    결제할 금액: <input type="text" value="${totalOrderPrice + 3000 - 70000}" id="finalPrice" readonly> 원
+                                </div>
+                            </div>
+                            <button type="button" id="addToCartButton" class="btn btn-primary" style="margin: 20px;">결제하기</button>
+                        </form>
+                    </div>
+                </div>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</main>
 
 		<!-- 배송지 변경 모달 -->
 		<div class="modal" id="addressModal" tabindex="-1" role="dialog"
@@ -205,7 +219,7 @@ main {
 			</div>
 		</div>
 
-		<%@include file="/WEB-INF/layouts/footer.jsp"%>
+	
 		<script src="/js/bootstrap.bundle.min.js"></script>
 		<script>
 		document.getElementById("addToCartButton").addEventListener("click", async (event) => {
@@ -378,4 +392,5 @@ main {
     	 */   
 </script>
 </body>
+	<%@include file="/WEB-INF/layouts/footer.jsp"%>
 </html>

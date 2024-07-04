@@ -56,7 +56,8 @@
                 <li><a href="/myPage/delivery">배송지 관리</a></li>
                 <li><a href="/myPage/wishList">관심상품</a></li>
                 <li><a href="/myPage/cart">장바구니</a></li>
-                <li><a href="/myPage/payment">결제페이지</a></li>
+                <li><a href="/myPage/payment">
+주문서작성</a></li>
        
             </ul>
         </nav>

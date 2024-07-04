@@ -8,37 +8,153 @@
 <title>카테고리 - ${categoryEngName}</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f5f0;
+    color: #333;
+}
+.main-header p a {
+  
+font-weight: lighter;
+color: #888888;
+
+    padding: 8px;
+    text-decoration: none;
+    margin-right: 3px;
+    font-size: 13px;
+    display: inline-block;
+}
+
+.main-header p a:hover,
+.main-header p a:active,
+.main-header p a:focus {
+    background-color: #ddd;
+    color: #000;
+    text-decoration: underline;
+}
+
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
 .card {
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	padding: 15px;
-	text-align: center;
+    border: none;
+    padding: 0;
+    text-align: left;
+    background-color: #fff;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+}
+
+.card-body {
+    padding: 15px;
+    position: relative;
+}
+
+.card-body span {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.card-body .btn {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background-color: transparent;
+}
+
+.card-body .btn svg {
+    width: 25px;
+    height: 25px;
+}
+
+.pagination {
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.page-item.active .page-link {
+    background-color: #000;
+    border-color: #000;
+}
+
+.page-link {
+    color: #000;
+}
+
+.page-link:hover {
+    color: #fff;
+    background-color: #000;
+    border-color: #000;
+}
+
+svg {
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.main-header {
+    text-align: center;
+    margin: 50px 0;
+}
+
+.main-header h1 {
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+}
+
+.main-header p {
+    color: #999;
+    margin-top: 10px;
 }
 </style>
 </head>
-<body>
-	<%@include file="/WEB-INF/layouts/header.jsp"%>
+<body style="background-color:#F6F4EE !important;">
+	<%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
 	<%@include file="/WEB-INF/layouts/aside.jsp"%>
 	<input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
 	<main>
 		<div class="container">
+			<div class="main-header">
+				<h3 style="font-weight:bold;">관심상품</h3>
+				<p>  <a href="/myPage/payment">주문/배송조회</a>
+         <a href="/myPage/cart">장바구니</a><a href="/myPage/wishList">좋아요</a></p>
+			</div>
 			<div class="row">
 				<c:choose>
-					<c:when test="${not empty wishList }">
+					<c:when test="${not empty wishList}">
 						<c:forEach var="wishList" items="${wishList}">
-							<div class="col-3">
+							<div class="col-md-4">
 								<div class="card">
 									<img src="${wishList.FILE_PATH}" class="img-fluid">
 									<div class="card-body">
-										<span>${wishList.POSTING_IDX}</span><br> 
-										<span>제조사: ${wishList.MANUFACTURE_NAME}</span><br> 
-										<span>공고 제목	: ${wishList.TITLE}</span><br> 
-										<span>가격 :${wishList.PRICE}</span>
+										<span>${wishList.POSTING_IDX}</span>
+										<span>가격 : ${wishList.PRICE}</span>
+										<span>공고 제목	: ${wishList.TITLE}</span>
+										<span>제조사: ${wishList.MANUFACTURE_NAME}</span>
 										
 											<button class="btn btn-outline-secondary wishBtn" style="margin-right: 5px;" data-user-idx="${sessionScope.userIdx}" data-posting-idx="${wishList.POSTING_IDX}">
 											    <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-											        <path fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"/>
+											        <path d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"/>
 											    </svg>
 											</button>
 									</div>
@@ -74,10 +190,9 @@
 				</c:choose>
 			</div>
 		</div>
+		
 	</main>
-
-
-
+<%@include file="/WEB-INF/layouts/footer.jsp"%>
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {

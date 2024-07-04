@@ -9,82 +9,213 @@
 <title>장바구니</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <style>
+body {
+    background-color: #F6F4EE !important;
+    font-family: Arial, sans-serif;
+}
 main {
-    width: 80%;
-    padding-left: 200px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.box-container {
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+}
+.box-container img {
+    width: 80px;
+    height: 80px;
+    border: 1px solid #CDCDCD;
+    margin-right: 10px;
+}
+.box {
+    padding: 5px;  
+}
+.item-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 60%;
+    font-size: 14px;
+    padding: 10px;
+}
+.item-options {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+.item-options button {
+    background: none;
+    border: 1px solid #CDCDCD;
+    color: #333;
+    cursor: pointer;
+    font-size: 16px;
+    width: 30px;
+    height: 30px;
+}
+.item-options .itemQuantity {
+    margin: 0 10px;
+    width: 30px;
+    text-align: center;
+}
+.price-details {
+    display: flex;
+    padding:30px;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.total-container {
+    text-align: center;
+    margin-top: 20px;
+}
+.select-btn {
+    margin-bottom: 10px;
+    width: 180px;
+    align-self: center;
+    background-color: #f6f4ee;
+    color: black;
+    cursor: pointer;
+    font-size: 14px;
+    border: none;
+    height: 60px;
+    border: 1px solid #CDCDCD;
+}
+.all-btn {
+    margin-bottom: 10px;
+    width: 180px;
+    align-self: center;
+    background-color: #E5AAA3;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    border: none;
+    height: 60px;
+}
+.main-header {
+    text-align: center;
+    margin: 50px 0;
+}
+.main-header h1 {
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+}
+.main-header p {
+    color: #999;
+    margin-top: 10px;
+}
+.main-header p a {
+    font-weight: lighter;
+    color: #888888;
+    padding: 8px;
+    text-decoration: none;
+    margin-right: 3px;
+    font-size: 13px;
+    display: inline-block;
+}
+.main-header p a:hover,
+.main-header p a:active,
+.main-header p a:focus {
+    background-color: #ddd;
+    color: #000;
+    text-decoration: underline;
+}
+.delete-button {
+    background: none;
+    border: none;
+    color: #FF6F61;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+}
+.btn-main {
+ margin-bottom: 10px;
+    width: 120px;
+    align-self: center;
+    background-color: #E5AAA3;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    border: none;
+    height: 60px;
+    border-radius:10px;
 }
 </style>
 </head>
 <body>
-    <%@include file="/WEB-INF/layouts/header.jsp"%>
-    <h2 style="text-align:left; margin-top:30px; margin-left:100px;">장바구니</h2>
-    <hr>
+    <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
+   
     <%@include file="/WEB-INF/layouts/aside.jsp"%>
-
-    <main style="margin-top:30px; width:90%;">
+    <main>
+		<div class="container">
+			<div class="main-header">
+    <h3 style="font-weight: bold">장바구니</h3>
+    <p>  <a href="/myPage/payment">주문/배송조회</a>
+         <a href="/myPage/cart">장바구니</a><a href="/myPage/wishList">좋아요</a></p>
         <c:choose>
             <c:when test="${empty cartList}">
                 <div style="text-align: center; margin-top: 50px;">
                     <h3 style="margin:100px 30px;">장바구니가 비어있습니다.</h3>
                     <hr>
                 </div>
-                <div style="text-align : right; margin-right:20px;">
-                	<button type="button" class="btn btn-info" style="margin: 20px;" onclick="location.href='/'">메인으로</button>
+             
+                <div class="total-container">
+                    <button type="button" class="btn-main" onclick="location.href='/'">메인으로</button>
                 </div>
             </c:when>
             <c:otherwise>
                 <form id="cartForm" action="/mypage/paying" method="post">
                     <c:forEach var="item" items="${cartList}">
-                        <div class="box-container" style="border: 1px solid black; padding: 10px; margin: 5px; display: flex; justify-content: space-evenly;">
-                            <div style="display: flex;">
-                                <input type="checkbox" name="selectedItems" value="${item.cartIdx}" class="itemCheckbox" onchange="updateBuyButton()">
+                        <div class="box-container">
+                            <input type="checkbox" name="selectedItems" value="${item.cartIdx}" class="itemCheckbox" onchange="updateBuyButton()">
+                            <img src="${item.filePath}" alt="Item Image" style="width: 110px; height: 110px;">
+                            <div class="item-details">
+                                <div class="box">${item.title}</div>
+                                <div class="box">${item.name}</div>
+                                <div class="box">내일 ${formattedDate} 도착 보장</div>
+                          
                             </div>
-                            <div>
-                                <img src="${item.filePath}" class="img-box" style="width: 150px; height: 150px; border: 1px solid #CDCDCD;">
+                            <div class="item-options">
+                                <button type="button" class="quantityButton" onclick="updateQuantity(this, -1)">-</button>
+                                <span class="itemQuantity" name="quantity">1</span>
+                                <button type="button" class="quantityButton" onclick="updateQuantity(this, 1)">+</button>
                             </div>
-                            <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
-                                <div class="box" name="title">${item.title}</div>
-                                <div class="box" name="name">${item.name}</div>
-                                <div class="box" name="name">내일 ${formattedDate} 도착 보장</div>
-                                <div class="box" name="price">상품 단가: ${item.price} 원</div>
-                            </div>
-                            <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
-                                <div>
-                                    <button type="button" class="quantityButton" onclick="updateQuantity(this, -1)">-</button>
-                                    <span class="itemQuantity" name="quantity">1</span>
-                                    <button type="button" class="quantityButton" onclick="updateQuantity(this, 1)">+</button>
+                            <div class="price-details">
+                                <div class="box">가격: <span class="itemPrice" data-price="${item.price}">${item.price}</span>원</div>
                                 </div>
-                                <div>
-                                    <button type="button" onclick="removeItem('${item.cartIdx}')">삭제</button>
-                                </div>
-                            </div>
-                            <div style="display: flex; flex-direction: column; justify-content: space-evenly;">
-                                <div class="box" name="price">가격: <span class="itemPrice" data-price="${item.price}">${item.price}</span>원</div>
+                               <button type="button" class="delete-button" onclick="removeItem('${item.cartIdx}')">X</button>
                             </div>
                         </div>
                     </c:forEach>
-                    <input type="submit" class="btn btn-primary" style="margin:20px;" id="buyButton" value="구매하기">
+                    <div class="total-container">
+                        <button type="button" class="select-btn" onclick="location.href='/'">전체상품 주문하기</button>
+                        
+                        <button type="submit" class="all-btn" id="buyButton">선택상품 주문하기</button>
+                    </div></div></div>
+                    
                 </form>
             </c:otherwise>
         </c:choose>
     </main>
 <%@include file="/WEB-INF/layouts/footer.jsp"%>
     <script>
-        // 수량을 업데이트하는 함수
         function updateQuantity(button, change) {
             const quantitySpan = button.parentElement.querySelector('.itemQuantity');
             const priceSpan = button.closest('.box-container').querySelector('.itemPrice');
             const basePrice = parseFloat(priceSpan.getAttribute('data-price'));
             let currentQuantity = parseInt(quantitySpan.textContent);
-            currentQuantity = Math.max(1, currentQuantity + change); // Ensure quantity is at least 1
+            currentQuantity = Math.max(1, currentQuantity + change); 
             quantitySpan.textContent = currentQuantity;
 
-            // 해당 상품의 총 가격 업데이트
             const newPrice = basePrice * currentQuantity;
-            priceSpan.textContent = newPrice.toLocaleString(); // Add comma as thousand separator if needed
+            priceSpan.textContent = newPrice.toLocaleString(); 
         }
 
-        // 상품을 삭제하는 함수
         async function removeItem(cartIdx) {
             try {
                 const response = await fetch('/myPage/deleteCart', {
@@ -102,7 +233,7 @@ main {
                 const data = await response.json();
                 if (data.message === "success") {
                     alert("삭제되었습니다.");
-                    location.reload(); // 페이지 새로고침
+                    location.reload(); 
                 } else {
                     throw new Error("삭제에 실패했습니다.");
                 }
@@ -110,14 +241,13 @@ main {
                 alert("삭제에 실패했습니다. " + error.message);
             }
         }
-        // 폼 제출 처리
+
         document.getElementById('cartForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // 기본 폼 제출 방지
+            event.preventDefault(); 
 
             const form = event.target;
             const formData = new FormData();
 
-            // 체크된 항목에서 데이터 수집
             document.querySelectorAll('.itemCheckbox:checked').forEach(checkbox => {
                 const container = checkbox.closest('.box-container');
                 const cartIdx = checkbox.value;
@@ -129,16 +259,13 @@ main {
                 formData.append('price_' + cartIdx, price);
             });
 
-            // fetch를 사용하여 수집된 데이터 제출
             fetch(form.action, {
                 method: form.method,
                 body: formData
             }).then(response => {
                 if (response.ok) {
-                    // 성공적인 응답을 처리합니다.
-                    window.location.href = response.url; // 응답 URL로 리다이렉트
+                    window.location.href = response.url; 
                 } else {
-                    // 오류 응답을 처리합니다.
                     alert('Error submitting form');
                 }
             }).catch(error => {
@@ -147,7 +274,6 @@ main {
             });
         });
 
-        // 페이지 로드 시 올바른 수를 설정하기 위한 초기 업데이트
         updateBuyButton();
     </script>
     <script src="/js/bootstrap.bundle.min.js"></script>
