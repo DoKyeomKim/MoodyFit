@@ -380,6 +380,15 @@ WHERE
 
 </select>
 
+<select id="selectPersonLevel" resultType="double">
+
+select pl.benefit
+from person p
+join person_level pl on p.level_idx = pl.level_idx
+where p.person_idx = #{ personIdx }
+
+</select>
+
 <insert id="insertDelivery">
 
 insert into delivery (

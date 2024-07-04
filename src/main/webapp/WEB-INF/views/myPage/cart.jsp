@@ -193,7 +193,9 @@ main {
                         </div>
                     </c:forEach>
                     <div class="total-container">
-                        <button type="button" class="select-btn" onclick="location.href='/'">전체상품 주문하기</button>
+                        <button type="button" class="select-btn" onclick="selectAllItems()">전체상품 선택</button>
+                        
+                        <button type="button" class="select-btn" onclick="selectNoItems()">전체상품 선택해제</button>
                         
                         <button type="submit" class="all-btn" id="buyButton">선택상품 주문하기</button>
                     </div></div></div>
@@ -273,6 +275,22 @@ main {
                 alert('Error submitting form');
             });
         });
+        
+        function selectAllItems() {
+            const checkboxes = document.querySelectorAll('.itemCheckbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+          
+        }
+        
+        function selectNoItems() {
+            const checkboxes = document.querySelectorAll('.itemCheckbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+          
+        }
 
         updateBuyButton();
     </script>
