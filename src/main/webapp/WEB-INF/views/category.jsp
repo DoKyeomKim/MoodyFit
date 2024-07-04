@@ -257,7 +257,7 @@
 	</div>	
 	<div class="subCateDefault">
 		<c:forEach var="subCategory" items="${subCategories}">
-			<a href="/category/${categoryEngName}/${subCategory.engName}"> <c:choose>
+			<a href="/category/${categoryEngName}/${subCategory.engName}" onclick="saveScrollPosition()"> <c:choose>
 					<c:when test="${subCategory.korName == '전체'}">All</c:when>
 					<c:otherwise>${subCategory.korName}</c:otherwise>
 				</c:choose>
@@ -270,7 +270,7 @@
 				<c:choose>
 					<c:when test="${not empty allPosting}">
 					<form method="get" action="/category/${categoryEngName}/${subCategoryName}" class="sort-form">
-					    <select id="orderBy" name="orderBy" class="sort-select" onchange="this.form.submit()">
+					    <select id="orderBy" name="orderBy" class="sort-select" onchange="saveScrollPosition(); this.form.submit();">
 					        <option value="newest" ${orderBy == 'newest' ? 'selected' : ''}>최신순</option>
 					        <option value="oldest" ${orderBy == 'oldest' ? 'selected' : ''}>오래된 순</option>
 					        <option value="expensive" ${orderBy == 'expensive' ? 'selected' : ''}>비싼 순</option>
@@ -319,19 +319,19 @@
 							<ul class="pagination justify-content-center">
 								<c:if test="${prev}">
 									<li class="page-item"><a class="page-link"
-										href="?orderBy=${orderBy}&&page=${startPageNum - 1}" aria-label="Previous"> <span
+										href="?orderBy=${orderBy}&&page=${startPageNum - 1}" onclick="saveScrollPosition()" aria-label="Previous"> <span
 											aria-hidden="true" class="fas fa-angle-left"></span>
 									</a></li>
 								</c:if>
 								<c:forEach begin="${startPageNum}" end="${endPageNum}"
 									var="page">
 									<li class="page-item ${currentPage == page ? 'active' : ''}">
-										<a class="page-link" href="?orderBy=${orderBy}&&page=${page}">${page}</a>
+										<a class="page-link" href="?orderBy=${orderBy}&&page=${page}" onclick="saveScrollPosition()">${page}</a>
 									</li>
 								</c:forEach>
 								<c:if test="${next}">
 									<li class="page-item"><a class="page-link"
-										href="?orderBy=${orderBy}&&page=${endPageNum + 1}"> <span aria-hidden="true"
+										href="?orderBy=${orderBy}&&page=${endPageNum + 1}" onclick="saveScrollPosition()"> <span aria-hidden="true"
 											class="fas fa-angle-right"></span>
 									</a></li>
 								</c:if>
@@ -340,7 +340,7 @@
 					</c:when>
 					<c:when test="${not empty selectedPosting}">
 						<form method="get" action="/category/${categoryEngName}/${subCategoryName}" class="sort-form">
-						    <select id="orderBy" name="orderBy" class="sort-select" onchange="this.form.submit()">
+   							<select id="orderBy" name="orderBy" class="sort-select" onchange="saveScrollPosition(); this.form.submit();">
 						        <option value="newest" ${orderBy == 'newest' ? 'selected' : ''}>최신순</option>
 						        <option value="oldest" ${orderBy == 'oldest' ? 'selected' : ''}>오래된 순</option>
 						        <option value="expensive" ${orderBy == 'expensive' ? 'selected' : ''}>비싼 순</option>
@@ -387,19 +387,19 @@
 							<ul class="pagination justify-content-center">
 								<c:if test="${prev}">
 									<li class="page-item"><a class="page-link"
-										href="?orderBy=${orderBy}&&page=${startPageNum - 1}" aria-label="Previous"> <span
+										href="?orderBy=${orderBy}&&page=${startPageNum - 1}" aria-label="Previous" onclick="saveScrollPosition()"> <span
 											aria-hidden="true" class="fas fa-angle-left"></span>
 									</a></li>
 								</c:if>
 								<c:forEach begin="${startPageNum}" end="${endPageNum}"
 									var="page">
 									<li class="page-item ${currentPage == page ? 'active' : ''}">
-										<a class="page-link" href="?orderBy=${orderBy}&&page=${page}">${page}</a>
+										<a class="page-link" href="?orderBy=${orderBy}&&page=${page}" onclick="saveScrollPosition()">${page}</a>
 									</li>
 								</c:forEach>
 								<c:if test="${next}">
 									<li class="page-item"><a class="page-link"
-										href="?orderBy=${orderBy}&&page=${endPageNum + 1}"> <span aria-hidden="true"
+										href="?orderBy=${orderBy}&&page=${endPageNum + 1}" onclick="saveScrollPosition()"> <span aria-hidden="true"
 											class="fas fa-angle-right"></span>
 									</a></li>
 								</c:if>
@@ -650,6 +650,34 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 </script>
+<script>
+    // 페이지 이동 전에 현재 스크롤 위치 저장
+    function saveScrollPosition() {
+        sessionStorage.setItem('scrollPos', window.scrollY);
+    }
 
+    // 페이지 로드 후 저장된 스크롤 위치로 이동
+    function loadScrollPosition() {
+        const scrollPos = sessionStorage.getItem('scrollPos');
+        if (scrollPos) {
+            window.scroll({
+                top: parseInt(scrollPos),
+                left: 0,
+                behavior: 'instant' 
+            });
+            sessionStorage.removeItem('scrollPos'); // 위치 복구 후 삭제
+        }
+    }
+
+    // 페이지 로드 시 스크롤 위치 복구
+    window.addEventListener('DOMContentLoaded', function() {
+        loadScrollPosition();
+    });
+
+    // 브라우저의 기본 스크롤 복원 비활성화
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+</script>
 </body>
 </html>
