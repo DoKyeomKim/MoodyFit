@@ -17,7 +17,7 @@
     background-color: white;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-left:40px;
-    font-size:10px;
+    font-size:12px;
       transition: top 0.5s;
 }
 
@@ -42,7 +42,7 @@
 
 #sidebar nav ul li a.bold {
     font-weight: bold;
-    font-size:12px;
+    font-size:14px;
 }
 </style>
 </head>
