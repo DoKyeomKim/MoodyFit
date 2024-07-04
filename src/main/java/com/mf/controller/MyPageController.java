@@ -1,5 +1,10 @@
 package com.mf.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.sql.Clob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,6 +37,7 @@ import com.mf.service.PostingService;
 import com.mf.service.UsersService;
 
 import jakarta.servlet.http.HttpSession;
+import oracle.sql.CLOB;
 
 @Controller
 public class MyPageController {
@@ -228,7 +234,7 @@ public class MyPageController {
 		
 	    // =============================== 판매글 상세보기 ======================================
 		@GetMapping("/postingDetail")
-		public String getPostingDetail(@RequestParam("postingIdx") Long postingIdx, Model model) throws JsonProcessingException {
+		public String getPostingDetail(@RequestParam("postingIdx") Long postingIdx, Model model) throws JsonProcessingException, SQLException {
 		    Map<String, Object> postingInfo = postingService.getPostingInfo(postingIdx);
 		    List<Map<String, Object>> postingDetail = postingService.getPostingDetail(postingIdx);
 
@@ -249,7 +255,12 @@ public class MyPageController {
 
 		    // colorSizeMap을 JSON 문자열로 변환
 		    String colorSizeMapJson = new ObjectMapper().writeValueAsString(colorSizeMap);
-
+		    
+		    
+		    CLOB contentClob = (CLOB) postingInfo.get("CONTENT");
+            String content = clobToString(contentClob);
+            
+            model.addAttribute("content",content);
 		    model.addAttribute("postingInfo", postingInfo);
 		    model.addAttribute("colorSizeMap", colorSizeMapJson);
 		    model.addAttribute("colors", new ArrayList<>(colorSizeMap.keySet()));
@@ -257,6 +268,20 @@ public class MyPageController {
 		    return "posting/postingDetail";
 		}
 	    
+	    private static String clobToString(Clob clob) throws SQLException {
+	        StringBuilder sb = new StringBuilder();
+	        try (Reader reader = clob.getCharacterStream();
+	             BufferedReader br = new BufferedReader(reader)) {
+	            String line;
+	            while ((line = br.readLine()) != null) {
+	                sb.append(line);
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	        return sb.toString();
+	    }
+
 		@PostMapping("/postingBuy")
 		public ModelAndView postingBuy(HttpSession session, @RequestParam("product_info_idx") Long product_info_idx, @RequestParam("posting_product_idx") Long posting_product_idx) {
 		    ModelAndView mv = new ModelAndView();

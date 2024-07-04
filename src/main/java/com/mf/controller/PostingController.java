@@ -2,6 +2,8 @@ package com.mf.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -38,37 +40,74 @@ public class PostingController {
     private String realPath = "/Users/sinminjae/dev/postingImage/";
 
     @GetMapping("/postingWrite")
-    public String showPostingWritePage(Model model) {
-        List<Map<String, Object>> products = postingService.getAllProductDetailsWithInventory();
-        model.addAttribute("products", products);
+    public String showPostingWritePage(Model model, HttpSession session) {
+        Long userIdx = (Long) session.getAttribute("userIdx");
+        List<Map<String, Object>> products = postingService.getAllProductDetailsWithInventory(userIdx);
+
+        // productIdx를 추출하기 위한 리스트 초기화
+        List<Long> productIdxList = new ArrayList<>();
+
+        // for문을 사용하여 각 product에서 productIdx를 추출
+        for (Map<String, Object> product : products) {
+            // productIdx를 BigDecimal로 가져와서 Long으로 변환 후 리스트에 추가
+            BigDecimal productIdxBigDecimal = (BigDecimal) product.get("PRODUCT_IDX");
+            productIdxList.add(productIdxBigDecimal.longValue());
+        }
+        
+        // 전체 product details를 저장할 리스트 초기화
+        List<Map<String, Object>> allProductDetails = new ArrayList<>();
+
+        for (Long productIdx : productIdxList) {
+            List<Map<String, Object>> productDetails = productService.getProductDetailsByProductIdx(productIdx);
+            allProductDetails.addAll(productDetails);
+        }
+
+        // 전체 product details 리스트를 모델에 추가
+        model.addAttribute("productDetails", allProductDetails);
+
         return "/posting/postingWrite";
     }
-
-    @GetMapping("/posting/getProductDetails")
-    @ResponseBody
-    public List<Map<String, Object>> getProductDetails(@RequestParam("productIdx") Long productIdx) {
-        System.out.println("Fetching details for productIdx: " + productIdx);
-        List<Map<String, Object>> productDetails = productService.getProductDetailsByProductIdx(productIdx);
-        System.out.println("Product details: " + productDetails);
-        return productDetails;
-    }
+    
+//    @GetMapping("/posting/getProductDetails")
+//    @ResponseBody
+//    public List<Map<String, Object>> getProductDetails(@RequestParam("productIdx") Long productIdx) {
+//        System.out.println("Fetching details for productIdx: " + productIdx);
+//        List<Map<String, Object>> productDetails = productService.getProductDetailsByProductIdx(productIdx);
+//        System.out.println("Product details: " + productDetails);
+//        return productDetails;
+//    }
 
     @PostMapping("/postingWrite")
-    public String createPosting(@RequestParam("productIdx") Long productIdx,
-                                @RequestParam("productInfoIdx") String productInfoIdxs,
-                                @RequestParam("title") String title,
-                                @RequestParam("content") String content,
+    public String createPosting(@RequestParam("title") String title,
+                                @RequestParam("editordata") String content,
+                                @RequestParam Map<String, String> requestParams,
                                 HttpSession session) {
         Long userIdx = (Long) session.getAttribute("userIdx");
         Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
 
+        // 숨겨진 필드에서 Long 타입의 데이터를 가져옵니다.
+        List<Long> productInfoIdxs = new ArrayList<>();
+        List<Long> productIdxs = new ArrayList<>();
+
+        // requestParams에서 데이터 빼내기
+        for (Map.Entry<String, String> entry : requestParams.entrySet()) {
+            if (entry.getKey().startsWith("productInfoIdx")) {
+                productInfoIdxs.add(Long.valueOf(entry.getValue()));
+            } else if (entry.getKey().startsWith("productIdx")) {
+                productIdxs.add(Long.valueOf(entry.getValue()));
+            }
+        }
+
+        // 판매글 DTO 구성
         PostingDto postingDto = new PostingDto();
         postingDto.setTitle(title);
         postingDto.setContent(content);
         postingDto.setStoreIdx(storeIdx);
         postingDto.setState(1);
 
+        // 판매글 생성 서비스 호출
         postingService.createPosting(postingDto, productInfoIdxs);
+
         return "redirect:/storeMyPage/postingList";
     }
     

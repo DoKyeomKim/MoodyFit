@@ -148,8 +148,8 @@ body {
     </div>
     
     <!-- 탭 내용 -->
-    <div class="tab-content">
-        <p>${postingInfo.CONTENT}</p>
+    <div class="tab-content" style="text-align:center;">
+        ${content}
     </div>
 </div>
 </main>

@@ -24,7 +24,7 @@ public class PostingService {
     private PostingMapper postingMapper;
 
     @Transactional
-    public void createPosting(PostingDto postingDto, String productInfoIdxs) {
+    public void createPosting(PostingDto postingDto, List<Long> productInfoIdxs) {
         postingMapper.insertPosting(postingDto);
         Long postingIdx = postingDto.getPostingIdx();
 
@@ -37,11 +37,10 @@ public class PostingService {
         }
 
         if (productInfoIdxs != null && !productInfoIdxs.isEmpty()) {
-            String[] productInfoIdxArray = productInfoIdxs.split(", ");
-            for (String productInfoIdx : productInfoIdxArray) {
+            for (Long productInfoIdx : productInfoIdxs) {
                 PostingProductDto postingProductDto = new PostingProductDto();
                 postingProductDto.setPostingIdx(postingIdx);
-                postingProductDto.setProductInfoIdx(Long.parseLong(productInfoIdx));
+                postingProductDto.setProductInfoIdx(productInfoIdx);
                 postingMapper.insertPostingProduct(postingProductDto);
             }
         }
@@ -69,8 +68,8 @@ public class PostingService {
         return imageUrls;
     }
 
-    public List<Map<String, Object>> getAllProductDetailsWithInventory() {
-        return postingMapper.getAllProductDetailsWithInventory();
+    public List<Map<String, Object>> getAllProductDetailsWithInventory(Long userIdx) {
+        return postingMapper.getAllProductDetailsWithInventory(userIdx);
     }
     
     

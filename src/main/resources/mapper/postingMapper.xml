@@ -3,42 +3,30 @@
 <mapper namespace="com.mf.mapper.PostingMapper">
 
 <insert id="insertPosting" parameterType="com.mf.dto.PostingDto">
-    <selectKey keyProperty="postingIdx" resultType="long" order="BEFORE">
-        SELECT posting_seq.NEXTVAL FROM DUAL
-    </selectKey>
     INSERT INTO posting (posting_idx, title, content, update_date, state, store_idx)
-    VALUES (#{postingIdx}, #{title}, #{content,jdbcType=CLOB}, SYSDATE, #{state}, #{storeIdx})
+    VALUES (posting_seq.NEXTVAL, #{title}, #{content}, SYSDATE, #{state}, #{storeIdx})
 </insert>
 
 <insert id="insertPostingProduct" parameterType="com.mf.dto.PostingProductDto">
-    <selectKey keyProperty="postingProductIdx" resultType="long" order="BEFORE">
-        SELECT posting_product_seq.NEXTVAL FROM DUAL
-    </selectKey>
     INSERT INTO posting_product (posting_product_idx, posting_idx, product_info_idx)
-    VALUES (#{postingProductIdx}, #{postingIdx}, #{productInfoIdx})
+    VALUES (posting_product_seq.NEXTVAL, posting_seq.CURRVAL, #{productInfoIdx})
 </insert>
 
 <insert id="insertPostingFile" parameterType="com.mf.dto.PostingFileDto">
-    <selectKey keyProperty="postingFileIdx" resultType="long" order="BEFORE">
-        SELECT posting_file_seq.NEXTVAL FROM DUAL
-    </selectKey>
     INSERT INTO posting_file (posting_file_idx, original_name, file_path, file_size, posting_idx)
-    VALUES (#{postingFileIdx}, #{originalName}, #{filePath}, #{fileSize}, #{postingIdx})
+    VALUES (posting_file_seq.NEXTVAL, #{originalName}, #{filePath}, #{fileSize}, posting_seq.CURRVAL)
 </insert>
 
 <select id="getAllProductDetailsWithInventory" resultType="java.util.HashMap">
-    SELECT 
-        p.product_idx AS productIdx,
+       SELECT 
+        distinct p.product_idx AS product_idx,
         p.name AS name,
         p.price AS price,
-        p.manufacture_name AS manufactureName,
+        p.manufacture_name AS manufacture_name,
         c.kor_name AS category,
-        sc.kor_name AS subCategory,
-        LISTAGG(pc.color, ', ') WITHIN GROUP (ORDER BY pc.color) AS colors,
-        LISTAGG(ps.sizes, ', ') WITHIN GROUP (ORDER BY ps.sizes) AS sizes,
-        LISTAGG(pq.quantity, ', ') WITHIN GROUP (ORDER BY pq.quantity) AS quantities,
-        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS filePaths
+        sc.kor_name AS sub_category
     FROM product p
+    JOIN store s on p.store_idx = s.store_idx
     JOIN product_info pi ON p.product_idx = pi.product_idx
     LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
     JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
@@ -46,28 +34,53 @@
     LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
     LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
     LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
-    GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name
+    where s.user_idx=#{userIdx}
 </select>
 
 <select id="getPostingInfo">
+WITH ranked_files AS (
     SELECT 
-        distinct p.posting_idx as posting_idx,
-        p.title as title,
-        p.content as content,
-        p.update_date as update_date,
-        pf.file_path as posting_file,
+        p.posting_idx,
+        p.title,
+        p.update_date,
         prof.file_path as product_file,
         pro.name AS product_name,
-        pro.price as price      
-        FROM posting p
-    LEFT JOIN posting_file pf ON p.posting_idx = pf.posting_idx
+        pro.price as price,
+        pr.product_info_idx,
+        ROW_NUMBER() OVER (PARTITION BY p.posting_idx ORDER BY pr.product_info_idx DESC) as rn
+    FROM posting p
     JOIN posting_product pp ON p.posting_idx = pp.posting_idx
     JOIN product_info pr ON pp.product_info_idx = pr.product_info_idx
-    JOIN product_file prof on pr.product_info_idx = prof.product_info_idx
-    JOIN product pro on pro.product_idx = pr.product_idx
+    JOIN product_file prof ON pr.product_info_idx = prof.product_info_idx
+    JOIN product pro ON pro.product_idx = pr.product_idx
     JOIN product_color pc ON pr.product_color_idx = pc.product_color_idx
     JOIN product_size ps ON pr.product_size_idx = ps.product_size_idx
-    WHERE p.posting_idx = #{postingIdx}
+    WHERE p.posting_idx = 32
+)
+SELECT 
+    ds.posting_idx as posting_idx,
+    ds.title as title,
+    p.content as content,
+    ds.update_date as update_date,
+    ppf.file_path as posting_file,
+    ds.product_file as product_file,
+    ds.product_name AS product_name,
+    ds.price as price
+FROM (
+    SELECT DISTINCT
+        posting_idx,
+        title,
+        update_date,
+        product_file,
+        product_name,
+        price
+    FROM ranked_files
+    WHERE rn = 1
+) ds
+JOIN posting p ON ds.posting_idx = p.posting_idx
+LEFT JOIN posting_file ppf ON p.posting_idx = ppf.posting_idx
+WHERE p.posting_idx = #{postingIdx}
+
 </select>
 
 <select id="getPostingDetail" resultType="java.util.HashMap">
