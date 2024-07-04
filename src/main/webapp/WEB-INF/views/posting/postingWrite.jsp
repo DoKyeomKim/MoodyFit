@@ -10,50 +10,9 @@
 <script type="text/JavaScript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/JavaScript" src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.js"></script>
 <script type="text/JavaScript" src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.js"></script>
-
 <style>
-.product-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-.product-item {
-    border: 1px solid #ddd;
-    padding: 10px;
-    cursor: pointer;
-    width: 150px;
-}
-.product-item img {
-    width: 100%;
-    height: auto;
-}
-.product-item.selected {
-    border-color: #007bff;
-}
-.details-container {
-    margin-top: 20px;
-}
-.tab-content {
-    display: none;
-}
-.tab-content.active {
-    display: block;
-}
-.tab-nav {
-    display: flex;
-    cursor: pointer;
-}
-.tab-nav div {
-    margin-right: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-}
-.tab-nav div.active {
-    background-color: #007bff;
-    color: white;
-}
 .container {
-    margin-top: 150px;
+    margin-top: 200px;
 }
 </style>
 </head>
@@ -76,7 +35,7 @@
 
     <div id="productDetails"></div>
 
-    <form method="post" enctype="multipart/form-data" action="/storeMyPage/postingWrite">
+    <form id="postingForm" method="post" enctype="multipart/form-data" action="/storeMyPage/postingWrite">
         <input type="hidden" id="productIdx" name="productIdx" value="">
         <input type="hidden" id="productInfoIdx" name="productInfoIdx" value="">
         <div class="form-group">
@@ -105,7 +64,12 @@ $(document).ready(function() {
         placeholder: '게시글 작성',
         fontNames: ['맑은 고딕', '궁서', '굴림체', '굴림', '돋움체', '바탕체', 'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New'],
         fontNamesIgnoreCheck: ['맑은 고딕'],
-        fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '28', '30', '36', '50', '72']
+        fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '28', '30', '36', '50', '72'],
+        callbacks: {
+            onImageUpload: function(files) {
+                uploadImage(files[0]);
+            }
+        }
     });
 
     $('#productSelect').change(function() {
@@ -123,13 +87,44 @@ $(document).ready(function() {
                 console.log('Product details:', data);
                 $('#productIdx').val(productIdx);
 
-                const productInfoIds = data.map(item => item.PRODUCTINFOIDX).join(', ');
+                const productInfoIds = data.map(item => item.productInfoIdx).join(', ');
                 $('#productInfoIdx').val(productInfoIds);
 
                 displayProductDetails(data);
             },
             error: function(error) {
                 console.error('Error fetching product details:', error);
+            }
+        });
+    });
+
+    $('#postingForm').submit(function(event) {
+        event.preventDefault();
+        
+        // Get Summernote content and extract image URLs
+        var content = $('#summernote').val();
+        var imageUrls = [];
+        $(content).find('img').each(function() {
+            imageUrls.push($(this).attr('src'));
+        });
+
+        // Prepare form data
+        var formData = new FormData(this);
+        imageUrls.forEach(function(url, index) {
+            formData.append('files', urlToFile(url, 'image' + index + '.png'));
+        });
+
+        $.ajax({
+            url: '/storeMyPage/postingWrite',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                window.location.href = '/storeMyPage/postingList';
+            },
+            error: function(error) {
+                console.error('Error submitting form:', error);
             }
         });
     });
@@ -141,22 +136,53 @@ function displayProductDetails(data) {
 
     data.forEach(item => {
         let imagesHtml = '';
-        if (item.FILEPATHS) {
-            imagesHtml += item.FILEPATHS.split(', ').map(filePath => {
-                return '<img src="' + filePath + '" alt="' + item.NAME + 
+        if (item.filePaths) {
+            imagesHtml += item.filePaths.split(', ').map(filePath => {
+                return '<img src="' + filePath + '" alt="' + item.name + 
                 '" style="width: 100px; height: 100px; object-fit: cover; margin: 5px;">';
             }).join('');
         }
 
         detailsDiv.append(`
-            <h3>${item.NAME}</h3>
-            <p>가격: ${item.PRICE} 원</p>
-            <p>색상: ${item.COLORS}</p>
-            <p>사이즈: ${item.SIZES}</p>
-            <p>재고: ${item.QUANTITIES} 개</p>
+            <h3>${item.name}</h3>
+            <p>가격: ${item.price} 원</p>
+            <p>색상: ${item.colors}</p>
+            <p>사이즈: ${item.sizes}</p>
+            <p>재고: ${item.quantities} 개</p>
             <div class="images">${imagesHtml}</div>
         `);
     });
+}
+
+function uploadImage(file) {
+    var data = new FormData();
+    data.append("file", file);
+    $.ajax({
+        url: '/storeMyPage/uploadSummernoteImageFile',
+        type: 'POST',
+        data: data,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            console.log('Image upload response:', response);
+            var jsonObject = JSON.parse(response);
+            if (jsonObject.responseCode === 'success') {
+                $('#summernote').summernote('insertImage', jsonObject.url);
+            } else {
+                console.error('Image upload failed:', jsonObject);
+            }
+        },
+        error: function(error) {
+            console.error('Error uploading image:', error);
+        }
+    });
+}
+
+function urlToFile(url, filename, mimeType){
+    return (fetch(url)
+        .then(function(res){return res.arrayBuffer();})
+        .then(function(buf){return new File([buf], filename, {type:mimeType});})
+    );
 }
 </script>
 

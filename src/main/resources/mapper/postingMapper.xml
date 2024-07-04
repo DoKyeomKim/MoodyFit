@@ -6,8 +6,8 @@
     <selectKey keyProperty="postingIdx" resultType="long" order="BEFORE">
         SELECT posting_seq.NEXTVAL FROM DUAL
     </selectKey>
-    INSERT INTO posting (posting_idx, title, content, update_date, state)
-    VALUES (#{postingIdx}, #{title}, #{content}, SYSDATE, #{state})
+    INSERT INTO posting (posting_idx, title, content, update_date, state, store_idx)
+    VALUES (#{postingIdx}, #{title}, #{content,jdbcType=CLOB}, SYSDATE, #{state}, #{storeIdx})
 </insert>
 
 <insert id="insertPostingProduct" parameterType="com.mf.dto.PostingProductDto">
@@ -47,6 +47,27 @@
     LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
     LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
     GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name
+</select>
+
+<select id="getPostingDetail" resultType="java.util.HashMap">
+    SELECT 
+        p.title,
+        p.content,
+        p.update_date,
+        pf.file_path,
+        pp.product_info_idx,
+        pro.name AS product_name,
+        pro.price,
+        pc.color,
+        ps.sizes
+    FROM posting p
+    LEFT JOIN posting_file pf ON p.posting_idx = pf.posting_idx
+    JOIN posting_product pp ON p.posting_idx = pp.posting_idx
+    JOIN product_info pr ON pp.product_info_idx = pr.product_info_idx
+    JOIN product pro on pro.product_idx = pr.product_idx
+    JOIN product_color pc ON pr.product_color_idx = pc.product_color_idx
+    JOIN product_size ps ON pr.product_size_idx = ps.product_size_idx
+    WHERE p.posting_idx = #{postingIdx}
 </select>
 
 </mapper>

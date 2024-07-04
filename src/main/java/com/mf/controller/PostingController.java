@@ -53,7 +53,6 @@ public class PostingController {
         return productDetails;
     }
 
-
     @PostMapping("/postingWrite")
     public String createPosting(@RequestParam("productIdx") Long productIdx,
                                 @RequestParam("productInfoIdx") String productInfoIdxs,
@@ -72,6 +71,8 @@ public class PostingController {
         postingService.createPosting(postingDto, productInfoIdxs);
         return "redirect:/storeMyPage/postingList";
     }
+    
+
 
     @RequestMapping(value = "/uploadSummernoteImageFile", produces = "application/json; charset=utf8")
     @ResponseBody
@@ -93,7 +94,7 @@ public class PostingController {
             java.io.InputStream fileStream = multipartFile.getInputStream();
             FileUtils.copyInputStreamToFile(fileStream, targetFile);
 
-            jsonObject.addProperty("url", "/Users/sinminjae/dev/postingImage/" + savedFileName);
+            jsonObject.addProperty("url", "/postingImage/" + savedFileName);
             jsonObject.addProperty("responseCode", "success");
         } catch (IOException e) {
             FileUtils.deleteQuietly(targetFile);
@@ -103,4 +104,5 @@ public class PostingController {
 
         return jsonObject.toString();
     }
+
 }

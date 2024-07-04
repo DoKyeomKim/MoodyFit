@@ -11,8 +11,9 @@ import com.mf.mapper.PostingMapper;
 
 import jakarta.transaction.Transactional;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,10 +28,12 @@ public class PostingService {
         postingMapper.insertPosting(postingDto);
         Long postingIdx = postingDto.getPostingIdx();
 
-        if (postingDto.getPostingFiles() != null && !postingDto.getPostingFiles().isEmpty()) {
-            for (MultipartFile file : postingDto.getPostingFiles()) {
-                savePostingFile(postingIdx, file);
-            }
+        // Save content with image URLs
+        String content = postingDto.getContent();
+        List<String> imageUrls = extractImageUrls(content);
+
+        for (String imageUrl : imageUrls) {
+            savePostingFile(postingIdx, imageUrl);
         }
 
         if (productInfoIdxs != null && !productInfoIdxs.isEmpty()) {
@@ -44,31 +47,36 @@ public class PostingService {
         }
     }
 
-    private void savePostingFile(Long postingIdx, MultipartFile file) {
-        if (file.isEmpty()) {
-            return;
+    private void savePostingFile(Long postingIdx, String imageUrl) {
+        PostingFileDto postingFileDto = new PostingFileDto();
+        postingFileDto.setOriginalName(imageUrl.substring(imageUrl.lastIndexOf('/') + 1));
+        postingFileDto.setFilePath(imageUrl);
+        postingFileDto.setFileSize("unknown"); // 파일 크기를 알 수 없기 때문에 "unknown"으로 설정
+        postingFileDto.setPostingIdx(postingIdx);
+        postingMapper.insertPostingFile(postingFileDto);
+    }
+
+    private List<String> extractImageUrls(String content) {
+        List<String> imageUrls = new ArrayList<>();
+        String imgTagPattern = "<img[^>]+src=[\"']([^\"']+)[\"'][^>]*>";
+        Pattern pattern = Pattern.compile(imgTagPattern);
+        Matcher matcher = pattern.matcher(content);
+
+        while (matcher.find()) {
+            imageUrls.add(matcher.group(1));
         }
 
-        String originalFileName = file.getOriginalFilename();
-        String newFileName = System.currentTimeMillis() + "_" + originalFileName;
-        String filePath = "/Users/sinminjae/dev/postingImage/" + newFileName;
-
-        try {
-            File dest = new File(filePath);
-            file.transferTo(dest);
-
-            PostingFileDto postingFileDto = new PostingFileDto();
-            postingFileDto.setOriginalName(originalFileName);
-            postingFileDto.setFilePath(filePath);
-            postingFileDto.setFileSize(String.valueOf(file.getSize()));
-            postingFileDto.setPostingIdx(postingIdx);
-            postingMapper.insertPostingFile(postingFileDto);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return imageUrls;
     }
 
     public List<Map<String, Object>> getAllProductDetailsWithInventory() {
         return postingMapper.getAllProductDetailsWithInventory();
     }
+    
+    
+    // =============================== 판매글 상세보기 ======================================
+    public Map<String, Object> getPostingDetail(Long postingIdx) {
+        return postingMapper.getPostingDetail(postingIdx);
+    }
+    
 }

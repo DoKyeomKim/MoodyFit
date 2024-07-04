@@ -15,4 +15,7 @@ public interface PostingMapper {
     void insertPostingProduct(PostingProductDto postingProductDto);
     void insertPostingFile(PostingFileDto postingFileDto);
     List<Map<String, Object>> getAllProductDetailsWithInventory();
+    
+    // 상세보기 로드
+	Map<String, Object> getPostingDetail(Long postingIdx);
 }
