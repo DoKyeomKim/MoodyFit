@@ -1,7 +1,5 @@
 package com.mf.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +24,7 @@ import com.mf.dto.StoreDto;
 import com.mf.dto.UsersDto;
 import com.mf.service.CustomUserDetails;
 import com.mf.service.MyPageService;
+import com.mf.service.PostingService;
 import com.mf.service.UsersService;
 
 import jakarta.servlet.http.HttpSession;
@@ -36,6 +36,8 @@ public class MyPageController {
 
 	@Autowired
 	private UsersService usersService;
+	@Autowired
+	private PostingService postingService;
 
 //===========================================================================
 //================================ 개인 =====================================
@@ -220,6 +222,19 @@ public class MyPageController {
 		}
 	//===========================================================================
 		
+	    // =============================== 판매글 상세보기 ======================================
+	    @GetMapping("/postingDetail")
+	    public String getPostingDetail(@RequestParam("postingIdx") Long postingIdx, Model model) {
+	        Map<String, Object> postingDetail = postingService.getPostingDetail(postingIdx);
+	        System.out.println(postingDetail);
+	        System.out.println(postingDetail);
+	        System.out.println(postingDetail);
+	        System.out.println(postingDetail);
+	        System.out.println(postingDetail);
+	        model.addAttribute("postingDetail", postingDetail);
+	        return "posting/postingDetail";
+	    }
+	    
 		
 
 }

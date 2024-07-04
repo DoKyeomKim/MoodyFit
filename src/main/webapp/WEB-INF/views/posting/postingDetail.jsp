@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>상품 판매글 상세보기</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <style>
 /* 기본 스타일 */
@@ -97,49 +97,63 @@ body {
 <body>
 <%@include file="/WEB-INF/layouts/header.jsp"%>
 
- <!-- 상품 이미지 및 정보 -->
-	<div class="product-details">
-	    <div class="product-info">
-	        <img src="posting_file.jpg" alt="상품 이미지" class="product-image">
-	        <h2 class="product-title">상품 제목</h2>
-	        <p class="product-content">상품 내용 설명.</p>
-	    </div>
-	    <div class="purchase-info">
-	        <div class="purchase-options">
-	            <label for="color">색상</label>
-	            <select id="color" name="color">
-	                <option value="red">레드</option>
-	                <option value="blue">블루</option>
-	                <option value="green">그린</option>
-	            </select>
-	        </div>
-	        <div class="purchase-options">
-	            <label for="size">사이즈</label>
-	            <select id="size" name="size">
-	                <option value="s">S</option>
-	                <option value="m">M</option>
-	                <option value="l">L</option>
-	            </select>
-	        </div>
-	        <div class="price">₩47,900</div>
-	        <button class="buy-button">구매하기</button>
-	    </div>
-	</div>
-	
-	<!-- 상품 추가 정보 탭 -->
-	<div class="tabs">
-	    <div class="tab active">상세정보</div>
-	    <div class="tab">사이즈</div>
-	    <div class="tab">상품후기</div>
-	    <div class="tab">상품문의</div>
-	</div>
-	
-	<!-- 탭 내용 -->
-	<div class="tab-content">
-	    <p>상세 정보 내용이 여기에 들어갑니다.</p>
-	</div>
-
+<div class="container">
+    <!-- 상품 이미지 및 정보 -->
+    <div class="product-details">
+        <div class="product-info">
+            <img src="${postingDetail.FILE_PATH}" alt="상품 이미지" class="product-image">
+            <h2 class="product-title">${postingDetail.TITLE}</h2>
+            <div class="product-content">
+                ${postingDetail.CONTENT}
+            </div>
+        </div>
+        <div class="purchase-info">
+            <div class="purchase-options">
+                <label for="color">색상</label>
+                <select id="color" name="color">
+                    <c:forEach var="color" items="${postingDetail.COLORS}">
+                        <option value="${color.COLORS}">${color.COLORS}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            <div class="purchase-options">
+                <label for="size">사이즈</label>
+                <select id="size" name="size">
+                    <c:forEach var="size" items="${postingDetail.SIZES}">
+                        <option value="${size}">${size}</option>
+                    </c:forEach>
+                </select>
+            </div>
+            <div class="price">${postingDetail.price} 원</div>
+            <button class="buy-button">구매하기</button>
+        </div>
+    </div>
+    
+    <!-- 상품 추가 정보 탭 -->
+    <div class="tabs">
+        <div class="tab active">상세정보</div>
+        <div class="tab">사이즈</div>
+        <div class="tab">상품후기</div>
+        <div class="tab">상품문의</div>
+    </div>
+    
+    <!-- 탭 내용 -->
+    <div class="tab-content">
+        <p>${postingDetail.content}</p>
+    </div>
+</div>
 
 <script src="/js/bootstrap.bundle.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.tab').click(function() {
+        var index = $(this).index();
+        $('.tab').removeClass('active');
+        $(this).addClass('active');
+        $('.tab-content').hide();
+        $('.tab-content').eq(index).show();
+    });
+});
+</script>
 </body>
 </html>

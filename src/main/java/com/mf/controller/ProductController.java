@@ -216,6 +216,7 @@ public class ProductController {
 
 
 
+    
     // 색상 데이터를 JSON 형식으로 제공하는 메소드
     @GetMapping("/api/colors")
     @ResponseBody

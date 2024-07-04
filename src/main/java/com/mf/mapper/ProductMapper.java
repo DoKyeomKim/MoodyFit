@@ -98,8 +98,6 @@ public interface ProductMapper {
 
 	List<ProductInfoDto> getProductInfosByProductIdx(Long productIdx);
 	List<ProductFileDto> getProductFilesByProductIdx(Long productIdx);
-
-	List<Map<String, Object>> getProductDetailsByProductIdx(Long productIdx);
 	
 	
 	ProductDto selectProductByIdx(@Param("productIdx") Long productIdx);
