@@ -44,6 +44,14 @@ public interface MyPageMapper {
 	// 위시리스트 갖고 오기
 	List<Map<String, Object>> getWishList(Map<String, Object> params);
 	
+	// 레벨 등급 확인표
+	List<PersonLevelDto> getPersonLevel();
+
+	// 총 구매 가격
+	Map<String, Object> getAllUserPurchase(Long userIdx);
+
+	// 장바구니 수
+	int getCartCount(Long userIdx);
 	
 	//=====================================================
 	//=======================가맹점========================
@@ -65,9 +73,7 @@ public interface MyPageMapper {
 
 	int getWishListCount(Long userIdx);
 
-	List<PersonLevelDto> getPersonLevel();
 
-	Map<String, Object> getAllUserPurchase(Long userIdx);
 
 
 

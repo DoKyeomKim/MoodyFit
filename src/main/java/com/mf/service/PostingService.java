@@ -75,8 +75,17 @@ public class PostingService {
     
     
     // =============================== 판매글 상세보기 ======================================
-    public Map<String, Object> getPostingDetail(Long postingIdx) {
+    public List<Map<String, Object>> getPostingDetail(Long postingIdx) {
         return postingMapper.getPostingDetail(postingIdx);
     }
+
+	public Map<String, Object> getPostingInfo(Long postingIdx) {
+		return postingMapper.getPostingInfo(postingIdx);
+
+	}
+
+	public void addPostingBuy(Long userIdx, Long productInfoIdx, Long postingProductIdx) {
+		postingMapper.addPostingBuy(userIdx,productInfoIdx,postingProductIdx);
+	}
     
 }

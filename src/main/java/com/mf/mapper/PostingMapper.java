@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.mf.dto.PostingDto;
 import com.mf.dto.PostingFileDto;
@@ -17,5 +18,7 @@ public interface PostingMapper {
     List<Map<String, Object>> getAllProductDetailsWithInventory();
     
     // 상세보기 로드
-	Map<String, Object> getPostingDetail(Long postingIdx);
+	List<Map<String, Object>> getPostingDetail(Long postingIdx);
+	Map<String, Object> getPostingInfo(Long postingIdx);
+    void addPostingBuy(@Param("userIdx") Long userIdx, @Param("productInfoIdx") Long productInfoIdx, @Param("postingProductIdx") Long postingProductIdx);
 }

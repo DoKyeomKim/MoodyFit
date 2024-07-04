@@ -30,7 +30,10 @@ public class MyPageService {
 	public Map<String, Object> getPersonMyPage(Long userIdx) {
 		// 닉네임과 personIdx 갖고오기
 		PersonDto person = myPageMapper.getNickNameByUserIdx(userIdx);
+		// 총구매 가격
 		Map<String,Object> price = myPageMapper.getAllUserPurchase(userIdx);
+		// 장바구니 갯수
+		int cartCount = myPageMapper.getCartCount(userIdx);
 		
 		// 배송 준비중인 물품 갖고오기
 		// 배송 준비중
@@ -49,6 +52,7 @@ public class MyPageService {
 		result.put("orderIng", orderIng);
 		result.put("orderDone", orderDone);
 		result.put("price", price);
+		result.put("cartCount", cartCount);
 		return result;
 	}
 	

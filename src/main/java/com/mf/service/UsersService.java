@@ -1,5 +1,7 @@
 package com.mf.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -74,11 +76,11 @@ public class UsersService {
 		return usersMapper.getStoreName(storeName);
 	}
 
-	public String getIdByEmail(String email) {
+	public List<String> getIdByEmail(String email) {
 		return usersMapper.getIdByEmail(email);
 	}
 
-	public String getIdByPhone(String phone) {
+	public List<String> getIdByPhone(String phone) {
 		return usersMapper.getIdByPhone(phone);
 	}
 
