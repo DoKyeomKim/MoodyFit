@@ -1,6 +1,8 @@
 package com.mf.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mf.dto.Paging;
 import com.mf.dto.PersonDto;
 import com.mf.dto.PersonLevelDto;
@@ -223,18 +227,45 @@ public class MyPageController {
 	//===========================================================================
 		
 	    // =============================== 판매글 상세보기 ======================================
-	    @GetMapping("/postingDetail")
-	    public String getPostingDetail(@RequestParam("postingIdx") Long postingIdx, Model model) {
-	        Map<String, Object> postingDetail = postingService.getPostingDetail(postingIdx);
-	        System.out.println(postingDetail);
-	        System.out.println(postingDetail);
-	        System.out.println(postingDetail);
-	        System.out.println(postingDetail);
-	        System.out.println(postingDetail);
-	        model.addAttribute("postingDetail", postingDetail);
-	        return "posting/postingDetail";
-	    }
-	    
-		
+		@GetMapping("/postingDetail")
+		public String getPostingDetail(@RequestParam("postingIdx") Long postingIdx, Model model) throws JsonProcessingException {
+		    Map<String, Object> postingInfo = postingService.getPostingInfo(postingIdx);
+		    List<Map<String, Object>> postingDetail = postingService.getPostingDetail(postingIdx);
 
+		    // 색상별 사이즈 및 관련 인덱스 매핑
+		    Map<String, Map<String, Map<String, Long>>> colorSizeMap = new HashMap<>();
+		    for (Map<String, Object> detail : postingDetail) {
+		        String color = (String) detail.get("COLOR");
+		        String size = (String) detail.get("SIZES");
+		        Long productInfoIdx = ((Number) detail.get("PRODUCT_INFO_IDX")).longValue();
+		        Long postingProductIdx = ((Number) detail.get("POSTING_PRODUCT_IDX")).longValue();
+		        
+		        colorSizeMap.computeIfAbsent(color, k -> new HashMap<>())
+		                    .computeIfAbsent(size, k -> new HashMap<>())
+		                    .put("product_info_idx", productInfoIdx);
+		        colorSizeMap.get(color).get(size).put("posting_product_idx", postingProductIdx);
+		    }
+
+
+		    // colorSizeMap을 JSON 문자열로 변환
+		    String colorSizeMapJson = new ObjectMapper().writeValueAsString(colorSizeMap);
+
+		    model.addAttribute("postingInfo", postingInfo);
+		    model.addAttribute("colorSizeMap", colorSizeMapJson);
+		    model.addAttribute("colors", new ArrayList<>(colorSizeMap.keySet()));
+
+		    return "posting/postingDetail";
+		}
+	    
+		@PostMapping("/postingBuy")
+		public ModelAndView postingBuy(HttpSession session, @RequestParam("product_info_idx") Long product_info_idx, @RequestParam("posting_product_idx") Long posting_product_idx) {
+		    ModelAndView mv = new ModelAndView();
+		    
+		    Long userIdx = (Long) session.getAttribute("userIdx");
+		    
+		    postingService.addPostingBuy(userIdx, product_info_idx, posting_product_idx);
+
+		    mv.setViewName("redirect:/myPage/cart");
+		    return mv;
+		}
 }
