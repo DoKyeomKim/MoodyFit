@@ -34,6 +34,7 @@ public class OrdersDto {
 	private String address;
 	private String detailAddress;
 
+	private double discount;
 	private String title;
 	private String name;
 	private String filePath;

@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>장바구니</title>
+<title>주문서 작성</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <style>
@@ -173,10 +173,10 @@ main {
                                 <div style="text-align: right;">총 상품 금액: <input type="text" name="price" value="${totalOrderPrice}" readonly> 원</div>
                                 <div style="text-align: right;">총 수량: <input type="text" name="quantity" value="${totalQuantity}" readonly> 개</div>
                                 <div style="text-align: right;">배송비: <input type="text" name="deliveryPrice" value="3000" readonly> 원</div>
-                                <div style="text-align: right;">할인금액: <input type="text" name="discount" value="70000" readonly> 원</div>
+                                <div style="text-align: right;">할인금액: <input type="text" class="price2" name="discount" value="${(totalOrderPrice + 3000) * discount}" readonly> 원</div>
                                 <hr style="border: 1px solid black;">
                                 <div style="text-align: right;">
-                                    결제할 금액: <input type="text" value="${totalOrderPrice + 3000 - 70000}" id="finalPrice" readonly> 원
+                                    결제할 금액: <input type="text" class="price" value="${(totalOrderPrice + 3000) * (1 - discount)}" id="finalPrice" readonly> 원
                                 </div>
                             </div>
                             <button type="button" id="addToCartButton" class="btn btn-primary" style="margin: 20px;">결제하기</button>
@@ -390,6 +390,33 @@ main {
     	        });
     	    }
     	 */   
+    	 
+    	
+    	// 모든 price 클래스를 가진 입력 태그들을 선택하여 처리
+    	 var prices = document.querySelectorAll('.price');
+    	 prices.forEach(function(input) {
+    	     // 입력 태그의 값에서 소수점 이후의 부분을 제거하고 정수로 변환
+    	     var value = input.value.trim(); // 값의 앞뒤 공백을 제거
+    	     var integerValue = parseInt(value.split('.')[0], 10); // 점(.) 이후의 부분을 제거하고 정수로 변환
+
+    	     // 정수로 변환된 값을 다시 입력 태그의 값으로 설정
+    	     input.value = integerValue.toLocaleString();
+    	 });
+    	 
+    	// 모든 price 클래스를 가진 입력 태그들을 선택하여 처리
+    	 var prices = document.querySelectorAll('.price2');
+    	 prices.forEach(function(input) {
+    	     // 입력 태그의 값에서 소수점 이후의 부분을 제거하고 정수로 변환
+    	     var value = input.value.trim(); // 값의 앞뒤 공백을 제거
+    	     var integerValue = parseInt(value.split('.')[0], 10); // 점(.) 이후의 부분을 제거하고 정수로 변환
+
+    	     // 정수로 변환된 값에 마이너스 기호를 붙이기
+    	     var formattedValue = '-' + Math.abs(integerValue).toLocaleString(); // 절댓값으로 변환 후 천 단위로 구분된 문자열로 변환
+
+    	     // 입력 태그의 값으로 설정
+    	     input.value = formattedValue;
+    	 });
+    	 
 </script>
 </body>
 	<%@include file="/WEB-INF/layouts/footer.jsp"%>

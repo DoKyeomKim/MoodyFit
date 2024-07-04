@@ -100,13 +100,16 @@ public class OrderController {
 		// 마이페이지 로직 처리
 		Map<String, Object> result = myPageService.getPersonMyPage(userIdx);
 		PersonDto person = (PersonDto) result.get("person");
+		Long personIdx = person.getPersonIdx();
+		
 		List<CartDto> cartList = orderMapper.selectCart2(userIdx);
 		List<DeliveryDto> deliveryList = orderMapper.selectDelivery(userIdx);
 		// OrdersDto orderList = orderMapper.selectOrderList(userIdx);
 		DeliveryDto deliveryDto = orderMapper.selectDelivery2(userIdx);
-		System.out.println(cartList);
-		System.out.println(deliveryList);
+		double discount = orderMapper.selectPersonLevel(personIdx);
+		System.out.println(discount);
 
+		mv.addObject("discount", discount);
 		mv.addObject("person", person);
 		mv.addObject("cartList", cartList);
 		mv.addObject("deliveryDto", deliveryDto);

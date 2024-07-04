@@ -218,6 +218,28 @@ main {
 	transform: scale(1.05);
 }
 
+.swiper2-container {
+    width: 100%;
+    height: 100%;
+}
+.swiper2-slide {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color : white;
+    background: gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+.swiper2-button-next, .swiper2-button-prev {
+    color: #111;
+}
+.swiper2-wrapper {
+    display: flex;
+}
 </style>
 </head>
 <body>
@@ -286,24 +308,31 @@ main {
 </div>
 </c:when>
 <c:otherwise>
-<div class="container" >
-    <h4 class="bold-text">Nearby Listings</h4>
-    <div class="light-text">지역별 매장의 상품입니다 </div>
-    <div class="item-wrapper" style="display:flex; flex-wrap: wrap; justify-content: flex-start;">
+    <div class="container">
+        <h4 class="bold-text">Nearby Listings2</h4>
+        <div class="light-text">지역별 매장의 상품입니다</div>
+        <div class="swiper2-container">
+        	<div style="display:flex;">
+            <div class="swiper2-button-prev"></div>
+            <div class="swiper2-wrapper item-wrapper">
                 <c:forEach items="${pl}" var="pl">
-                    <div class="item">
-                        <div>
-                            <img src="${pl.filePath}" alt="${pl.title}" style="width:100%; height:auto;">
+                    <div class="swiper2-slide item">
+                        <div style="text-align: center;">
+                            <img src="${pl.filePath}" alt="${pl.title}" style="width:250px; height:250px;">
                         </div>
-                        <div style="padding: 10px; text-align: center; margin-top : 30px;">
-                            <h4>${pl.title}</h4>
-                            <p style="font-size:small;">${pl.storeName}</p>
-                                <span class="address" style="font-size: medium;">주소 : ${pl.address} ${pl.detailAddress}</span>
+                        <div style="padding: 10px; text-align: center; margin: 10px 0px;">
+                            <h4 style="margin: 10px 0; font-size: 16px;">${pl.title}</h4>
+                            <p style="font-size: 14px; margin: 5px 0;">${pl.storeName}</p>
+                            <span class="address" style="font-size: 12px;">주소: ${pl.address} ${pl.detailAddress}</span>
                         </div>
                     </div>
                 </c:forEach>
+            </div>
+            <div class="swiper2-button-next"></div>
+            </div>
+            <div class="swiper2-pagination"></div>
+        </div>
     </div>
-</div>
 </c:otherwise>
 </c:choose>
 
@@ -378,7 +407,7 @@ window.onclick = function(event) {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const swiper = new Swiper('.swiper-container', {
+    const swiper1 = new Swiper('.swiper-container', {
         slidesPerView: 1,
         spaceBetween: 30,
         pagination: {
@@ -391,13 +420,30 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         loop: true,
         loopAdditionalSlides: 1,
-        // 자동 넘기기 기능
         autoplay: {
             delay: 5000, // 5초
             disableOnInteraction: false,
         },
-        // 애니메이션 속도
         speed: 1000 
+    });
+
+    const swiper2 = new Swiper2('.swiper2-container', {
+        slidesPerView: 5,
+        spaceBetween: 50,
+        pagination: {
+            el: '.swiper2-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper2-button-next',
+            prevEl: '.swiper2-button-prev',
+        },
+        loop: true,
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        speed: 1000
     });
 });
 

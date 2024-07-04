@@ -72,4 +72,7 @@ public interface OrderMapper {
 
 	List<NearbyDto> selectPosting2(Long personIdx);
 
+	double selectPersonLevel(Long personIdx);
+
+
 }

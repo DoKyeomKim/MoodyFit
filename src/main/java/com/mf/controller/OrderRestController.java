@@ -115,11 +115,7 @@ public class OrderRestController {
 		    // 마이페이지 로직 처리
 		    Map<String, Object> result = myPageService.getPersonMyPage(userIdx);
 		    PersonDto person = (PersonDto) result.get("person");
-		    
-
-		    System.out.println(deliveryIdx);
-		    System.out.println(deliveryIdx);
-		    System.out.println(deliveryIdx);
+		   
 
 			   orderMapper.deleteDelivery(deliveryIdx);
 			// JSON 형식의 응답 생성
