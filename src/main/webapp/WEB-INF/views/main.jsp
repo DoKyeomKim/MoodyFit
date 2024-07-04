@@ -35,6 +35,16 @@ main {
     margin-top : 40px;
     margin-bottom : 40px;
 }
+.container-best{
+	width : 100%;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top : 40px;
+    margin-bottom : 40px;
+}
+
 .overlay {
     position: absolute;
     top: 0;
@@ -106,9 +116,9 @@ main {
 
 .weekly-best-slide {
     display: inline-block;
-    width: 30%; /* 슬라이드의 너비를 설정 (전체 화면의 20%) */
+    width: 20%;
     box-sizing: border-box;
-    margin-right: 50px; /* 슬라이드 간 간격을 설정 */
+    margin-right: 50px;
 }
 
 @keyframes slide {
@@ -297,7 +307,7 @@ main {
 </c:otherwise>
 </c:choose>
 
-<div class="container">
+<div class="container-best">
     <h4 class="bold-text">WEEKLY BEST</h4>
     <div class="light-text">한주간 가장 인기있는 상품입니다</div>
     <div class="weekly-best-container">

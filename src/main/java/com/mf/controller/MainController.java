@@ -163,6 +163,11 @@ public class MainController {
         
         // 해당 카테고리의 모든 서브 카테고리 목록을 가져옴
         List<SubCategoryDto> subCategories = mainService.getSubCategoriesByCategoryEngName(categoryEngName);
+
+        List<Map<String,Object>> topPosting = mainService.getTopPostingByCategoryEngName(categoryEngName);
+        if(topPosting != null) {
+            mv.addObject("topPosting", topPosting);
+        }
         
 	    int pageSize = 2; // 한 페이지에 표시할 게시글 수 확인용으로 1 해놓음 나중에 수정
 	    int startIndex = (page - 1) * pageSize;
@@ -202,6 +207,7 @@ public class MainController {
             mv.addObject("selectedPosting", selectedPosting);
         }
         
+        mv.addObject("topPosting", topPosting);
         mv.addObject("orderBy", orderBy);
 	    mv.addObject("currentPage", page);
         mv.addObject("subCategories", subCategories);

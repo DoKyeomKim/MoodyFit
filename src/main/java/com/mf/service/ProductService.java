@@ -105,9 +105,9 @@ public class ProductService {
     		// 파일 이름 변경 및 저장 위치 설정
     		String originalFileName = file.getOriginalFilename();
     		String fileNameScret = System.currentTimeMillis() + "_" + originalFileName; // 파일 이름 변경(시간값 + 기존 이름)
-    		String filePath = "/Users/sinminjae/dev/" + fileNameScret; // 저장 경로
+    		String filePath = "/images/" + fileNameScret; // 저장 경로
 
-    	      File dest = new File("/Users/sinminjae/dev/images/"+fileNameScret);
+    	      File dest = new File("C:/dev/images/"+fileNameScret);
     	      // 만약 해당 위치에 폴더가 없으면 생성
     	      if (!dest.exists()) {
     	         dest.mkdirs();
@@ -119,7 +119,7 @@ public class ProductService {
     			// 파일 정보 db에 기록
     			ProductFileDto productFileDto = new ProductFileDto();
     			productFileDto.setOriginalName(originalFileName);
-    			productFileDto.setFilePath("/images/"+fileNameScret);
+    			productFileDto.setFilePath(filePath);
     			productFileDto.setFileSize(String.valueOf(file.getSize()));
     			productFileDto.setProductInfoIdx(productInfoIdx);
     			productMapper.insertProductFile(productFileDto);
