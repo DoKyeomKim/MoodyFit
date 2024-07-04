@@ -240,7 +240,7 @@
     GROUP BY p.product_idx, p.name, p.price, p.manufacture_name, c.kor_name, sc.kor_name
 </select>
 
-<!-- 특정 상품의 세부 정보 가져오기 -->
+<!-- 특정 상품의 상세정보 로드 -->
 <select id="getProductDetailsByProductIdxForPosting" resultType="java.util.HashMap">
     SELECT 
         pi.product_info_idx AS productInfoIdx,
@@ -264,6 +264,7 @@
     JOIN category c ON sc.category_idx = c.category_idx
     WHERE p.product_idx = #{productIdx}
 </select>
+
 
 
 

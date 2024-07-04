@@ -229,21 +229,20 @@ public class ProductService {
     }
 
 	
-	@Transactional
-	public List<Map<String, Object>> getProductDetailsByProductIdx(Long productIdx) {
-	    if (productIdx == null) {
-	        throw new IllegalArgumentException("productIdx는 null이 될 수 없습니다.");
-	    }
-	    List<Map<String, Object>> productDetailsList = productMapper.getProductDetailsByProductIdxForPosting(productIdx);
-	    if (productDetailsList == null || productDetailsList.isEmpty()) {
-	        System.out.println("상품 정보가 없습니다.");
-	        return Collections.emptyList();
-	    } else {
-	        System.out.println("상품 정보 로드 성공: " + productDetailsList);
-	        return productDetailsList;
-	    }
-	}
-
+    @Transactional
+    public List<Map<String, Object>> getProductDetailsByProductIdx(Long productIdx) {
+        if (productIdx == null) {
+            throw new IllegalArgumentException("productIdx는 null이 될 수 없습니다.");
+        }
+        List<Map<String, Object>> productDetailsList = productMapper.getProductDetailsByProductIdxForPosting(productIdx);
+        if (productDetailsList == null || productDetailsList.isEmpty()) {
+            System.out.println("상품 정보가 없습니다.");
+            return Collections.emptyList();
+        } else {
+            System.out.println("상품 정보 로드 성공: " + productDetailsList);
+            return productDetailsList;
+        }
+    }
 
 
 	public void updateProductPrice(Long productIdx, int price) {
@@ -305,17 +304,19 @@ public class ProductService {
 	
 	// ======================== 상품 상태 관련 ====================================
 	@Transactional
+	public List<Map<String, Object>> getAllProductDetails(Long storeIdx) {
+		return productMapper.getAllProductDetails(storeIdx);
+	}
+	
+	public List<Map<String, Object>> getOnHoldProductDetails(Long storeIdx) {
+		return productMapper.getOnHoldProductDetails(storeIdx);
+	}
+	
 	public void updateProductState(Long productIdx, int state) {
 	    productMapper.updateProductState(productIdx, state);
 	}
 
-	public List<Map<String, Object>> getAllProductDetails(Long storeIdx) {
-	    return productMapper.getAllProductDetails(storeIdx);
-	}
 
-	public List<Map<String, Object>> getOnHoldProductDetails(Long storeIdx) {
-	    return productMapper.getOnHoldProductDetails(storeIdx);
-	}
 
 
 }
