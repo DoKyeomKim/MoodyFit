@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>상품문의</title>
-    <style>
+      <style>
         /* 전체 페이지 스타일 */
         body {
             font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
@@ -14,6 +14,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            height: 100vh;
         }
 
         main {
@@ -22,6 +23,9 @@
             padding: 80px;
             font-size: 15px;
             margin-top: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         form {
@@ -45,7 +49,6 @@
 
         th {
             text-align: left;
-            background-color: #f9f9f9;
         }
 
         input[type="text"] {
@@ -71,41 +74,48 @@
             display: flex;
             justify-content: flex-end;
             margin-top: 20px;
+            margin-right: 33px;
+            padding:20px;
         }
 
-        input[type="submit"],
-        input[type="button"] {
-            background-color: #111;
-            color: #fff;
-            border: none;
+        input[type="submit"] {
+            background-color: #f2eaeaa8;
+            color: #B68555;
+            border: 1px solid #B68555;
             padding: 10px 20px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
-            margin-left: 10px;
-        }
-
-        input[type="button"] {
-            background-color: #f4f4f4;
-            color: #333;
+            font-size: 16px;
+            
         }
 
         .link-button {
             text-decoration: none;
-            background-color: #f4f4f4;
-            color: #333;
+            background-color: #EBDACB;
+            color: #B68555;
             padding: 10px 20px;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 16px;
             display: inline-block;
-            border: 1px solid #ddd;
+            border: 1px solid #B68555;
+            text-align: center;
+              margin-right: 15px; 
         }
 
-        .link-button:hover {
-            background-color: #e4e4e4;
+        .link-button:hover,
+        input[type="submit"]:hover {
+            background-color: #D1C0B0;
         }
 
-    </style>
+        h2.text-center {
+            font-weight: bold;
+            color: #867B73;
+            text-align: center;
+            margin: 0;
+            margin-bottom:20px;
+            
+        }
+        </style>
 </head>
 <body>
    <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>

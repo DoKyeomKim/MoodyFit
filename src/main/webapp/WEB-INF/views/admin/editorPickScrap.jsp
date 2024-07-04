@@ -5,54 +5,11 @@
 <head>
 <meta charset="UTF-8">
 <title>에디터 픽</title>
-<link href="/css/bootstrap.min.css" rel="stylesheet" />
+
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <style>
-body {
-    font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
-}
-main {
-    width: 100%;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    font-size : 15px;
-  
-}
-.editor-pick-table {
-    width: 100%;
-    margin-bottom: 20px;
-    border-collapse: collapse;
-}
 
-.editor-pick-table th, .editor-pick-table td {
-    padding: 10px;
-    text-align: center;
-}
-
-.editor-pick-table th {
-    background-color: #343a40;
-    color: #fff;
-}
-
-.editor-pick-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-.editorPick-info td {
-    vertical-align: middle;
-}
-
-.btn-margin-right {
-    margin-right: 5px;
-}
-.button-group {
-	margin-top : 20px;
-    display: flex;
-    justify-content: center;
-}
 </style>
 </head>
 <body>
@@ -62,10 +19,12 @@ main {
 </div>
 <input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
 <main>
-	<h2>에디터 픽 스크랩</h2>
-	   <table class="editor-pick-table">
-            <thead>
-                <tr>
+	<h3 class="mt-3 text-center">에디터 픽 스크랩</h3>
+    <hr class="mb-3">
+    <div class="table-container">
+        <table class="table table-bordered">
+            <thead class="table-secondary">
+                 <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
                     <th>공고번호</th>
                     <th>공고명</th>
                     <th>가맹점명</th>
@@ -89,6 +48,7 @@ main {
                 </c:forEach>
             </tbody>
         </table>
+        </div>
 		<nav aria-label="Page navigation" style="margin-top: 100px;">
 			<ul class="pagination justify-content-center">
 				<c:if test="${prev}">

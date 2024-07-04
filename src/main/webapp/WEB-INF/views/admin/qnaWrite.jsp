@@ -14,7 +14,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-                 height: 100vh;
+            height: 100vh;
         }
 
         main {
@@ -23,6 +23,9 @@
             padding: 80px;
             font-size: 15px;
             margin-top: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         form {
@@ -46,7 +49,6 @@
 
         th {
             text-align: left;
-            
         }
 
         input[type="text"] {
@@ -72,21 +74,21 @@
             display: flex;
             justify-content: flex-end;
             margin-top: 20px;
-            margin-right:33px;
+            margin-right: 33px;
+            padding:20px;
         }
 
-        input[type="submit"]{
-     
-             background-color: #f2eaeaa8;
+        input[type="submit"] {
+            background-color: #f2eaeaa8;
             color: #B68555;
             border: 1px solid #B68555;
             padding: 10px 20px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            
         }
 
-        
         .link-button {
             text-decoration: none;
             background-color: #EBDACB;
@@ -97,27 +99,36 @@
             display: inline-block;
             border: 1px solid #B68555;
             text-align: center;
+              margin-right: 15px; 
         }
 
-        .link-button:hover {
-             input[type="submit"]:hover {
+        .link-button:hover,
+        input[type="submit"]:hover {
             background-color: #D1C0B0;
         }
 
+        h2.text-center {
+            font-weight: bold;
+            color: #867B73;
+            text-align: center;
+            margin: 0;
+            margin-bottom:20px;
+            
+        }
     </style>
 </head>
+<%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
 <body>
-   <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
 <main>
-    <h2 class="text-center" style="font-weight:bold; color: #867B73;">1:1문의</h2>
+    <h2 class="text-center">1:1문의</h2>
     <form action="/qnaWrite" method="POST">
-        <table class="board_row" style="margin-top:20px; padding-bottom:15px;">
+        <table class="board_row" style="margin-top: 20px; padding-bottom: 15px;">
             <colgroup>
-                <col style="width:20%;">
-                <col style="width:80%;">
+                <col style="width: 20%;">
+                <col style="width: 80%;">
             </colgroup>
             <tbody>
-                <tr class="bbaf">                        
+                <tr class="bbaf">
                     <th scope="row">제목</th>
                     <td><input type="text" name="title" class="form_input subject" id="subject" placeholder="제목을 입력하세요"></td>
                 </tr>
@@ -132,7 +143,7 @@
 성함:
 연락처:"></textarea>
                     </td>
-                </tr>         
+                </tr>
             </tbody>
         </table>
         <div class="button-container">
@@ -141,6 +152,6 @@
         </div>
     </form>
 </main>
-<%@include file="/WEB-INF/layouts/footer.jsp"%>
 </body>
+<%@include file="/WEB-INF/layouts/footer.jsp"%>
 </html>
