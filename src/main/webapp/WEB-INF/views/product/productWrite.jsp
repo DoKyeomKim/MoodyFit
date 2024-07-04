@@ -6,13 +6,36 @@
 <head>
 <meta charset="UTF-8">
 <title>상품 등록</title>
-<link href="/css/bootstrap.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <style>
+
+body {
+    font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
+    background-color: #F6F4EE;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+   
+}
+
+main {
+    flex: 1;
+    width: 50%;
+    margin: 70px auto; /* 상단에 배치하기 위해 margin을 70px에서 20px로 수정 */
+}
+
+.container {
+    margin-left: 160px; 
+    padding: 16px;
+    background-color: white;
+    border: 1px solid #e2e2e2;
+    margin-top: 40px; /* 추가된 부분: 화면 상단에 여백 추가 */
+    
+}
 .modal-dialog {
     max-width: 800px;
 }
@@ -57,9 +80,7 @@
     font-weight: bold;
 }
 
-.container {
-    margin-top: 100px;
-}
+
 
 .button-container {
     display: flex;
@@ -73,30 +94,120 @@
     font-size: 18px;
 }
 
+input[type="text"],
+input[type="number"] {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #e2e2e2;
+    border-radius: 0;
+    padding: 10px 0;
+    box-shadow: none;
+    width: 10%; /* 밑줄 길이를 줄이기 위해 width를 80%로 설정 */
+    margin-left: 50px; /* 밑줄과 상품명 간격을 주기 위해 margin-left를 10px로 설정 */
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    background-color: transparent;
+    border-bottom: 1px solid #000;
+    outline: none;
+    box-shadow: none;
+}
+.select-btn{
+background-color: white; /* Light grey background */
+    border: 1px solid #ccc; /* Light grey border */
+
+    color: #000; /* Black text */
+    font-size: 14px; /* Font size */
+    padding: 10px 20px; /* Padding */
+    cursor: pointer; /* Pointer cursor on hover */
+  
+    display: inline-block; /* Inline block element */
+    margin-right:100px;
+    margin-left: 100px;
+    display:flex;
+
+    
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #888888;
+}
+
+.form-group label {
+    flex: 0 0 150px;
+    margin-right: 10px;
+    text-align: right;
+}
+
+.form-group input {
+    flex: 0 1 40%; /* 입력 필드의 너비를 50%로 조정 */
+    margin-left: 80px; /* 밑줄과 상품명 간격을 주기 위해 margin-left를 10px로 설정 */
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #e2e2e2;
+    border-radius: 0;
+    padding: 10px 0;
+    box-shadow: none;
+}
+
+.form-group input:focus {
+    background-color: transparent;
+    border-bottom: 1px solid #000;
+    outline: none;
+    box-shadow: none;
+}
+
+.form-group button#addProductInfo {
+    background-color: white; /* Light grey background */
+    border: 1px solid #ccc; /* Light grey border */
+    color: #000; /* Black text */
+    font-size: 14px; /* Font size */
+    padding: 10px 20px; /* Padding */
+    cursor: pointer; /* Pointer cursor on hover */
+    display: block; /* Block element */
+    margin: 0 auto; /* 중앙 정렬을 위해 margin을 0 auto로 설정 */
+    text-align: center; /* Centered text */
+}
+.apply-btn{
+ background-color: #333; /* 버튼 배경색 (어두운 회색) */
+    color: white; /* 버튼 텍스트 색상 (흰색) */
+    border: none; /* 버튼 테두리 없음 */
+    padding: 10px 20px; /* 버튼 내부 여백 */
+    font-size: 16px; /* 버튼 글자 크기 */
+    cursor: pointer; /* 마우스 커서 포인터 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    display: inline-block; /* 인라인 블록 요소 */
+    border-radius: 5px; /* 버튼 모서리 둥글게 */
+}
 </style>
 </head>
-<body>
-    <%@include file="/WEB-INF/layouts/header.jsp"%>
     <%@include file="/WEB-INF/layouts/storeAside.jsp"%>
+    <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
+<body style="background-color:#F6F4EE !important;">
 
     <!-- ========= 등록 페이지 ============ -->
-
-    <div class="w3-container" style="margin-left: 160px">
+<main>
+ 
+             <h3 style="font-weight:bold; text-align: center; "> 상품 등록</h3>
         <div class="container">
-            <h3>상품 등록</h3>
             <form action="${pageContext.request.contextPath}/storeMyPage/products/add"
                 method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="pname">상품명</label> 
-                        <input type="text" value="에어포스" class="form-control" id="pname" name="pname" required>
+                     <label for="pname">상품명</label> 
+                        <input type="text"  class="form-control" id="pname" name="pname" required>
                 </div>
                 <div class="form-group">
                     <label for="unitprice">상품 판매가</label> 
-                        <input type="number" value="109000" class="form-control" id="unitprice" name="unitprice" required>
+                        <input type="number"  class="form-control" id="unitprice" name="unitprice" required>
                 </div>
                 <div class="form-group">
                     <label for="menufecturer">제조사</label>
-                        <input type="text" value="나이키" class="form-control" id="menufecturer" name="menufecturer" required>
+                        <input type="text"  class="form-control" id="menufecturer" name="menufecturer" required>
                 </div>
                 <div class="form-group">
                     <label for="category">카테고리</label>
@@ -104,7 +215,7 @@
                         <input type="text" class="form-control" id="categoryInput" name="category" 
                             placeholder="카테고리를 선택하세요" required readonly>    
                         <div class="input-group-append">
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                            <button type="button" class="select-btn" data-toggle="modal"
                                 data-target="#categoryModal">카테고리 선택</button>
                         </div>
                     </div>
@@ -161,7 +272,7 @@
                         <input type="text" class="form-control" id="colorInput" name="colorName" placeholder="색상을 선택하세요" readonly>
                         <input type="hidden" id="colorIdx" name="colorIdx">
                         <div class="input-group-append">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#colorModal">색상 선택</button>
+                            <button type="button" class="select-btn" data-toggle="modal" data-target="#colorModal">색상 선택</button>
                         </div>
                     </div>
                     <div id="selectedColorDisplay" class="selected-item"></div>
@@ -173,7 +284,7 @@
                         <input type="text" class="form-control" id="sizeInput" name="sizeName" placeholder="사이즈를 선택하세요" readonly>
                         <input type="hidden" id="sizeIdx" name="sizeIdx">
                         <div class="input-group-append">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sizeModal">사이즈 선택</button>
+                            <button type="button" class="select-btn" data-toggle="modal" data-target="#sizeModal">사이즈 선택</button>
                         </div>
                     </div>
                     <div id="selectedSizeDisplay" class="selected-item"></div>
@@ -181,11 +292,11 @@
                 
                 <div class="form-group">
                     <label for="quantity">재고</label>
-                    <input type="number" value="99" class="form-control" id="quantity" name="quantity" required min="0">
+                    <input type="number" class="form-control" id="quantity" name="quantity" required min="0">
                 </div>
                 <br><br>
                 <div class="form-group">
-                    <button type="button" id="addProductInfo" class="btn btn-secondary" name="productInfos">색상/사이즈/재고 추가</button>
+                    <button type="button" id="addProductInfo" class="select-btn" name="productInfos">색상/사이즈/재고 추가</button>
                 </div>
                 <div class="form-group">
                     <table class="table" id="productInfoTable">
@@ -211,7 +322,7 @@
                 </div>
                 <br><br>
                 <div class="button-container">
-                    <button type="submit" class="btn btn-primary">상품 등록</button>
+                    <button type="submit" class="apply-btn">상품 등록</button>
                     <a href="/storeMyPage/productList" class="btn btn-outline-dark">목록</a>
                 </div>
             </form>

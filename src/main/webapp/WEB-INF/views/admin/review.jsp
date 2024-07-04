@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>리뷰 작성</title>
-    <style>
+      <style>
         body {
             font-family: Arial, sans-serif;
         }
@@ -38,16 +38,12 @@
             width: 100%;
             padding: 10px;
         }
-        .modal img {
-            max-width: 100%;
-            margin-bottom: 20px;
-        }
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            margin-top: 20px;
             width: 100%;
+            
         }
         .input-group label {
             width: 20%;
@@ -62,17 +58,17 @@
             width: 80%;
             border-radius: 4px;
             overflow: hidden;
+            border: 1.5px solid #e2e2e2;
+            background-color: transparent;
         }
         .input-group .input-wrapper input {
             flex: 1;
             padding: 8px;
-            border: 1px solid #ccc;
+            border: none;
             outline: none;
             font-size: 16px;
             color: #000;
-        }
-        .input-group .input-wrapper input::placeholder {
-            color: #aaa;
+            background-color: transparent;
         }
         .input-group .input-wrapper span {
             padding: 8px;
@@ -80,31 +76,27 @@
             color: #aaa;
         }
         .rating {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-    direction: rtl; /* Add this to reverse the order of stars */
-}
-
-.rating input {
-    display: none;
-}
-
-.rating label {
-    font-size: 24px;
-    color: #ddd;
-    cursor: pointer;
-    direction: ltr; /* Ensure the stars are still left-to-right inside the reversed container */
-}
-
-.rating input:checked ~ label {
-    color: #f5b301;
-}
-
-.rating label:hover,
-.rating label:hover ~ label {
-    color: #f5b301;
-}
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            direction: rtl;
+        }
+        .rating input {
+            display: none;
+        }
+        .rating label {
+            font-size: 24px;
+            color: #ddd;
+            cursor: pointer;
+            direction: ltr;
+        }
+        .rating input:checked ~ label {
+            color: #f5b301;
+        }
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #f5b301;
+        }
         .button-group {
             text-align: right;
         }
@@ -135,12 +127,16 @@
             cursor: pointer;
         }
         .option-group {
-            text-align: center;
+            display: flex;
+            align-items: center;
             justify-content: space-around;
             color: #e2e2e2;
             font-size: 14px;
         }
         .option-group button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px 30px;
             border: 1.5px solid #E2e2e2;
             border-radius: 20px;
@@ -156,16 +152,14 @@
         }
         .input-group.no-border span,
         .input-group.no-border .input-wrapper input {
-            border: 1.5px solid #e2e2e2;
-            border-radius: 5px;
+            border: none;
             background-color: transparent;
         }
-        .centered-label {
-            text-align: center;
+        .input-group .centered-label {
+            display: block;
             width: 100%;
-        }
-        .input-group {
             text-align: center;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -212,9 +206,9 @@
                 </div>
             </div>
             <div class="input-group">
-                <label class="centered-label">상품을 만족하셨나요?</label>
+                <label class="centered-label">상품은 만족하셨나요?</label>
             </div>
-            <div class="rating" >
+            <div class="rating" style="margin-bottom:20px;" >
                 <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
                 <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
                 <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
@@ -222,17 +216,17 @@
                 <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
             </div>
             <div class="input-group">
-                <label class="centered-label" >색상은 어떠셨나요?</label>
+                <label class="centered-label"  >색상은 어떠셨나요?</label>
             </div>
-            <div class="option-group">
+            <div class="option-group" style="margin-bottom:20px;">
                 <button onclick="toggleActive(this)" name="color_satis" value="0">연해요</button>
                 <button onclick="toggleActive(this)" name="color_satis" value="1">똑같아요</button>
                 <button onclick="toggleActive(this)" name="color_satis" value="2">진해요</button>
             </div>
-            <div class="input-group">
+            <div class="input-group" style="margin-bottom:20px;">
                 <label class="centered-label">사이즈는 잘 맞으셨나요?</label>
             </div>
-            <div class="option-group">
+            <div class="option-group" style="margin-bottom:20px;">
                 <button onclick="toggleActive(this)" name="sizes_satis" value="0">작아요</button>
                 <button onclick="toggleActive(this)" name="sizes_satis" value="1">잘맞아요</button>
                 <button onclick="toggleActive(this)" name="sizes_satis" value="2">커요</button>
@@ -243,8 +237,8 @@
             <div>
                 <textarea id="content" rows="4" placeholder="최소 10자 이상 입력해주세요" style="width:500px; height:55px;"></textarea>
             </div>
-            <div class="input-group">
-                <label for="file">파일 업로드</label>
+            <div class="input-group"style="margin-top:20px;">
+                
                 <input type="file" id="file" name="file">
             </div>
             <div class="button-group">

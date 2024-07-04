@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>주문서 작성</title>
+<title>장바구니</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <style>
@@ -66,6 +66,19 @@ main {
         display: flex;
         justify-content: space-evenly;
         font-size: 15px;}
+
+.btn-main {
+ margin-bottom: 10px;
+    width: 100px;
+    align-self: center;
+    background-color: #E5AAA3;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    border: none;
+    height: 50px;
+    border-radius:10px;
+}
 </style>
 
 </head>
@@ -87,8 +100,8 @@ main {
                     <h3 style="margin: 100px 30px;">주문목록이 비어있습니다.</h3>
                     <hr>
                 </div>
-                <div style="text-align: right; margin-right: 20px;">
-                    <button type="button" class="btn btn-info" style="margin: 20px;" onclick="location.href='/'">메인으로</button>
+                <div style="text-align: center; margin-right: 20px;">
+                    <button type="button" class="btn-main" style="margin: 20px;" onclick="location.href='/'">홈으로</button>
                 </div>
             </c:when>
             <c:otherwise>
@@ -173,13 +186,13 @@ main {
                                 <div style="text-align: right;">총 상품 금액: <input type="text" name="price" value="${totalOrderPrice}" readonly> 원</div>
                                 <div style="text-align: right;">총 수량: <input type="text" name="quantity" value="${totalQuantity}" readonly> 개</div>
                                 <div style="text-align: right;">배송비: <input type="text" name="deliveryPrice" value="3000" readonly> 원</div>
-                                <div style="text-align: right;">할인금액: <input type="text" class="price2" name="discount" value="${(totalOrderPrice + 3000) * discount}" readonly> 원</div>
+                                <div style="text-align: right;">할인금액: <input type="text" name="discount" class="price2" name="discount" value="${(totalOrderPrice + 3000) * discount}" readonly> 원</div>
                                 <hr style="border: 1px solid black;">
                                 <div style="text-align: right;">
                                     결제할 금액: <input type="text" class="price" value="${(totalOrderPrice + 3000) * (1 - discount)}" id="finalPrice" readonly> 원
                                 </div>
                             </div>
-                            <button type="button" id="addToCartButton" class="btn btn-primary" style="margin: 20px;">결제하기</button>
+                            <button type="button" id="addToCartButton" class="payment-btn" style="margin: 20px;">결제하기</button>
                         </form>
                     </div>
                 </div>
@@ -391,7 +404,6 @@ main {
     	    }
     	 */   
     	 
-    	
     	// 모든 price 클래스를 가진 입력 태그들을 선택하여 처리
     	 var prices = document.querySelectorAll('.price');
     	 prices.forEach(function(input) {

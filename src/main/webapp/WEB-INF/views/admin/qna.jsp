@@ -7,23 +7,21 @@
 <meta charset="UTF-8">
 <title>Q&A 리스트</title>
 <style>
-body {
-    font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
-    background-color: #F6F4EE;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+ body {
+        font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
+        background-color: #F6F4EE;
+        margin: 0;
+        padding: 0;
+    }
 
-main {
-    width: 60%;
-    background-color: #F6F4EE;
-    padding: 20px;
-    font-size: 15px;
-    margin-top: 70px;
-}
+    main {
+        width: 60%;
+        font-size: 15px;
+        margin: 70px auto;
+        
+        
+        
+    }
 
 table {
     width: 100%;
@@ -48,6 +46,7 @@ th {
 
 td {
     background-color: white;
+    border-bottom: 1px solid #e2e2e2 !important;
 }
 
 tr {
@@ -118,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 </head>
-<body>
+<body style="background-color:#F6F4EE !important;">
     <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
     <main>
         <h2 class="text-center" style="font-weight:bold; color: #867B73;">1:1문의</h2>
@@ -159,6 +158,6 @@ document.addEventListener("DOMContentLoaded", function() {
             <button onclick="window.location.href='qnaWriteform'">글쓰기</button>
         </div>
     </main>
-    <%@include file="/WEB-INF/layouts/footer.jsp"%>
 </body>
+    <%@include file="/WEB-INF/layouts/footer.jsp"%>
 </html>
