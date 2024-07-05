@@ -5,7 +5,8 @@
 
 <select id="selectCart" >
 
-select 	posting.title,
+select 	posting.posting_idx,
+		posting.title,
         product.name,
         product_file.file_path,
         person.person_idx,
@@ -176,6 +177,7 @@ SELECT
     orders.state,
     product.price,
     cart.quantity,
+    posting.posting_idx,
     posting.title,
     product.name,
     product_file.file_path
