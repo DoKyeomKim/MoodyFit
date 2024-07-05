@@ -115,9 +115,10 @@ where user_idx = #{userIdx}
 <!-- 메인홈에서 카테고리 및 서브카테고리로 이동시 = -->
 <select id="getSubCategoriesByCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
 	select sc.*
-		from  sub_category sc
-		join  category c on sc.category_idx = c.category_idx
-		where c.eng_name = #{categoryEngName} 
+	from  sub_category sc
+	join  category c on sc.category_idx = c.category_idx
+	where c.eng_name = #{categoryEngName}
+	order by sub_category_idx asc
 </select>
 
 <select id="getSubCategoryByNameAndCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
