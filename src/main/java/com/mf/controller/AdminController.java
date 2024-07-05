@@ -459,16 +459,18 @@ public class AdminController {
 		}
 		  //상품문의 페이지
 				@GetMapping("/qna2")
-				public  ModelAndView   qna2() {
+				public  ModelAndView   qna2(HttpSession session) {
 					ModelAndView    mv    = new ModelAndView("qna2");
-					 List<Map<String,Object>> qna2List = adminQnaService.getAllQna2s();
+					Long personIdx = (Long) session.getAttribute("personIdx");
+					 List<Map<String,Object>> qna2List = adminQnaService.getAllQna2s(personIdx);
 					 mv.addObject("qna2List",qna2List);
 					mv.setViewName("/admin/qna2");
 					
 					return mv;
 				}
 				
-				
+			
+				   	   
 			
 				   
 				
@@ -552,15 +554,17 @@ public class AdminController {
 	   
 	    //qna 게시판
 	    @GetMapping("/qna")
-	    public ModelAndView qna() {
+	    public ModelAndView qna(HttpSession session) {
 	    	ModelAndView mv = new ModelAndView("qna");
-	    	List<Map<String,Object>>  AdminQnaList = adminQnaService.getAllAdminQnas();
-	    	mv.addObject("AdminqnaList",AdminQnaList);
-	    	mv.setViewName("/admin/qna");
+	    	Long userIdx = (Long) session.getAttribute("userIdx");
+	    	List<Map<String,Object>>  qnaList = adminQnaService.getUsersQnas(userIdx);
+	    	
+	    	
+	    	mv.addObject("qnaList",qnaList);
+	    	mv.setViewName("admin/qna");
 	    	return mv;
 	    }
-	   
-	   
+	   	   
 	   @GetMapping("/qnaWriteform")
 			public  ModelAndView   qnaWrite() {
 				ModelAndView    mv    = new ModelAndView("qnaWrite");

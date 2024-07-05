@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Q&A 관리</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/scripts.js"></script>
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
@@ -52,6 +53,10 @@ main {
     background-color: #f4f4f4;
     color: #333;
 }
+.hidden { display: none; }
+.paging { margin: 10px; text-align: center; }
+.paging a { margin: 0 5px; cursor: pointer; text-decoration: none; }
+.paging a.active { font-weight: bold; }
 </style>
 </head>
 <body>
@@ -74,7 +79,7 @@ main {
 <div class="container mt-3">
     <div class="row">
         <div class="col-12">
-            <table class="table table-bordered">
+            <table id="qnaTable" class="table table-bordered">
                 <thead class="table-secondary">
                     <tr>
                         <th>번호</th>
@@ -111,6 +116,7 @@ main {
                     </c:forEach>
                 </tbody>
             </table>
+            <div class="paging"></div>
         </div>
     </div>
 </div>
@@ -122,6 +128,35 @@ function confirmComplit(event, form) {
         form.submit(); // 확인 버튼 클릭 시 폼 제출
     }
 }
+
+$(document).ready(function() {
+    var rowsPerPage = 10;
+    var rows = $('#qnaTable tbody tr');
+    var rowsCount = rows.length;
+    var pageCount = Math.ceil(rowsCount / rowsPerPage);
+    var numbers = $('.paging');
+
+    for (var i = 1; i <= pageCount; i++) {
+        numbers.append('<a href="#" class="page-link">' + i + '</a>');
+    }
+
+    rows.hide();
+    rows.slice(0, rowsPerPage).show();
+    numbers.find('a:first').addClass('active');
+
+    numbers.on('click', 'a', function(e) {
+        e.preventDefault();
+        numbers.find('a').removeClass('active');
+        $(this).addClass('active');
+
+        var page = $(this).text();
+        var start = (page - 1) * rowsPerPage;
+        var end = start + rowsPerPage;
+
+        rows.hide();
+        rows.slice(start, end).show();
+    });
+});
 </script>
 </body>
 </html>

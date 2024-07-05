@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.AdminQnaMapper">
+<select id="getUsersQnas">
+    SELECT 
+        CS_QUESTION.QUESTION_IDX AS QUESTION_IDX,
+        CS_QUESTION.TITLE AS TITLE,
+        CS_QUESTION.CONTENT AS CONTENT,
+        CS_QUESTION.CREATE_DATE AS CREATE_DATE,
+        CS_QUESTION.UPDATE_DATE AS UPDATE_DATE,
+        CS_QUESTION.STATE AS STATE,
+        u.ID as id
+    FROM 
+        CS_QUESTION
+    JOIN 
+        USERS u ON CS_QUESTION.USER_IDX = u.USER_IDX
+        where u.user_idx=#{userIdx}
+</select>
     <select id="getAllAdminQnas" resultType="com.mf.dto.AdminQuestionDto">
     SELECT 
         CS_QUESTION.QUESTION_IDX as questionIdx,
@@ -117,20 +132,22 @@
 </insert>
     
     
-    <select id="getAllQna2s">
-   SELECT 
-        pq.POSTING_QUESTION_IDX,
-        pq.TITLE,
- 
-        pq.CREATE_DATE,
-        pq.STATE,
-        p.NAME
-    FROM 
-        POSTING_QUESTION pq
-    JOIN 
-        PERSON p
-    ON 
-        pq.PERSON_IDX = p.PERSON_IDX
+<select id="getAllQna2s" resultType="map">
+ SELECT 
+    pq.POSTING_QUESTION_IDX,
+    pq.TITLE,
+    pq.CREATE_DATE,
+    pq.STATE,
+    p.NAME
+FROM 
+    POSTING_QUESTION pq
+JOIN 
+    PERSON p
+ON 
+    pq.PERSON_IDX = p.PERSON_IDX
+WHERE 
+    pq.PERSON_IDX = #{personIdx, jdbcType=INTEGER}
+
 </select>
 
 <select id="getQna2ByquestionIdx" >

@@ -4,10 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="${pageContext.request.contextPath}/scripts.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
-
 
 <style>
 body {
@@ -19,11 +18,11 @@ main {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    font-size : 15px;
+    font-size: 15px;
 }
 .table td {
-    padding: 30px; /* 셀 내부 여백 조정 */
-    margin: 30px; /* 셀 외부 여백 조정 */
+    padding: 10px;
+    margin: 10px;
 }
 .container {
     display: flex;
@@ -31,24 +30,22 @@ main {
 }
 .container > * {
     flex: 1;
-    margin-right: 30px; /* Adjust as needed */
+    margin-right: 30px;
 }
 .container > *:last-child {
     margin-right: 0;
 }
-/* Adjust column widths as needed */
 .col-main {
-    flex: 3; /* Main content width */
+    flex: 3;
 }
 .col-sidebar {
-    flex: 1; /* Sidebar content width */
-    margin-top:30px;
+    flex: 1;
+    margin-top: 30px;
 }
 .btn-update {
     background-color: #f4f4f4;
     color: #333;
 }
-/* 반려 버튼 스타일 */
 .btn-delete {
     background-color: #111111;
     color: #fff;
@@ -56,7 +53,12 @@ main {
     padding: 5px 10px;
     cursor: pointer;
 }
+.hidden { display: none; }
+.paging { margin: 10px; text-align: center; }
+.paging a { margin: 0 5px; cursor: pointer; text-decoration: none; }
+.paging a.active { font-weight: bold; }
 </style>
+
 <script>
 function confirmDelete(event, form) {
     event.preventDefault();
@@ -64,10 +66,39 @@ function confirmDelete(event, form) {
         form.submit();
     }
 }
+
+$(document).ready(function() {
+    var rowsPerPage = 10;
+    var rows = $('#storeTable tbody tr');
+    var rowsCount = rows.length;
+    var pageCount = Math.ceil(rowsCount / rowsPerPage);
+    var numbers = $('.paging');
+
+    for (var i = 1; i <= pageCount; i++) {
+        numbers.append('<a href="#">' + i + '</a>');
+    }
+
+    rows.hide();
+    rows.slice(0, rowsPerPage).show();
+    numbers.find('a:first').addClass('active');
+
+    numbers.find('a').click(function(e) {
+        e.preventDefault();
+        numbers.find('a').removeClass('active');
+        $(this).addClass('active');
+
+        var page = $(this).text();
+        var start = (page - 1) * rowsPerPage;
+        var end = start + rowsPerPage;
+
+        rows.hide();
+        rows.slice(start, end).show();
+    });
+});
 </script>
 </head>
 <body>
-<%@include file="/WEB-INF/layouts/adminheader.jsp"%> 
+<%@include file="/WEB-INF/layouts/adminheader.jsp"%>
 <div class="col-sidebar">
     <%@include file="/WEB-INF/layouts/adminsidebar.jsp"%>
 </div>
@@ -80,14 +111,14 @@ function confirmDelete(event, form) {
         <label for="searchId" class="sr-only">아이디</label>
         <input type="text" name="searchId" id="searchId" class="form-control" placeholder="아이디를 입력하세요">
     </div>
-   <button class="header-search-btn" type="submit">
+    <button class="header-search-btn" type="submit">
         <i class="fa-solid fa-magnifying-glass"></i>
     </button>
 </form>
 <div class="table-container">
     <div class="row">
         <div class="col-12">
-            <table class="table table-bordered">
+            <table id="storeTable" class="table table-bordered">
                 <thead class="table-secondary">
                     <tr>
                         <th>번호</th>
@@ -132,6 +163,7 @@ function confirmDelete(event, form) {
                     </c:forEach>
                 </tbody>
             </table>
+            <div class="paging"></div>
         </div>
     </div>
 </div>

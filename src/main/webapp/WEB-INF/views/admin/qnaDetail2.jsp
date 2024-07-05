@@ -120,7 +120,7 @@ function toggleAnswerContainer() {
                 </c:forEach>
             </div>
 
-            <security:authorize access="hasRole('ROLE_ADMIN')">
+            <security:authorize access="hasRole('ROLE_STORE')">
                 <button onclick="toggleAnswerContainer()">답변 작성</button>
                 <div id="answerContainer" class="answer-container">
                     <h4>답변 작성</h4>

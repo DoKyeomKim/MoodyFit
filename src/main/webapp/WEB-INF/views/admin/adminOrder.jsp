@@ -5,9 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <title>주문내역 관리</title>
-
-    <script src="${pageContext.request.contextPath}/scripts.js"></script>
-    <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/scripts.js"></script>
+<script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <style>
 body {
@@ -19,58 +18,84 @@ main {
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    font-size : 15px;
-  
+    font-size: 15px;
 }
 .table td {
-        padding: 30px; /* 셀 내부 여백 조정 */
-        margin: 30px; /* 셀 외부 여백 조정 */
-    }
+    padding: 10px;
+    margin: 10px;
+}
 .container {
     display: flex;
     flex-wrap: wrap;
 }
-
 .container > * {
     flex: 1;
-    margin-right: 30px; /* Adjust as needed */
+    margin-right: 30px;
 }
-
 .container > *:last-child {
     margin-right: 0;
 }
-
-/* Adjust column widths as needed */
 .col-main {
-    flex: 3; /* Main content width */
+    flex: 3;
 }
-
 .col-sidebar {
-    flex: 1; /* Sidebar content width */
-    margin-top:30px;
+    flex: 1;
+    margin-top: 30px;
 }
 .btn-update {
-   background-color: #f4f4f4;
+    background-color: #f4f4f4;
     color: #333;
 }
-
-/* 반려 버튼 스타일 */
 .btn-delete {
-      background-color: #111111;
+    background-color: #111111;
     color: #fff;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
 }
+.hidden { display: none; }
+.paging { margin: 10px; text-align: center; }
+.paging a { margin: 0 5px; cursor: pointer; text-decoration: none; }
+.paging a.active { font-weight: bold; }
 </style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    var rowsPerPage = 10;
+    var rows = $('#orderTable tbody tr');
+    var rowsCount = rows.length;
+    var pageCount = Math.ceil(rowsCount / rowsPerPage);
+    var numbers = $('.paging');
+
+    for (var i = 1; i <= pageCount; i++) {
+        numbers.append('<a href="#" class="page-link">' + i + '</a>');
+    }
+
+    rows.hide();
+    rows.slice(0, rowsPerPage).show();
+    numbers.find('a:first').addClass('active');
+
+    numbers.on('click', 'a', function(e) {
+        e.preventDefault();
+        numbers.find('a').removeClass('active');
+        $(this).addClass('active');
+
+        var page = $(this).text();
+        var start = (page - 1) * rowsPerPage;
+        var end = start + rowsPerPage;
+
+        rows.hide();
+        rows.slice(start, end).show();
+    });
+});
+</script>
 </head>
 <body>
 <%@include file="/WEB-INF/layouts/adminheader.jsp"%> 
-   <div class="col-sidebar">
-                <%@include file="/WEB-INF/layouts/adminsidebar.jsp"%>
-            </div>
+<div class="col-sidebar">
+    <%@include file="/WEB-INF/layouts/adminsidebar.jsp"%>
+</div>
 <main>
-
 <input type="hidden" value="{user_idx}" id="userIdx">
 <h3 class="mt-3 text-center">주문내역 관리</h3>
 <hr class="mb-3">
@@ -86,9 +111,9 @@ main {
 <div class="container mt-3">
     <div class="row">
         <div class="col-12">
-            <table class="table table-bordered">
+            <table id="orderTable" class="table table-bordered">
                 <thead class="table-secondary">
-                  <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
+                    <tr>
                         <th>번호</th>
                         <th>아이디</th>
                         <th>상품명</th>
@@ -97,11 +122,9 @@ main {
                         <th>배송비</th>
                         <th>총가격</th>
                         <th>주문일자</th>
-<!--                         <th>상태</th> -->
                     </tr>
                 </thead>
                 <tbody>
-           
                     <c:forEach var="order" items="${adminOrderList}" varStatus="status">
                         <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
                             <td>${order.orderIdx}</td>
@@ -112,24 +135,14 @@ main {
                             <td>${order.deliveryPrice}</td>
                             <td>${order.totalPrice}</td>
                             <td>${order.orderDate}</td>
-<!--                             <td> -->
-<%--                                 <button class="btn btn-update" onclick="updateStatus(${company.id}, 'approved')">수정</button> --%>
-<%--                                 <button class="btn btn-delete" onclick="updateStatus(${company.id}, 'rejected')">삭제</button> --%>
-<!--                             </td> -->
                         </tr>
-                     
-                   
                     </c:forEach>
                 </tbody>
             </table>
+            <div class="paging"></div>
         </div>
     </div>
 </div>
-
 </main>
-
-<script>
-</script> 
-
 </body>
 </html>
