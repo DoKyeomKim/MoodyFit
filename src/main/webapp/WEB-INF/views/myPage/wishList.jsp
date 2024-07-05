@@ -126,6 +126,63 @@ svg {
     color: #999;
     margin-top: 10px;
 }
+
+.wishBtn{
+	border:none;
+	background-color : transparent;
+}
+.all-posting {
+    text-align: left;
+    margin: 20px;
+    border: 0.5px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.all-posting:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.all-post-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.all-post-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+.all-price {
+    font-size: 17px;
+    font-weight: bold;
+}
+.all-store-name {
+    opacity: 0.7;
+}
+.all-post-image {
+    height: 260px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+}
+
+.all-post-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    margin: 0;
+}
+.post-header{
+	display:flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
 </style>
 </head>
 <body style="background-color:#F6F4EE !important;">
@@ -143,24 +200,32 @@ svg {
 				<c:choose>
 					<c:when test="${not empty wishList}">
 						<c:forEach var="wishList" items="${wishList}">
-							<div class="col-md-4">
-								<div class="card">
-									<img src="${wishList.FILE_PATH}" class="img-fluid">
-									<div class="card-body">
-										<span>${wishList.POSTING_IDX}</span>
-										<span>가격 : ${wishList.PRICE}</span>
-										<span>공고 제목	: ${wishList.TITLE}</span>
-										<span>제조사: ${wishList.MANUFACTURE_NAME}</span>
-										
-											<button class="btn btn-outline-secondary wishBtn" style="margin-right: 5px;" data-user-idx="${sessionScope.userIdx}" data-posting-idx="${wishList.POSTING_IDX}">
-											    <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-											        <path d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"/>
-											    </svg>
-											</button>
-									</div>
-								</div>
-							</div>
-						</c:forEach>
+				            <div class="col-md-3 mt-3 mb-3 all-posting-area">
+				                <div class="all-posting">
+				                    <a class="text-decoration-none text-dark" href="/postingDetail?postingIdx=${wishList.POSTING_IDX}">
+			                        <div class="all-post-image">
+			                            <img src="${wishList.FILE_PATH}" class="img-fluid" alt="${wishList.TITLE}">
+			                        </div>
+				                        <div class="post-header">
+				                        	<div class="all-post-title">${wishList.TITLE}</div>
+					                        <div class="all-post-wish">
+								                <security:authorize access="hasRole('ROLE_PERSON')">
+													<button class="wishBtn" data-user-idx="${sessionScope.userIdx}" data-posting-idx="${wishList.POSTING_IDX}">
+													    <svg style="margin-top: 10px;" width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+													        <path fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"/>
+													    </svg>
+													</button>
+												</security:authorize>	
+											</div>
+										</div>
+				                        <div class="all-post-info">
+				                            <div class="all-price">${wishList.PRICE}원</div>
+				                            <div class="all-store-name">${wishList.STORE_NAME}</div>
+				                        </div>
+				                    </a>
+				                </div>
+				            </div>
+				        </c:forEach>
 						<nav aria-label="Page navigation" style="margin-top: 100px;">
 							<ul class="pagination justify-content-center">
 								<c:if test="${prev}">
@@ -279,6 +344,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
     });
 });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var allPrices = document.querySelectorAll(".all-price");
+
+        allPrices.forEach(function(priceElement) {
+            var priceText = priceElement.textContent;
+            var price = parseFloat(priceText.replace(/[^\d.-]/g, '')); // 숫자 이외의 문자 제거 후 숫자로 변환
+            var formattedPrice = price.toLocaleString("ko-KR"); // 한국 통화 형식으로 포맷팅
+            priceElement.textContent = formattedPrice + " 원";
+        });
+    });
 </script>
 </body>
 </html>

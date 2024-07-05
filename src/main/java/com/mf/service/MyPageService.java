@@ -189,6 +189,10 @@ public class MyPageService {
 		// 주문(orders) 관련해서는 유지해야할듯
 	}
 
+	public Map<String, Object> getPostingByPostingIdx(Long postingIdx) {
+		return myPageMapper.getPostingByPostingIdx(postingIdx);
+	}
+
 
 	
 
