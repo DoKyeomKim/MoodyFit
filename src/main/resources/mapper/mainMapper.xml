@@ -86,7 +86,7 @@ SELECT * FROM (
     WHERE e.rn = 1
     GROUP BY a.posting_idx, a.title, d.price, e.file_path, a.update_date, s.store_name
 ) subquery
-WHERE rnum <= 10
+WHERE rnum <= 8
 ]]>
 </select>
 
@@ -95,6 +95,7 @@ select nick_name
 from person
 where user_idx = #{userIdx}
 </select>
+
 <select id="getSNickNameByUserIdx">
 select store_name
 from store
