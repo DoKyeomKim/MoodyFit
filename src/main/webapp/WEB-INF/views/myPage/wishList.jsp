@@ -193,7 +193,7 @@ svg {
 		<div class="container">
 			<div class="main-header">
 				<h3 style="font-weight:bold;">관심상품</h3>
-				<p>  <a href="/myPage/payment">주문/배송조회</a>
+				<p>  <a href="/myPage/order">주문/배송조회</a>
          <a href="/myPage/cart">장바구니</a><a href="/myPage/wishList">좋아요</a></p>
 			</div>
 			<div class="row">
