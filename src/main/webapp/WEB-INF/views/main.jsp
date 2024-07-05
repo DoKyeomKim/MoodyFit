@@ -318,7 +318,7 @@ main {
                <h4 class="bold-text">Nearby Listings2</h4>
                <div class="light-text">지역별 매장의 상품입니다</div>
                <div class="swiper-container2" id="swiper2"
-                  style="width: 100%; height: 100%; display: flex;">
+                  style="width: 100%; height: 100%; display: flex; overflow: hidden;">
                   <div class="swiper-wrapper item-wrapper"
                      style="display: flex; width: 20%; height: 100%;">
                      <c:forEach items="${pl}" var="pl">
