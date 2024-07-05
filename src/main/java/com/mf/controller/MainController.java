@@ -112,7 +112,7 @@ public class MainController {
 	public ModelAndView search(@RequestParam("keyword") String keyword,@RequestParam(value = "page", defaultValue = "1") int page) {
 		ModelAndView mv = new ModelAndView();
 		
-	    int pageSize = 2; // 한 페이지에 표시할 게시글 수 지금은 확인용으로 2개만 해둠.
+	    int pageSize = 8; // 한 페이지에 표시할 게시글 수 지금은 확인용으로 2개만 해둠.
 	    int startIndex = (page - 1) * pageSize;
 
 	    
@@ -164,12 +164,13 @@ public class MainController {
         // 해당 카테고리의 모든 서브 카테고리 목록을 가져옴
         List<SubCategoryDto> subCategories = mainService.getSubCategoriesByCategoryEngName(categoryEngName);
 
+        // 카테고리 내의 매출 많은 순
         List<Map<String,Object>> topPosting = mainService.getTopPostingByCategoryEngName(categoryEngName);
         if(topPosting != null) {
             mv.addObject("topPosting", topPosting);
         }
         
-	    int pageSize = 2; // 한 페이지에 표시할 게시글 수 확인용으로 1 해놓음 나중에 수정
+	    int pageSize = 8; // 한 페이지에 표시할 게시글 수 확인용으로 1 해놓음 나중에 수정
 	    int startIndex = (page - 1) * pageSize;
         
         SubCategoryDto selectedSubCategory = new SubCategoryDto();
