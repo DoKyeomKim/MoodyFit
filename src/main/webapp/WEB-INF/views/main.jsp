@@ -293,7 +293,7 @@ main {
                   </div>
                </c:forEach>
                <div class="swiper-container2" id="swiper2"
-                  style="width: 100%; height: 100%; display: flex;">
+                  style="width: 100%; height: 100%; display: flex; overflow: hidden;">
                   <div class="swiper-wrapper item-wrapper"
                      style="display: flex; width: 20%; height: 100%;">
                      <c:forEach items="${postingList}" var="pl">
