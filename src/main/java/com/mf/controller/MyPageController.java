@@ -6,21 +6,26 @@ import java.io.Reader;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -55,7 +60,7 @@ public class MyPageController {
 	
 	// 개인 마이페이지 메인
 	@GetMapping("/myPage")
-	public ModelAndView myPage(HttpSession session) {
+	public ModelAndView myPage(@CookieValue(value = "recentPostings", defaultValue = "[]") String recentPostings,HttpSession session) {
 		ModelAndView mv = new ModelAndView();
 		// 세션의 userIdx 갖고오기
 		Long userIdx = (Long) session.getAttribute("userIdx");
@@ -96,6 +101,8 @@ public class MyPageController {
 	    }
 	    int cartCount =  (int) result.get("cartCount");
 	    
+
+	    
 	    mv.addObject("cartCount",cartCount);
 		mv.addObject("person",person);
 		mv.addObject("personLevel",personLevels);
@@ -105,6 +112,43 @@ public class MyPageController {
 		mv.addObject("price", result.get("price"));
 		mv.setViewName("myPage/myPage");
 		return mv;
+	}
+	
+	
+	@GetMapping("/myPage/recentPostings")
+	@ResponseBody
+	public ResponseEntity<List<Map<String, Object>>> getRecentPostings(@CookieValue(value = "recentPostings", defaultValue = "[]") String recentPostings) {
+	    List<Long> postingIdxs;
+
+	    try {
+	        postingIdxs = Arrays.stream(recentPostings.replace("[", "").replace("]", "").replace("\"", "").split(","))
+	                .map(String::trim)
+	                .filter(s -> !s.isEmpty())
+	                .map(Long::parseLong)
+	                .collect(Collectors.toList());
+	        
+	        List<Map<String, Object>> cookiePostings = new ArrayList<>();
+	        for(Long postingIdx : postingIdxs) {
+	            try {
+	                Map<String, Object> posting = myPageService.getPostingByPostingIdx(postingIdx);
+	                if (posting != null) {
+	                    cookiePostings.add(posting);
+	                    
+	                }
+	            } catch (Exception ex) {
+	                // 특정 postingIdx에 대해 문제가 발생하면 로그를 남기고 계속 진행
+	                System.err.println("Error retrieving posting for IDX: " + postingIdx);
+	                ex.printStackTrace();
+	            }
+	        }
+	        return ResponseEntity.ok(cookiePostings);
+	        
+	    } catch (Exception e) {
+	        // 쿠키 값 파싱 중 예외가 발생할 경우 빈 리스트를 반환
+	        System.err.println("Error parsing cookie value: " + e.getMessage());
+	        System.err.println("Failed cookie value: " + recentPostings);
+	        return ResponseEntity.ok(List.of());
+	    }
 	}
 	
 	// 유저 정보 수정페이지
@@ -141,7 +185,7 @@ public class MyPageController {
 	public ModelAndView wishList(HttpSession session,@RequestParam(value = "page", defaultValue = "1") int page) {
 		ModelAndView mv = new ModelAndView();
 		Long userIdx = (Long) session.getAttribute("userIdx");
-		int pageSize = 1; // 페이징 확인용 1개만 들고옴
+		int pageSize = 8; // 페이징 확인용 1개만 들고옴
 		int startIndex = (page - 1) * pageSize;
 		
 		List<Map<String,Object>> wishList= myPageService.getWishList(userIdx,pageSize,startIndex);

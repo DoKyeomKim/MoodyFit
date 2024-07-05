@@ -57,20 +57,33 @@ SELECT * FROM (
 
 <select id="getRecentPosting">
 <![CDATA[
+WITH RankedFiles AS (
+    SELECT 
+        a.posting_idx,
+        e.file_path,
+        ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY e.file_path) AS rn
+    FROM posting a
+    JOIN posting_product b ON a.posting_idx = b.posting_idx
+    JOIN product_info c ON b.product_info_idx = c.product_info_idx
+    JOIN product d ON c.product_idx = d.product_idx
+    JOIN product_file e ON e.product_info_idx = b.product_info_idx
+)
 SELECT * FROM (
-    SELECT a.posting_idx AS posting_idx,
-    	   a.update_date,
-           a.title AS title,
-           d.price AS price,
-           s.store_name as store_name,
-           e.file_path AS file_path,
-           ROW_NUMBER() OVER (ORDER BY a.update_date DESC) AS rnum
+    SELECT 
+        a.posting_idx AS posting_idx,
+        a.update_date,
+        a.title AS title,
+        d.price AS price,
+        s.store_name as store_name,
+        e.file_path AS file_path,
+        ROW_NUMBER() OVER (ORDER BY a.update_date DESC) AS rnum
     FROM posting a
     JOIN posting_product b ON a.posting_idx = b.posting_idx
     JOIN product_info c ON b.product_info_idx = c.product_info_idx
     JOIN product d ON c.product_idx = d.product_idx
     JOIN store s on d.store_idx = s.store_idx
-    JOIN product_file e ON e.product_info_idx = b.product_info_idx
+    JOIN RankedFiles e ON a.posting_idx = e.posting_idx
+    WHERE e.rn = 1
     GROUP BY a.posting_idx, a.title, d.price, e.file_path, a.update_date, s.store_name
 ) subquery
 WHERE rnum <= 10
@@ -194,36 +207,39 @@ ORDER BY a.posting_idx DESC
 </select>
 
 <select id="getAllPostingByCategory">
-    SELECT posting_idx, title, price, store_name, file_path, total_price
+SELECT posting_idx, title, price, store_name, file_path, total_price
+FROM (
+    SELECT posting_idx, title, price, store_name, file_path, total_price,
+           ROW_NUMBER() OVER (ORDER BY
+               <choose>
+                   <when test="orderBy == 'expensive'">
+                       price DESC
+                   </when>
+                   <when test="orderBy == 'chip'">
+                       price ASC
+                   </when>
+                   <when test="orderBy == 'newest'">
+                       posting_idx DESC
+                   </when>
+                   <when test="orderBy == 'sales'">
+                       total_price DESC
+                   </when>
+                   <otherwise>
+                       posting_idx ASC
+                   </otherwise>
+               </choose>
+           ) AS rnum
     FROM (
-        SELECT posting_idx, title, price, store_name, file_path, total_price,
-               ROW_NUMBER() OVER (ORDER BY
-                   <choose>
-                       <when test="orderBy == 'expensive'">
-                           price DESC
-                       </when>
-                       <when test="orderBy == 'chip'">
-                           price ASC
-                       </when>
-                       <when test="orderBy == 'newest'">
-                           posting_idx DESC
-                       </when>
-                       <when test="orderBy == 'sales'">
-                           total_price DESC
-                       </when>
-                       <otherwise>
-                           posting_idx ASC
-                       </otherwise>
-                   </choose>
-               ) AS rnum
+        SELECT posting_idx, title, price, store_name, file_path, total_price
         FROM (
-            SELECT DISTINCT 
+            SELECT
                 a.posting_idx AS posting_idx,
                 a.title AS title,
                 d.price AS price,
                 s.store_name,
                 e.file_path AS file_path,
-                COALESCE(SUM(o.total_price), 0) AS total_price
+                COALESCE(SUM(o.total_price), 0) AS total_price,
+                ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY e.file_path) AS rn
             FROM posting a
             JOIN store s ON s.store_idx = a.store_idx
             JOIN posting_product b ON a.posting_idx = b.posting_idx
@@ -237,9 +253,11 @@ ORDER BY a.posting_idx DESC
             LEFT JOIN orders o ON o.order_idx = oc.order_idx
             WHERE g.eng_name = #{categoryEngName}
             GROUP BY a.posting_idx, a.title, d.price, s.store_name, e.file_path
-        ) inner_sub
-    )
-    WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
+        ) temp
+        WHERE rn = 1
+    ) inner_sub
+)
+WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
 </select>
 
 <select id="getPostingCountBycategoryEngName">
@@ -257,51 +275,56 @@ where g.eng_name = #{categoryEngName}
 
 
 <select id="getSelectedPostingBySubCategory">
-    SELECT posting_idx, title, price, store_name, file_path, total_price
+SELECT posting_idx, title, price, store_name, file_path, total_price
+FROM (
+    SELECT posting_idx, title, price, store_name, file_path, total_price,
+           ROW_NUMBER() OVER (ORDER BY
+               <choose>
+                   <when test="orderBy == 'expensive'">
+                       price DESC
+                   </when>
+                   <when test="orderBy == 'chip'">
+                       price ASC
+                   </when>
+                   <when test="orderBy == 'newest'">
+                       posting_idx DESC
+                   </when>
+                   <when test="orderBy == 'sales'">
+                       total_price DESC
+                   </when>
+                   <otherwise>
+                       posting_idx ASC
+                   </otherwise>
+               </choose>
+           ) AS rnum
     FROM (
-        SELECT posting_idx, title, price, store_name, file_path, total_price,
-               ROW_NUMBER() OVER (ORDER BY
-                   <choose>
-                       <when test="orderBy == 'expensive'">
-                           price DESC
-                       </when>
-                       <when test="orderBy == 'chip'">
-                           price ASC
-                       </when>
-                       <when test="orderBy == 'newest'">
-                           posting_idx DESC
-                       </when>
-                       <when test="orderBy == 'sales'">
-                           total_price DESC
-                       </when>
-                       <otherwise>
-                           posting_idx ASC
-                       </otherwise>
-                   </choose>
-               ) AS rnum
+        SELECT posting_idx, title, price, store_name, file_path, total_price
         FROM (
-            SELECT DISTINCT 
+            SELECT 
                 a.posting_idx AS posting_idx,
                 a.title AS title,
                 d.price AS price,
                 s.store_name,
                 e.file_path AS file_path,
-                COALESCE(SUM(o.total_price), 0) AS total_price
-			FROM posting a
-			JOIN store s on a.store_idx = s.store_idx
-			JOIN posting_product b ON a.posting_idx = b.posting_idx
-			JOIN product_info c ON b.product_info_idx = c.product_info_idx
-			JOIN product d ON c.product_idx = d.product_idx
-			join product_file e on e.product_info_idx = b.product_info_idx
-			join sub_category f on d.sub_category_idx = f.sub_category_idx
+                COALESCE(SUM(o.total_price), 0) AS total_price,
+                ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY e.file_path) AS rn
+            FROM posting a
+            JOIN store s ON a.store_idx = s.store_idx
+            JOIN posting_product b ON a.posting_idx = b.posting_idx
+            JOIN product_info c ON b.product_info_idx = c.product_info_idx
+            JOIN product d ON c.product_idx = d.product_idx
+            JOIN product_file e ON e.product_info_idx = b.product_info_idx
+            JOIN sub_category f ON d.sub_category_idx = f.sub_category_idx
             LEFT JOIN cart c ON c.posting_product_idx = b.posting_product_idx
-            LEFT JOIN order_cart oc on c.cart_idx = oc.cart_idx
+            LEFT JOIN order_cart oc ON c.cart_idx = oc.cart_idx
             LEFT JOIN orders o ON o.order_idx = oc.order_idx
-			where f.eng_name = #{subCategoryName}
+            WHERE f.eng_name = #{subCategoryName}
             GROUP BY a.posting_idx, a.title, d.price, s.store_name, e.file_path
-        ) inner_sub
-    )
-    WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
+        ) temp
+        WHERE rn = 1
+    ) inner_sub
+)
+WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
 </select>
 
 <select id="getPostingCountBysubCategoryName">

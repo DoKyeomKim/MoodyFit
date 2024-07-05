@@ -236,92 +236,127 @@ function updateProductInfo() {
 <security:authorize access="isAuthenticated()">
     <c:choose>
         <c:when test="${sessionScope.role == 'ROLE_PERSON'}">
-			<script>
-			document.addEventListener("DOMContentLoaded", function() {
-			    const userIdx = document.getElementById('userIdx').value;
-			
-			    function updateWishSvgs() {
-			        const wishButtons = document.querySelectorAll('.wishBtn');
-			        wishButtons.forEach(function(button) {
-			            const postingIdx = button.getAttribute('data-posting-idx');
-			            
-			            if (!userIdx) {
-			                const svg = button.querySelector('svg path');
-			                svg.setAttribute('fill', 'none');
-			                return;
-			            }
-			
-			            // 스크랩 상태 확인 요청
-			            fetch(`/checkWish?postingIdx=` + postingIdx + `&userIdx=` + userIdx,  {
-			                method: 'GET',
-			            })
-			            .then(response => response.json())
-			            .then(isWish => {
-			                button.setAttribute('data-wish', isWish);
-			                const svg = button.querySelector('svg path');
-			                if (isWish) {
-			                    svg.setAttribute('fill', 'red');
-			                } else {
-			                    svg.setAttribute('fill', 'none');
-			                }
-			            })
-			            .catch(error => {
-			                console.error('Error:', error);
-			            });
-			        });
-			    }
-			
-			    updateWishSvgs(); // 페이지 로드 시 스크랩 버튼 상태 갱신
-			
-			    document.addEventListener('click', async function(e) {
-			        const button = e.target.closest('.wishBtn'); // 상위 요소인 버튼을 찾기
-			        if (button) {
-			            e.preventDefault(); // 기본 동작 방지
-			            e.stopPropagation(); // 이벤트 전파 방지
-			            const svg = button.querySelector('svg path');
-			            const postingIdx = button.getAttribute('data-posting-idx');
-			            const userIdx = button.getAttribute('data-user-idx');
-			            const isWish = button.getAttribute('data-wish') === 'true';
-			            
-			            try {
-			                let response;
-			                if (isWish) {
-			                    // 찜 삭제 요청
-			                    response = await fetch('/deleteWish', {
-			                        method: 'DELETE',
-			                        headers: {
-			                            'Content-Type': 'application/json',
-			                        },
-			                        body: JSON.stringify({ postingIdx, userIdx }),
-			                    });
-			                } else {
-			                    // 찜 추가 요청
-			                    response = await fetch('/addWish', {
-			                        method: 'POST',
-			                        headers: {
-			                            'Content-Type': 'application/json',
-			                        },
-			                        body: JSON.stringify({ postingIdx, userIdx }), // 변경된 부분
-			                    });
-			                }
-			
-			                if (response.ok) {
-			                    const message = isWish ? '찜 목록에서 삭제되었습니다.' : '찜 목록에 추가되었습니다.';
-			                    alert(message);
-			                    updateWishSvgs(); // 개추 버튼 상태 갱신
-			                } else {
-			                    throw new Error('error.');
-			                }
-			            } catch (error) {
-			                console.error('Error:', error);
-			                alert('오류가 발생했습니다. 다시 시도해주세요.');
-			            }
-			            return; // 여기서 함수 실행 종료
-			        }
-			
-			    });
-			});
-			</script>
+<script>
+function getCookie(name) {
+    let cookieArr = document.cookie.split(";");
+    for (let i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+        if (name === cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
+}
+
+function setCookie(name, value, days) {
+    let date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    let postingIdx = "${postingInfo.POSTING_IDX}";
+    let recentPostings = getCookie("recentPostings");
+
+    if (recentPostings) {
+        recentPostings = JSON.parse(recentPostings);
+        if (!recentPostings.includes(postingIdx)) {
+            recentPostings.push(postingIdx);
+        }
+    } else {
+        recentPostings = [postingIdx];
+    }
+
+    setCookie("recentPostings", JSON.stringify(recentPostings), 7);
+});
+</script>
+		<script>
+		document.addEventListener("DOMContentLoaded", function() {
+		    const userIdx = document.getElementById('userIdx').value;
+		
+		    function updateWishSvgs() {
+		        const wishButtons = document.querySelectorAll('.wishBtn');
+		        wishButtons.forEach(function(button) {
+		            const postingIdx = button.getAttribute('data-posting-idx');
+		            
+		            if (!userIdx) {
+		                const svg = button.querySelector('svg path');
+		                svg.setAttribute('fill', 'none');
+		                return;
+		            }
+		
+		            // 스크랩 상태 확인 요청
+		            fetch(`/checkWish?postingIdx=` + postingIdx + `&userIdx=` + userIdx,  {
+		                method: 'GET',
+		            })
+		            .then(response => response.json())
+		            .then(isWish => {
+		                button.setAttribute('data-wish', isWish);
+		                const svg = button.querySelector('svg path');
+		                if (isWish) {
+		                    svg.setAttribute('fill', 'red');
+		                } else {
+		                    svg.setAttribute('fill', 'none');
+		                }
+		            })
+		            .catch(error => {
+		                console.error('Error:', error);
+		            });
+		        });
+		    }
+		
+		    updateWishSvgs(); // 페이지 로드 시 스크랩 버튼 상태 갱신
+		
+		    document.addEventListener('click', async function(e) {
+		        const button = e.target.closest('.wishBtn'); // 상위 요소인 버튼을 찾기
+		        if (button) {
+		            e.preventDefault(); // 기본 동작 방지
+		            e.stopPropagation(); // 이벤트 전파 방지
+		            const svg = button.querySelector('svg path');
+		            const postingIdx = button.getAttribute('data-posting-idx');
+		            const userIdx = button.getAttribute('data-user-idx');
+		            const isWish = button.getAttribute('data-wish') === 'true';
+		            
+		            try {
+		                let response;
+		                if (isWish) {
+		                    // 찜 삭제 요청
+		                    response = await fetch('/deleteWish', {
+		                        method: 'DELETE',
+		                        headers: {
+		                            'Content-Type': 'application/json',
+		                        },
+		                        body: JSON.stringify({ postingIdx, userIdx }),
+		                    });
+		                } else {
+		                    // 찜 추가 요청
+		                    response = await fetch('/addWish', {
+		                        method: 'POST',
+		                        headers: {
+		                            'Content-Type': 'application/json',
+		                        },
+		                        body: JSON.stringify({ postingIdx, userIdx }), // 변경된 부분
+		                    });
+		                }
+		
+		                if (response.ok) {
+		                    const message = isWish ? '찜 목록에서 삭제되었습니다.' : '찜 목록에 추가되었습니다.';
+		                    alert(message);
+		                    updateWishSvgs(); // 개추 버튼 상태 갱신
+		                } else {
+		                    throw new Error('error.');
+		                }
+		            } catch (error) {
+		                console.error('Error:', error);
+		                alert('오류가 발생했습니다. 다시 시도해주세요.');
+		            }
+		            return; // 여기서 함수 실행 종료
+		        }
+		
+		    });
+		});
+		</script>
 		</c:when>
 	</c:choose>
 </security:authorize>

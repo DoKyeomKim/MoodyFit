@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.MyPageMapper">
+<select id="getPostingByPostingIdx">
+SELECT 
+    p.posting_idx as posting_idx,
+    p.title as title,
+    MIN(prod.name) as name,
+    s.store_name as store_name,
+    prod.price as price,
+    MIN(pf.file_path) as file_path
+FROM posting p
+JOIN store s on p.store_idx = s.store_idx
+JOIN posting_product pp ON p.posting_idx = pp.posting_idx
+JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+JOIN product prod ON pi.product_idx = prod.product_idx
+JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
+WHERE p.posting_idx = #{postingIdx}
+GROUP BY p.posting_idx, p.title, s.store_name, prod.price
+	
+</select>
 
 <select id="getCartCount">
 select NVL(COUNT(cart_idx),0) as cartCount

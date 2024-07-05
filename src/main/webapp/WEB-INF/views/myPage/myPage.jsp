@@ -52,11 +52,71 @@ margin-left:10px;
 	display:flex;
 	align-items: center;
 }
+.wishBtn{
+	border:none;
+	background-color : transparent;
+}
+.all-posting {
+    text-align: left;
+    margin: 20px;
+    border: 0.5px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.all-posting:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.all-post-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.all-post-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+.all-price {
+    font-size: 17px;
+    font-weight: bold;
+}
+.all-store-name {
+    opacity: 0.7;
+}
+.all-post-image {
+    height: 260px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+}
+
+.all-post-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    margin: 0;
+}
+.post-header{
+	display:flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.cookie-container{
+	display:flex;
+}
 </style>
 </head>
 <body>
     <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
     <%@include file="/WEB-INF/layouts/aside.jsp"%>
+    <input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
     <div class="container mt-5">
         <div class="row">
             <div class="col-12 text-center">
@@ -135,13 +195,12 @@ margin-left:10px;
             </div>
         </div>
         
-        <div class="row mt-5 recent-views">
-            <div class="col-12">
-                <h2>최근 본 공고</h2>
-                <!-- 최근 본 공고 리스트 추가 -->
-            </div>
-        </div>
+<div class="row mt-5 recent-views">
+    <div class="col-12">
+        <h2>최근 본 공고</h2>
+        <div class="cookie-container"></div> <!-- 이 부분에 비동기 데이터가 렌더링됨 -->
     </div>
+</div>
 
 <div class="modal fade" id="levelModal" tabindex="-1" aria-labelledby="levelModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl"> <!-- modal-xl로 변경 -->
@@ -182,24 +241,212 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var purchaseElements = document.querySelectorAll(".purchase");
-            var userTotalPurchaseElements = document.querySelectorAll(".userTotalPurchase");
+<script>
+function getCookie(name) {
+    let cookieArr = document.cookie.split(";");
+    for (let i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+        if (name === cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
+}
 
-            purchaseElements.forEach(function(purchaseElement) {
-                var purchaseText = purchaseElement.textContent.trim();
-                var purchaseValue = parseFloat(purchaseText.replace(/[^\d.-]/g, ''));
-                var formattedPurchase = purchaseValue.toLocaleString("ko-KR");
-                purchaseElement.textContent = formattedPurchase + "원 이상";
-            });
-            userTotalPurchaseElements.forEach(function(userTotalPurchaseElements) {
-                var userTotalPurchaseText =  userTotalPurchaseElements.textContent.trim();
-                var userTotalPurchaseValue = parseFloat(userTotalPurchaseText.replace(/[^\d.-]/g, ''));
-                var formattedUserTotalPurchaseText = userTotalPurchaseValue.toLocaleString("ko-KR");
-                userTotalPurchaseElements.textContent = formattedUserTotalPurchaseText + " 원";
+function setCookie(name, value, days) {
+    let date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + encodeURIComponent(value) + ";" + expires + ";path=/";
+}
+
+async function deletePosting(postingIdx, userIdx) {
+    let recentPostings = getCookie("recentPostings");
+    if (recentPostings) {
+        recentPostings = JSON.parse(recentPostings);
+        const index = recentPostings.indexOf(postingIdx.toString());
+        if (index > -1) {
+            recentPostings.splice(index, 1);
+            setCookie("recentPostings", JSON.stringify(recentPostings), 7);
+
+            // Remove the posting from the DOM
+            const postingElement = document.getElementById(`posting-${postingIdx}`);
+            if (postingElement) {
+                postingElement.remove();
+            }
+
+            // Re-fetch the recent postings list
+            await fetchRecentPostings(userIdx);
+        }
+    }
+}
+
+async function fetchRecentPostings(userIdx) {
+    try {
+        const response = await fetch('/myPage/recentPostings', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        renderRecentPostings(data, userIdx);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+function renderRecentPostings(postings, userIdx) {
+    const container = document.querySelector('.cookie-container');
+    container.innerHTML = '';  // 기존 내용 제거
+    postings.forEach(posting => {
+        const postingElement =
+            '<div class="col-md-3 mt-3 mb-3 all-posting-area" id="posting-' + posting.POSTING_IDX + '">' +
+                '<div class="all-posting">' +
+                    '<a class="text-decoration-none text-dark" href="/postingDetail?postingIdx=' + posting.POSTING_IDX + '">' +
+                        '<div class="all-post-image">' +
+                            '<img src="' + posting.FILE_PATH + '" class="img-fluid" alt="' + posting.TITLE + '">' +
+                        '</div>' +
+                        '<div class="post-header">' +
+                            '<div class="all-post-title">' + posting.TITLE + '</div>' +
+                            '<div class="all-post-wish">' +
+                                '<security:authorize access="hasRole(\'ROLE_PERSON\')">' +
+                                    '<button class="wishBtn" data-user-idx="' + userIdx + '" data-posting-idx="' + posting.POSTING_IDX + '">' +
+                                        '<svg style="margin-top: 10px;" width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                                            '<path fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 6.00019C10.2006 3.90317 7.19377 3.2551 4.93923 5.17534C2.68468 7.09558 2.36727 10.3061 4.13778 12.5772C5.60984 14.4654 10.0648 18.4479 11.5249 19.7369C11.6882 19.8811 11.7699 19.9532 11.8652 19.9815C11.9483 20.0062 12.0393 20.0062 12.1225 19.9815C12.2178 19.9532 12.2994 19.8811 12.4628 19.7369C13.9229 18.4479 18.3778 14.4654 19.8499 12.5772C21.6204 10.3061 21.3417 7.07538 19.0484 5.17534C16.7551 3.2753 13.7994 3.90317 12 6.00019Z"/>' +
+                                        '</svg>' +
+                                    '</button>' +
+                                '</security:authorize>' +  
+                            '</div>' +
+                        '</div>' +
+                        '<div class="all-post-info">' +
+                            '<div class="all-price">' + posting.PRICE + '원</div>' +
+                            '<div class="all-store-name">' + posting.STORE_NAME + '</div>' +
+                        '</div>' +
+                    '</a>' +
+                    '<button class="deleteBtn" onclick="deletePosting(' + posting.POSTING_IDX + ', ' + userIdx + ')">X</button>' +
+                '</div>' +
+            '</div>';
+        container.innerHTML += postingElement;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const userIdxElement = document.getElementById('userIdx');
+    if (userIdxElement) {
+        const userIdx = userIdxElement.value;
+        fetchRecentPostings(userIdx);
+    } else {
+        console.error('userIdx element not found');
+    }
+});
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var purchaseElements = document.querySelectorAll(".purchase");
+        var userTotalPurchaseElements = document.querySelectorAll(".userTotalPurchase");
+
+        purchaseElements.forEach(function(purchaseElement) {
+            var purchaseText = purchaseElement.textContent.trim();
+            var purchaseValue = parseFloat(purchaseText.replace(/[^\d.-]/g, ''));
+            var formattedPurchase = purchaseValue.toLocaleString("ko-KR");
+            purchaseElement.textContent = formattedPurchase + "원 이상";
+        });
+        userTotalPurchaseElements.forEach(function(userTotalPurchaseElements) {
+            var userTotalPurchaseText =  userTotalPurchaseElements.textContent.trim();
+            var userTotalPurchaseValue = parseFloat(userTotalPurchaseText.replace(/[^\d.-]/g, ''));
+            var formattedUserTotalPurchaseText = userTotalPurchaseValue.toLocaleString("ko-KR");
+            userTotalPurchaseElements.textContent = formattedUserTotalPurchaseText + " 원";
+        });
+    });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const userIdx = document.getElementById('userIdx').value;
+
+    function updateWishSvgs() {
+        const wishButtons = document.querySelectorAll('.wishBtn');
+        wishButtons.forEach(function(button) {
+            const postingIdx = button.getAttribute('data-posting-idx');
+            
+            if (!userIdx) {
+                const svg = button.querySelector('svg path');
+                svg.setAttribute('fill', 'none');
+                return;
+            }
+
+            // 스크랩 상태 확인 요청
+            fetch(`/checkWish?postingIdx=` + postingIdx + `&userIdx=` + userIdx,  {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(isWish => {
+                button.setAttribute('data-wish', isWish);
+                const svg = button.querySelector('svg path');
+                if (isWish) {
+                    svg.setAttribute('fill', 'red');
+                } else {
+                    svg.setAttribute('fill', 'none');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
         });
-    </script>
+    }
+
+    updateWishSvgs(); // 페이지 로드 시 스크랩 버튼 상태 갱신
+
+    document.addEventListener('click', async function(e) {
+        const button = e.target.closest('.wishBtn'); // 상위 요소인 버튼을 찾기
+        if (button) {
+            e.preventDefault(); // 기본 동작 방지
+            e.stopPropagation(); // 이벤트 전파 방지
+            const svg = button.querySelector('svg path');
+            const postingIdx = button.getAttribute('data-posting-idx');
+            const userIdx = button.getAttribute('data-user-idx');
+            const isWish = button.getAttribute('data-wish') === 'true';
+            
+            try {
+                let response;
+                if (isWish) {
+                    // 찜 삭제 요청
+                    response = await fetch('/deleteWish', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ postingIdx, userIdx }),
+                    });
+                } else {
+                    // 찜 추가 요청
+                    response = await fetch('/addWish', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ postingIdx, userIdx }), // 변경된 부분
+                    });
+                }
+
+                if (response.ok) {
+                    const message = isWish ? '찜 목록에서 삭제되었습니다.' : '찜 목록에 추가되었습니다.';
+                    alert(message);
+                    updateWishSvgs(); // 개추 버튼 상태 갱신
+                } else {
+                    throw new Error('error.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('오류가 발생했습니다. 다시 시도해주세요.');
+            }
+            return; // 여기서 함수 실행 종료
+        }
+
+    });
+});
+</script>
 </body>
 </html>
