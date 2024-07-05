@@ -145,6 +145,19 @@ main {
     height: 60px;
     border-radius:10px;
 }
+    .item-link {
+	text-decoration: none; /* 밑줄 제거 */
+	color: inherit; /* 부모 요소의 색상 상속 */
+}
+
+.item-link:hover .item {
+	transform: scale(1.05); /* hover 시 확대 효과 추가 */
+}
+
+.item-link .item {
+	color: #000; /* 글자 색상을 검정으로 설정 */
+	transition: transform 0.2s;
+}
 </style>
 </head>
 <body>
@@ -155,7 +168,7 @@ main {
 		<div class="container">
 			<div class="main-header">
     <h3 style="font-weight: bold">장바구니</h3>
-    <p>  <a href="/myPage/payment">주문/배송조회</a>
+    <p>  <a href="/myPage/order">주문/배송조회</a>
          <a href="/myPage/cart">장바구니</a><a href="/myPage/wishList">좋아요</a></p>
         <c:choose>
             <c:when test="${empty cartList}">
@@ -173,11 +186,11 @@ main {
                     <c:forEach var="item" items="${cartList}">
                         <div class="box-container">
                             <input type="checkbox" name="selectedItems" value="${item.cartIdx}" class="itemCheckbox" onchange="updateBuyButton()">
-                            <img src="${item.filePath}" alt="Item Image" style="width: 110px; height: 110px;">
+                            <img src="${item.filePath}" alt="Item Image" style="width: 110px; height: 110px; margin-left: 30px;">
                             <div class="item-details">
-                                <div class="box">${item.title}</div>
-                                <div class="box">${item.name}</div>
-                                <div class="box">내일 ${formattedDate} 도착 보장</div>
+                                <div class="box"><a href="/postingDetail?postingIdx=${item.postingIdx}" class="item-link">${item.title}</a></div>
+                                <div class="box"><a href="/postingDetail?postingIdx=${item.postingIdx}" class="item-link">${item.name}</a></div>
+                                <div class="box"><a href="/postingDetail?postingIdx=${item.postingIdx}" class="item-link">내일 ${formattedDate} 도착 보장</a></div>
                           
                             </div>
                             <div class="item-options">

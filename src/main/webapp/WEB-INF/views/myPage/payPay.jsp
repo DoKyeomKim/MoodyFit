@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>장바구니</title>
+<title>결제중</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <style>

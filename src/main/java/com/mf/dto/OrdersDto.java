@@ -19,6 +19,7 @@ public class OrdersDto {
 	private Long userIdx;
 	private String state;
 	
+	private Long postingIdx;
 	private Long orderIdx;
 	private String merchantUid;
 	private String deliveryPrice;
