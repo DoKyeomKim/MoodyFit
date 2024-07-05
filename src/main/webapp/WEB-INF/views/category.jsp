@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <style>
+
 .cateDefault {
 	text-align: center;
     position: relative;
@@ -25,6 +26,7 @@
 }
 .subCateDefault {
 	text-align: center;
+	font-size: 17px;
 }
 
 .subCateDefault a {
@@ -207,7 +209,7 @@
 }
 </style>
 </head>
-<body style="margin-top:70px;">
+<body>
 	<%@include file="/WEB-INF/layouts/header.jsp"%>
 
 
@@ -260,8 +262,7 @@
 			</a>
 		</c:forEach>
 	</div>
-	<main>
-		<div class="container">
+		<div class="container" style="margin-bottom :150px;">
 			<div class="row">
 				<c:choose>
 					<c:when test="${not empty allPosting}">
@@ -411,10 +412,6 @@
 
 			</div>
 		</div>
-	</main>
-
-
-
 <script src="/js/bootstrap.bundle.min.js"></script>
 <security:authorize access="isAuthenticated()">
     <c:choose>
@@ -615,7 +612,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var swiper = new Swiper('.swiper-container', {
-        slidesPerView: 2, // 한 번에 보여줄 슬라이드의 개수
+        slidesPerView: 4, // 한 번에 보여줄 슬라이드의 개수
         spaceBetween: 5, // 슬라이드 사이의 간격 (픽셀 단위)
         navigation: {
             nextEl: '.swiper-button-next',
@@ -675,5 +672,6 @@ document.addEventListener('DOMContentLoaded', function() {
         history.scrollRestoration = 'manual';
     }
 </script>
+<%@include file="/WEB-INF/layouts/footer.jsp"%>
 </body>
 </html>
