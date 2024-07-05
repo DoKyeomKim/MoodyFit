@@ -8,9 +8,11 @@
 <title>상품 판매글 등록</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.css">
+<script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <script type="text/JavaScript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/JavaScript" src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.js"></script>
 <script type="text/JavaScript" src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.js"></script>
+<script type="text/JavaScript" src="/js/bootstrap.bundle.min.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -156,102 +158,147 @@ background-color: #333; /* 버튼 배경색 (어두운 회색) */
     border-radius: 5px; /* 버튼 모서리 둥글게 */
     text-decoration: none;
  }
+     .product-pick-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .product-pick-table th, .product-pick-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    .product-pick-table th {
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+    .product-pick-table tbody tr:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+    }
+    .product-selection {
+        margin-bottom: 20px;
+    }
+    #productDetails {
+        margin-top: 20px;
+    }
 </style>
 </head>
 <%@ include file="/WEB-INF/layouts/mypageheader.jsp" %>
 <%@ include file="/WEB-INF/layouts/storeAside.jsp" %>
-<body style="background-color:#F6F4EE !important;">
-<main>
-         <h3 style="font-weight:bold; text-align: center; ">판매글 등록</h3>
-<div class="container">
-    
-    <!-- 상품 목록 -->
-    <div class="product-selection">
-        <label for="productSelect">판매 상품 선택:</label>
-        <select id="productSelect" onchange="loadProductDetails(this.value)">
-            <option value="">상품을 선택하세요</option>
-            <c:forEach var="product" items="${products}">
-                <option value="${product.PRODUCTIDX}">${product.NAME} - ${product.CATEGORY} / ${product.SUBCATEGORY}</option> 
-            </c:forEach>
-        </select>
+<body>
+    <main>
+        <h3 style="font-weight:bold; text-align: center;">판매글 등록</h3>
+        <div class="container">
+            <!-- 상품 목록 -->
+            <div class="product-selection">
+                <label for="productSelect">판매 상품 선택:</label>
+                <button type="button" id="product" class="btn btn-primary pick-product" data-bs-toggle="modal" data-bs-target="#pickModal">상품 선택</button>
+            </div>
+            <div id="productDetails"></div>
+            <form method="post" enctype="multipart/form-data" action="/storeMyPage/postingWrite">
+                <div class="form-group">
+                    <label for="title">판매글 제목 : </label>
+                    <input type="text" id="title" name="title" class="form-control" required>
+                </div>
+                <!-- 에디터 영역 -->
+                <textarea id="summernote" name="editordata"></textarea>
+                <div id="hiddenFieldsContainer"></div> <!-- 숨겨진 필드들이 삽입될 위치 -->
+                <div class="button-container">
+                    <button type="submit" class="apply-btn">등록</button>
+                    <a href="/storeMyPage/postingList" class="cancel-btn">목록</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div class="modal fade" id="pickModal" tabindex="-1" aria-labelledby="pickModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content overflow-auto">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pickModalLabel">공고 선택</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="product-pick-table">
+                        <thead>
+                            <tr>
+                                <th>선택</th>
+                                <th>상품명</th>
+                                <th>가격</th>
+                                <th>색상,수량,갯수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="productDetails" items="${productDetails}">
+                            <tr class="productDetails">
+                                <td>
+                                    <input type="checkbox" class="productCheckbox" 
+                                        data-info-idx="${productDetails.PRODUCTINFO_IDX}" 
+                                        data-idx="${productDetails.PRODUCT_IDX}" 
+                                        data-name="${productDetails.NAME}" 
+                                        data-price="${productDetails.PRICE}" 
+                                        data-details="${productDetails.COLORS}/${productDetails.SIZES}/${productDetails.QUANTITIES}개">
+                                </td>
+                                <td>${productDetails.NAME}</td>
+                                <td>${productDetails.PRICE}</td>
+                                <td>${productDetails.COLORS}/${productDetails.SIZES}/${productDetails.QUANTITIES}개</td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="confirmSelectionBtn">선택 확인</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="productDetails">
-    </div>
-
-    <form method="post" enctype="multipart/form-data" action="/storeMyPage/postingWrite">
-        <input type="hidden" id="productIdx" name="productIdx" value="">
-        <div style="display:none;" id="productInfoIdx" name="productInfoIdx"></div>
-       <div class="form-group">
-    <label for="title">판매글 제목 : </label>
-    <input type="text" id="title" name="title" class="form-control" required>
-</div>
-        
-        <!-- 에디터 영역 -->
-        <textarea id="summernote" name="editordata"></textarea>
-        
-                 <div class="button-container">
-			         <button type="submit" class="apply-btn">등록</button>
-                     <a href="/storeMyPage/postingList" class="cancel-btn">목록</a>
-                 </div>
-    </form>
-</div>
-</main>
-<script src="/js/bootstrap.bundle.min.js"></script>
 <script>
-    // 상품 상세 정보 로드 관련
-    function loadProductDetails(productIdx) {
-    if (productIdx === "") {
-        document.getElementById('productDetails').innerHTML = "";
-        return;
-    }
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('confirmSelectionBtn').addEventListener('click', function () {
+        const selectedProductCheckboxes = document.querySelectorAll('.productCheckbox:checked');
+        if (selectedProductCheckboxes.length > 0) {
+            let productDetailsHTML = '<h5>선택된 상품</h5>';
+            let hiddenFieldsHTML = '';
+            selectedProductCheckboxes.forEach((checkbox, index) => {
+            	const productInfoIdx = checkbox.getAttribute('data-info-idx');
+            	const productIdx = checkbox.getAttribute('data-idx');
+            	const productName = checkbox.getAttribute('data-name');
+            	const productPrice = checkbox.getAttribute('data-price');
+            	const productDetails = checkbox.getAttribute('data-details');
 
-    console.log("Selected Product IDX:", productIdx);
+            	productDetailsHTML += `
+            	    <div>
+            	        <p>상품명: ` + productName + `</p>
+            	        <p>가격: ` + productPrice + `</p>
+            	        <p>세부사항: ` + productDetails + `</p>
+            	    </div>
+            	`;
 
-    fetch('/storeMyPage/posting/getProductDetails?productIdx=' + productIdx)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Data received:", data);
-            document.getElementById('productIdx').value = productIdx;
+            	hiddenFieldsHTML += `
+            	    <input type="hidden" name="productInfoIdx` + index + `" value="` + productInfoIdx + `">
+            	    <input type="hidden" name="productIdx` + index + `" value="` + productIdx + `">
+            	`;
 
-            const productInfoIds = data.map(item => item.productInfoIdx).join(', ');
-            document.getElementById('productInfoIdx').textContent = productInfoIds;
+            });
 
-            displayProductDetails(data);
-        })
-        .catch(error => console.error('Error fetching product details:', error));
-		}
-		
-		function displayProductDetails(data) {
-		    console.log("Data received:", data);
-		    const detailsDiv = document.getElementById('productDetails');
-		    let imagesHtml = '';
-		
-		    data.forEach(item => {
-		        if (item.filePaths) {
-		            imagesHtml += item.filePaths.split(', ').map(filePath => {
-		                return '<img src="' + filePath + '" alt="' + item.name + 
-		                '" style="width: 100px; height: 100px; object-fit: cover; margin: 5px;">';
-		            }).join('');
-		        }
-		
-		        detailsDiv.innerHTML += `
-		            <h3>${item.name}</h3>
-		            <p>가격: ${item.price} 원</p>
-		            <p>색상: ${item.colors}</p>
-		            <p>사이즈: ${item.sizes}</p>
-		            <p>재고: ${item.quantities} 개</p>
-		            <div class="images">${imagesHtml}</div>
-		        `;
-		        console.log("HTML set to:", detailsDiv.innerHTML);
-		    });
-		}
+            document.getElementById('productDetails').innerHTML = productDetailsHTML;
+            document.getElementById('hiddenFieldsContainer').innerHTML = hiddenFieldsHTML;
+
+            // 모달 닫기
+            const modal = bootstrap.Modal.getInstance(document.getElementById('pickModal'));
+
+            // 모달 닫힘 이벤트 발생 시 처리
+            modal._element.addEventListener('hidden.bs.modal', function () {
+                document.querySelector('.btn-close').click();
+            });
+
+            modal.hide();
+        } else {
+            alert('상품을 선택해주세요.');
+        }
+    });
+});
 </script>
-
 </body>
 </html>

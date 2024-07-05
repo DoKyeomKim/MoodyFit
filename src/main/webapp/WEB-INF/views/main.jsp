@@ -428,7 +428,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const swiper2 = new Swiper2('.swiper2-container', {
-        slidesPerView: 5,
+        slidesPerView: 2,
         spaceBetween: 50,
         pagination: {
             el: '.swiper2-pagination',

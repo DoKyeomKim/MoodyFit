@@ -10,12 +10,8 @@
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <style>
-.category-best-item{
-	background-color :#fafafa;
-}
 .cateDefault {
 	text-align: center;
-	background-color :#fafafa;
     position: relative;
     height: 50vh;
     overflow: hidden;
@@ -273,8 +269,8 @@
 					    <select id="orderBy" name="orderBy" class="sort-select" onchange="saveScrollPosition(); this.form.submit();">
 					        <option value="newest" ${orderBy == 'newest' ? 'selected' : ''}>최신순</option>
 					        <option value="oldest" ${orderBy == 'oldest' ? 'selected' : ''}>오래된 순</option>
-					        <option value="expensive" ${orderBy == 'expensive' ? 'selected' : ''}>비싼 순</option>
-					        <option value="chip" ${orderBy == 'chip' ? 'selected' : ''}>저렴한 순</option>
+					        <option value="expensive" ${orderBy == 'expensive' ? 'selected' : ''}>가격 높은 순</option>
+					        <option value="chip" ${orderBy == 'chip' ? 'selected' : ''}>가격 낮은 순</option>
 					        <option value="sales" ${orderBy == 'sales' ? 'selected' : ''}>매출순</option>
 					    </select>
 					</form>

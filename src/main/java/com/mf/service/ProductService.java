@@ -74,6 +74,7 @@ public class ProductService {
 
  	    for (ProductOptionDto productOptionDto : productInfos) {
  	        ProductInfoDto productInfoDto = new ProductInfoDto();
+ 	        
  	        productInfoDto.setProductColorIdx(productOptionDto.getColorIdx());
  	        productInfoDto.setProductSizeIdx(productOptionDto.getSizeIdx());
  	        productInfoDto.setProductIdx(productIdx);
@@ -236,10 +237,8 @@ public class ProductService {
         }
         List<Map<String, Object>> productDetailsList = productMapper.getProductDetailsByProductIdxForPosting(productIdx);
         if (productDetailsList == null || productDetailsList.isEmpty()) {
-            System.out.println("상품 정보가 없습니다.");
             return Collections.emptyList();
         } else {
-            System.out.println("상품 정보 로드 성공: " + productDetailsList);
             return productDetailsList;
         }
     }
