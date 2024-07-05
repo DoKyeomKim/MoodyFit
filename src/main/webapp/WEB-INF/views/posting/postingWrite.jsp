@@ -180,6 +180,29 @@ background-color: #333; /* 버튼 배경색 (어두운 회색) */
     #productDetails {
         margin-top: 20px;
     }
+    .product-detail-area {
+        max-width: 600px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin-bottom:30px;
+    }
+    .product-name {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .product-price {
+        font-size: 20px;
+        color: #ff5722;
+        margin-bottom: 15px;
+    }
+    .product-details {
+        font-size: 16px;
+        line-height: 1.5;
+        color: #555;
+    }
 </style>
 </head>
 <%@ include file="/WEB-INF/layouts/mypageheader.jsp" %>
@@ -268,10 +291,10 @@ document.addEventListener('DOMContentLoaded', function () {
             	const productDetails = checkbox.getAttribute('data-details');
 
             	productDetailsHTML += `
-            	    <div>
-            	        <p>상품명: ` + productName + `</p>
-            	        <p>가격: ` + productPrice + `</p>
-            	        <p>세부사항: ` + productDetails + `</p>
+            	    <div class="product-detail-area">
+            	        <p class="product-name">상품명: ` + productName + `</p>
+            	        <p class="product-price">가격: ` + productPrice + `</p>
+            	        <p class="product-details">세부사항: ` + productDetails + `</p>
             	    </div>
             	`;
 
