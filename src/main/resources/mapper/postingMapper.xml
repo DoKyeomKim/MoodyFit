@@ -55,7 +55,7 @@ WITH ranked_files AS (
     JOIN product pro ON pro.product_idx = pr.product_idx
     JOIN product_color pc ON pr.product_color_idx = pc.product_color_idx
     JOIN product_size ps ON pr.product_size_idx = ps.product_size_idx
-    WHERE p.posting_idx = 32
+    WHERE p.posting_idx = #{postingIdx}
 )
 SELECT 
     ds.posting_idx as posting_idx,

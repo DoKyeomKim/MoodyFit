@@ -237,7 +237,7 @@ public class MyPageController {
 		public String getPostingDetail(@RequestParam("postingIdx") Long postingIdx, Model model) throws JsonProcessingException, SQLException {
 		    Map<String, Object> postingInfo = postingService.getPostingInfo(postingIdx);
 		    List<Map<String, Object>> postingDetail = postingService.getPostingDetail(postingIdx);
-
+		    
 		    // 색상별 사이즈 및 관련 인덱스 매핑
 		    Map<String, Map<String, Map<String, Long>>> colorSizeMap = new HashMap<>();
 		    for (Map<String, Object> detail : postingDetail) {
