@@ -61,9 +61,9 @@ public class AdminQnaService {
 		        adminQnaMapper.addQuestion2(qna2dto);		    
 		    }
 
-		public List<Map<String, Object>> getAllQna2s() {
+		public List<Map<String, Object>> getAllQna2s(Long personIdx) {
 			
-			return adminQnaMapper.getAllQna2s();
+			return adminQnaMapper.getAllQna2s(personIdx);
 		}
 
 		public PostingQuestionDto getQna2ByPostingQuestionIdx(Long postingQuestionIdx) {
@@ -83,6 +83,10 @@ public class AdminQnaService {
 
 		public Long getPersonIdxByUserIdx(Long userIdx) {
 			return adminQnaMapper.getPersonIdxByUserIdx(userIdx);
+		}
+
+		public List<Map<String, Object>> getUsersQnas(Long userIdx) {
+			return adminQnaMapper.getUsersQnas(userIdx);
 		}
 
 	

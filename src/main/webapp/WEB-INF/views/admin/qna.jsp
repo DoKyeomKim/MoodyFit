@@ -137,16 +137,16 @@ document.addEventListener("DOMContentLoaded", function() {
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="qna" items="${AdminqnaList}">
+                    <c:forEach var="qnaList" items="${qnaList}">
                         <tr>
-                            <td>${qna.questionIdx}</td>
-                            <td><a href="/qnaDetail?questionIdx=${qna.questionIdx}">${qna.title}</a></td>
-                            <td>${qna.id}</td>
-                            <td>${qna.createDate}</td>
+                            <td>${qnaList.QUESTION_IDX}</td>
+                            <td><a href="/qnaDetail?questionIdx=${qnaList.QUESTION_IDX}">${qnaList.TITLE}</a></td>
+                            <td>${qnaList.ID}</td>
+                            <td>${qnaList.CREATE_DATE}</td>
                             <td>
                             <c:choose>
-                                <c:when test="${qna.state == 1}">답변대기</c:when>
-                                <c:when test="${qna.state == 2}">답변완료</c:when>
+                                <c:when test="${qnaList.STATE == 1}">답변대기</c:when>
+                                <c:when test="${qnaList.STATE == 2}">답변완료</c:when>
                             </c:choose>
                             </td>
                         </tr>

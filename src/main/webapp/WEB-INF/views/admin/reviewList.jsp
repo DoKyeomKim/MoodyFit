@@ -16,7 +16,6 @@
             flex-direction: column;
             justify-content: space-between;
             min-height: 100vh;
-           
         }
 
         .container {
@@ -75,7 +74,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            margin-bottom:70px;
+            margin-bottom: 70px;
         }
 
         .review-item {
@@ -137,45 +136,64 @@
             height: auto;
             margin-top: 10px;
         }
+
+        .review-like-area {
+            margin-top: 10px;
+        }
         
-        .review-like-area{
-           margin-top : 10px;
+        .paging {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .paging a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .paging a.active {
+            color: red;
         }
     </style>
 </head>
-    <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
 <body>
-   <input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
-    <div class="container">
-        <h1 class="head" style="font-size: 18px; margin-top: 30px;">PHOTO REVIEW | 포토 리뷰</h1>
-        <div class="header"></div>
-        <div class="filter-bar">
-            <select id="category">
-                <option value="">카테고리를 선택해주세요</option>
-                <option value="OUTER">OUTER</option>
-                <option value="TOP">TOP</option>
-                <option value="KNIT">KNIT</option>
-                <option value="SHIRTS">SHIRTS</option>
-                <option value="PANTS">PANTS</option>
-                <option value="SHOES">SHOES</option>
-                <option value="BAG">BAG</option>
-                <option value="ACC">ACC</option>
-                <option value="HAT">HAT</option>
-            </select>
+<%@include file="/WEB-INF/layouts/mypageheader.jsp"%> 
+<input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
+<div class="container">
+    <h1 class="head" style="font-size: 18px; margin-top: 30px;">PHOTO REVIEW | 포토 리뷰</h1>
+    <div class="header"></div>
+    <div class="filter-bar">
+        <select id="category">
+            <option value="">카테고리를 선택해주세요</option>
+            <option value="OUTER">OUTER</option>
+            <option value="TOP">TOP</option>
+            <option value="KNIT">KNIT</option>
+            <option value="SHIRTS">SHIRTS</option>
+            <option value="PANTS">PANTS</option>
+            <option value="SHOES">SHOES</option>
+            <option value="BAG">BAG</option>
+            <option value="ACC">ACC</option>
+            <option value="HAT">HAT</option>
+        </select>
 
-            <select id="sort">
-                <option value="latest">최신순</option>
-                <option value="rating">별점순</option>
-                <option value="recommend">추천순</option>
-            </select>
+        <select id="sort">
+            <option value="latest">최신순</option>
+            <option value="rating">별점순</option>
+            <option value="recommend">추천순</option>
+        </select>
 
-            <input type="text" id="search" placeholder="검색어 입력">
-            <button type="button" onclick="searchReviews()">검색</button>
-        </div>
-        <div class="review-list" id="review-list"></div>
+        <input type="text" id="search" placeholder="검색어 입력">
+        <button type="button" onclick="searchReviews()">검색</button>
     </div>
+    <div class="review-list" id="review-list"></div>
+    <div class="paging" id="paging"></div>
+</div>
 <script>
 let reviews = [];
+let currentPage = 1;
+const reviewsPerPage = 9;
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchReviews();
@@ -189,19 +207,24 @@ async function fetchReviews() {
         }
         reviews = await response.json();
         console.log('Fetched Reviews:', reviews);
-        renderReviews(reviews);
+        renderReviews(reviews, currentPage);
+        renderPagination(reviews);
     } catch (error) {
         console.error('리뷰 데이터를 가져오는 데 문제가 발생했습니다:', error);
         alert('리뷰 데이터를 가져오는 데 문제가 발생했습니다. 네트워크 상태를 확인하고 다시 시도해주세요.');
     }
 }
 
-function renderReviews(reviews) {
+function renderReviews(reviews, page) {
     try {
         const reviewList = document.getElementById('review-list');
         reviewList.innerHTML = '';
+        
+        const startIndex = (page - 1) * reviewsPerPage;
+        const endIndex = startIndex + reviewsPerPage;
+        const paginatedReviews = reviews.slice(startIndex, endIndex);
 
-        reviews.forEach(review => {
+        paginatedReviews.forEach(review => {
             console.log('Review Data:', review);
 
             const reviewItem = document.createElement('div');
@@ -318,6 +341,30 @@ function renderReviews(reviews) {
     updateLikesSvgs();
 }
 
+function renderPagination(reviews) {
+    const paging = document.getElementById('paging');
+    paging.innerHTML = '';
+    const pageCount = Math.ceil(reviews.length / reviewsPerPage);
+
+    for (let i = 1; i <= pageCount; i++) {
+        const pageLink = document.createElement('a');
+        pageLink.href = '#';
+        pageLink.textContent = i;
+        if (i === currentPage) {
+            pageLink.classList.add('active');
+        }
+
+        pageLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            currentPage = i;
+            renderReviews(reviews, currentPage);
+            renderPagination(reviews);
+        });
+
+        paging.appendChild(pageLink);
+    }
+}
+
 function searchReviews() {
     try {
         const searchInput = document.getElementById('search').value.toLowerCase();
@@ -346,7 +393,8 @@ function searchReviews() {
             filteredReviews = filteredReviews.sort((a, b) => new Date(b.createDate) - new Date(a.createDate));
         }
 
-        renderReviews(filteredReviews);
+        renderReviews(filteredReviews, 1);
+        renderPagination(filteredReviews);
     } catch (error) {
         console.error('리뷰 검색 및 필터링 도중 문제가 발생했습니다:', error);
     }
@@ -451,7 +499,6 @@ function updateLikeButtonAppearance(button, isLiked) {
     }
 }
 </script>
-
-</body>
 <%@include file="/WEB-INF/layouts/footer.jsp"%>
+</body>
 </html>

@@ -49,7 +49,7 @@
     <aside id="sidebar">
         <nav>
             <ul>
-                <li><a href="/myPage" class="bold">마이페이지</a></li>
+                <li><a href="/storeMyPage" class="bold">마이페이지</a></li>
                 <li><a href="/storeMyPage/productList">상품 리스트</a></li>
                 <li><a href="/storeMyPage/productWrite">상품 등록</a></li>
                 <li><a href="/storeMyPage/postingList">판매 글 리스트</a></li>

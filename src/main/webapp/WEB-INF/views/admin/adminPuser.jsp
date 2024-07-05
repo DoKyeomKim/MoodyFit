@@ -6,12 +6,67 @@
 <meta charset="UTF-8">
 <title>개인회원 관리</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
-<script src="${pageContext.request.contextPath}/scripts.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <style>
-
-
-
+body {
+    font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
+}
+main {
+    width: 90%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    font-size: 15px;
+    margin: auto; /* 수평 중앙 정렬 */
+}
+.table td {
+    padding: 10px;
+    margin: 10px;
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+.container > * {
+    flex: 1;
+    margin-right: 30px;
+}
+.container > *:last-child {
+    margin-right: 0;
+}
+.col-main {
+    flex: 3;
+}
+.col-sidebar {
+    flex: 1;
+    margin-top: 30px;
+}
+.btn-update {
+    background-color: #f4f4f4;
+    color: #333;
+}
+.btn-delete {
+    background-color: #111111;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.hidden { display: none; }
+.paging {
+    margin: 10px 0; /* 위아래 여백 추가 */
+    text-align: center; /* 중앙 정렬 */
+}
+.paging a {
+    margin: 0 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.paging a.active {
+    font-weight: bold;
+}
 </style>
 <script>
 function confirmDelete(event, form) {
@@ -21,16 +76,33 @@ function confirmDelete(event, form) {
     }
 }
 
-window.addEventListener('scroll', function() {
-    var header = document.querySelector('.fixed-header');
-    var logo = document.getElementById('logo');
-    if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-        logo.src = '/images/white_logo.png'; 
-    } else {
-        header.classList.remove('scrolled');
-        logo.src = '/images/logo.png'; 
+$(document).ready(function() {
+    var rowsPerPage = 10;
+    var rows = $('#personTable tbody tr');
+    var rowsCount = rows.length;
+    var pageCount = Math.ceil(rowsCount / rowsPerPage);
+    var numbers = $('.paging');
+
+    for (var i = 1; i <= pageCount; i++) {
+        numbers.append('<a href="#" class="page-link">' + i + '</a>');
     }
+
+    rows.hide();
+    rows.slice(0, rowsPerPage).show();
+    numbers.find('a:first').addClass('active');
+
+    numbers.on('click', 'a', function(e) {
+        e.preventDefault();
+        numbers.find('a').removeClass('active');
+        $(this).addClass('active');
+
+        var page = $(this).text();
+        var start = (page - 1) * rowsPerPage;
+        var end = start + rowsPerPage;
+
+        rows.hide();
+        rows.slice(start, end).show();
+    });
 });
 </script>
 </head>
@@ -53,7 +125,7 @@ window.addEventListener('scroll', function() {
     </div>
 </form>
 <div class="table-container">
-    <table class="table table-bordered">
+    <table id="personTable" class="table table-bordered">
         <thead class="table-secondary">
             <tr>
                 <th>회원번호</th>
@@ -97,6 +169,7 @@ window.addEventListener('scroll', function() {
         </tbody>
     </table>
 </div>
+    <div class="paging"></div>
 </main>
 </body>
 </html>
