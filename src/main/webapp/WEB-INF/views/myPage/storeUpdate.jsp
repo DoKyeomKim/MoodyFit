@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>가맹점 정보수정</title>
+<title>편집샵 정보수정</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     body {
@@ -74,7 +74,7 @@
 
 <main>
 <form action="/storeUpdate" method="post" name="updateForm">
-<h4 class="text-center">가맹점 정보수정</h4>
+<h4 class="text-center">편집샵 정보수정</h4>
 <div class="required-table">
     <div class="required-table-header">필수입력</div>
     <table class="table table-bordered">
@@ -94,7 +94,7 @@
           </td>
         </tr>
         <tr>
-          <th>가맹점명</th>
+          <th>편집샵명</th>
           <td><input type="text" class="form-control" name="storeName" id="name" value="${result.STORE_NAME}"></td>
         </tr>
         <tr>

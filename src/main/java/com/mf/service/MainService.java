@@ -206,7 +206,7 @@ public class MainService {
 		return mainMapper.getPNickNameByUserIdx(userIdx);
 	}
 
-	// 가맹점
+	// 편집샵
 	public String getSNickNameByUserIdx(Long userIdx) {
 		return mainMapper.getSNickNameByUserIdx(userIdx);
 	}

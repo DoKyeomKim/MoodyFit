@@ -24,7 +24,7 @@ public interface EditorPickMapper {
 	
 	// 에디터픽 수정용 정보 들고오기
 	EditorPickDto getEditPickByPickIdx(Long pickIdx);
-	// 가맹점 정보 들고오기
+	// 편집샵 정보 들고오기
 	Map<String, Object> getPostingByPostingIdx(Long postingIdx);
 	
 	// 에디터픽 수정

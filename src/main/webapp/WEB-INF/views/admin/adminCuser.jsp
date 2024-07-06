@@ -104,7 +104,7 @@ $(document).ready(function() {
 </div>
 <main>
 <input type="hidden" value="{store_idx}" id="storeIdx">
-<h3 class="mt-3 text-center">가맹점 관리</h3>
+<h3 class="mt-3 text-center">편집샵 관리</h3>
 <hr class="mb-3">
 <form action="${pageContext.request.contextPath}/admin/userManagement2" method="get" class="search-container">
     <div class="form-group mb-2">
@@ -123,7 +123,7 @@ $(document).ready(function() {
                     <tr>
                         <th>번호</th>
                         <th>아이디</th>
-                        <th>가맹점 이름</th>
+                        <th>편집샵 이름</th>
                         <th>매니저 이름</th>
                         <th>사업자 번호</th>
                         <th>이메일</th>

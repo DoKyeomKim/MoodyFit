@@ -139,7 +139,7 @@ public class MyPageService {
 	
 //===========================================================================================
 	
-	// 가맹점 마이페이지 서비스 로직
+	// 편집샵 마이페이지 서비스 로직
 	public Map<String, Object> getShopMyPage(Long userIdx) {
 		// 상호명과 storeIdx 갖고오기
 		StoreDto store = myPageMapper.getStoreNameByUserIdx(userIdx);
@@ -151,18 +151,18 @@ public class MyPageService {
 		return result;
 	}
 	
-	// 가맹점 마이페이지 매출 탑 들고오기
+	// 편집샵 마이페이지 매출 탑 들고오기
 	public List<Map<String, Object>> getTopPostingByUserIdx(Long userIdx) {
 		return myPageMapper.getTopPosting(userIdx);
 	}
 	
-	// 가맹점 정보 수정용 정보 들고오기
+	// 편집샵 정보 수정용 정보 들고오기
 	public Map<String, Object> getStoreInfo(Long userIdx) {
 		Map<String,Object> result = myPageMapper.getStoreInfo(userIdx);
 		return result;
 	}
 
-	// 가맹점 정보수정
+	// 편집샵 정보수정
 	@Transactional
 	public void storeUpdate(Long userIdx, UsersDto users, StoreDto store) {
 		// 현재 유저 정보 갖고 오기(변경전)
@@ -190,7 +190,7 @@ public class MyPageService {
 	public void userDelete(Long userIdx) {
 		myPageMapper.userDelete(userIdx);
 		
-		// 나중에 if문 추가해서 가맹점회원 공고 내리기까지 추가
+		// 나중에 if문 추가해서 편집샵회원 공고 내리기까지 추가
 		// 개인회원은 장바구니 삭제 정도?
 		// 주문(orders) 관련해서는 유지해야할듯
 	}

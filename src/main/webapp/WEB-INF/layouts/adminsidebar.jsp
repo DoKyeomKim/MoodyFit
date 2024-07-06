@@ -92,7 +92,7 @@
     </button>
     <div class="dropdown-container">
       <a href="adminPuser">개인회원</a>
-      <a href="adminCuser">가맹점</a>
+      <a href="adminCuser">편집샵</a>
     </div>
      <button class="dropdown-btn">카테고리 관리 
       <i class="fa fa-caret-down"></i></button>
@@ -101,7 +101,7 @@
     <a href="adminCategoryUpdate">카테고리 수정</a>
 
     </div>
-    <a href="adminApply">가맹점 공고 관리</a>
+    <a href="adminApply">편집샵 공고 관리</a>
     <a href="adminOrder">주문내역 관리</a>
     <a href="adminSales">판매수익 관리</a>
     <a href="adminReview">리뷰 관리</a>

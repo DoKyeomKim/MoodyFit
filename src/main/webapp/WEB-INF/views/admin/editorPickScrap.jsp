@@ -40,7 +40,7 @@
                  <tr class="${status.index % 2 == 0 ? 'even-row' : 'odd-row'}">
                     <th>공고번호</th>
                     <th>공고명</th>
-                    <th>가맹점명</th>
+                    <th>편집샵명</th>
                     <th>스크랩여부</th>
                 </tr>
             </thead>

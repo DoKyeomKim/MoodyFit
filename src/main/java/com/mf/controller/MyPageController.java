@@ -205,10 +205,10 @@ public class MyPageController {
 	
 	
 //===========================================================================
-//================================ 가맹점 ===================================
+//================================ 편집샵 ===================================
 //===========================================================================
 
-	// 가맹점 마이페이지 메인
+	// 편집샵 마이페이지 메인
 	@GetMapping("/storeMyPage")
 	public ModelAndView storeMyPage(HttpSession session) {
 		ModelAndView mv = new ModelAndView();		
@@ -235,7 +235,7 @@ public class MyPageController {
 		return mv;
 	}
 	
-	// 가맹점 정보 수정페이지
+	// 편집샵 정보 수정페이지
 	@GetMapping("/storeUpdateForm")
 	public ModelAndView storeUpdateForm(HttpSession session) {
 		ModelAndView mv = new ModelAndView();
@@ -249,7 +249,7 @@ public class MyPageController {
 		return mv;
 	}
 	
-	// 가맹점 정보 수정
+	// 편집샵 정보 수정
 	@PostMapping("/storeUpdate")
 	public ModelAndView storeUpdate( HttpSession session,UsersDto users,StoreDto store) {
 		ModelAndView mv = new ModelAndView();

@@ -40,7 +40,7 @@ public class LoginController {
 		return "login/join";
 	}
 	
-	// 가맹점 회원가입 페이지이동
+	// 편집샵 회원가입 페이지이동
 	@GetMapping("/storeJoin")
 	public String storeJoin() {
 		
@@ -56,7 +56,7 @@ public class LoginController {
 		return "redirect:/login";
 	}
 	
-	// 가맹점 회원가입 진행
+	// 편집샵 회원가입 진행
 	@PostMapping("/storeJoinProcess")
 	public String storeJoinProcess(UsersDto usersDto,StoreDto storeDto) {
 		usersService.storeJoinProcess(usersDto,storeDto);

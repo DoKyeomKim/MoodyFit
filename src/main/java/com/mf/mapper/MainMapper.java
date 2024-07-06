@@ -65,7 +65,7 @@ public interface MainMapper {
 	// 개인
 	String getPNickNameByUserIdx(Long userIdx);
 
-	// 가맹점
+	// 편집샵
 	String getSNickNameByUserIdx(Long userIdx);
 	//=========================================
 

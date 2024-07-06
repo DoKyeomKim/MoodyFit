@@ -60,7 +60,7 @@
                                         <img src="/images/company.svg" class="card-img-top w-100 h-100">
                                     </div>
                                     <div class="card-body align-self-center mt-2">
-                                        <h3>가맹점 회원가입</h3>
+                                        <h3>편집샵 회원가입</h3>
                                     </div>
                                 </div>
                             </a>
