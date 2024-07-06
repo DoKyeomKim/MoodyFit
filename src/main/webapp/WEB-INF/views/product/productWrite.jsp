@@ -47,7 +47,11 @@ main {
     overflow: auto;
 }
 
-/* Image preview styling */
+.modal-footer .d-flex {
+    gap: 10px;
+    justify-content: end;
+}
+
 #imagePreviewContainer {
     display: flex;
     flex-wrap: wrap;
@@ -56,27 +60,32 @@ main {
 
 .image-preview {
     position: relative;
-    width: 100px;
-    height: 130px;
+    width: 150px;
+    height: 180px;
+    margin: 10px;
 }
 
 .image-preview img {
-    width: 150px;
-    height: 180px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
 }
 
 .remove-button {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 10px;
+    right: -10px;
     background-color: red;
     color: white;
     border: none;
-    border-radius: 50%;
     cursor: pointer;
     padding: 2px 6px;
-    font-size: 12px;
+    font-size: 15px;
+    border-radius: 0; /* 사각형 디자인 */
+}
+
+.remove-button:hover {
+    background-color: #ffcccc;
 }
 
 .selected-item {
@@ -127,6 +136,12 @@ input[type="number"]:focus {
     margin-right: 100px;
     margin-left: 100px;
     display: flex;
+    writing-mode: horizontal-tb;
+}
+
+.select-btn:hover {
+    background-color: #f0f0f0; 
+    border-color: #b0b0b0; 
 }
 
 .form-group {
@@ -184,6 +199,22 @@ input[type="number"]:focus {
     display: inline-block;
     border-radius: 5px;
 }
+
+/* 모달 상단 X 버튼 제거 */
+.modal-header .close {
+    display: none;
+}
+
+/* 선택 부분 밑줄 제거 */
+.table a {
+    text-decoration: none;
+}
+
+/* 표 형식 간격 맞추기 */
+#productInfoTable th, #productInfoTable td {
+    padding: 10px; /* 간격 조정 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+}
 </style>
 </head>
 <%@ include file="/WEB-INF/layouts/storeAside.jsp"%>
@@ -223,9 +254,6 @@ input[type="number"]:focus {
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="categoryModalLabel">카테고리 선택</h5>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
                             </div>
                             <div class="modal-body">
                                 <!-- 카테고리 리스트 -->
@@ -243,7 +271,7 @@ input[type="number"]:focus {
                             </div>
                             <div class="modal-footer d-flex justify-content-between align-items-center">
                                 <div id="selectedCategoryDisplay" class="selected-item"></div>
-                                <div>
+                                <div class="d-flex gap-2">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                                     <button type="button" class="btn btn-primary" id="applyCategory">적용</button>
                                 </div>
@@ -305,11 +333,10 @@ input[type="number"]:focus {
                 </table>
             </div>
 
-            <div class="form-group">
-						    <label for="productImages"></label>
-						    <button type="button" id="addFileButton" class="btn btn-secondary mt-2">Image 추가</button>
+            <div class="form-group d-flex flex-column align-items-center">
+						    <button type="button" id="addFileButton" class="select-btn">Image 추가</button>
 						    <input type="file" class="form-control" id="productImages" name="productImages" style="display: none;" multiple>
-						    <div id="imagePreviewContainer" class="d-flex flex-wrap mt-2"></div>
+						    <div id="imagePreviewContainer" class="d-flex flex-wrap mt-2 justify-content-center"></div>
 						</div>
 
             <br><br>
@@ -326,9 +353,6 @@ input[type="number"]:focus {
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="colorModalLabel">색상 선택</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
                     <table class="table">
@@ -345,7 +369,7 @@ input[type="number"]:focus {
                 </div>
                 <div class="modal-footer d-flex justify-content-between align-items-center">
                     <div id="selectedColorModalDisplay" class="selected-item"></div>
-                    <div>
+                    <div class="d-flex gap-2">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                         <button type="button" class="btn btn-primary" id="applyColor">적용</button>
                     </div>
@@ -360,8 +384,6 @@ input[type="number"]:focus {
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="sizeModalLabel">사이즈 선택</h5>
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
                     <table class="table">
@@ -378,7 +400,7 @@ input[type="number"]:focus {
                 </div>
                 <div class="modal-footer d-flex justify-content-between align-items-center">
                     <div id="selectedSizeModalDisplay" class="selected-item"></div>
-                    <div>
+                    <div class="d-flex gap-2">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                         <button type="button" class="btn btn-primary" id="applySize">적용</button>
                     </div>
@@ -622,8 +644,6 @@ $(document).ready(function() {
 
     document.getElementById('productImages').addEventListener('change', function(event) {
         handleFileSelect(event);
-   		  // 현재 선택된 product_info_idx를 설정
-        document.getElementById('productInfoIdx').value = selectedSize.sizeIdx;
     });
 
     function handleFileSelect(event) {

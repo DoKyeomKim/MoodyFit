@@ -94,12 +94,9 @@ public class ProductService {
  	        productMapper.insertProductQuantity(productQuantityDto);
  	        System.out.println("Inserted Product Quantity ID: " + productQuantityDto.getProductQuantityIdx());
 
+ 	        saveProductImages(productInfoIdx, productImages);
  	    }
- 	    saveProductImages(productInfoIdx, productImages);
  	}
-
-
-
 
 
     private void saveProductImages(Long productInfoIdx, List<MultipartFile> productImages) {
@@ -109,7 +106,9 @@ public class ProductService {
     		String fileNameScret = System.currentTimeMillis() + "_" + originalFileName; // 파일 이름 변경(시간값 + 기존 이름)
     		String filePath = "/images/" + fileNameScret; // 저장 경로
 
-    	      File dest = new File("C:/dev/images/"+fileNameScret);
+    	      //File dest = new File("C:/dev/images/"+fileNameScret);
+    		  File dest = new File("/Users/sinminjae/dev/images/"+fileNameScret);
+    		
     	      // 만약 해당 위치에 폴더가 없으면 생성
     	      if (!dest.exists()) {
     	         dest.mkdirs();

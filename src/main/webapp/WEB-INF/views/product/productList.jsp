@@ -169,7 +169,6 @@ h3 {
             <table class="table">
                 <thead>
                     <tr >
-                        <th><input type="checkbox" id="select-all"></th>
                         <th>no</th>
                         <th>사진</th>
                         <th>상품명</th>
@@ -184,7 +183,6 @@ h3 {
                 <tbody id="productListBody">
                     <c:forEach var="product" items="${products}">
                     <tr id="productRow_${product.PRODUCT_IDX}">
-                        <td><input type="checkbox" class="select-item"></td>
                         <td>${product.PRODUCT_IDX}</td>
                         <td>
                             <c:choose>
@@ -231,7 +229,6 @@ h3 {
             <table class="table">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" id="select-all-hold"></th>
                         <th>no</th>
                         <th>사진</th>
                         <th>상품명</th>
@@ -246,7 +243,6 @@ h3 {
                 <tbody id="onHoldListBody">
                     <c:forEach var="product" items="${onHoldProducts}">
                     <tr id="productRow_${product.PRODUCT_IDX}">
-                        <td><input type="checkbox" class="select-item"></td>
                         <td>${product.PRODUCT_IDX}</td>
                         <td>
                             <c:choose>
@@ -304,19 +300,6 @@ function openTab(evt, tabName) {
     evt.currentTarget.className += " active";
 }
 
-document.getElementById('select-all').addEventListener('change', function() {
-    const checkboxes = document.querySelectorAll('.select-item');
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
-    });
-});
-
-document.getElementById('select-all-hold').addEventListener('change', function() {
-    const checkboxes = document.querySelectorAll('.select-item');
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
-    });
-});
 
 function editProduct(productIdx) {
     window.location.href = "/storeMyPage/updateForm?productIdx=" + productIdx;
