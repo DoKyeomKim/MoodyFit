@@ -43,7 +43,7 @@ public interface AdminQnaMapper {
 		void addQuestion2(PostingQuestionDto qna2dto);
 
 
-		List<Map<String, Object>> getAllQna2s(Long personIdx);
+		List<Map<String, Object>> getAllQna2s(Long userIdx);
 
 
 		PostingQuestionDto getQna2ByquestionIdx(Long postingQuestionIdx);
@@ -59,6 +59,12 @@ public interface AdminQnaMapper {
 
 
 		List<Map<String, Object>> getUsersQnas(Long userIdx);
+
+
+		List<Map<String, Object>> getAllStoreQna(Long userIdx);
+
+
+		void updateStatePostingQuestion(Long postingQuestionIdx);
 	}
 
 	

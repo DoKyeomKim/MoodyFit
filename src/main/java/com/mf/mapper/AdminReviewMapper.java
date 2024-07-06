@@ -32,4 +32,6 @@ public interface AdminReviewMapper {
 
 	public int getReviewLikeCount(Long postingReviewIdx);
 
+	public List<AdminReviewDto> getReviewsStore(Long postingIdx);
+
 	}

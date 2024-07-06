@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.PostingMapper">
+<select id="getPostingQuestion">
+	select pq.POSTING_QUESTION_IDX, pq.TITLE, pq.CONTENT, pq.CREATE_DATE, pq.STATE, p.nick_name
+	from posting_question pq
+	join person p on p.person_idx = pq.person_idx
+	where posting_idx=#{postingIdx} 
+</select>
 
 <insert id="insertPosting" parameterType="com.mf.dto.PostingDto">
     INSERT INTO posting (posting_idx, title, content, update_date, state, store_idx)

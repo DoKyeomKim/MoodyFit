@@ -86,7 +86,7 @@ SELECT * FROM (
     WHERE e.rn = 1
     GROUP BY a.posting_idx, a.title, d.price, e.file_path, a.update_date, s.store_name
 ) subquery
-WHERE rnum <= 10
+WHERE rnum <= 8
 ]]>
 </select>
 
@@ -95,6 +95,7 @@ select nick_name
 from person
 where user_idx = #{userIdx}
 </select>
+
 <select id="getSNickNameByUserIdx">
 select store_name
 from store
@@ -114,9 +115,10 @@ where user_idx = #{userIdx}
 <!-- 메인홈에서 카테고리 및 서브카테고리로 이동시 = -->
 <select id="getSubCategoriesByCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
 	select sc.*
-		from  sub_category sc
-		join  category c on sc.category_idx = c.category_idx
-		where c.eng_name = #{categoryEngName} 
+	from  sub_category sc
+	join  category c on sc.category_idx = c.category_idx
+	where c.eng_name = #{categoryEngName}
+	order by sub_category_idx asc
 </select>
 
 <select id="getSubCategoryByNameAndCategoryEngName" resultType="com.mf.dto.SubCategoryDto">

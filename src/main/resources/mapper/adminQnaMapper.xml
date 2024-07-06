@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.AdminQnaMapper">
+<select id="getAllStoreQna">
+ SELECT 
+    pq.POSTING_QUESTION_IDX,
+    pq.posting_idx,
+    pq.TITLE,
+    pos.title as posting_title,
+    pq.CREATE_DATE,
+    pq.STATE,
+    p.NAME
+FROM 
+    POSTING_QUESTION pq
+JOIN posting pos ON pos.posting_idx=pq.posting_idx
+JOIN store s ON pos.store_idx =s.store_idx
+JOIN PERSON p ON pq.PERSON_IDX = p.PERSON_IDX
+WHERE 
+    s.USER_IDX = #{userIdx}
+</select>
 <select id="getUsersQnas">
     SELECT 
         CS_QUESTION.QUESTION_IDX AS QUESTION_IDX,
@@ -135,31 +152,38 @@
 <select id="getAllQna2s" resultType="map">
  SELECT 
     pq.POSTING_QUESTION_IDX,
+    pq.posting_idx,
     pq.TITLE,
+    pos.title as posting_title,
     pq.CREATE_DATE,
     pq.STATE,
     p.NAME
 FROM 
     POSTING_QUESTION pq
+JOIN
+	posting pos on pos.posting_idx=pq.posting_idx
 JOIN 
     PERSON p
 ON 
     pq.PERSON_IDX = p.PERSON_IDX
 WHERE 
-    pq.PERSON_IDX = #{personIdx, jdbcType=INTEGER}
-
+    p.USER_IDX = #{userIdx}
 </select>
 
 <select id="getQna2ByquestionIdx" >
     SELECT 
         q.posting_question_idx AS postingQuestionIdx,
         q.title,
-        u.name AS name,
+        u.nick_name AS name,
         q.content,
-        q.create_date AS createDate
-        
+        q.create_date AS createDate,
+        s.user_idx AS user_idx
     FROM 
         posting_question q
+    JOIN
+    	posting p ON q.posting_idx = p.posting_idx
+    JOIN
+    	store s on p.store_idx = s.store_idx
     JOIN 
         person u ON q.person_idx = u.person_idx
     WHERE 
@@ -179,8 +203,13 @@ WHERE
         
         WHERE 
             posting_question_idx = #{postingQuestionIdx}
+        order by posting_answer_idx asc
     </select>
-
+	<update id="updateStatePostingQuestion">
+		update posting_question
+		set state = 2
+		where posting_question_idx =#{postingQuestionIdx}
+	</update>
 	<select id="getPersonIdxByUserIdx">
     select person_idx
     from person

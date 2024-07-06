@@ -87,7 +87,7 @@ tr:hover td {
     border-bottom: 2px solid #867B73;
 }
 
-button {
+.write-btn {
     padding: 15px 40px;
     font-size: 16px;
     border: none;
@@ -97,7 +97,7 @@ button {
     border-radius: 10px !important;
 }
 
-button:hover {
+.write-btn:hover {
     background-color: #E3AAA2;
 }
 </style>
@@ -121,42 +121,76 @@ document.addEventListener("DOMContentLoaded", function() {
 <body style="background-color:#F6F4EE !important;">
     <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
     <main>
-        <h2 class="text-center" style="font-weight:bold; color: #867B73;">상품문의</h2>
+        <h2 class="text-center" style="font-weight:bold; color: #867B73;">내 상품문의</h2>
         <div class="qna-style">
             <a href="/qna">관리자문의</a>
-            <a href="/qna2">상품문의</a>
+            <a href="/myQna">내 상품문의</a>
         </div>
         <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>번호</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>작성일</th>
-                        <th>답변여부</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="qna2" items="${qna2List}">
-                        <tr>
-                            <td>${qna2.POSTING_QUESTION_IDX}</td>
-                            <td><a href="/qnaDetail2?postingQuestionIdx=${qna2.POSTING_QUESTION_IDX}">${qna2.TITLE}</a></td>
-                            <td>${qna2.NAME}</td>
-                            <td>${qna2.CREATE_DATE}</td>
-                            <td>
-                            <c:choose>
-                                <c:when test="${qna2.STATE==1}">답변대기</c:when>
-                                <c:when test="${qna2.STATE==2}">답변완료</c:when>
-                            </c:choose>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </div>
-        <div class="button-container">
-            <button onclick="window.location.href='qnaWrite2'">글쓰기</button>
+        <c:choose>
+	        <c:when test="${sessionScope.role == 'ROLE_PERSON'}">
+		            <table>
+		                <thead>
+		                    <tr>
+		                        <th>번호</th>
+		                        <th>제목</th>
+		                        <th>공고 제목</th>
+		                        <th>작성자</th>
+		                        <th>작성일</th>
+		                        <th>답변여부</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                    <c:forEach var="qna2" items="${qna2List}">
+		                        <tr>
+		                            <td>${qna2.POSTING_QUESTION_IDX}</td>
+		                            <td><a href="/qnaDetail2?postingQuestionIdx=${qna2.POSTING_QUESTION_IDX}">${qna2.TITLE}</a></td>
+		                            <td><a href="/postingDetail?postingIdx=${qna2.POSTING_IDX}">${qna2.POSTING_TITLE}</a></td>
+		                            <td>${qna2.NAME}</td>
+		                            <td>${qna2.CREATE_DATE}</td>
+		                            <td>
+		                            <c:choose>
+		                                <c:when test="${qna2.STATE==1}">답변대기</c:when>
+		                                <c:when test="${qna2.STATE==2}">답변완료</c:when>
+		                            </c:choose>
+		                            </td>
+		                        </tr>
+		                    </c:forEach>
+		                </tbody>
+		            </table>
+	            </c:when>
+                <c:when test="${sessionScope.role == 'ROLE_STORE'}">
+		            <table>
+		                <thead>
+		                    <tr>
+		                        <th>번호</th>
+		                        <th>제목</th>
+		                        <th>공고 제목</th>
+		                        <th>작성자</th>
+		                        <th>작성일</th>
+		                        <th>답변여부</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                    <c:forEach var="qna2" items="${qnaStoreList}">
+		                        <tr>
+		                            <td>${qna2.POSTING_QUESTION_IDX}</td>
+		                            <td><a href="/qnaDetail2?postingQuestionIdx=${qna2.POSTING_QUESTION_IDX}">${qna2.TITLE}</a></td>
+		                            <td><a href="/postingDetail?postingIdx=${qna2.POSTING_IDX}">${qna2.POSTING_TITLE}</a></td>
+		                            <td>${qna2.NAME}</td>
+		                            <td>${qna2.CREATE_DATE}</td>
+		                            <td>
+		                            <c:choose>
+		                                <c:when test="${qna2.STATE==1}">답변대기</c:when>
+		                                <c:when test="${qna2.STATE==2}">답변완료</c:when>
+		                            </c:choose>
+		                            </td>
+		                        </tr>
+		                    </c:forEach>
+		                </tbody>
+		            </table>
+		       </c:when>
+            </c:choose>
         </div>
     </main>
 </body>

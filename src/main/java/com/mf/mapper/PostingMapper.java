@@ -21,4 +21,5 @@ public interface PostingMapper {
 	List<Map<String, Object>> getPostingDetail(Long postingIdx);
 	Map<String, Object> getPostingInfo(Long postingIdx);
     void addPostingBuy(@Param("userIdx") Long userIdx, @Param("productInfoIdx") Long productInfoIdx, @Param("postingProductIdx") Long postingProductIdx);
+	List<Map<String, Object>> getPostingQuestion(Long postingIdx);
 }

@@ -283,7 +283,7 @@
     	if(!emailInputEl.value.trim()){
     		output4El.innerHTML = "<small style='color:red'>이메일을 입력해주세요.</small>";
     		emailCheckPassed = false;
-    		checkFormValidity();
+    		updateSubmitButtonState();
     		return;
     	}
     	
@@ -298,12 +298,12 @@
             } else {
                 emailCheckPassed = false;
             }
-            checkFormValidity();
+            updateSubmitButtonState();
         })
         .catch(error => {
             console.error('Error:', error);
             emailCheckPassed = false;
-            checkFormValidity();
+            updateSubmitButtonState();
         });
     }
 
@@ -417,6 +417,7 @@
                 document.getElementById("sample6_address").value = addr;
                 // 커서를 상세주소 필드로 이동한다.
                 document.getElementById("sample6_detailAddress").focus();
+                updateSubmitButtonState();
             }
         }).open();
     }
@@ -505,5 +506,25 @@ document.querySelector('form[name="joinForm"]').onsubmit = function(event) {
     }
 }
 </script>
+<script>
+document.getElementById('phone').addEventListener('input', function (e) {
+    // 현재 입력된 값에서 숫자만 추출
+    let numbers = e.target.value.replace(/\D/g, '');
+    
+    // 하이픈(-)을 추가한 전화번호 포맷 생성
+    let formattedNumber = '';
+    if (numbers.length <= 3) {
+        formattedNumber = numbers;
+    } else if (numbers.length <= 7) {
+        formattedNumber = numbers.slice(0, 3) + '-' + numbers.slice(3);
+    } else {
+        formattedNumber = numbers.slice(0, 3) + '-' + numbers.slice(3, 7) + '-' + numbers.slice(7, 11);
+    }
+
+    // 포맷된 번호를 입력 필드에 설정
+    e.target.value = formattedNumber;
+});
+</script>
+
 </body>
 </html>

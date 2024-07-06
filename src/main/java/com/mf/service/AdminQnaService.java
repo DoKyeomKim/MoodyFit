@@ -61,9 +61,9 @@ public class AdminQnaService {
 		        adminQnaMapper.addQuestion2(qna2dto);		    
 		    }
 
-		public List<Map<String, Object>> getAllQna2s(Long personIdx) {
+		public List<Map<String, Object>> getAllQna2s(Long userIdx) {
 			
-			return adminQnaMapper.getAllQna2s(personIdx);
+			return adminQnaMapper.getAllQna2s(userIdx);
 		}
 
 		public PostingQuestionDto getQna2ByPostingQuestionIdx(Long postingQuestionIdx) {
@@ -76,9 +76,10 @@ public class AdminQnaService {
 			return adminQnaMapper.getAnswers2ByPostingQuestionIdx(postingQuestionIdx);
 		}
 
-		public void addAnswer2(PostingAnswerDto answer2Dto) {
+		@Transactional
+		public void addAnswer2(PostingAnswerDto answer2Dto, Long postingQuestionIdx) {
 			adminQnaMapper.insertAnswer2(answer2Dto);
-			
+			adminQnaMapper.updateStatePostingQuestion(postingQuestionIdx);
 		}
 
 		public Long getPersonIdxByUserIdx(Long userIdx) {
@@ -87,6 +88,10 @@ public class AdminQnaService {
 
 		public List<Map<String, Object>> getUsersQnas(Long userIdx) {
 			return adminQnaMapper.getUsersQnas(userIdx);
+		}
+
+		public List<Map<String, Object>> getAllStoreQna(Long userIdx) {
+			return adminQnaMapper.getAllStoreQna(userIdx);
 		}
 
 	

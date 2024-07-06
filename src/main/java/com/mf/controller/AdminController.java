@@ -3,6 +3,7 @@ package com.mf.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -36,6 +40,7 @@ import com.mf.dto.CategoryDto;
 import com.mf.dto.CsFaqDto;
 import com.mf.dto.CsQnaDto;
 import com.mf.dto.EditorPickDto;
+import com.mf.dto.NearbyDto;
 import com.mf.dto.Paging;
 import com.mf.dto.PersonDto;
 import com.mf.dto.PostingAnswerDto;
@@ -306,6 +311,9 @@ public class AdminController {
 	    @ResponseBody
 	    public ResponseEntity<Map<String, Boolean>> addReview(@RequestPart("reviewDto") AdminReviewDto reviewDto, @RequestPart("file") MultipartFile file,
 	    		@ModelAttribute("qnaDTO") PostingQuestionDto qna2DTO, HttpSession session) {
+	    	System.out.println(reviewDto);
+	    	System.out.println(file);
+	    	System.out.println(qna2DTO);
 	        Map<String, Boolean> response = new HashMap<>();
 	            if (!file.isEmpty()) {
 	                // 사진 파일 이름
@@ -316,7 +324,7 @@ public class AdminController {
 	                String filePath = "/images/" + fileNameScret;
 	                Long fileSize = file.getSize();
 	                // 파일 해당 위치에 저장
-	                File dest = new File("/Users/sinminjae/dev/images/" + fileNameScret);
+	    	        File dest = new File("C:/dev/images/"+fileNameScret);
 	                // 만약 해당 위치에 폴더가 없으면 생성
 	                if (!dest.exists()) {
 	                    dest.mkdirs();
@@ -457,17 +465,39 @@ public class AdminController {
 			mv.setViewName("/admin/reviewList");
 			return mv;
 		}
-		  //상품문의 페이지
-				@GetMapping("/qna2")
-				public  ModelAndView   qna2(HttpSession session) {
-					ModelAndView    mv    = new ModelAndView("qna2");
-					Long personIdx = (Long) session.getAttribute("personIdx");
-					 List<Map<String,Object>> qna2List = adminQnaService.getAllQna2s(personIdx);
-					 mv.addObject("qna2List",qna2List);
-					mv.setViewName("/admin/qna2");
-					
-					return mv;
-				}
+		
+		
+		//상품문의 페이지
+		@GetMapping("/myQna")
+		public  ModelAndView   myQna(HttpSession session) {
+			ModelAndView    mv    = new ModelAndView();
+			Long userIdx = (Long) session.getAttribute("userIdx");
+			
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (authentication != null && authentication.isAuthenticated()) {
+			    // 사용자의 권한 확인
+			    for (GrantedAuthority authority : authentication.getAuthorities()) {
+			        if ("ROLE_PERSON".equals(authority.getAuthority())) {
+			        	
+						 List<Map<String,Object>> qna2List = adminQnaService.getAllQna2s(userIdx);
+						 mv.addObject("qna2List",qna2List);
+			            
+			            break;
+			        } else if ("ROLE_STORE".equals(authority.getAuthority())) {
+			        	
+			        	 List<Map<String,Object>> qnaStoreList = adminQnaService.getAllStoreQna(userIdx);
+			        	 mv.addObject("qnaStoreList", qnaStoreList);
+			            break;
+			        } 
+			    }
+			}
+			
+			
+			
+			 mv.setViewName("/admin/qna2");
+			
+			 return mv;
+		}
 				
 			
 				   	   
@@ -478,12 +508,18 @@ public class AdminController {
 				
 				 //상품문의 페이지
 				@GetMapping("/qnaWrite2")
-				public  ModelAndView   qnaWrite2() {
+				public  ModelAndView   qnaWrite2(@RequestParam("postingIdx") Long postingIdx) {
 					ModelAndView    mv    = new ModelAndView("qnaWrite2");
+					
+					if(postingIdx!=null) {
+						mv.addObject("postingIdx", postingIdx);
+					}
 					
 					mv.setViewName("/admin/qnaWrite2");
 					return mv;
 				}
+
+				
 				 //상품문의 작성 페이지
 				   @PostMapping("/qnaWrite2")
 				    public String addQuestion2(@ModelAttribute("qnaDTO") PostingQuestionDto qna2DTO, HttpSession session) {
@@ -491,7 +527,7 @@ public class AdminController {
 				        Long personIdx = adminQnaService.getPersonIdxByUserIdx(userIdx);
 				        qna2DTO.setPersonIdx(personIdx);
 				        adminQnaService.addQuestion2(qna2DTO, personIdx);
-				        return "redirect:/qna2"; // qna 목록 페이지로 리다이렉트 
+				        return "redirect:/myQna"; // qna 목록 페이지로 리다이렉트 
 				    }
 	    
 //가맹점회원 페이지
@@ -622,6 +658,7 @@ public class AdminController {
 	        
 	        // FAQ 객체를 가져와서 모델에 추가
 	        PostingQuestionDto qna2DTO = adminQnaService.getQna2ByPostingQuestionIdx(postingQuestionIdx);
+	        
 	        if (qna2DTO == null) {
 	            // questionIdx로 FAQ를 찾지 못한 경우 처리
 	            System.out.println("QnA not found for PostingQuestionIdx: " + postingQuestionIdx);
@@ -644,7 +681,7 @@ public class AdminController {
 	        answer2Dto.setTitle(title);
 	        answer2Dto.setContent(content);
 	        
-	        adminQnaService.addAnswer2(answer2Dto);
+	        adminQnaService.addAnswer2(answer2Dto,postingQuestionIdx);
 	        
 	        return "redirect:/qnaDetail2?postingQuestionIdx=" + postingQuestionIdx;
 	    }
