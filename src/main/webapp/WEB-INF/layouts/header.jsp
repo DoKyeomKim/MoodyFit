@@ -186,8 +186,7 @@ main {
                         <li><a class="dropdown-item" href="/nearbyList">지역별 검색</a></li>
                         <li><a class="dropdown-item" href="/faq">FAQ</a></li>
                         <li><a class="dropdown-item" href="/qna">QNA</a></li>
-                        <li><a class="dropdown-item" href="/review">Review</a></li>
-                        <li><a class="dropdown-item" href="/reviewList">Review리스트</a></li>
+                        <li><a class="dropdown-item" href="/reviewList">Review</a></li>
                     </ul>
                 </div>
             </div>

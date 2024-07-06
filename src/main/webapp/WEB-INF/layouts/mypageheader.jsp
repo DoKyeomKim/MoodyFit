@@ -185,7 +185,7 @@ main {
                     <ul class="dropdown-menu" aria-labelledby="communityDropdown">
                         <li><a class="dropdown-item" href="/faq">FAQ</a></li>
                         <li><a class="dropdown-item" href="/qna">QNA</a></li>
-                        <li><a class="dropdown-item" href="/review">Review</a></li>
+                        <li><a class="dropdown-item" href="/reviewList">Review</a></li>
                     </ul>
                 </div>
             </div>

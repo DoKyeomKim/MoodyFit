@@ -530,7 +530,7 @@ public class AdminController {
 				        return "redirect:/myQna"; // qna 목록 페이지로 리다이렉트 
 				    }
 	    
-//가맹점회원 페이지
+		//가맹점회원 페이지
 	   @GetMapping("/adminCuser")
 	   public ModelAndView adminCuser() {
 		   ModelAndView mv = new ModelAndView("adminCuser");
