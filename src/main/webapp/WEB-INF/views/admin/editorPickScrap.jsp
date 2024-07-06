@@ -48,7 +48,7 @@
                 <c:forEach var="EPScrap" items="${EPScrap}">    
                     <tr class="posting-info">
                         <td>${EPScrap.POSTING_IDX}</td>
-                        <td><a href="/postingDetail?postingIdx=${EPScrap.POSTING_IDX}">${EPScrap.TITLE}</a></td>
+                        <td><a href="/postingDetail?postingIdx=${EPScrap.POSTING_IDX}" style="text-decoration: none; color: black;">${EPScrap.TITLE}</a></td>
                         <td>${EPScrap.STORE_NAME}</td>
                         <td>
 	                   		<button class="btn btn-outline-secondary editorBtn" style="margin-right: 5px;" data-user-idx="${sessionScope.userIdx}" data-posting-idx="${EPScrap.POSTING_IDX}">

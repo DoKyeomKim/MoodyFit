@@ -34,6 +34,7 @@ a:hover {
     width: 30%;
     text-align: center;
 }
+
 .btn-outline-primary:hover {
     background-color: #ccc;
     text-decoration: none;
@@ -50,8 +51,6 @@ a:hover {
     border-color: #999; /* 원하는 테두리 색상으로 변경 */
 }
 
-
-
 .page-item.active .page-link {
     background-color: black;
     border-color: black;
@@ -65,104 +64,7 @@ a:hover {
 .page-link:hover {
     color: #0056b3; /* 호버 시 링크 색상 변경 */
 }
-
 </style>
-
-<script>
-function confirmDelete(event, form) {
-    event.preventDefault();
-    if (confirm('정말로 삭제하시겠습니까?')) {
-        form.submit();
-    }
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    var editorPicks = document.querySelectorAll(".editorPick-info");
-
-    editorPicks.forEach(function(editorPick) {
-        var startDateElem = editorPick.querySelector(".start-date");
-        var endDateElem = editorPick.querySelector(".end-date");
-        var postingStatusElem = editorPick.querySelector(".posting-status");
-
-        var startDate = new Date(startDateElem.textContent.trim());
-        var endDate = new Date(endDateElem.textContent.trim());
-        var currentDate = new Date();
-
-        var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        var startDateStr = startDate.toLocaleDateString('ko-KR', options);
-        var endDateStr = endDate.toLocaleDateString('ko-KR', options);
-
-        startDateElem.textContent = startDateStr;
-        endDateElem.textContent = endDateStr;
-
-        if (currentDate >= startDate && currentDate <= endDate) {
-            postingStatusElem.checked = true;
-        } else {
-            postingStatusElem.checked = false;
-        }
-    });
-});
-
-function sortTable(columnIndex) {
-    var table, rows, switching, i, x, y, shouldSwitch, direction, switchCount = 0;
-    table = document.querySelector(".table");
-    switching = true;
-
-    if (!sortDirections[columnIndex]) {
-        direction = "asc";
-    } else {
-        direction = sortDirections[columnIndex];
-    }
-
-    while (switching) {
-        switching = false;
-        rows = table.rows;
-        for (i = 1; i < (rows.length - 1); i++) {
-            shouldSwitch = false;
-            if (columnIndex === 0) {
-                x = rows[i].querySelector(".posting-status");
-                y = rows[i + 1].querySelector(".posting-status");
-                if (direction === "asc") {
-                    if (!x.checked && y.checked) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                } else if (direction === "desc") {
-                    if (x.checked && !y.checked) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                }
-            } else {
-                x = rows[i].getElementsByTagName("TD")[columnIndex];
-                y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
-                if (direction === "asc") {
-                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                } else if (direction === "desc") {
-                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                }
-            }
-        }
-        if (shouldSwitch) {
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-            switchCount++;
-        } else {
-            if (switchCount === 0 && direction === "asc") {
-                direction = "desc";
-                switching = true;
-            }
-        }
-    }
-    sortDirections[columnIndex] = direction === "asc" ? "desc" : "asc";
-}
-</script>
 </head>
 <body>
 <%@include file="/WEB-INF/layouts/adminheader.jsp"%> 
@@ -230,5 +132,102 @@ function sortTable(columnIndex) {
         <a href="/EPWriteForm" class="btn btn-outline-primary" style="width: 300px;">작성하기</a>
     </div>
 </main>
+<script>
+function confirmDelete(event, form) {
+    event.preventDefault();
+    if (confirm('정말로 삭제하시겠습니까?')) {
+        form.submit();
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var editorPicks = document.querySelectorAll(".editorPick-info");
+
+    editorPicks.forEach(function(editorPick) {
+        var startDateElem = editorPick.querySelector(".start-date");
+        var endDateElem = editorPick.querySelector(".end-date");
+        var postingStatusElem = editorPick.querySelector(".posting-status");
+
+        var startDate = new Date(startDateElem.textContent.trim());
+        var endDate = new Date(endDateElem.textContent.trim());
+        var currentDate = new Date();
+
+        var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        var startDateStr = startDate.toLocaleDateString('ko-KR', options);
+        var endDateStr = endDate.toLocaleDateString('ko-KR', options);
+
+        startDateElem.textContent = startDateStr;
+        endDateElem.textContent = endDateStr;
+
+        if (currentDate >= startDate && currentDate <= endDate) {
+            postingStatusElem.checked = true;
+        } else {
+            postingStatusElem.checked = false;
+        }
+    });
+});
+
+var sortDirections = [];
+
+function sortTable(columnIndex) {
+    var table, rows, switching, i, x, y, shouldSwitch, direction, switchCount = 0;
+    table = document.querySelector(".table");
+    switching = true;
+
+    if (!sortDirections[columnIndex]) {
+        direction = "asc";
+    } else {
+        direction = sortDirections[columnIndex];
+    }
+
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+        for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            if (columnIndex === 0) {
+                x = rows[i].querySelector(".posting-status");
+                y = rows[i + 1].querySelector(".posting-status");
+                if (direction === "asc") {
+                    if (!x.checked && y.checked) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (direction === "desc") {
+                    if (x.checked && !y.checked) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            } else {
+                x = rows[i].getElementsByTagName("TD")[columnIndex];
+                y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+                if (direction === "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (direction === "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            switchCount++;
+        } else {
+            if (switchCount === 0 && direction === "asc") {
+                direction = "desc";
+                switching = true;
+            }
+        }
+    }
+    sortDirections[columnIndex] = direction === "asc" ? "desc" : "asc";
+}
+</script>
 </body>
 </html>
