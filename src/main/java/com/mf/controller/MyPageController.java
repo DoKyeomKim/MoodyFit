@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.sql.Clob;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -261,6 +264,30 @@ public class MyPageController {
 		mv.setViewName("redirect:/storeMyPage");
 		return mv;
 	}
+	
+	// 편집샵 주문 받은 내역
+    @GetMapping("/postingOrders")
+    public String postingOrders(Model model, HttpSession session) {
+        Long userIdx = (Long) session.getAttribute("userIdx");
+
+        List<Map<String, Object>> postingOrders = myPageService.getOrdersByUserIdx(userIdx);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        // order_date를 파싱하여 변환
+        for (Map<String, Object> order : postingOrders) {
+            Object originalDateObj = order.get("ORDER_DATE");
+            if (originalDateObj instanceof java.sql.Timestamp) {
+                java.sql.Timestamp originalTimestamp = (java.sql.Timestamp) originalDateObj;
+                String formattedDateStr = outputFormat.format(new Date(originalTimestamp.getTime()));
+                order.put("ORDER_DATE", formattedDateStr);
+            }
+        }
+
+        model.addAttribute("postingOrders", postingOrders);
+
+        return "myPage/postingOrders";
+    }
+
 	
 	
 	//==========================공통============================================

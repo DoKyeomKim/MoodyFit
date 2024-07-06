@@ -54,7 +54,7 @@
                 <li><a href="/storeMyPage/productWrite">상품 등록</a></li>
                 <li><a href="/storeMyPage/postingList">판매 글 리스트</a></li>
                 <li><a href="/storeMyPage/postingWrite">판매 글 등록</a></li>
-                <li><a href="/storeMyPage/postingStatus">판매 글 신청 현황</a></li>
+                <li><a href="/postingOrders">내 주문 현황</a></li>
                 <li><a href="/storeUpdateForm">정보 수정</a></li>
             </ul>
         </nav>
