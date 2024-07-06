@@ -217,10 +217,12 @@ public class MyPageController {
 		
 		// 마이페이지 로직처리
 		Map<String, Object> result = myPageService.getShopMyPage(userIdx);
+		List<Map<String,Object>> topPosting =myPageService.getTopPostingByUserIdx(userIdx);
 		
 		// 서비스에서 넘어온 store안에 들어가 있는 store_idx와 store_name 꺼내기
 		StoreDto store = (StoreDto) result.get("store");
 		
+		mv.addObject("topPosting", topPosting);
 		mv.addObject("store", store);
 		mv.setViewName("myPage/storeMyPage");
 		return mv;

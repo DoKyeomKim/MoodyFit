@@ -67,7 +67,52 @@ main {
   color: #333;
   margin-bottom: 20px;
 }
+.top-posting {
+    text-align: left;
+    margin: 20px;
+    border: 0.5px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.top-posting:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.top-post-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.top-post-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+.top-price {
+    font-size: 17px;
+    font-weight: bold;
+}
+.top-store-name {
+    opacity: 0.7;
+}
+.top-post-image {
+    height: 260px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+}
 
+.top-post-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    margin: 0;
+}
 </style>
 
 </head>
@@ -104,6 +149,31 @@ main {
         </div>
         <div class="my-postings">
             <h2>제품 판매 순위</h2>
+            <c:choose>
+            <c:when test="${not empty topPosting }">
+	        <c:forEach var="topPosting" items="${topPosting}">
+	            <div class="col-md-3 mt-3 mb-3 top-posting-area">
+	                <div class="top-posting">
+	                    <a class="text-decoration-none text-dark" href="/postingDetail?postingIdx=${topPosting.POSTING_IDX}">
+	                        <div class="top-post-image">
+	                            <img src="${topPosting.FILE_PATH}" class="img-fluid" alt="${topPosting.TITLE}">
+	                        </div>
+	                        <div class="top-post-title">${topPosting.TITLE}</div>
+	                        <div class="top-post-info">
+	                            <div class="top-price">${topPosting.PRICE}원</div>
+	                            <div class="top-store-name">${topPosting.STORE_NAME}</div>
+	                        </div>
+	                    </a>
+	                </div>
+	            </div>
+	        </c:forEach>
+	        </c:when>
+	        <c:otherwise>
+	        	<div style="text-align:center; margin-top : 50px;">
+	        		<h3> 아직 제품을 판매되지 않았습니다!</h3>
+	        	</div>
+	        </c:otherwise>
+	        </c:choose>
         </div>
 </div>
 </div>

@@ -76,6 +76,8 @@ public interface MyPageMapper {
 	// 쿠키 공고 들고오기
 	Map<String, Object> getPostingByPostingIdx(Long postingIdx);
 
+	List<Map<String, Object>> getTopPosting(Long userIdx);
+
 
 
 
