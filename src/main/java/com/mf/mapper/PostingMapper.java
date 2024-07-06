@@ -17,6 +17,11 @@ public interface PostingMapper {
     void insertPostingFile(PostingFileDto postingFileDto);
     List<Map<String, Object>> getAllProductDetailsWithInventory(Long userIdx);
     
+    List<Map<String, Object>> getAllPostingDetails(Long storeIdx);
+	List<Map<String, Object>> getOnHoldPostingDetails(Long storeIdx);
+	void updatePostingState(@Param("postingIdx") Long postingIdx, @Param("state") int state);
+
+    
     // 상세보기 로드
 	List<Map<String, Object>> getPostingDetail(Long postingIdx);
 	Map<String, Object> getPostingInfo(Long postingIdx);

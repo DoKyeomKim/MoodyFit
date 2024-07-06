@@ -1,5 +1,6 @@
 package com.mf.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -196,6 +197,24 @@ public class MyPageService {
 
 	public Map<String, Object> getPostingByPostingIdx(Long postingIdx) {
 		return myPageMapper.getPostingByPostingIdx(postingIdx);
+	}
+
+	public Map<String, Integer> getCounts(Long userIdx) {
+		
+		Map<String, Integer> getCounts = new HashMap<>();
+		
+		int postingCount = myPageMapper.getPostingCount(userIdx);
+		int productCount = myPageMapper.getProductCount(userIdx);
+		int orderCount = myPageMapper.getOrderCount(userIdx);
+		int totalRevenue = myPageMapper.getTotalRevenue(userIdx);
+
+		getCounts.put("postingCount", postingCount);
+		getCounts.put("productCount", productCount);
+		getCounts.put("orderCount", orderCount);
+		getCounts.put("totalRevenue", totalRevenue);
+		
+		
+		return getCounts;
 	}
 
 

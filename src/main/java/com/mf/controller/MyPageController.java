@@ -217,11 +217,18 @@ public class MyPageController {
 		
 		// 마이페이지 로직처리
 		Map<String, Object> result = myPageService.getShopMyPage(userIdx);
+		// 내 매출 상위 제품
 		List<Map<String,Object>> topPosting =myPageService.getTopPostingByUserIdx(userIdx);
+		// 마이페이지 정보용
+		Map<String, Integer> getCounts = myPageService.getCounts(userIdx);
+		
 		
 		// 서비스에서 넘어온 store안에 들어가 있는 store_idx와 store_name 꺼내기
 		StoreDto store = (StoreDto) result.get("store");
-		
+		mv.addObject("postingCount", getCounts.get("postingCount"));
+		mv.addObject("productCount", getCounts.get("productCount"));
+		mv.addObject("orderCount", getCounts.get("orderCount"));
+		mv.addObject("totalRevenue", getCounts.get("totalRevenue"));
 		mv.addObject("topPosting", topPosting);
 		mv.addObject("store", store);
 		mv.setViewName("myPage/storeMyPage");

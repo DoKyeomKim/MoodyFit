@@ -4,12 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.mf.dto.PostingDto;
 import com.mf.service.PostingService;
@@ -111,6 +116,78 @@ public class PostingController {
         return "redirect:/storeMyPage/postingList";
     }
     
+    @GetMapping("postingList")
+    public ModelAndView postingList(HttpSession session) {
+        ModelAndView mv = new ModelAndView();
+        Long userIdx = (Long) session.getAttribute("userIdx");
+        Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
+
+        List<Map<String, Object>> postings = postingService.getAllPostingDetails(storeIdx);
+        List<Map<String, Object>> onHoldPostings = postingService.getOnHoldPostingDetails(storeIdx);
+
+        for (Map<String, Object> posting : postings) {
+            String filePaths = (String) posting.get("FILE_PATHS");
+            if (filePaths != null) {
+                posting.put("FILE_PATHS", Arrays.asList(filePaths.split(", ")));
+            } else {
+                posting.put("FILE_PATHS", Collections.emptyList());
+            }
+        }
+
+        for (Map<String, Object> posting : onHoldPostings) {
+            String filePaths = (String) posting.get("FILE_PATHS");
+            if (filePaths != null) {
+                posting.put("FILE_PATHS", Arrays.asList(filePaths.split(", ")));
+            } else {
+                posting.put("FILE_PATHS", Collections.emptyList());
+            }
+        }
+
+        mv.addObject("postings", postings);
+        mv.addObject("onHoldPostings", onHoldPostings);
+        mv.setViewName("posting/postingList");
+        return mv;
+    }
+
+    @GetMapping("/postingListData")
+    @ResponseBody
+    public Map<String, Object> postingListData(HttpSession session) {
+        Long userIdx = (Long) session.getAttribute("userIdx");
+        Long storeIdx = productService.getStoreIdxByUserIdx(userIdx);
+
+        List<Map<String, Object>> postings = postingService.getAllPostingDetails(storeIdx);
+        List<Map<String, Object>> onHoldPostings = postingService.getOnHoldPostingDetails(storeIdx);
+
+        for (Map<String, Object> posting : postings) {
+            String filePaths = (String) posting.get("FILE_PATHS");
+            if (filePaths != null) {
+                posting.put("FILE_PATHS", Arrays.asList(filePaths.split(", ")));
+            } else {
+                posting.put("FILE_PATHS", Collections.emptyList());
+            }
+        }
+
+        for (Map<String, Object> posting : onHoldPostings) {
+            String filePaths = (String) posting.get("FILE_PATHS");
+            if (filePaths != null) {
+                posting.put("FILE_PATHS", Arrays.asList(filePaths.split(", ")));
+            } else {
+                posting.put("FILE_PATHS", Collections.emptyList());
+            }
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("postings", postings);
+        response.put("onHoldPostings", onHoldPostings);
+        return response;
+    }
+
+	    @PostMapping("/updatePostingState")
+	    @ResponseBody
+	    public ResponseEntity<Void> updatePostingState(@RequestParam("postingIdx") Long postingIdx, @RequestParam("state") int state) {
+	        postingService.updatePostingState(postingIdx, state);
+	        return ResponseEntity.ok().build();
+	    }
 
 
     @RequestMapping(value = "/uploadSummernoteImageFile", produces = "application/json; charset=utf8")

@@ -116,5 +116,52 @@ WHERE p.posting_idx = #{postingIdx}
         #{productInfoIdx}
     )
 </insert>
+<select id="getAllPostingDetails" parameterType="long" resultType="java.util.HashMap">
+    SELECT 
+        p.posting_idx AS posting_idx,
+        p.title AS title,
+        TO_CHAR(p.update_date, 'YYYY.MM.DD') AS update_date,
+        p.state AS state,
+        p.store_idx AS store_idx,
+        pd.price AS price,
+        sc.kor_name AS sub_category,
+        c.kor_name AS category,
+        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS file_paths,
+        LISTAGG(pc.color || ' ' || ps.sizes || ' (' || pq.quantity || '개)', ', ') WITHIN GROUP (ORDER BY pp.posting_product_idx) AS inventory
+    FROM posting p
+    LEFT JOIN posting_product pp ON p.posting_idx = pp.posting_idx
+    LEFT JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+    LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
+    LEFT JOIN product pd ON pi.product_idx = pd.product_idx
+    LEFT JOIN sub_category sc ON pd.sub_category_idx = sc.sub_category_idx
+    LEFT JOIN category c ON sc.category_idx = c.category_idx
+    LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+    LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+    LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+    WHERE p.store_idx = #{storeIdx} AND p.state != 2
+    GROUP BY p.posting_idx, p.title, p.update_date, p.state, p.store_idx, pd.price, sc.kor_name, c.kor_name
+</select>
+
+
+<select id="getOnHoldPostingDetails" parameterType="long" resultType="java.util.HashMap">
+    SELECT 
+        p.posting_idx AS posting_idx,
+        p.title AS title,
+        p.update_date AS update_date,
+        p.state AS state,
+        p.store_idx AS store_idx,
+        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.posting_file_idx) AS file_paths
+    FROM posting p
+    LEFT JOIN posting_file pf ON p.posting_idx = pf.posting_idx
+    WHERE p.store_idx = #{storeIdx} AND p.state = 0
+    GROUP BY p.posting_idx, p.title, p.update_date, p.state, p.store_idx
+</select>
+
+<update id="updatePostingState" parameterType="map">
+    UPDATE posting
+    SET state = #{state}
+    WHERE posting_idx = #{postingIdx}
+</update>
+
 
 </mapper>
