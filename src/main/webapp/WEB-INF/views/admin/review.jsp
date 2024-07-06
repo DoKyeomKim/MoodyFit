@@ -117,12 +117,19 @@
         .open-modal-button {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
+            background-color: #E5AAA3;
+            color: white;
             text-decoration: none;
             border-radius: 4px;
             cursor: pointer;
+            border: none; 
         }
+        .open-modal-button:hover {
+		    background-color: #E3AAA2;
+		    color : #ccc;
+        }
+        
+        
         .option-group {
             display: flex;
             align-items: center;
@@ -170,8 +177,6 @@
     </style>
 </head>
 <body>
-
-    <div class="open-modal-button btn btn-primary" data-toggle="modal" data-target="#reviewModal">리뷰 쓰기</div>
 
     <div class="modal fade right" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">

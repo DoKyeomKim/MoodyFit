@@ -339,6 +339,14 @@ tr:hover td {
 
 .write-btn:hover {
     background-color: #E3AAA2;
+    text-decoration: none;
+    color : #ccc;
+}
+
+.review-header-btn{
+	display:flex;
+	justify-content: space-between;
+	align-items: center;
 }
 </style>
 </head>
@@ -420,7 +428,10 @@ tr:hover td {
                 
         <input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
 		<div class="container">
-		    <h1 class="head" style="font-size: 18px; margin-top: 10px;">PHOTO REVIEW | 포토 리뷰</h1>
+			<div class="review-header-btn">
+		    	<h1 class="head" style="font-size: 18px; margin-top: 10px;">PHOTO REVIEW | 포토 리뷰</h1>
+		    	<div class="open-modal-button btn btn-primary" data-toggle="modal" data-target="#reviewModal">리뷰 쓰기</div>
+		    </div>
 		    <div class="header"></div>
 		    <div class="filter-bar">
 			        <select id="sort">
