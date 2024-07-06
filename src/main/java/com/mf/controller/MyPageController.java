@@ -282,6 +282,8 @@ public class MyPageController {
 		    Map<String, Object> postingInfo = postingService.getPostingInfo(postingIdx);
 		    List<Map<String, Object>> postingDetail = postingService.getPostingDetail(postingIdx);
 		    
+		    List<Map<String,Object>> postingQuestion = postingService.getPostingQuestion(postingIdx);
+		    
 		    // 색상별 사이즈 및 관련 인덱스 매핑
 		    Map<String, Map<String, Map<String, Long>>> colorSizeMap = new HashMap<>();
 		    for (Map<String, Object> detail : postingDetail) {
@@ -304,6 +306,10 @@ public class MyPageController {
 		    CLOB contentClob = (CLOB) postingInfo.get("CONTENT");
             String content = clobToString(contentClob);
             
+            System.out.println(postingIdx);
+            System.out.println(postingQuestion);
+            
+            model.addAttribute("postingQuestion",postingQuestion);
             model.addAttribute("content",content);
 		    model.addAttribute("postingInfo", postingInfo);
 		    model.addAttribute("colorSizeMap", colorSizeMapJson);

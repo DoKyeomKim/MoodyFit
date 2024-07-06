@@ -122,6 +122,9 @@
 <main>
     <h2 class="text-center" style="font-weight:bold; color: #867B73;">상품문의</h2>
     <form action="qnaWrite2" method="POST">
+    <c:if test="${not empty postingIdx }">
+    	<input type="hidden" name="postingIdx" value="${postingIdx }">
+    </c:if>
         <table class="board_row" style="margin-top:20px; padding-bottom:15px;">
             <colgroup>
                 <col style="width:10%;">
@@ -147,7 +150,7 @@
             </tbody>
         </table>
         <div class="button-container">
-            <a href="qna2" class="link-button">목록으로</a>
+			<a href="javascript:history.back()" class="link-button">목록으로</a>
             <input type="submit" value="등록">
         </div>
     </form>

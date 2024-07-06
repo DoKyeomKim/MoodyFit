@@ -257,6 +257,89 @@ main{
 .paging a.active {
     color: red;
 }
+
+#qna{
+	text-align:center;
+}
+table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 20px;
+    text-align: left;
+ 
+}
+
+thead {
+    background-color: white;
+    border-bottom: 2px solid #867B73;
+}
+
+th {
+    font-weight: bold;
+    background-color: #FFF;
+    border-bottom: 1px solid #867B73 !important;
+}
+
+td {
+    background-color: white;
+    border-bottom: 1px solid #e2e2e2 !important;
+    text-align:center;
+}
+
+tr {
+    background-color: #F6F4EE;
+}
+
+tr:hover td {
+    background-color: #f1f1f1;
+}
+
+.button-container {
+    text-align: right;
+    margin-top: 30px;
+}
+.table-container {
+    width: 100%;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.qna-style {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.qna-style a {
+    margin: 0 10px;
+    color: #A9A9A9;
+    text-decoration: none;
+    font-weight: normal;
+    transition: color 0.3s, border-bottom 0.3s;
+    padding-bottom: 5px;
+}
+
+.qna-style a.active, .qna-style a:hover {
+    color: #867B73;
+    border-bottom: 2px solid #867B73;
+}
+
+.write-btn {
+    padding: 15px 40px;
+    font-size: 16px;
+    border: none;
+    background-color: #E5AAA3;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px !important;
+    text-decoration: none;
+}
+
+.write-btn:hover {
+    background-color: #E3AAA2;
+}
 </style>
 </head>
 <body>
@@ -352,12 +435,46 @@ main{
 			    <div class="review-list" id="review-list"></div>
 			    <div class="paging" id="paging"></div>
 			</div>
+			<div style="margin-bottom:300px;"></div>
     </div>
 		    
     <div class="tab-content" id="qna">
-        상품 문의가 여기에 표시됩니다.
-    </div>
-</div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                        <th>답변여부</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="postingQuestion" items="${postingQuestion}">
+                        <tr>
+                            <td>${postingQuestion.POSTING_QUESTION_IDX}</td>
+                            <td><a href="/qnaDetail2?postingQuestionIdx=${postingQuestion.POSTING_QUESTION_IDX}">${postingQuestion.TITLE}</a></td>
+                            <td>${postingQuestion.NICK_NAME}</td>
+                            <td>${postingQuestion.CREATE_DATE}</td>
+                            <td>
+                            <c:choose>
+                                <c:when test="${postingQuestion.STATE==1}">답변대기</c:when>
+                                <c:when test="${postingQuestion.STATE==2}">답변완료</c:when>
+                            </c:choose>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
+        <security:authorize access="hasRole('ROLE_PERSON')">
+	        <div class="button-container" style="margin-top :30px;">
+	            <a class="write-btn" href="/qnaWrite2?postingIdx=${postingInfo.POSTING_IDX }">질문하기</a>
+	        </div>
+	    </security:authorize>
+        <div style="margin-bottom:300px;"></div>
+	</div>
 
 
 </main>
@@ -931,6 +1048,22 @@ function updateLikeButtonAppearance(button, isLiked) {
         svg.setAttribute('fill', 'none'); // 좋아요 상태가 아닌 경우 비워둠
     }
 }
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const links = document.querySelectorAll('.qna-style a');
+    const currentPath = window.location.pathname;
+
+    links.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+        link.addEventListener('click', function() {
+            links.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+});
 </script>
 </body>
 <%@include file="/WEB-INF/layouts/footer.jsp"%>

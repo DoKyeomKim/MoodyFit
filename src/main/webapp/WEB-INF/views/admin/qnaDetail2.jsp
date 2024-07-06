@@ -100,13 +100,11 @@ function toggleAnswerContainer() {
                 <p>${qna2.content}</p>
             </div>
             </div>
-            <div class="button-container">
-                <button onclick="window.history.back()">목록</button>
-        </div>
+
 
         <!-- Answer Section -->
+        <c:if test="${not empty answers2}">
         <div class="container">
-           
             <div class="answer-list">
                 <c:forEach var="answer2" items="${answers2}">
                     <div class="answer2">
@@ -119,7 +117,7 @@ function toggleAnswerContainer() {
                     </div>
                 </c:forEach>
             </div>
-
+        
             <security:authorize access="hasRole('ROLE_STORE')">
                 <button onclick="toggleAnswerContainer()">답변 작성</button>
                 <div id="answerContainer" class="answer-container">
@@ -133,6 +131,10 @@ function toggleAnswerContainer() {
                 </div>
             </security:authorize>
         </div>
+        </c:if>
+            <div class="button-container">
+                <button onclick="window.history.back()">목록으로</button>
+      		</div>
     </main>
 </body>
 </html>

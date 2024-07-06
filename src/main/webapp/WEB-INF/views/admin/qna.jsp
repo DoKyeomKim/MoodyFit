@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function() {
         <h2 class="text-center" style="font-weight:bold; color: #867B73;">1:1문의</h2>
         <div class="qna-style">
             <a href="/qna">관리자문의</a>
-            <a href="/qna2">상품문의</a>
+            <a href="/myQna">내 상품문의</a>
         </div>
         <div class="table-container">
             <table>

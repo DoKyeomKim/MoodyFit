@@ -86,5 +86,9 @@ public class PostingService {
 	public void addPostingBuy(Long userIdx, Long productInfoIdx, Long postingProductIdx) {
 		postingMapper.addPostingBuy(userIdx,productInfoIdx,postingProductIdx);
 	}
+
+	public List<Map<String, Object>> getPostingQuestion(Long postingIdx) {
+		return postingMapper.getPostingQuestion(postingIdx);
+	}
     
 }
