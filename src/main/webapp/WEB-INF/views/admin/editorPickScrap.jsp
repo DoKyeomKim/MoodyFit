@@ -5,10 +5,23 @@
 <head>
 <meta charset="UTF-8">
 <title>에디터 픽</title>
-
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <style>
+.page-item.active .page-link {
+    background-color: black;
+    border-color: black;
+    color: #fff;
+}
+
+.page-link {
+    color: black; /* 기본 링크 색상 변경 */
+}
+
+.page-link:hover {
+    color: #0056b3; /* 호버 시 링크 색상 변경 */
+}
 
 </style>
 </head>
@@ -35,7 +48,7 @@
                 <c:forEach var="EPScrap" items="${EPScrap}">    
                     <tr class="posting-info">
                         <td>${EPScrap.POSTING_IDX}</td>
-                        <td><a href="/postingDetail?postingIdx=${EPScrap.POSTING_IDX}">${EPScrap.TITLE}</a></td>
+                        <td><a href="/postingDetail?postingIdx=${EPScrap.POSTING_IDX}" style="text-decoration: none; color: black;">${EPScrap.TITLE}</a></td>
                         <td>${EPScrap.STORE_NAME}</td>
                         <td>
 	                   		<button class="btn btn-outline-secondary editorBtn" style="margin-right: 5px;" data-user-idx="${sessionScope.userIdx}" data-posting-idx="${EPScrap.POSTING_IDX}">
@@ -49,7 +62,7 @@
             </tbody>
         </table>
         </div>
-		<nav aria-label="Page navigation" style="margin-top: 100px;">
+		<nav aria-label="Page navigation">
 			<ul class="pagination justify-content-center">
 				<c:if test="${prev}">
 					<li class="page-item"><a class="page-link"

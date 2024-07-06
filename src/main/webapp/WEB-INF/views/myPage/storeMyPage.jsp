@@ -18,7 +18,7 @@ main {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border: 1px solid #ccc;
+
   width: 100%;
   margin: auto;
   padding: 20px;
@@ -81,9 +81,9 @@ main {
             <h2 style="text-align: center; font-size: 35px; font-weight: 600; color: #867B73;">마이페이지</h2>
         </div>
     </div>
+        <h3 style="text-align: left; margin-bottom:50px; padding-top: 50px;">${store.storeName} 님</h3>
+<div class="status1" style="background-color:white; border-radius:20px;" >
 
-        <h5 style="text-align: center; margin: 0; padding-top: 50px;">${store.storeName} 님 반갑습니다.</h5>
-        <hr>
         <div class="status">
             <div class="status-box">
                 <h3>0</h3>
@@ -105,6 +105,7 @@ main {
         <div class="my-postings">
             <h2>제품 판매 순위</h2>
         </div>
+</div>
 </div>
     </main>
 <script>
