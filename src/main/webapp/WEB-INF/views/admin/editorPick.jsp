@@ -7,6 +7,7 @@
 <title>에디터 픽</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
 <script src="${pageContext.request.contextPath}/scripts.js"></script>
+<link href="/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <style>
 main{
@@ -33,29 +34,38 @@ a:hover {
     width: 30%;
     text-align: center;
 }
-
-
-
-.pagination {
-	display: flex;
-	justify-content: center;
-	margin: 20px 0px;
-	border-top: 1px solid #ddd;
+.btn-outline-primary:hover {
+    background-color: #ccc;
+    text-decoration: none;
+}
+.btn-outline-primary:active,
+.btn-outline-primary:focus {
+    background-color: #999;
+    border-color: #999; 
+    text-decoration: none;
+    box-shadow: none; 
+}
+.btn-outline-primary:active:focus {
+    background-color: #999; /* 원하는 색상으로 변경 */
+    border-color: #999; /* 원하는 테두리 색상으로 변경 */
 }
 
-.pagination button {
-	padding: 10px;
-	margin: 20px 5px;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	background-color: gray;
-	cursor: pointer;
+
+
+.page-item.active .page-link {
+    background-color: black;
+    border-color: black;
+    color: #fff;
 }
 
-.pagination button.active {
-	background-color: #gray;
-	color: #fff;
+.page-link {
+    color: black; /* 기본 링크 색상 변경 */
 }
+
+.page-link:hover {
+    color: #0056b3; /* 호버 시 링크 색상 변경 */
+}
+
 </style>
 
 <script>
@@ -201,7 +211,7 @@ function sortTable(columnIndex) {
             </tbody>
         </table>
     </div>
-    <nav aria-label="Page navigation" style="margin-top: 100px;">
+    <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             <c:if test="${prev}">
                 <li class="page-item"><a class="page-link" href="?page=${startPageNum - 1}" aria-label="Previous"> <span aria-hidden="true" class="fas fa-angle-left"></span></a></li>
@@ -216,7 +226,7 @@ function sortTable(columnIndex) {
             </c:if>
         </ul>
     </nav>
-    <div class="button-group">
+    <div class="button-group" style="text-align:center; margin-left :10%">
         <a href="/EPWriteForm" class="btn btn-outline-primary" style="width: 300px;">작성하기</a>
     </div>
 </main>
