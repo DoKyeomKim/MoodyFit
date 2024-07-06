@@ -705,7 +705,7 @@ public class AdminController {
 	   public ModelAndView adminEPScrap(@RequestParam(value = "page", defaultValue = "1") int page) {
  		  ModelAndView mv = new ModelAndView();
  		  
-		   int pageSize = 5;
+		   int pageSize = 10;
 		   int startIndex = (page - 1) * pageSize;
 		   
 		   List<Map<String,Object>> EPScrap = editorPickService.getEditorPickScrap(pageSize,startIndex);
@@ -728,7 +728,7 @@ public class AdminController {
  	   public ModelAndView editorPick(@RequestParam(value = "page", defaultValue = "1") int page) {
  		   ModelAndView mv = new ModelAndView();
  		   
- 		   int pageSize = 5;
+ 		   int pageSize = 10;
  		   int startIndex = (page - 1) * pageSize;
  		   
  		   // 에디터픽 리스트 갖고오기
