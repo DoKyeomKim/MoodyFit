@@ -24,10 +24,18 @@ public class ReviewController {
     @Autowired
     private AdminReviewService adminReviewService;
 
+    // 전체 리뷰
     @GetMapping("/reviews")
     public List<AdminReviewDto> getAllReviews() {
     	
         return adminReviewService.getAllReviews();
+    }
+    
+    // 포스팅당 리뷰
+    @GetMapping("/reviewsStore")
+    public List<AdminReviewDto> getReviewsStore(@RequestParam("postingIdx") Long postingIdx) {
+    	
+    	return adminReviewService.getReviewsStore(postingIdx);
     }
     
 	    // 좋아요 목록 체크

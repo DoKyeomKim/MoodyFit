@@ -306,6 +306,9 @@ public class AdminController {
 	    @ResponseBody
 	    public ResponseEntity<Map<String, Boolean>> addReview(@RequestPart("reviewDto") AdminReviewDto reviewDto, @RequestPart("file") MultipartFile file,
 	    		@ModelAttribute("qnaDTO") PostingQuestionDto qna2DTO, HttpSession session) {
+	    	System.out.println(reviewDto);
+	    	System.out.println(file);
+	    	System.out.println(qna2DTO);
 	        Map<String, Boolean> response = new HashMap<>();
 	            if (!file.isEmpty()) {
 	                // 사진 파일 이름
@@ -316,7 +319,7 @@ public class AdminController {
 	                String filePath = "/images/" + fileNameScret;
 	                Long fileSize = file.getSize();
 	                // 파일 해당 위치에 저장
-	                File dest = new File("/Users/sinminjae/dev/images/" + fileNameScret);
+	    	        File dest = new File("C:/dev/images/"+fileNameScret);
 	                // 만약 해당 위치에 폴더가 없으면 생성
 	                if (!dest.exists()) {
 	                    dest.mkdirs();

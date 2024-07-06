@@ -7,11 +7,58 @@
                CONTENT,
                RATING,
                CREATE_DATE
-           
         FROM   POSTING_REVIEW
         ORDER BY POSTING_REVIEW_IDX ASC
                
     </select>
+    
+    <select id="getReviewsStore">
+	SELECT 
+	    ar.posting_review_idx AS postingReviewIdx,
+	    ar.title,
+	    ar.content,
+	    ar.rating,
+	    ar.create_date AS createDate,
+	    ar.height,
+	    ar.weight,
+	    ar.sizes,
+	    ar.foot,
+	    ar.color_satis AS colorSatis,
+	    ar.sizes_satis AS sizesSatis,
+	    ar.posting_idx AS postingIdx,
+	    ar.person_idx AS personIdx,
+	    prf.file_path AS filePath,
+	    prf.original_name AS originalName,
+	    prf.file_size AS fileSize,
+	    prf.posting_review_file_idx AS postingReviewFileIdx,
+	    COUNT(rl.review_like_idx) AS reviewLikeCount
+	FROM 
+	    posting_review ar
+	LEFT JOIN 
+	    posting_review_file prf ON ar.posting_review_idx = prf.posting_review_idx
+	LEFT JOIN 
+	    review_likes rl ON rl.posting_review_idx = ar.posting_review_idx
+	WHERE posting_idx=#{postingIdx}
+	GROUP BY 
+	    ar.posting_review_idx,
+	    ar.title,
+	    ar.content,
+	    ar.rating,
+	    ar.create_date,
+	    ar.height,
+	    ar.weight,
+	    ar.sizes,
+	    ar.foot,
+	    ar.color_satis,
+	    ar.sizes_satis,
+	    ar.posting_idx,
+	    ar.person_idx,
+	    prf.file_path,
+	    prf.original_name,
+	    prf.file_size,
+	    prf.posting_review_file_idx
+    </select>
+    
     <select id="searchReviewsById" resultType="com.mf.dto.AdminReviewDto">
         SELECT  POSTING_REVIEW_IDX,
     title,

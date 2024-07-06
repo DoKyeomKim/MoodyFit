@@ -59,6 +59,9 @@ public class AdminReviewService {
 	public int getReviewLikeCount(Long postingReviewIdx) {
         return adminReviewMapper.getReviewLikeCount(postingReviewIdx);
 	}
+	public List<AdminReviewDto> getReviewsStore(Long postingIdx) {
+		return adminReviewMapper.getReviewsStore(postingIdx);
+	}
 
 }
 
