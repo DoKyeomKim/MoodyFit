@@ -170,7 +170,7 @@ public class AdminController {
 
 
 	   
-	 //가맹점 회원 탈퇴
+	 //편집샵 회원 탈퇴
 		@PostMapping("/admin/dropId")
 		public String dropID(@RequestParam("userIdx") Long userIdx) {
 			storeService.dropUser(userIdx);
@@ -214,7 +214,7 @@ public class AdminController {
 		        return "/admin/adminPuser";
 		    }
 		  
-		  //가맹점회원 검색
+		  //편집샵회원 검색
 		  @GetMapping("/admin/userManagement2")
 		    public String cManagement(@RequestParam(value = "searchId", required = false) String searchId,
 		                                 @RequestParam(value = "page", defaultValue = "1") int page,
@@ -530,7 +530,7 @@ public class AdminController {
 				        return "redirect:/myQna"; // qna 목록 페이지로 리다이렉트 
 				    }
 	    
-		//가맹점회원 페이지
+		//편집샵회원 페이지
 	   @GetMapping("/adminCuser")
 	   public ModelAndView adminCuser() {
 		   ModelAndView mv = new ModelAndView("adminCuser");

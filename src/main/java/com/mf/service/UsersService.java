@@ -41,7 +41,7 @@ public class UsersService {
         usersMapper.specProcess(personSpecDto);
     }
 
-	// 가맹점 회원 가입 진행
+	// 편집샵 회원 가입 진행
 	@Transactional
 	public void storeJoinProcess(UsersDto usersDto, StoreDto storeDto) {
 		

@@ -25,7 +25,7 @@ public interface UsersMapper {
 	String getNickName(String nickName);
 	//=========================
 	
-	//가맹점 회원가입 진행
+	//편집샵 회원가입 진행
 	void storeJoinProcess(UsersDto usersDto);
 	void storeJoinDetailProcess(StoreDto storeDto);
 

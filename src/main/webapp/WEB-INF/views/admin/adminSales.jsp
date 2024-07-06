@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>가맹점별 판매수익 관리</title>
+<title>편집샵별 판매수익 관리</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/scripts.js"></script>
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
@@ -66,12 +66,12 @@ main {
 </div>
 <main>
 <input type="hidden" value="{user_idx}" id="userIdx">
-<h3>가맹점별 판매수익 관리</h3>
+<h3>편집샵별 판매수익 관리</h3>
 <hr class="mb-3">
 <form action="${pageContext.request.contextPath}/admin/userManagement9" method="get" class="search-container">
     <div class="form-group mb-2">
         <label for="searchId" class="sr-only"></label>
-        <input type="text" name="searchId" id="searchId" class="form-control" placeholder="가맹점 이름 입력">
+        <input type="text" name="searchId" id="searchId" class="form-control" placeholder="편집샵 이름 입력">
     </div>
     <button class="header-search-btn" type="submit">
         <i class="fa-solid fa-magnifying-glass"></i>
@@ -83,7 +83,7 @@ main {
             <table id="salesTable" class="table table-bordered">
                 <thead class="table-secondary">
                     <tr>
-                        <th>가맹점 이름</th>
+                        <th>편집샵 이름</th>
                         <th>판매 건수</th>
                         <th>판매 수익</th>
                         <th>수수료</th>

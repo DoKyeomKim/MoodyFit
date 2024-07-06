@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>가맹점 공고 관리</title>
+<title>편집샵 공고 관리</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://kit.fontawesome.com/960173563c.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/styles.css">
@@ -112,7 +112,7 @@ $(document).ready(function() {
     <%@include file="/WEB-INF/layouts/adminsidebar.jsp"%>
 </div>
 <main>
-    <h3>가맹점 공고 관리</h3>
+    <h3>편집샵 공고 관리</h3>
     <hr class="mb-3">
     <form action="${pageContext.request.contextPath}/admin/userManagement3" method="get" class="search-container">
         <div class="form-group mb-2">

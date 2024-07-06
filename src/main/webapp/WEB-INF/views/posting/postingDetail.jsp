@@ -395,7 +395,7 @@ tr:hover td {
                             <!-- 사이즈 옵션은 JavaScript로 동적으로 생성 -->
                         </select>
                     </div>
-                    <div class="price">${postingInfo.PRICE} 원</div>
+                    <div class="price new-price">${postingInfo.PRICE} 원</div>
                     <input type="hidden" id="product_info_idx" name="product_info_idx">
                     <input type="hidden" id="posting_product_idx" name="posting_product_idx">
                     <button type="submit" class="buy-button">구매하기</button>
@@ -1088,6 +1088,19 @@ document.addEventListener("DOMContentLoaded", function() {
             this.classList.add('active');
         });
     });
+});
+</script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+  var priceElements = document.querySelectorAll('.new-price');
+  
+  priceElements.forEach(function(element) {
+    var priceText = element.textContent;
+    var priceNumber = parseInt(priceText.replace(/[^0-9]/g, ''), 10);
+    if (!isNaN(priceNumber)) {
+      element.textContent = priceNumber.toLocaleString('ko-KR') + ' 원';
+    }
+  });
 });
 </script>
 </body>

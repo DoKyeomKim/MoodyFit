@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>가맹점 회원가입</title>
+<title>편집샵 회원가입</title>
 <link href="/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
@@ -97,7 +97,7 @@
 
 <main>
 <form action="/storeJoinProcess" method="post" name="joinForm">
-<h4 class="text-center">가맹점 회원가입</h4>
+<h4 class="text-center">편집샵 회원가입</h4>
 <div class="required-table">
     <div class="required-table-header">필수입력</div>
     <table class="table table-bordered">  	

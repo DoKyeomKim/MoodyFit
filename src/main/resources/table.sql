@@ -52,11 +52,11 @@ CREATE TABLE person_spec (
     FOREIGN KEY (person_idx) REFERENCES person(person_idx)
 );
 
--- 가맹점
+-- 편집샵
 CREATE TABLE store (  
-    store_idx NUMBER PRIMARY KEY,            -- 가맹점 고유번호
-    store_name VARCHAR2(100) NOT NULL,       -- 가맹점 ex) 나이키 서면점
-    manager_name VARCHAR2(30) NOT NULL,      -- 가맹점 관리자 이름
+    store_idx NUMBER PRIMARY KEY,            -- 편집샵 고유번호
+    store_name VARCHAR2(100) NOT NULL,       -- 편집샵 ex) 나이키 서면점
+    manager_name VARCHAR2(30) NOT NULL,      -- 편집샵 관리자 이름
     business_number VARCHAR2(30) NOT NULL,   -- 사업자 등록 번호
     email VARCHAR2(50) NOT NULL,             -- 회사 이메일
     phone VARCHAR2(50) NOT NULL,             -- 회사 전화  
@@ -91,7 +91,7 @@ CREATE TABLE product (
     price NUMBER NOT NULL,                       -- 제품 가격
     sub_category_idx NUMBER,                 -- 옷 세부 분류
     FOREIGN KEY (sub_category_idx) REFERENCES sub_category(sub_category_idx),
-    store_idx NUMBER,                        -- 해당 상품을 올린 가맹점 고유번호
+    store_idx NUMBER,                        -- 해당 상품을 올린 편집샵 고유번호
     FOREIGN KEY (store_idx) REFERENCES store(store_idx)
 );
 

@@ -106,8 +106,8 @@
         <span class="light">카테고리를 관리 할 수 있습니다.</span>
     </a></li>
     <li><a href="/adminApply" class="nav-link">
-        <br><span class="bold">Apply</span></br>가맹점 공고 관리<br><br>
-        <span class="light">가맹점의 공고를 승인 할 수 있습니다.</span>
+        <br><span class="bold">Apply</span></br>편집샵 공고 관리<br><br>
+        <span class="light">편집샵의 공고를 승인 할 수 있습니다.</span>
     </a></li>
     <li><a href="/adminOrder" class="nav-link">
         <br><span class="bold">Order</span></br>주문내역 관리<br><br>
@@ -118,12 +118,12 @@
         <span class="light">개인 회원을 관리 할 수 있습니다.</span>
     </a></li>
     <li><a href="/adminCuser" class="nav-link">
-        <br><span class="bold">Franchisee</span></br>가맹점 관리<br><br>
-        <span class="light">가맹점 회원을 관리 할 수 있습니다.</span>
+        <br><span class="bold">Franchisee</span></br>편집샵 관리<br><br>
+        <span class="light">편집샵 회원을 관리 할 수 있습니다.</span>
     </a></li>
       <li><a href="/adminSales" class="nav-link">
         <br><span class="bold">Sales</span></br>판매수익 관리<br><br>
-        <span class="light">가맹점별 판매수익을 확인 할 수 있습니다.</span>
+        <span class="light">편집샵별 판매수익을 확인 할 수 있습니다.</span>
     </a></li>
     <li><a href="/adminReview" class="nav-link">
         <br><span class="bold">Review</span></br>리뷰 관리<br><br>

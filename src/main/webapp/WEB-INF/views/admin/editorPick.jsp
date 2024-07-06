@@ -83,7 +83,7 @@ a:hover {
                     <th><a href="javascript:void(0);" onclick="sortTable(1);">번호</a></th>
                     <th><a href="javascript:void(0);" onclick="sortTable(2);">공고 번호</a></th>
                     <th><a href="javascript:void(0);" onclick="sortTable(3);">공고 제목</a></th>
-                    <th><a href="javascript:void(0);" onclick="sortTable(4);">가맹점명</a></th>
+                    <th><a href="javascript:void(0);" onclick="sortTable(4);">편집샵명</a></th>
                     <th><a href="javascript:void(0);" onclick="sortTable(5);">게시 시작일</a></th>
                     <th><a href="javascript:void(0);" onclick="sortTable(6);">게시 마감일</a></th>
                     <th>작업</th>

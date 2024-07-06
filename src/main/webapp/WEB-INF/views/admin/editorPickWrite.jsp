@@ -152,7 +152,7 @@ table.editor-pick-table tr.posting-info:active {
             <input type="hidden" value=""  id="postingIdx" name="postingIdx">
             <p>공고번호: <span id="selected-posting-idx"></span></p>
             <p>공고명: <span id="selected-posting-title"></span></p>
-            <p>가맹점명: <span id="selected-posting-store"></span></p>
+            <p>편집샵명: <span id="selected-posting-store"></span></p>
             <button type="button" id="pick-posting" class="btn btn-primary pick-posting" data-bs-toggle="modal" data-bs-target="#pickModal">공고 선택</button>
         </div>
         <div class="preview-area" onclick="openFileInput()"> 
@@ -186,7 +186,7 @@ table.editor-pick-table tr.posting-info:active {
                 <tr>
                     <th>공고번호</th>
                     <th>공고명</th>
-                    <th>가맹점명</th>
+                    <th>편집샵명</th>
                 </tr>
             </thead>
             <tbody>
