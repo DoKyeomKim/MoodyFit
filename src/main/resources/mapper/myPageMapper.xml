@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.MyPageMapper">
+
+<select id="getTopPosting">
+<![CDATA[
+SELECT * FROM (
+	    SELECT p.posting_idx AS posting_idx,
+	           p.update_date,
+	           p.title AS title,
+	           pro.price AS price,
+	           s.store_name AS store_name,
+	           MAX(pf.file_path) AS file_path,
+	           ROW_NUMBER() OVER (ORDER BY SUM(o.total_price) DESC) AS rnum
+	    FROM orders o
+        JOIN order_cart oc on o.order_idx = oc.order_idx
+        join cart c on c.cart_idx = oc.cart_idx
+	    JOIN posting_product pp ON c.posting_product_idx = pp.posting_product_idx
+	    JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+	    JOIN product pro ON pi.product_idx = pro.product_idx
+	    JOIN store s on pro.store_idx = s.store_idx
+	    JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
+	    JOIN posting p ON p.posting_idx = pp.posting_idx
+        where s.user_idx = #{userIdx}
+	    GROUP BY p.posting_idx, p.update_date, p.title, pro.price,s.store_name
+	)
+	WHERE rnum <= 10
+]]>
+</select>
+
 <select id="getPostingByPostingIdx">
 SELECT 
     p.posting_idx as posting_idx,

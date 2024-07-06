@@ -142,12 +142,17 @@ public class MyPageService {
 	public Map<String, Object> getShopMyPage(Long userIdx) {
 		// 상호명과 storeIdx 갖고오기
 		StoreDto store = myPageMapper.getStoreNameByUserIdx(userIdx);
-		
+
 		Map<String,Object> result = new HashMap<>();
 		
 		result.put("store", store);
 		
 		return result;
+	}
+	
+	// 가맹점 마이페이지 매출 탑 들고오기
+	public List<Map<String, Object>> getTopPostingByUserIdx(Long userIdx) {
+		return myPageMapper.getTopPosting(userIdx);
 	}
 	
 	// 가맹점 정보 수정용 정보 들고오기
