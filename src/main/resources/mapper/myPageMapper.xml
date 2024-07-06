@@ -289,4 +289,27 @@ where level_idx != 6
 order by level_idx asc
 </select>
 
+<select id="getOrdersByUserIdx">
+SELECT 
+    ROW_NUMBER() OVER (ORDER BY o.order_date ASC) AS row_num,
+    o.total_price AS total_price,
+    o.quantity AS quantity,
+    p.title AS title,
+    pro.price AS price,
+    o.order_date as order_date,
+    p.posting_idx as posting_idx
+FROM orders o
+JOIN order_cart oc ON o.order_idx = oc.order_idx
+JOIN cart c ON c.cart_idx = oc.cart_idx
+JOIN posting_product pp ON c.posting_product_idx = pp.posting_product_idx
+JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+JOIN product pro ON pi.product_idx = pro.product_idx
+JOIN store s ON pro.store_idx = s.store_idx
+JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
+JOIN posting p ON p.posting_idx = pp.posting_idx
+WHERE s.user_idx = #{userIdx} 
+  AND o.state != '결제중'
+ORDER BY o.order_date desc
+</select>
+
 </mapper>

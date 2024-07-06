@@ -55,7 +55,7 @@ public class SecurityConfig {
 						"/joinProcess","/error","/loginFail","/review**").permitAll()
 				.requestMatchers("/admin/admin**","/admin**","/admin/**","/EP**").hasRole("ADMIN")
 				.requestMatchers("/myPage/**","/personUpdateForm","/personUpdate").hasAnyRole("ADMIN","PERSON")
-				.requestMatchers("/storeMyPage","/storeUpdateForm").hasAnyRole("ADMIN","STORE")
+				.requestMatchers("/storeMyPage","/storeUpdateForm","/postingOrders").hasAnyRole("ADMIN","STORE")
 				.requestMatchers("/accountDeleteForm").hasAnyRole("PERSON","STORE")
 				.anyRequest().authenticated()
 				);

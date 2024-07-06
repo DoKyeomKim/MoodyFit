@@ -81,6 +81,8 @@ public interface MyPageMapper {
 	// 내 총 매출
 	int getTotalRevenue(Long userIdx);
 
+	// 내 공고 주문 현황
+	List<Map<String, Object>> getOrdersByUserIdx(Long userIdx);
 
 	
 	//======================== 공통 ========================
@@ -91,6 +93,7 @@ public interface MyPageMapper {
 
 	// 쿠키 공고 들고오기
 	Map<String, Object> getPostingByPostingIdx(Long postingIdx);
+
 
 
 

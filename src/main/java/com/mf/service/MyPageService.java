@@ -217,6 +217,10 @@ public class MyPageService {
 		return getCounts;
 	}
 
+	public List<Map<String, Object>> getOrdersByUserIdx(Long userIdx) {
+		return myPageMapper.getOrdersByUserIdx(userIdx);
+	}
+
 
 	
 
