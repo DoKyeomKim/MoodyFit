@@ -131,20 +131,20 @@ main {
 
         <div class="status">
             <div class="status-box">
-                <h3>0</h3>
+                <h3>${postingCount }</h3>
                 <p>등록한 공고 수</p>
             </div>
             <div class="status-box">
-                <h3>0</h3>
+                <h3>${productCount }</h3>
                 <p>등록한 제품 수</p>
             </div>
             <div class="status-box">
-                <h3>0</h3>
+                <h3>${orderCount }</h3>
                 <p>총 주문 건수</p>
             </div>
             <div class="status-box">
-                <h3>0</h3>
-                <p>총 판매 건수</p>
+                <h3>${totalRevenue } 원</h3>
+                <p>총 매출</p>
             </div>
         </div>
         <div class="my-postings">
@@ -170,7 +170,7 @@ main {
 	        </c:when>
 	        <c:otherwise>
 	        	<div style="text-align:center; margin-top : 50px;">
-	        		<h3> 아직 제품을 판매되지 않았습니다!</h3>
+	        		<h3> 아직 제품을 판매되지 않았습니다! </h3>
 	        	</div>
 	        </c:otherwise>
 	        </c:choose>

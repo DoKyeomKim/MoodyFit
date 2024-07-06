@@ -69,6 +69,7 @@ public class ProductController {
         productDto.setManufactureName(manufactureName);
         productDto.setSubCategoryIdx(subCategoryIdx);
         productDto.setStoreIdx(storeIdx);
+        productDto.setState(0);
         
         // 서비스 호출
         productService.addProduct(productDto, productInfos.getProductInfos(), productImages);

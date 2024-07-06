@@ -71,6 +71,7 @@ public class ProductService {
  	    if (productIdx == null || productIdx <= 0) {
  	        throw new RuntimeException("Product ID is invalid: " + productIdx);
  	    }
+ 	    Long productInfoIdx = null;
 
  	    for (ProductOptionDto productOptionDto : productInfos) {
  	        ProductInfoDto productInfoDto = new ProductInfoDto();
@@ -82,7 +83,7 @@ public class ProductService {
  	        // ProductInfo 테이블에 삽입
  	        productMapper.insertProductInfo(productInfoDto);
 
- 	        Long productInfoIdx = productInfoDto.getProductInfoIdx();
+ 	        productInfoIdx = productInfoDto.getProductInfoIdx();
  	        System.out.println("Inserted Product Info ID: " + productInfoIdx);
 
  	        ProductQuantityDto productQuantityDto = new ProductQuantityDto();
@@ -93,8 +94,8 @@ public class ProductService {
  	        productMapper.insertProductQuantity(productQuantityDto);
  	        System.out.println("Inserted Product Quantity ID: " + productQuantityDto.getProductQuantityIdx());
 
- 	        saveProductImages(productInfoIdx, productImages);
  	    }
+ 	    saveProductImages(productInfoIdx, productImages);
  	}
 
 

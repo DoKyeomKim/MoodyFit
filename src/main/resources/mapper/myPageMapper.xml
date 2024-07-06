@@ -28,6 +28,39 @@ SELECT * FROM (
 ]]>
 </select>
 
+<select id="getPostingCount">
+select nvl(count(p.posting_idx),0)
+from posting p
+join store s on p.store_idx = s.store_idx
+where s.user_idx = #{userIdx}
+</select>
+<select id="getProductCount">
+select nvl(count(p.product_idx),0)
+from product p
+join store s on p.store_idx = s.store_idx
+where s.user_idx = #{userIdx}
+</select>
+<select id="getOrderCount">
+select nvl(count(c.cart_idx),0)
+from cart c
+join product_info pi on c.product_info_idx = pi.product_info_idx
+join product p on p.product_idx = pi.product_idx
+join store s on p.store_idx = s.store_idx
+where s.user_idx = #{userIdx} and c.state != '결제중' and c.state != '장바구니'
+</select>
+<select id="getTotalRevenue">
+    SELECT 
+        NVL(SUM(o.total_price), 0)
+    FROM 
+        orders o
+    join order_cart oc on o.order_idx = oc.order_idx
+    join cart c on c.cart_idx = oc.cart_idx
+    join product_info pi on c.product_info_idx = pi.product_info_idx
+	join product p on p.product_idx = pi.product_idx
+	join store s on p.store_idx = s.store_idx
+	where s.user_idx = #{userIdx}
+</select>
+
 <select id="getPostingByPostingIdx">
 SELECT 
     p.posting_idx as posting_idx,

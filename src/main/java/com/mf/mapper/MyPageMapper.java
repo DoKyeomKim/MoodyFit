@@ -66,6 +66,22 @@ public interface MyPageMapper {
 	// 가맹점 회원 store 수정
 	void storeUpdate(StoreDto store);
 	
+	// 매출 상위 제품
+	List<Map<String, Object>> getTopPosting(Long userIdx);
+
+	// 내 공고 갯수
+	int getPostingCount(Long userIdx);
+
+	// 내 상품 갯수
+	int getProductCount(Long userIdx);
+
+	// 내 상품 주문 갯수
+	int getOrderCount(Long userIdx);
+	
+	// 내 총 매출
+	int getTotalRevenue(Long userIdx);
+
+
 	
 	//======================== 공통 ========================
 	// 회원 탈퇴
@@ -76,7 +92,9 @@ public interface MyPageMapper {
 	// 쿠키 공고 들고오기
 	Map<String, Object> getPostingByPostingIdx(Long postingIdx);
 
-	List<Map<String, Object>> getTopPosting(Long userIdx);
+
+
+
 
 
 

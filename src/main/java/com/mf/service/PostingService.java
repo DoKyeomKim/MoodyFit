@@ -91,4 +91,19 @@ public class PostingService {
 		return postingMapper.getPostingQuestion(postingIdx);
 	}
     
+	// 기존의 List<Map<String, Object>> 반환
+	public List<Map<String, Object>> getAllPostingDetails(Long storeIdx) {
+        return postingMapper.getAllPostingDetails(storeIdx);
+    }
+	
+
+    public List<Map<String, Object>> getOnHoldPostingDetails(Long storeIdx) {
+        return postingMapper.getOnHoldPostingDetails(storeIdx);
+    }
+
+    public void updatePostingState(Long postingIdx, int state) {
+        postingMapper.updatePostingState(postingIdx, state);
+    }
+
+	
 }
