@@ -658,6 +658,7 @@ public class AdminController {
 	        
 	        // FAQ 객체를 가져와서 모델에 추가
 	        PostingQuestionDto qna2DTO = adminQnaService.getQna2ByPostingQuestionIdx(postingQuestionIdx);
+	        
 	        if (qna2DTO == null) {
 	            // questionIdx로 FAQ를 찾지 못한 경우 처리
 	            System.out.println("QnA not found for PostingQuestionIdx: " + postingQuestionIdx);
@@ -680,7 +681,7 @@ public class AdminController {
 	        answer2Dto.setTitle(title);
 	        answer2Dto.setContent(content);
 	        
-	        adminQnaService.addAnswer2(answer2Dto);
+	        adminQnaService.addAnswer2(answer2Dto,postingQuestionIdx);
 	        
 	        return "redirect:/qnaDetail2?postingQuestionIdx=" + postingQuestionIdx;
 	    }

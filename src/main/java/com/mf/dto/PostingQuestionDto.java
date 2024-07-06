@@ -16,6 +16,7 @@ public class PostingQuestionDto {
 		private int state;
 		private Long personIdx;
 		private Long postingIdx;
+		private Long userIdx;
 		private Date createDate;
 		private String name;
 }

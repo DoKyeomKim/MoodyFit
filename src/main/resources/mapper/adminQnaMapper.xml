@@ -174,12 +174,16 @@ WHERE
     SELECT 
         q.posting_question_idx AS postingQuestionIdx,
         q.title,
-        u.name AS name,
+        u.nick_name AS name,
         q.content,
-        q.create_date AS createDate
-        
+        q.create_date AS createDate,
+        s.user_idx AS user_idx
     FROM 
         posting_question q
+    JOIN
+    	posting p ON q.posting_idx = p.posting_idx
+    JOIN
+    	store s on p.store_idx = s.store_idx
     JOIN 
         person u ON q.person_idx = u.person_idx
     WHERE 
@@ -199,8 +203,13 @@ WHERE
         
         WHERE 
             posting_question_idx = #{postingQuestionIdx}
+        order by posting_answer_idx asc
     </select>
-
+	<update id="updateStatePostingQuestion">
+		update posting_question
+		set state = 2
+		where posting_question_idx =#{postingQuestionIdx}
+	</update>
 	<select id="getPersonIdxByUserIdx">
     select person_idx
     from person

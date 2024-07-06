@@ -437,8 +437,16 @@ tr:hover td {
 			</div>
 			<div style="margin-bottom:300px;"></div>
     </div>
+    
+    <%@include file="/WEB-INF/views/admin/review.jsp"%>
 		    
     <div class="tab-content" id="qna">
+    		<div class="title" style="margin-top: 20px; font-size: 13px; text-align: center;">
+				<span style="background-color:#F4CAC0;">편집샵</span> 에게 질문하세요! 
+            </div>
+            <div class="subtitle" style="margin-top: 5px; font-size: 13px; text-align: center;">
+            	모르는 것이 있다면 참지 말고 질문 ㄱㄱ!
+            </div>
         <div class="table-container">
             <table>
                 <thead>

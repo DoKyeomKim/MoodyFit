@@ -76,9 +76,10 @@ public class AdminQnaService {
 			return adminQnaMapper.getAnswers2ByPostingQuestionIdx(postingQuestionIdx);
 		}
 
-		public void addAnswer2(PostingAnswerDto answer2Dto) {
+		@Transactional
+		public void addAnswer2(PostingAnswerDto answer2Dto, Long postingQuestionIdx) {
 			adminQnaMapper.insertAnswer2(answer2Dto);
-			
+			adminQnaMapper.updateStatePostingQuestion(postingQuestionIdx);
 		}
 
 		public Long getPersonIdxByUserIdx(Long userIdx) {

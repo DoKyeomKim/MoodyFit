@@ -45,11 +45,6 @@
         margin-bottom: 20px;
     }
 
-    .answer-container {
-        margin-top: 20px;
-        display: none; /* Initially hide the answer container */
-    }
-
     button.submit-btn, .button-container button {
         margin-bottom: 10px;
         width: 80px;
@@ -70,17 +65,53 @@
         text-align: center;
         margin-top: 20px;
     }
-</style>
-<script>
-function toggleAnswerContainer() {
-    var answerContainer = document.getElementById("answerContainer");
-    if (answerContainer.style.display === "none") {
-        answerContainer.style.display = "block";
-    } else {
-        answerContainer.style.display = "none";
-    }
+    .answer-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
 }
-</script>
+
+.answer-container h4 {
+    margin-top: 0;
+    color: #333;
+}
+
+.answer-container input[type="text"], .answer-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.answer-container textarea {
+    height: 150px;
+    resize: none;
+}
+
+.submit-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+}
+.answer-area{
+	text-align:center;
+}
+.answer-btn{
+	text-align:right;
+}
+</style>
 </head>
 <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
 <body style="background-color:#F6F4EE !important;">
@@ -103,7 +134,7 @@ function toggleAnswerContainer() {
 
 
         <!-- Answer Section -->
-        <c:if test="${not empty answers2}">
+        <c:if test="${not empty answers2 }">
         <div class="container">
             <div class="answer-list">
                 <c:forEach var="answer2" items="${answers2}">
@@ -117,21 +148,24 @@ function toggleAnswerContainer() {
                     </div>
                 </c:forEach>
             </div>
-        
-            <security:authorize access="hasRole('ROLE_STORE')">
-                <button onclick="toggleAnswerContainer()">답변 작성</button>
-                <div id="answerContainer" class="answer-container">
-                    <h4>답변 작성</h4>
-                    <form action="/submitAnswer2" method="post">
-                        <input type="text" name="title" placeholder="제목을 입력하세요" required>
-                        <textarea name="content" placeholder="답변을 입력하세요" required></textarea>
-                        <input type="hidden" name="postingQuestionIdx" value="${qna2.postingQuestionIdx}">
-                        <button type="submit" class="submit-btn">답변 제출</button>
-                    </form>
-                </div>
-            </security:authorize>
+           </c:if>
+        	<c:choose>
+	            <c:when test="${qna2.userIdx == sessionScope.userIdx}">
+	                <div id="answerContainer" class="answer-container">
+	                    <h4>답변 작성</h4>
+	                    <form action="/submitAnswer2" method="post">
+	                        <input type="text" name="title" placeholder="제목을 입력하세요" required>
+	                        <textarea name="content" placeholder="답변을 입력하세요" required></textarea>
+	                        <input type="hidden" name="postingQuestionIdx" value="${qna2.postingQuestionIdx}">
+	                        <div class="answer-btn">
+	                        	<button type="submit" class="submit-btn">답변 제출</button>
+	                        </div>
+	                    </form>
+	         	   </div>
+	            </c:when>
+            <c:otherwise></c:otherwise>
+            </c:choose>
         </div>
-        </c:if>
             <div class="button-container">
                 <button onclick="window.history.back()">목록으로</button>
       		</div>

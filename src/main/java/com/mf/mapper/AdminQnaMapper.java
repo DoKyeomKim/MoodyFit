@@ -62,6 +62,9 @@ public interface AdminQnaMapper {
 
 
 		List<Map<String, Object>> getAllStoreQna(Long userIdx);
+
+
+		void updateStatePostingQuestion(Long postingQuestionIdx);
 	}
 
 	
