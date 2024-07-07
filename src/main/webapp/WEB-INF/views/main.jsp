@@ -104,7 +104,7 @@ main {
 
 .weekly-best-wrapper {
     display: flex;
-    animation: slide 10s linear infinite;
+    animation: slide 15s linear infinite;
     animation-play-state: running; /* 애니메이션의 기본 상태를 재생 중으로 설정 */
     width: 3000px;
     height: 100%;
