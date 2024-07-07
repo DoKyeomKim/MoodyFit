@@ -23,10 +23,7 @@ main {
     margin-top: -200px; /* Adjust based on the height of your header */
     padding-top: 100px; /* To ensure the content is not hidden under the header */
 }
-.image-container {
-    position: relative;
-    display: inline-block;
-}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -61,9 +58,7 @@ main {
     align-items: center;
     color: white;
 }
-.image-container:hover .overlay {
-    opacity: 1;
-}
+
 .info {
     text-align: center;
 }
@@ -111,7 +106,8 @@ main {
     display: flex;
     animation: slide 10s linear infinite;
     animation-play-state: running; /* 애니메이션의 기본 상태를 재생 중으로 설정 */
-    width: 100%;
+    width: 3000px;
+    height: 100%;
 }
 
 .weekly-best-slide {
@@ -120,10 +116,23 @@ main {
     box-sizing: border-box;
     margin-right: 50px;
 }
+.best-image-container:hover .overlay {
+    opacity: 1;
+}
+.best-image-container {
+    position: relative;
+    display: inline-block;
+}
+.best-image-container img{
+	height : 300px;
+}
 
 @keyframes slide {
     0% {
         transform: translateX(100%);
+    }
+    50% {
+        transform: translateX(0%);
     }
     100% {
         transform: translateX(-100%);
@@ -351,14 +360,14 @@ main {
                <c:forEach var="topPosting" items="${topPosting}">
                   <div class="weekly-best-slide">
                      <a href="/postingDetail?postingIdx=${topPosting.POSTING_IDX}">
-                        <div class="image-container"
+                        <div class="best-image-container"
                            data-store-name="${topPosting.STORE_NAME}"
                            data-posting-idx="${topPosting.POSTING_IDX}"
                            data-price="${topPosting.PRICE}"
                            data-title="${topPosting.TITLE}"
                            data-date="${topPosting.UPDATE_DATE}">
                            <img src="${topPosting.FILE_PATH}" class="img-fluid"
-                              alt="Image 1" style="height: auto; width: 100%;">
+                              alt="Image 1">
                            <div class="overlay">
                               <div class="info"></div>
                            </div>
@@ -467,9 +476,10 @@ window.addEventListener('load', function() {
     document.body.classList.add('loaded');
 });
 </script>
-   <script>
+<script>
 document.addEventListener('DOMContentLoaded', function() {
-    const imageContainers = document.querySelectorAll('.image-container');
+    // .image-container를 .best-image-container로 변경
+    const imageContainers = document.querySelectorAll('.best-image-container');
     const weeklyBestWrapper = document.querySelector('.weekly-best-wrapper');
 
     imageContainers.forEach(container => {
@@ -483,7 +493,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // 가격을 파싱하여 포맷팅하는 함수
             const formattedPrice = Number(price).toLocaleString();
 
-            infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + ' 원</div><div>' + storeName +'</div>';
+            infoDiv.innerHTML = '<div>' + title + '</div><div>' + formattedPrice + ' 원</div><div>' + storeName + '</div>';
 
             // 애니메이션을 일시 정지
             weeklyBestWrapper.style.animationPlayState = 'paused';
@@ -496,6 +506,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
    <script>
     document.addEventListener("DOMContentLoaded", function() {
         var recentPrices = document.querySelectorAll(".recent-price");
