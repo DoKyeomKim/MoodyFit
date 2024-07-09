@@ -429,7 +429,7 @@ main {
         <h4 class="font-weight-bold">NEW ARRIVALS</h4>
         <div class="text-muted">새롭게 업데이트된 상품입니다</div>
         <div class="row">
-            <c:forEach var="recent" items="${recent}">
+            <c:forEach var="recent" items="${recent} ">
                 <div class="col-md-3 mt-3 mb-3 recent-posting-area">
                     <div class="recent-posting">
                         <a class="text-decoration-none text-dark" href="/postingDetail?postingIdx=${recent.POSTING_IDX}">
