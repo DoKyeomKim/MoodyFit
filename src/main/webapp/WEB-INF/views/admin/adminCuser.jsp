@@ -106,7 +106,7 @@ $(document).ready(function() {
 <input type="hidden" value="{store_idx}" id="storeIdx">
 <h3 class="mt-3 text-center">편집샵 관리</h3>
 <hr class="mb-3">
-<form action="${pageContext.request.contextPath}/admin/userManagement2" method="get" class="search-container">
+<form action="${pageContext.request.contextPath}/userManagement2" method="get" class="search-container">
     <div class="form-group mb-2">
         <label for="searchId" class="sr-only">아이디</label>
         <input type="text" name="searchId" id="searchId" class="form-control" placeholder="아이디를 입력하세요">

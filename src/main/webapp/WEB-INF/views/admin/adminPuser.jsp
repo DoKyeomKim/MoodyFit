@@ -115,7 +115,7 @@ $(document).ready(function() {
 <input type="hidden" value="{user_idx}" id="userIdx">
 <h3 class="mt-3 text-center">개인회원 관리</h3>
 <hr class="mb-3">
-<form action="${pageContext.request.contextPath}/admin/userManagement" method="get" class="search-container">
+<form action="${pageContext.request.contextPath}/userManagement" method="get" class="search-container">
     <div>
         <label for="searchId" class="sr-only"></label>
         <input type="text" name="searchId" id="searchId" class="form-control" placeholder="아이디를 입력하세요">

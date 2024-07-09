@@ -114,7 +114,7 @@ $(document).ready(function() {
 <main>
     <h3>편집샵 공고 관리</h3>
     <hr class="mb-3">
-    <form action="${pageContext.request.contextPath}/admin/userManagement3" method="get" class="search-container">
+    <form action="${pageContext.request.contextPath}/userManagement3" method="get" class="search-container">
         <div class="form-group mb-2">
             <label for="searchId" class="sr-only"></label>
             <input type="text" name="searchId" id="searchId" class="form-control" placeholder="공고 제목 입력">
