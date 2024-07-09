@@ -49,9 +49,7 @@
 .all-posting {
     text-align: left;
     margin: 20px;
-    border: 0.5px solid #ccc;
     padding: 15px;
-    border-radius: 5px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .all-posting:hover {

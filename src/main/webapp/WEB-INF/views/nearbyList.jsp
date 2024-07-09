@@ -164,7 +164,7 @@ body {
 <body>
 <input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
 <div class="container">
-    <h1 class="head" style="font-size: 18px; margin-top: 30px;">NEARBY LISTING | 자역별 리스트</h1>
+    <h1 class="head" style="font-size: 18px; margin-top: 30px;">NEARBY LISTING | 지역별 리스트</h1>
     <div class="header"></div>
     <div class="filter-bar">
         <select id="address" onchange="filterItems()">
@@ -216,7 +216,7 @@ body {
                      data-date="${pl.updateDate}" data-rating="${pl.rating}" data-reviewCount="${pl.reviewCount}" data-posting-idx="${pl.postingIdx}">
                      <a href="/postingDetail?postingIdx=${pl.postingIdx}" class="item-link">
                     <div class="image">
-                        <img src="${pl.filePath}" alt="${pl.title}">
+                        <img src="${pl.filePath}" alt="${pl.title}" style="width:250px; height:250px;">
                     </div>
                     <div class="details">
                         <h3>${pl.title}</h3>

@@ -23,7 +23,7 @@ SELECT * FROM (
 	    JOIN posting p ON p.posting_idx = pp.posting_idx
         join sub_category sc on pro.sub_category_idx = sc.sub_category_idx
         join category cate on sc.category_idx = cate.category_idx
-        where cate.eng_name=#{categoryEngName}
+        where cate.eng_name=#{categoryEngName} and p.state = 2
 	    GROUP BY p.posting_idx, p.update_date, p.title, pro.price,s.store_name
 	)
 	WHERE rnum <= 10
@@ -49,6 +49,7 @@ SELECT * FROM (
 	    JOIN store s on pro.store_idx = s.store_idx
 	    JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
 	    JOIN posting p ON p.posting_idx = pp.posting_idx
+	    where p.state = 2
 	    GROUP BY p.posting_idx, p.update_date, p.title, pro.price,s.store_name
 	)
 	WHERE rnum <= 10
@@ -83,7 +84,7 @@ SELECT * FROM (
     JOIN product d ON c.product_idx = d.product_idx
     JOIN store s on d.store_idx = s.store_idx
     JOIN RankedFiles e ON a.posting_idx = e.posting_idx
-    WHERE e.rn = 1
+    WHERE e.rn = 1 and a.state=2
     GROUP BY a.posting_idx, a.title, d.price, e.file_path, a.update_date, s.store_name
 ) subquery
 WHERE rnum <= 8
@@ -146,7 +147,7 @@ where user_idx = #{userIdx}
 SELECT ep.pick_idx, ep.file_path, ep.posting_idx, ep.start_date, ep.end_date
 FROM editor_pick ep
 JOIN posting p ON p.posting_idx = ep.posting_idx
-WHERE p.state = '1'
+WHERE p.state = 2
 AND CURRENT_DATE BETWEEN ep.start_date AND ep.end_date
 ORDER BY ep.pick_idx DESC
 </select>
@@ -177,12 +178,11 @@ FROM (
         JOIN product_color e ON c.product_color_idx = e.product_color_idx
         JOIN product_file f ON f.product_info_idx = b.product_info_idx
         JOIN store s on s.store_idx = a.store_idx
-        WHERE REPLACE(a.title, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
-           OR REPLACE(a.content, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+        WHERE (REPLACE(a.title, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
            OR REPLACE(d.manufacture_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
            OR REPLACE(d.name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
            OR REPLACE(e.color, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
-           OR REPLACE(s.store_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+           OR REPLACE(s.store_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%' ) and a.state =2
         ) inner_sub
     WHERE inner_sub.row_num = 1
 ) outer_sub
@@ -199,12 +199,11 @@ JOIN product d ON c.product_idx = d.product_idx
 JOIN product_color e ON c.product_color_idx = e.product_color_idx
 JOIN product_file f ON f.product_info_idx = b.product_info_idx
 JOIN store s on s.store_idx = a.store_idx
-WHERE REPLACE(a.title, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
-   OR REPLACE(a.content, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+WHERE (REPLACE(a.title, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
    OR REPLACE(d.manufacture_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
    OR REPLACE(d.name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
    OR REPLACE(e.color, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
-   OR REPLACE(s.store_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+   OR REPLACE(s.store_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%' )and a.state=2
 ORDER BY a.posting_idx DESC
 </select>
 
@@ -253,7 +252,7 @@ FROM (
             LEFT JOIN cart c ON c.posting_product_idx = b.posting_product_idx
             LEFT JOIN order_cart oc on c.cart_idx = oc.cart_idx
             LEFT JOIN orders o ON o.order_idx = oc.order_idx
-            WHERE g.eng_name = #{categoryEngName}
+            WHERE g.eng_name = #{categoryEngName} and a.state=2
             GROUP BY a.posting_idx, a.title, d.price, s.store_name, e.file_path
         ) temp
         WHERE rn = 1
@@ -272,7 +271,7 @@ JOIN product d ON c.product_idx = d.product_idx
 join product_file e on e.product_info_idx = b.product_info_idx
 join sub_category f on d.sub_category_idx = f.sub_category_idx
 join category g on g.category_idx = f.category_idx
-where g.eng_name = #{categoryEngName}
+where g.eng_name = #{categoryEngName} and a.state = 2
 </select>
 
 
@@ -320,7 +319,7 @@ FROM (
             LEFT JOIN cart c ON c.posting_product_idx = b.posting_product_idx
             LEFT JOIN order_cart oc ON c.cart_idx = oc.cart_idx
             LEFT JOIN orders o ON o.order_idx = oc.order_idx
-            WHERE f.eng_name = #{subCategoryName}
+            WHERE f.eng_name = #{subCategoryName} and a.state=2
             GROUP BY a.posting_idx, a.title, d.price, s.store_name, e.file_path
         ) temp
         WHERE rn = 1
@@ -338,7 +337,7 @@ JOIN product_info c ON b.product_info_idx = c.product_info_idx
 JOIN product d ON c.product_idx = d.product_idx
 join product_file e on e.product_info_idx = b.product_info_idx
 join sub_category f on d.sub_category_idx = f.sub_category_idx
-where f.eng_name = #{subCategoryName}
+where f.eng_name = #{subCategoryName} and a.state =2
 </select>
 
 <select id="checkWish">

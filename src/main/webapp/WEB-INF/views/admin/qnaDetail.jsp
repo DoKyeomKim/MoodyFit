@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <title>Q&A 상세</title>
 <style>
+<style>
     body {
         font-family: '맑은 고딕', 'Nanum Gothic', Verdana, Dotum, AppleGothic, sans-serif;
         background-color: #F6F4EE;
@@ -45,13 +46,8 @@
         margin-bottom: 20px;
     }
 
-    .answer-container {
-        margin-top: 20px;
-        display: none; /* Initially hide the answer container */
-    }
-       button.submit-btn, .button-container button {
-       margin-bottom: 10px;
-
+    button.submit-btn, .button-container button {
+        margin-bottom: 10px;
         width: 80px;
         align-self: center;
         background-color: #E5AAA3;
@@ -69,7 +65,53 @@
     .button-container {
         text-align: center;
         margin-top: 20px;
+    }
+    .answer-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
 
+.answer-container h4 {
+    margin-top: 0;
+    color: #333;
+}
+
+.answer-container input[type="text"], .answer-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.answer-container textarea {
+    height: 150px;
+    resize: none;
+}
+
+.submit-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+}
+.answer-area{
+	text-align:center;
+}
+.answer-btn{
+	text-align:right;
+}
 
 </style>
 <script>
@@ -120,7 +162,6 @@ function toggleAnswerContainer() {
             </div>
 
             <security:authorize access="hasRole('ROLE_ADMIN')">
-                <button onclick="toggleAnswerContainer()">답변 작성</button>
                 <div id="answerContainer" class="answer-container">
                     <h4>답변 작성</h4>
                     <form action="/submitAnswer" method="post">

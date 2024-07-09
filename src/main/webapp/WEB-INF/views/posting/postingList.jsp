@@ -192,16 +192,16 @@ h3 {
                         <td>${posting.UPDATE_DATE}</td>
                         <td>
                             <c:choose>
-                                <c:when test="${posting.STATE == 0}">
+                                <c:when test="${posting.STATE == 1}">
                                     등록 심사중
                                 </c:when>
-                                <c:when test="${posting.STATE == 1}">
+                                <c:when test="${posting.STATE == 2}">
                                     <select onchange="updatePostingState(${posting.POSTING_IDX}, this.value, 'postingList')">
                                         <option value="1" selected>판매중</option>
                                         <option value="2">판매중단</option>
                                     </select>
                                 </c:when>
-                                <c:when test="${posting.STATE == 2}">
+                                <c:when test="${posting.STATE == 3}">
                                     판매중단
                                 </c:when>
                             </c:choose>

@@ -160,9 +160,9 @@ margin-left:10px;
 }
 </style>
 </head>
-<body>
     <%@include file="/WEB-INF/layouts/mypageheader.jsp"%>
     <%@include file="/WEB-INF/layouts/aside.jsp"%>
+<body>
     <main>
     <input type="hidden" name="userIdx" id="userIdx" value="${sessionScope.userIdx}">
     <div class="container">
@@ -523,6 +523,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
-   <%@include file="/WEB-INF/layouts/footer.jsp"%>
 </body>	
+   <%@include file="/WEB-INF/layouts/footer.jsp"%>
 </html>

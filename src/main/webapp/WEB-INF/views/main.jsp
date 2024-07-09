@@ -98,47 +98,45 @@ main {
 }
 .weekly-best-container {
     overflow: hidden;
-    white-space: nowrap;
     width: 100%;
+    position: relative;
 }
 
 .weekly-best-wrapper {
     display: flex;
-    animation: slide 15s linear infinite;
-    animation-play-state: running; /* 애니메이션의 기본 상태를 재생 중으로 설정 */
-    width: 3000px;
-    height: 100%;
+    animation: slide 30s linear infinite;
 }
 
 .weekly-best-slide {
     display: inline-block;
-    width: 20%;
+    width: 300px; /* 모든 슬라이드의 너비를 300px로 고정 */
     box-sizing: border-box;
-    margin-right: 50px;
+    margin-right: 20px;
 }
+
 .best-image-container:hover .overlay {
     opacity: 1;
 }
+
 .best-image-container {
     position: relative;
     display: inline-block;
 }
-.best-image-container img{
-	height : 300px;
+
+.best-image-container img {
+    height: 300px;
+    width: 300px; /* 모든 이미지의 너비를 300px로 고정 */
+    object-fit: cover; /* 이미지 비율 유지하면서 잘라내기 */
 }
 
 @keyframes slide {
     0% {
-        transform: translateX(100%);
-    }
-    50% {
-        transform: translateX(0%);
+        transform: translateX(0);
     }
     100% {
-        transform: translateX(-100%);
+        transform: translateX(-50%); /* 슬라이드가 절반으로 이동하도록 설정 */
     }
 }
-
 .image-container {
     position: relative;
     width: 100%;
@@ -160,14 +158,18 @@ main {
 .recent-posting {
     text-align: left;
     margin: 20px;
-    border: 0.5px solid #ccc;
     padding: 15px;
-    border-radius: 5px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 450px; /* 높이 증가 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden; /* 박스 밖으로 내용이 넘치지 않도록 설정 */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* 트랜지션 추가 */
 }
 .recent-posting:hover {
     transform: scale(1.02);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* hover 시에도 박스 밖으로 내용이 넘치지 않도록 설정 */
 }
 .recent-post-title {
     font-size: 20px;
@@ -188,7 +190,7 @@ main {
     opacity: 0.7;
 }
 .recent-post-image {
-    height: 260px;
+    height: 300px; /* 이미지 높이 증가 */
     width: 100%;
     display: flex;
     align-items: center;
@@ -200,7 +202,7 @@ main {
 .recent-post-image img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain;
+    object-fit: cover; /* cover로 변경하여 이미지 비율 유지하면서 잘라내기 */
     margin: 0;
 }
 
@@ -215,10 +217,7 @@ main {
 	height: 400px;
 	margin: 10px 5px;
 	box-sizing: border-box;
-	border: 1px solid #ddd;
-	border-radius: 8px;
 	overflow: hidden;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	transition: transform 0.2s;
 }
 
@@ -240,7 +239,39 @@ main {
    color: #000; /* 글자 색상을 검정으로 설정 */
    transition: transform 0.2s;
 }
+.item {
+    width: calc(20% - 10px);
+    height: 400px;
+    margin: 10px 5px;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
 
+.item img {
+    width: 100%;
+    height: 200px; /* 이미지 높이를 고정 */
+    object-fit: cover; /* 이미지 비율 유지하면서 잘라내기 */
+}
+
+.item-content {
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px; /* 상단 여백 */
+}
+
+.item-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 10px;
+    word-wrap: break-word; /* 단어가 긴 경우 줄 바꿈 처리 */
+}
+
+.item-store-name, .item-address {
+    font-size: 0.875rem;
+    margin-top: 5px;
+    word-wrap: break-word; /* 단어가 긴 경우 줄 바꿈 처리 */
+}
 </style>
 </head>
 <body>
@@ -273,8 +304,7 @@ main {
             style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden;">
             <div class="swiper-wrapper">
                <c:forEach var="edtiorPick" items="${edtiorPick}">
-                  <div class="swiper-slide"
-                     style="display: flex; justify-content: center; align-items: center;">
+                  <div class="swiper-slide">
                      <div style="text-align: center;">
                         <a href="/postingDetail?postingIdx=${edtiorPick.POSTING_IDX}">
                            <div class="image-container"
@@ -291,8 +321,9 @@ main {
          </div>
       </div>
 
+		<security:authorize access="isAuthenticated()">
       <c:choose>
-         <c:when test="${not empty sessionScope.userIdx }">
+          <c:when test="${sessionScope.role == 'ROLE_PERSON'}">
             <div class="container">
                <h4 class="bold-text">Nearby Listings</h4>
                <c:forEach items="${p}" var="p">
@@ -306,103 +337,117 @@ main {
                   <div class="swiper-wrapper item-wrapper"
                      style="display: flex; width: 20%; height: 100%;">
                      <c:forEach items="${postingList}" var="pl">
-                        <div class="swiper-slide item">
-                           <a href="/postingDetail?postingIdx=${pl.postingIdx}" class="item-link">
-                              <div><img src="${pl.filePath}" alt="${pl.title}" style="width: 100%; height: auto;"></div>
-                              <div style="padding: 10px; text-align: center; margin-top: 30px;">
-                                 <h4>${pl.title}</h4>
-                                 <p style="font-size: 14px; margin: 5px 0;">${pl.storeName}</p>
-                                 <span class="address" style="font-size: 12px;">주소 :
-                                    ${pl.address} ${pl.detailAddress}</span>
-                              </div>
-                           </a>
-                        </div>
+						<div class="swiper-slide item">
+						    <a href="/postingDetail?postingIdx=${pl.postingIdx}" class="item-link">
+						        <div><img src="${pl.filePath}" alt="${pl.title}"></div>
+						        <div class="item-content">
+						            <h4 class="item-title">${pl.title}</h4>
+						            <p class="item-store-name">${pl.storeName}</p>
+						            <span class="item-address">주소: ${pl.address} ${pl.detailAddress}</span>
+						        </div>
+						    </a>
+						</div>
                      </c:forEach>
                   </div>
                </div>
             </div>
          </c:when>
-         <c:otherwise>
+		
+         <c:when test="${sessionScope.role == 'ROLE_STORE' || sessionScope.role == 'ROLE_ADMIN'}">
             <div class="container">
-               <h4 class="bold-text">Nearby Listings2</h4>
+               <h4 class="bold-text">Nearby Listings</h4>
                <div class="light-text">지역별 매장의 상품입니다</div>
                <div class="swiper-container2" id="swiper2"
                   style="width: 100%; height: 100%; display: flex; overflow: hidden;">
                   <div class="swiper-wrapper item-wrapper"
                      style="display: flex; width: 20%; height: 100%;">
-                     <c:forEach items="${pl}" var="pl">
-                        <div class="swiper-slide item">
-                           <a href="/postingDetail?postingIdx=${pl.postingIdx}" class="item-link">
-                           <div style="text-align: center;">
-                              <img src="${pl.filePath}" alt="${pl.title}"
-                                 style="width: 100%; height: auto;">
-                           </div>
-                           <div style="padding: 10px; text-align: center; margin-top: 30px;">
-                              <h4>${pl.title}</h4>
-                              <p style="font-size: 14px; margin: 5px 0;">${pl.storeName}</p>
-                              <span class="address" style="font-size: 12px;">주소:
-                                 ${pl.address} ${pl.detailAddress}</span>
-                           </div>
-                           </a>
-                        </div>
-                     </c:forEach>
+						<c:forEach items="${pl}" var="pl">
+						    <div class="swiper-slide item">
+						        <a href="/postingDetail?postingIdx=${pl.postingIdx}" class="item-link">
+						            <div><img src="${pl.filePath}" alt="${pl.title}"></div>
+						           <div class="item-content">
+						            <h4 class="item-title">${pl.title}</h4>
+						            <p class="item-store-name">${pl.storeName}</p>
+						            <span class="item-address">주소: ${pl.address} ${pl.detailAddress}</span>
+						        </div>
+						        </a>
+						    </div>
+						</c:forEach>
                   </div>
                </div>
             </div>
-         </c:otherwise>
-      </c:choose>
+			</c:when>
+	      </c:choose>
+		</security:authorize>
 
-      <div class="container-best">
-         <h4 class="bold-text">WEEKLY BEST</h4>
-         <div class="light-text">한주간 가장 인기있는 상품입니다</div>
-         <div class="weekly-best-container">
-            <div class="weekly-best-wrapper">
-               <c:forEach var="topPosting" items="${topPosting}">
-                  <div class="weekly-best-slide">
-                     <a href="/postingDetail?postingIdx=${topPosting.POSTING_IDX}">
+<div class="container-best">
+    <h4 class="bold-text">WEEKLY BEST</h4>
+    <div class="light-text" style="margin-bottom:70px;">한주간 가장 인기있는 상품입니다</div>
+    <div class="weekly-best-container">
+        <div class="weekly-best-wrapper" id="weeklyBestWrapper">
+            <c:forEach var="topPosting" items="${topPosting}">
+                <div class="weekly-best-slide">
+                    <a href="/postingDetail?postingIdx=${topPosting.POSTING_IDX}">
                         <div class="best-image-container"
-                           data-store-name="${topPosting.STORE_NAME}"
-                           data-posting-idx="${topPosting.POSTING_IDX}"
-                           data-price="${topPosting.PRICE}"
-                           data-title="${topPosting.TITLE}"
-                           data-date="${topPosting.UPDATE_DATE}">
-                           <img src="${topPosting.FILE_PATH}" class="img-fluid"
-                              alt="Image 1">
-                           <div class="overlay">
-                              <div class="info"></div>
-                           </div>
+                             data-store-name="${topPosting.STORE_NAME}"
+                             data-posting-idx="${topPosting.POSTING_IDX}"
+                             data-price="${topPosting.PRICE}"
+                             data-title="${topPosting.TITLE}"
+                             data-date="${topPosting.UPDATE_DATE}">
+                            <img src="${topPosting.FILE_PATH}" class="img-fluid" alt="Image 1">
+                            <div class="overlay">
+                                <div class="info"></div>
+                            </div>
                         </div>
-                     </a>
-                  </div>
-               </c:forEach>
-            </div>
-         </div>
-      </div>
-
-      <div class="container">
-         <h4 class="font-weight-bold">NEW ARRIVALS</h4>
-         <div class="text-muted">새롭게 업데이트된 상품입니다</div>
-         <div class="row">
-            <c:forEach var="recent" items="${recent}">
-               <div class="col-md-3 mt-3 mb-3 recent-posting-area">
-                  <div class="recent-posting">
-                     <a class="text-decoration-none text-dark"
-                        href="/postingDetail?postingIdx=${recent.POSTING_IDX}">
-                        <div class="recent-post-image">
-                           <img src="${recent.FILE_PATH}" class="img-fluid"
-                              alt="${recent.TITLE}">
-                        </div>
-                        <div class="recent-post-title">${recent.TITLE}</div>
-                        <div class="recent-post-info">
-                           <div class="recent-price">${recent.PRICE}원</div>
-                           <div class="recent-store-name">${recent.STORE_NAME}</div>
-                        </div>
-                     </a>
-                  </div>
-               </div>
+                    </a>
+                </div>
             </c:forEach>
-         </div>
-      </div>
+            <!-- 슬라이드 복제본 추가 -->
+            <c:forEach var="topPosting" items="${topPosting}">
+                <div class="weekly-best-slide">
+                    <a href="/postingDetail?postingIdx=${topPosting.POSTING_IDX}">
+                        <div class="best-image-container"
+                             data-store-name="${topPosting.STORE_NAME}"
+                             data-posting-idx="${topPosting.POSTING_IDX}"
+                             data-price="${topPosting.PRICE}"
+                             data-title="${topPosting.TITLE}"
+                             data-date="${topPosting.UPDATE_DATE}">
+                            <img src="${topPosting.FILE_PATH}" class="img-fluid" alt="Image 1">
+                            <div class="overlay">
+                                <div class="info"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+</div>
+
+
+    <div class="container">
+        <h4 class="font-weight-bold">NEW ARRIVALS</h4>
+        <div class="text-muted">새롭게 업데이트된 상품입니다</div>
+        <div class="row">
+            <c:forEach var="recent" items="${recent}">
+                <div class="col-md-3 mt-3 mb-3 recent-posting-area">
+                    <div class="recent-posting">
+                        <a class="text-decoration-none text-dark" href="/postingDetail?postingIdx=${recent.POSTING_IDX}">
+                            <div class="recent-post-image">
+                                <img src="${recent.FILE_PATH}" class="img-fluid" alt="${recent.TITLE}">
+                            </div>
+                            <div class="recent-post-title">${recent.TITLE}</div>
+                            <div class="recent-post-info">
+                                <div class="recent-price">${recent.PRICE}원</div>
+                                <div class="recent-store-name">${recent.STORE_NAME}</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+
    </main>
    <%@include file="/WEB-INF/layouts/footer.jsp"%>
    <script src="/js/bootstrap.bundle.min.js"></script>
@@ -517,6 +562,13 @@ document.addEventListener('DOMContentLoaded', function() {
             var formattedPrice = price.toLocaleString("ko-KR"); // 한국 통화 형식으로 포맷팅
             priceElement.textContent = formattedPrice + " 원";
         });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var slideCount = document.querySelectorAll('.weekly-best-slide').length / 2; // 원래 슬라이드 수
+        var wrapper = document.getElementById('weeklyBestWrapper');
+        wrapper.style.width = (320 * slideCount * 2) + 'px'; // 두 배의 너비로 설정
     });
 </script>
 </body>

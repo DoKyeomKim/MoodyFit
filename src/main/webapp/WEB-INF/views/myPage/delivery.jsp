@@ -119,7 +119,8 @@
     </div>
     
     <%@include file="/WEB-INF/layouts/aside.jsp"%>
-
+	<c:choose>
+	<c:when test="${not empty deliveryList }">
     <c:forEach var="de" items="${deliveryList}">
         <div class="box-container">
             <div class="form-check" style="display: flex; flex-direction: column; justify-content: space-evenly; width:30%;">
@@ -144,7 +145,13 @@
             </div>
         </div>
     </c:forEach>
-    
+    </c:when>
+    <c:otherwise>
+            <div class="box-container mt-5" style="margin-bottom:300px;">
+    			<h3> 배송지 정보가 없습니다.</h3>
+    		</div>
+    </c:otherwise>
+    </c:choose>
     <div id="deliveryModal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">

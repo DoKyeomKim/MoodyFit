@@ -83,10 +83,16 @@ public class MainController {
 		            break; // 이미 닉네임을 설정했으면 루프 종료
 		        } else if ("ROLE_STORE".equals(authority.getAuthority())) {
 		            String nickName = mainService.getSNickNameByUserIdx(userIdx);
+		            List<NearbyDto> postingList = orderMapper.selectPosting();
+		            Collections.shuffle(postingList);
+		            mv.addObject("pl",postingList);
 		            mv.addObject("nickName", nickName);
 		            break; // 이미 닉네임을 설정했으면 루프 종료
 		        } else if ("ROLE_ADMIN".equals(authority.getAuthority())) {
 		        	String nickName = "운영자";
+		        	List<NearbyDto> postingList = orderMapper.selectPosting();
+		        	Collections.shuffle(postingList);
+		        	mv.addObject("pl",postingList);
 		        	mv.addObject("nickName",nickName);
 		        	break;
 		        }

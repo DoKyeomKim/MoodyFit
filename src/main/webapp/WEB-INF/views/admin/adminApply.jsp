@@ -144,19 +144,20 @@ $(document).ready(function() {
                                 <td>${apply.updateDate}</td>
                                 <td>
                                     <c:choose>
-                                        <c:when test="${apply.state==1}">승인</c:when>
-                                        <c:when test="${apply.state==2}">반려</c:when>
+                                        <c:when test="${apply.state==1}">대기</c:when>
+                                        <c:when test="${apply.state==2}">승인</c:when>
+                                        <c:when test="${apply.state==3}">반려</c:when>
                                     </c:choose>
                                 </td>
                                 <td>
                                     <form action="${pageContext.request.contextPath}/admin/updateStatus" method="post" style="display:inline;">
                                         <input type="hidden" name="id" value="${apply.postingIdx}">
-                                        <input type="hidden" name="state" value="1">
+                                        <input type="hidden" name="state" value="2">
                                         <button class="btn btn-success" type="button" onclick="confirmAction(this.form, '승인하시겠습니까?')">승인</button>
                                     </form>
                                     <form action="${pageContext.request.contextPath}/admin/updateStatus" method="post" style="display:inline;">
                                         <input type="hidden" name="id" value="${apply.postingIdx}">
-                                        <input type="hidden" name="state" value="2">
+                                        <input type="hidden" name="state" value="3">
                                         <button class="btn btn-danger" type="button" onclick="confirmAction(this.form, '반려하시겠습니까?')">반려</button>
                                     </form>
                                 </td>
