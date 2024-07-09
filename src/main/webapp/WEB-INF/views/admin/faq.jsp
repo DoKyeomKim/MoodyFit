@@ -151,7 +151,7 @@ button.header-search-btn i {
 <h1 class="mt-3 text-center" style="font-weight:bold; color: #867B73;">FAQ</h1>
 키워드 추천:  입금확인  |  배송  |  반품  |  교환
 <div class="search-container">
-    <form action="${pageContext.request.contextPath}/admin/userManagement7" method="get">
+    <form action="${pageContext.request.contextPath}/userManagement7" method="get">
         <div class="form-group mb-2">
             <label for="searchId" class="sr-only"></label>
             <input type="text" name="searchId" id="searchId" placeholder="검색어를 입력하세요">

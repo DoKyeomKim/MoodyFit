@@ -204,7 +204,7 @@ public class AdminController {
 		        return "adminPuser";
 		    }
 		  //개인회원 검색
-		  @GetMapping("/admin/userManagement")
+		  @GetMapping("/userManagement")
 		    public String userManagement(@RequestParam(value = "searchId", required = false) String searchId,
 		                                 @RequestParam(value = "page", defaultValue = "1") int page,
 		                                 Model model) {
@@ -215,7 +215,7 @@ public class AdminController {
 		    }
 		  
 		  //편집샵회원 검색
-		  @GetMapping("/admin/userManagement2")
+		  @GetMapping("/userManagement2")
 		    public String cManagement(@RequestParam(value = "searchId", required = false) String searchId,
 		                                 @RequestParam(value = "page", defaultValue = "1") int page,
 		                                 Model model) {
@@ -226,7 +226,7 @@ public class AdminController {
 		    }
 		  
 		  //판매수익 검색
-		  @GetMapping("/admin/userManagement9")
+		  @GetMapping("/userManagement9")
 		    public String SalesSearch(@RequestParam(value = "searchId", required = false) String searchId,
 		                                 @RequestParam(value = "page", defaultValue = "1") int page,
 		                                 Model model) {
@@ -236,7 +236,7 @@ public class AdminController {
 		        return "/admin/adminSales";
 		    }
 		  //공고 검색
-		  @GetMapping("/admin/userManagement3")
+		  @GetMapping("/userManagement3")
 		    public String applySearch(@RequestParam(value = "searchId", required = false) String searchId,
 		                                 @RequestParam(value = "page", defaultValue = "1") int page,
 		                                 Model model) {
@@ -246,7 +246,7 @@ public class AdminController {
 		        return "/admin/adminApply";
 		    }
 		  //Q&A검색
-		  @GetMapping("/admin/userManagement4")
+		  @GetMapping("/userManagement4")
 		    public String qnaSearch(@RequestParam(value = "searchId", required = false) String searchId,
 		                                 @RequestParam(value = "page", defaultValue = "1") int page,
 		                                 Model model) {
@@ -256,7 +256,7 @@ public class AdminController {
 		        return "/admin/adminQnA";
 		    }
 		//Q&A검색
-		  @GetMapping("/admin/userManagement5")
+		  @GetMapping("/userManagement5")
 		    public String reviewSearch(@RequestParam(value = "searchId", required = false) String searchId,
 		                                 @RequestParam(value = "page", defaultValue = "1") int page,
 		                                 Model model) {
@@ -267,7 +267,7 @@ public class AdminController {
 		    }
 		  
 		//주문내역검색
-		  @GetMapping("/admin/userManagement6")
+		  @GetMapping("/userManagement6")
 		    public String orderSearch(@RequestParam(value = "searchId", required = false) String searchId,
 		                                 @RequestParam(value = "page", defaultValue = "1") int page,
 		                                 Model model) {
@@ -277,7 +277,7 @@ public class AdminController {
 		        return "/admin/adminOrder";
 		    }
 		  
-		  @GetMapping("/admin/userManagement7")
+		  @GetMapping("/userManagement7")
 		    public String faqSearch(@RequestParam(value = "searchId", required = false) String searchId,
 		                                 @RequestParam(value = "page", defaultValue = "1") int page,
 		                                 Model model) {
@@ -291,7 +291,7 @@ public class AdminController {
 	
 
 		//FAQ작성 페이지
-	    @PostMapping("/admin/adminFAQWrite")
+	    @PostMapping("/adminFAQWrite")
 	    public String addFAQ(@ModelAttribute("faqDTO") CsFaqDto faqDTO) {
 	        faqService.addFAQ(faqDTO); // FAQ 서비스를 통해 FAQ 추가
 	        return "redirect:/admin"; // FAQ 목록 페이지로 리다이렉트 

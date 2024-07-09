@@ -67,7 +67,7 @@ main {
 <main>
 <h3 class="mt-3 text-center">Q&A 관리</h3>
 <hr class="mb-3">
-<form action="${pageContext.request.contextPath}/admin/userManagement4" method="get" class="search-container">
+<form action="${pageContext.request.contextPath}/userManagement4" method="get" class="search-container">
     <div class="form-group mb-2">
         <label for="searchId" class="sr-only"></label>
         <input type="text" name="searchId" id="searchId" class="form-control" placeholder="제목을 입력하세요">

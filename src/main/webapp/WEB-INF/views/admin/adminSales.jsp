@@ -68,7 +68,7 @@ main {
 <input type="hidden" value="{user_idx}" id="userIdx">
 <h3>편집샵별 판매수익 관리</h3>
 <hr class="mb-3">
-<form action="${pageContext.request.contextPath}/admin/userManagement9" method="get" class="search-container">
+<form action="${pageContext.request.contextPath}/userManagement9" method="get" class="search-container">
     <div class="form-group mb-2">
         <label for="searchId" class="sr-only"></label>
         <input type="text" name="searchId" id="searchId" class="form-control" placeholder="편집샵 이름 입력">
