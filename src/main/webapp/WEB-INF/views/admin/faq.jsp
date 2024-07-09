@@ -26,6 +26,7 @@ main {
     flex-direction: column; /* 추가된 부분 */
     align-items: center; /* 추가된 부분 */
     justify-content: center; /* 추가된 부분 */
+    margin: 70px auto;
     
 }
 
@@ -134,10 +135,16 @@ button.header-search-btn i {
 .faq-answer a:hover {
     text-decoration: underline; /* 마우스 오버 시 밑줄 설정 */
 }
+.footer-container {
+    width: 100%; /* 너비를 100%로 설정 */
+    margin: 0; /* 외부 여백 제거 */
+    padding: 0; /* 내부 여백 제거 */
+    box-sizing: border-box; /* 박스 크기 설정 */
+}
 </style>
 </head>
-<body style="background-color: #F6F4EE;">
 <%@include file="/WEB-INF/layouts/mypageheader.jsp"%> 
+<body style="background-color: #F6F4EE;">
 <div class="col-sidebar"></div>
 <main>
 <input type="hidden" value="{user_idx}" id="userIdx">
@@ -177,5 +184,7 @@ button.header-search-btn i {
 </div>
 </main>
 </body>
+<div class="footer-container">
 <%@include file="/WEB-INF/layouts/footer.jsp"%>
+</div>
 </html>

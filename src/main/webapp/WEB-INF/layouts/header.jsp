@@ -183,10 +183,10 @@ main {
                         COMMUNITY
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="communityDropdown">
-                        <li><a class="dropdown-item" href="/nearbyList">지역별 검색</a></li>
+                        <li><a class="dropdown-item" href="/nearbyList">NEARBY</a></li>
                         <li><a class="dropdown-item" href="/faq">FAQ</a></li>
                         <li><a class="dropdown-item" href="/qna">QNA</a></li>
-                        <li><a class="dropdown-item" href="/reviewList">Review</a></li>
+                        <li><a class="dropdown-item" href="/reviewList">REVIEW</a></li>
                     </ul>
                 </div>
             </div>

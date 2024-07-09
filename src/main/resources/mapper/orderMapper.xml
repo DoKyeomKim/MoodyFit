@@ -71,8 +71,8 @@ from	delivery d
         join person p on d.person_idx = p.person_idx
         join users u on p.user_idx = u.user_idx
 where	u.user_idx = #{ userIdx }
-and		d.is_default = 1
-or		d.is_default = 0
+and		(d.is_default = 1
+or		d.is_default = 0)
 order by d.is_default desc
 
 </select>
@@ -151,15 +151,17 @@ FROM orders
     JOIN posting ON posting.posting_idx = posting_product.posting_idx
 WHERE users.user_idx = #{ userIdx }
 AND orders.state = '결제중'
+
 AND orders.order_idx = (
 SELECT MAX(orders.order_idx)
     FROM orders
     WHERE state = '결제중')
 AND cart.state = '결제중'
 AND cart.cart_idx = (
-    SELECT MIN(cart_idx)
+    SELECT MAX(cart.cart_idx)
     FROM cart
     WHERE state = '결제중')
+    
 </select>
 
 <select id="selectOrder2">
@@ -192,10 +194,10 @@ FROM orders
     JOIN product ON product.product_idx = product_info.product_idx
     JOIN posting ON posting.posting_idx = posting_product.posting_idx
 WHERE orders.person_idx = #{ personIdx }
-and orders.state = '결제완료'
+and (orders.state = '결제완료'
 or orders.state = '배송준비중'
 or orders.state = '배송중'
-or orders.state = '배송완료'
+or orders.state = '배송완료')
 order by orders.order_date desc
 
 </select>
@@ -315,7 +317,6 @@ WHERE
 </select>
 
 <select id="selectPosting2">
-
 WITH RankedPostings AS (
     SELECT 
         p.posting_idx,
@@ -373,13 +374,12 @@ WHERE
     rp.rn = 1
     AND rp.address LIKE '%' || (
         SELECT 
-            REGEXP_SUBSTR(address, '([^ ]+광역시|[^ ]+특별시|[^ ]+시|[^ ]+군)', 1, 1, NULL, 1) AS city_name
-        FROM 
-            person
-        WHERE 
-            person_idx = #{ personIdx }
+    REGEXP_SUBSTR(address, '^..', 1, 1) AS first_two_chars
+FROM 
+    person
+WHERE 
+    person_idx = #{ personIdx }
     ) || '%'
-
 </select>
 
 <select id="selectPersonLevel" resultType="double">
