@@ -16,7 +16,7 @@
 
 
 ## 시연영상
-[![Video Label](https://youtu.be/bmOFo_jMoUs)]
+[![Video Label](http://img.youtube.com/vi/bmOFo_jMoUs/0.jpg)](https://youtu.be/bmOFo_jMoUs?t=0s)
 
 
 ## 주요 기능
