@@ -3,8 +3,7 @@
 ![KakaoTalk_20240709_094541898](https://github.com/DoKyeomKim/MoodyFit/assets/164134917/9e245c1f-9379-4aee-afe2-a4e2a99cc399)
 
 ## 개발 목표
-
-![Uploading 슬라이드3.PNG…]()
+![슬라이드3](https://github.com/DoKyeomKim/MoodyFit/assets/164134917/e9ba1bff-b715-4581-9193-780554b72e2b)
 
 
 
