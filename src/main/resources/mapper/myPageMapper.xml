@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.MyPageMapper">
+
+<select id="getTopPosting">
+<![CDATA[
+SELECT * FROM (
+	    SELECT p.posting_idx AS posting_idx,
+	           p.update_date,
+	           p.title AS title,
+	           pro.price AS price,
+	           s.store_name AS store_name,
+	           MAX(pf.file_path) AS file_path,
+	           ROW_NUMBER() OVER (ORDER BY SUM(o.total_price) DESC) AS rnum
+	    FROM orders o
+        JOIN order_cart oc on o.order_idx = oc.order_idx
+        join cart c on c.cart_idx = oc.cart_idx
+	    JOIN posting_product pp ON c.posting_product_idx = pp.posting_product_idx
+	    JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+	    JOIN product pro ON pi.product_idx = pro.product_idx
+	    JOIN store s on pro.store_idx = s.store_idx
+	    JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
+	    JOIN posting p ON p.posting_idx = pp.posting_idx
+        where s.user_idx = #{userIdx}
+	    GROUP BY p.posting_idx, p.update_date, p.title, pro.price,s.store_name
+	)
+	WHERE rnum <= 10
+]]>
+</select>
+
+<select id="getPostingCount">
+select nvl(count(p.posting_idx),0)
+from posting p
+join store s on p.store_idx = s.store_idx
+where s.user_idx = #{userIdx}
+</select>
+<select id="getProductCount">
+select nvl(count(p.product_idx),0)
+from product p
+join store s on p.store_idx = s.store_idx
+where s.user_idx = #{userIdx}
+</select>
+<select id="getOrderCount">
+select nvl(count(c.cart_idx),0)
+from cart c
+join product_info pi on c.product_info_idx = pi.product_info_idx
+join product p on p.product_idx = pi.product_idx
+join store s on p.store_idx = s.store_idx
+where s.user_idx = #{userIdx} and c.state != '결제중' and c.state != '장바구니'
+</select>
+<select id="getTotalRevenue">
+    SELECT 
+        NVL(SUM(o.total_price), 0)
+    FROM 
+        orders o
+    join order_cart oc on o.order_idx = oc.order_idx
+    join cart c on c.cart_idx = oc.cart_idx
+    join product_info pi on c.product_info_idx = pi.product_info_idx
+	join product p on p.product_idx = pi.product_idx
+	join store s on p.store_idx = s.store_idx
+	where s.user_idx = #{userIdx}
+</select>
+
+<select id="getPostingByPostingIdx">
+SELECT 
+    p.posting_idx as posting_idx,
+    p.title as title,
+    MIN(prod.name) as name,
+    s.store_name as store_name,
+    prod.price as price,
+    MIN(pf.file_path) as file_path
+FROM posting p
+JOIN store s on p.store_idx = s.store_idx
+JOIN posting_product pp ON p.posting_idx = pp.posting_idx
+JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+JOIN product prod ON pi.product_idx = prod.product_idx
+JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
+WHERE p.posting_idx = #{postingIdx}
+GROUP BY p.posting_idx, p.title, s.store_name, prod.price
+	
+</select>
+
+<select id="getCartCount">
+select NVL(COUNT(cart_idx),0) as cartCount
+from cart c
+join person p on c.person_idx=p.person_idx
+where c.state='장바구니' and p.user_idx=#{userIdx}
+</select>
+
+<select id="getAllUserPurchase">
+SELECT NVL(SUM(o.total_price), 0) AS sum_price
+FROM orders o
+JOIN person p ON p.person_idx = o.person_idx
+JOIN users u ON p.user_idx = u.user_idx
+WHERE o.state != '결제중' AND p.user_idx =#{userIdx}
+</select>
+
+<select id="getOrderPrePare">
+select count(o.order_idx)
+from orders o
+join person p on p.person_idx = o.person_idx
+where o.state = '배송준비중' and p.user_idx=#{userIdx}
+</select>
+
+<select id="getOrderIng">
+select count(o.order_idx)
+from orders o
+join person p on p.person_idx = o.person_idx
+where o.state = '배송진행중' and p.user_idx=#{userIdx}
+</select>
+<select id="getOrderDone">
+select count(o.order_idx)
+from orders o
+join person p on p.person_idx = o.person_idx
+where o.state = '배송완료' and p.user_idx=#{userIdx}
+</select>
+
+<select id="getNickNameByUserIdx">
+SELECT PERSON_IDX, NICK_NAME
+FROM PERSON
+WHERE USER_IDX = #{userIdx}
+</select>
+
+<select id="getStoreNameByUserIdx">
+SELECT STORE_IDX, STORE_NAME
+FROM STORE
+WHERE USER_IDX = #{userIdx}
+</select>
+
+<select id="getPersonInfo">
+SELECT 
+    u.ID,
+    u.PW,
+    P.PERSON_IDX,
+    p.NAME,
+    p.NICK_NAME,
+    p.EMAIL,
+    p.PHONE,
+    p.POST_CODE,
+    p.ADDRESS,
+    p.DETAIL_ADDRESS,
+    p.SOCIAL,
+    PS.PERSON_SPEC_IDX,
+    ps.GENDER,
+    ps.HEIGHT,
+    ps.WEIGHT,
+    ps.FOOT,
+    ps.TOP,
+    ps.BOTTOM
+FROM 
+    users u
+JOIN 
+    person p ON u.USER_IDX = p.USER_IDX
+JOIN 
+    person_spec ps ON p.PERSON_IDX = ps.PERSON_IDX
+WHERE 
+    u.USER_IDX = #{userIdx}
+</select>
+
+<select id="getStoreInfo">
+SELECT 
+U.ID,
+U.PW,
+S.STORE_IDX,
+S.STORE_NAME,
+S.MANAGER_NAME,
+S.BUSINESS_NUMBER,
+S.EMAIL,
+S.PHONE,
+S.POST_CODE,
+S.ADDRESS,
+S.DETAIL_ADDRESS
+FROM USERS U
+JOIN STORE S ON U.USER_IDX = S.USER_IDX
+WHERE
+U.USER_IDX=#{userIdx}
+</select>
+
+<select id="getUserById">
+    SELECT * FROM USERS WHERE USER_IDX = #{userIdx}
+</select>
+
+<update id="usersUpdate">
+UPDATE USERS
+ SET PW = #{pw}
+ WHERE USER_IDX = #{userIdx}
+</update>
+
+<update id="personUpdate">
+UPDATE PERSON
+SET 
+NAME=#{name},
+NICK_NAME=#{nickName},
+EMAIL=#{email},
+PHONE=#{phone},
+POST_CODE=#{postCode},
+ADDRESS=#{address},
+DETAIL_ADDRESS=#{detailAddress}
+WHERE 
+PERSON_IDX = #{personIdx}
+</update>
+
+<update id="storeUpdate">
+UPDATE STORE
+SET 
+STORE_NAME=#{storeName},
+MANAGER_NAME=#{managerName},
+EMAIL=#{email},
+PHONE=#{phone},
+POST_CODE=#{postCode},
+ADDRESS=#{address},
+DETAIL_ADDRESS=#{detailAddress}
+WHERE 
+STORE_IDX = #{storeIdx}
+</update>
+
+<update id="personSpecUpdate">
+UPDATE PERSON_SPEC
+SET
+GENDER = #{gender},
+HEIGHT = #{height},
+WEIGHT = #{weight},
+FOOT = #{foot},
+TOP = #{top},
+BOTTOM = #{bottom}
+WHERE PERSON_SPEC_IDX =#{personSpecIdx}
+</update>
+
+<update id="userDelete">
+UPDATE USERS
+SET
+STATE = 2
+WHERE USER_IDX = #{userIdx}
+</update>
+
+<select id="getWishList">
+select
+	posting_idx,
+	title,
+	name,
+	store_name,
+	price,
+	file_path,
+	wish_idx
+FROM(
+	SELECT
+	posting_idx,
+	title,
+	name,
+	store_name,
+	price,
+	file_path,
+	wish_idx,
+	ROWNUM as rnum
+	FROM (
+	SELECT 
+		distinct p.posting_idx as posting_idx,
+		p.title as title,
+		prod.name as name,
+		s.store_name as store_name,
+		prod.price as price,
+		pf.file_path as file_path,
+		w.wish_idx as wish_idx
+		FROM posting p
+		JOIN store s on p.store_idx = s.store_idx
+		JOIN posting_product pp ON p.posting_idx = pp.posting_idx
+		JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+		JOIN product prod ON pi.product_idx = prod.product_idx
+		JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
+		JOIN wish w on p.posting_idx = w.posting_idx
+		join person per on w.person_idx = per.person_idx
+		where per.user_idx = #{userIdx}
+	) inner_sub
+)
+where rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
+order by wish_idx desc
+</select>
+
+<select id="getWishListCount">
+select count(wish_idx) from wish w
+join person p on w.person_idx=p.person_idx
+where p.user_idx=#{userIdx}
+</select>
+
+<select id="getPersonLevel">
+select name,purchase,benefit
+from person_level
+where level_idx != 6
+order by level_idx asc
+</select>
+
+<select id="getOrdersByUserIdx">
+SELECT 
+    ROW_NUMBER() OVER (ORDER BY o.order_date ASC) AS row_num,
+    o.total_price AS total_price,
+    o.quantity AS quantity,
+    p.title AS title,
+    pro.price AS price,
+    o.order_date as order_date,
+    p.posting_idx as posting_idx
+FROM orders o
+JOIN order_cart oc ON o.order_idx = oc.order_idx
+JOIN cart c ON c.cart_idx = oc.cart_idx
+JOIN posting_product pp ON c.posting_product_idx = pp.posting_product_idx
+JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+JOIN product pro ON pi.product_idx = pro.product_idx
+JOIN store s ON pro.store_idx = s.store_idx
+JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
+JOIN posting p ON p.posting_idx = pp.posting_idx
+WHERE s.user_idx = #{userIdx} 
+  AND o.state != '결제중'
+ORDER BY o.order_date desc
+</select>
+
+</mapper>

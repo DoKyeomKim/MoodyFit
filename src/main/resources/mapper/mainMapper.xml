@@ -1,7 +1,385 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mf.mapper.MainMapper">
-<select id="getCategory" parameterType="com.mf.dto.CategoryDto">
-select * from category
+
+<select id="getTopPostingByCategoryEngName">
+<![CDATA[
+SELECT * FROM (
+	    SELECT p.posting_idx AS posting_idx,
+	           p.update_date,
+	           p.title AS title,
+	           pro.price AS price,
+	           s.store_name AS store_name,
+	           MAX(pf.file_path) AS file_path,
+	           ROW_NUMBER() OVER (ORDER BY SUM(o.total_price) DESC) AS rnum
+	    FROM orders o
+        JOIN order_cart oc on o.order_idx = oc.order_idx
+        join cart c on c.cart_idx = oc.cart_idx
+	    JOIN posting_product pp ON c.posting_product_idx = pp.posting_product_idx
+	    JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+	    JOIN product pro ON pi.product_idx = pro.product_idx
+	    JOIN store s on pro.store_idx = s.store_idx
+	    JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
+	    JOIN posting p ON p.posting_idx = pp.posting_idx
+        join sub_category sc on pro.sub_category_idx = sc.sub_category_idx
+        join category cate on sc.category_idx = cate.category_idx
+        where cate.eng_name=#{categoryEngName} and p.state = 2
+	    GROUP BY p.posting_idx, p.update_date, p.title, pro.price,s.store_name
+	)
+	WHERE rnum <= 10
+]]>
 </select>
+
+<select id="getTopPosting">
+<![CDATA[
+SELECT * FROM (
+	    SELECT p.posting_idx AS posting_idx,
+	           p.update_date,
+	           p.title AS title,
+	           pro.price AS price,
+	           s.store_name AS store_name,
+	           MAX(pf.file_path) AS file_path,
+	           ROW_NUMBER() OVER (ORDER BY SUM(o.total_price) DESC) AS rnum
+	    FROM orders o
+        JOIN order_cart oc on o.order_idx = oc.order_idx
+        join cart c on c.cart_idx = oc.cart_idx
+	    JOIN posting_product pp ON c.posting_product_idx = pp.posting_product_idx
+	    JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+	    JOIN product pro ON pi.product_idx = pro.product_idx
+	    JOIN store s on pro.store_idx = s.store_idx
+	    JOIN product_file pf ON pf.product_info_idx = pp.product_info_idx
+	    JOIN posting p ON p.posting_idx = pp.posting_idx
+	    where p.state = 2
+	    GROUP BY p.posting_idx, p.update_date, p.title, pro.price,s.store_name
+	)
+	WHERE rnum <= 10
+]]>
+</select>
+
+<select id="getRecentPosting">
+<![CDATA[
+WITH RankedFiles AS (
+    SELECT 
+        a.posting_idx,
+        e.file_path,
+        ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY e.file_path) AS rn
+    FROM posting a
+    JOIN posting_product b ON a.posting_idx = b.posting_idx
+    JOIN product_info c ON b.product_info_idx = c.product_info_idx
+    JOIN product d ON c.product_idx = d.product_idx
+    JOIN product_file e ON e.product_info_idx = b.product_info_idx
+)
+SELECT * FROM (
+    SELECT 
+        a.posting_idx AS posting_idx,
+        a.update_date,
+        a.title AS title,
+        d.price AS price,
+        s.store_name as store_name,
+        e.file_path AS file_path,
+        ROW_NUMBER() OVER (ORDER BY a.update_date DESC) AS rnum
+    FROM posting a
+    JOIN posting_product b ON a.posting_idx = b.posting_idx
+    JOIN product_info c ON b.product_info_idx = c.product_info_idx
+    JOIN product d ON c.product_idx = d.product_idx
+    JOIN store s on d.store_idx = s.store_idx
+    JOIN RankedFiles e ON a.posting_idx = e.posting_idx
+    WHERE e.rn = 1 and a.state=2
+    GROUP BY a.posting_idx, a.title, d.price, e.file_path, a.update_date, s.store_name
+) subquery
+WHERE rnum <= 8
+]]>
+</select>
+
+<select id="getPNickNameByUserIdx">
+select nick_name
+from person
+where user_idx = #{userIdx}
+</select>
+
+<select id="getSNickNameByUserIdx">
+select store_name
+from store
+where user_idx = #{userIdx}
+</select>
+
+<!-- 카테고리 첫 페이지가 All로 출력되게끔 -->
+<select id="getAllSubCategoryByCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
+	select sc.*
+		from sub_category sc
+		join category c on sc.category_idx = c.category_idx
+		where c.eng_name = #{categoryEngName}
+  		and sc.kor_name = '전체'
+</select>
+
+
+<!-- 메인홈에서 카테고리 및 서브카테고리로 이동시 = -->
+<select id="getSubCategoriesByCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
+	select sc.*
+	from  sub_category sc
+	join  category c on sc.category_idx = c.category_idx
+	where c.eng_name = #{categoryEngName}
+	order by sub_category_idx asc
+</select>
+
+<select id="getSubCategoryByNameAndCategoryEngName" resultType="com.mf.dto.SubCategoryDto">
+	select sc.*
+		from sub_category sc
+		join category c on sc.category_idx = c.category_idx
+		where c.eng_name = #{categoryEngName}
+			and sc.eng_name = #{subCategoryName}
+</select>
+
+
+
+<select id="getAllSubCategories" resultType="com.mf.dto.SubCategoryDto">
+    select * from sub_category
+</select>
+
+<select id="getSubCategoryById" resultType="com.mf.dto.SubCategoryDto">
+  select *
+  	from sub_category
+  	where sub_category_idx = #{subCategoryId}
+</select>
+
+
+<select id="getEdtiorPick">
+SELECT ep.pick_idx, ep.file_path, ep.posting_idx, ep.start_date, ep.end_date
+FROM editor_pick ep
+JOIN posting p ON p.posting_idx = ep.posting_idx
+WHERE p.state = 2
+AND CURRENT_DATE BETWEEN ep.start_date AND ep.end_date
+ORDER BY ep.pick_idx DESC
+</select>
+
+
+<select id="getSearchResult">
+SELECT posting_idx, title, price, file_path, store_name
+FROM (
+    SELECT 
+        posting_idx,
+        title,
+        price,
+        file_path,
+        store_name,
+        ROWNUM AS rnum
+    FROM (
+        SELECT 
+            a.posting_idx,
+            a.title,
+            d.price,
+            f.file_path,
+            s.store_name,
+            ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY f.file_path) AS row_num
+        FROM posting a
+        JOIN posting_product b ON a.posting_idx = b.posting_idx
+        JOIN product_info c ON b.product_info_idx = c.product_info_idx
+        JOIN product d ON c.product_idx = d.product_idx
+        JOIN product_color e ON c.product_color_idx = e.product_color_idx
+        JOIN product_file f ON f.product_info_idx = b.product_info_idx
+        JOIN store s on s.store_idx = a.store_idx
+        WHERE (REPLACE(a.title, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+           OR REPLACE(d.manufacture_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+           OR REPLACE(d.name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+           OR REPLACE(e.color, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+           OR REPLACE(s.store_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%' ) and a.state =2
+        ) inner_sub
+    WHERE inner_sub.row_num = 1
+) outer_sub
+WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
+ORDER BY posting_idx DESC
+</select> 
+
+<select id="getPostingCountByKeyword">
+SELECT count(DISTINCT a.posting_idx)
+FROM posting a
+JOIN posting_product b ON a.posting_idx = b.posting_idx
+JOIN product_info c ON b.product_info_idx = c.product_info_idx
+JOIN product d ON c.product_idx = d.product_idx
+JOIN product_color e ON c.product_color_idx = e.product_color_idx
+JOIN product_file f ON f.product_info_idx = b.product_info_idx
+JOIN store s on s.store_idx = a.store_idx
+WHERE (REPLACE(a.title, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+   OR REPLACE(d.manufacture_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+   OR REPLACE(d.name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+   OR REPLACE(e.color, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%'
+   OR REPLACE(s.store_name, ' ', '') LIKE '%' || REPLACE(#{keyword}, ' ', '') || '%' )and a.state=2
+ORDER BY a.posting_idx DESC
+</select>
+
+<select id="getAllPostingByCategory">
+SELECT posting_idx, title, price, store_name, file_path, total_price
+FROM (
+    SELECT posting_idx, title, price, store_name, file_path, total_price,
+           ROW_NUMBER() OVER (ORDER BY
+               <choose>
+                   <when test="orderBy == 'expensive'">
+                       price DESC
+                   </when>
+                   <when test="orderBy == 'chip'">
+                       price ASC
+                   </when>
+                   <when test="orderBy == 'newest'">
+                       posting_idx DESC
+                   </when>
+                   <when test="orderBy == 'sales'">
+                       total_price DESC
+                   </when>
+                   <otherwise>
+                       posting_idx ASC
+                   </otherwise>
+               </choose>
+           ) AS rnum
+    FROM (
+        SELECT posting_idx, title, price, store_name, file_path, total_price
+        FROM (
+            SELECT
+                a.posting_idx AS posting_idx,
+                a.title AS title,
+                d.price AS price,
+                s.store_name,
+                e.file_path AS file_path,
+                COALESCE(SUM(o.total_price), 0) AS total_price,
+                ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY e.file_path) AS rn
+            FROM posting a
+            JOIN store s ON s.store_idx = a.store_idx
+            JOIN posting_product b ON a.posting_idx = b.posting_idx
+            JOIN product_info c ON b.product_info_idx = c.product_info_idx
+            JOIN product d ON c.product_idx = d.product_idx
+            JOIN product_file e ON e.product_info_idx = b.product_info_idx
+            JOIN sub_category f ON d.sub_category_idx = f.sub_category_idx
+            JOIN category g ON g.category_idx = f.category_idx
+            LEFT JOIN cart c ON c.posting_product_idx = b.posting_product_idx
+            LEFT JOIN order_cart oc on c.cart_idx = oc.cart_idx
+            LEFT JOIN orders o ON o.order_idx = oc.order_idx
+            WHERE g.eng_name = #{categoryEngName} and a.state=2
+            GROUP BY a.posting_idx, a.title, d.price, s.store_name, e.file_path
+        ) temp
+        WHERE rn = 1
+    ) inner_sub
+)
+WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
+</select>
+
+<select id="getPostingCountBycategoryEngName">
+SELECT count(DISTINCT a.posting_idx)
+FROM posting a
+join store s on s.store_idx = a.store_idx
+JOIN posting_product b ON a.posting_idx = b.posting_idx
+JOIN product_info c ON b.product_info_idx = c.product_info_idx
+JOIN product d ON c.product_idx = d.product_idx
+join product_file e on e.product_info_idx = b.product_info_idx
+join sub_category f on d.sub_category_idx = f.sub_category_idx
+join category g on g.category_idx = f.category_idx
+where g.eng_name = #{categoryEngName} and a.state = 2
+</select>
+
+
+<select id="getSelectedPostingBySubCategory">
+SELECT posting_idx, title, price, store_name, file_path, total_price
+FROM (
+    SELECT posting_idx, title, price, store_name, file_path, total_price,
+           ROW_NUMBER() OVER (ORDER BY
+               <choose>
+                   <when test="orderBy == 'expensive'">
+                       price DESC
+                   </when>
+                   <when test="orderBy == 'chip'">
+                       price ASC
+                   </when>
+                   <when test="orderBy == 'newest'">
+                       posting_idx DESC
+                   </when>
+                   <when test="orderBy == 'sales'">
+                       total_price DESC
+                   </when>
+                   <otherwise>
+                       posting_idx ASC
+                   </otherwise>
+               </choose>
+           ) AS rnum
+    FROM (
+        SELECT posting_idx, title, price, store_name, file_path, total_price
+        FROM (
+            SELECT 
+                a.posting_idx AS posting_idx,
+                a.title AS title,
+                d.price AS price,
+                s.store_name,
+                e.file_path AS file_path,
+                COALESCE(SUM(o.total_price), 0) AS total_price,
+                ROW_NUMBER() OVER (PARTITION BY a.posting_idx ORDER BY e.file_path) AS rn
+            FROM posting a
+            JOIN store s ON a.store_idx = s.store_idx
+            JOIN posting_product b ON a.posting_idx = b.posting_idx
+            JOIN product_info c ON b.product_info_idx = c.product_info_idx
+            JOIN product d ON c.product_idx = d.product_idx
+            JOIN product_file e ON e.product_info_idx = b.product_info_idx
+            JOIN sub_category f ON d.sub_category_idx = f.sub_category_idx
+            LEFT JOIN cart c ON c.posting_product_idx = b.posting_product_idx
+            LEFT JOIN order_cart oc ON c.cart_idx = oc.cart_idx
+            LEFT JOIN orders o ON o.order_idx = oc.order_idx
+            WHERE f.eng_name = #{subCategoryName} and a.state=2
+            GROUP BY a.posting_idx, a.title, d.price, s.store_name, e.file_path
+        ) temp
+        WHERE rn = 1
+    ) inner_sub
+)
+WHERE rnum BETWEEN #{startIndex} + 1 AND #{startIndex} + #{pageSize}
+</select>
+
+<select id="getPostingCountBysubCategoryName">
+SELECT count(DISTINCT a.posting_idx)
+FROM posting a
+join store s on s.store_idx = a.store_idx 
+JOIN posting_product b ON a.posting_idx = b.posting_idx
+JOIN product_info c ON b.product_info_idx = c.product_info_idx
+JOIN product d ON c.product_idx = d.product_idx
+join product_file e on e.product_info_idx = b.product_info_idx
+join sub_category f on d.sub_category_idx = f.sub_category_idx
+where f.eng_name = #{subCategoryName} and a.state =2
+</select>
+
+<select id="checkWish">
+select count(wish_idx)
+from wish w
+join person p on p.person_idx = w.person_idx
+where posting_idx=#{postingIdx} and p.user_idx=#{userIdx}
+</select>
+
+<select id="getPersonIdxByUserIdx">
+select person_idx
+from person
+where user_idx = #{userIdx}
+</select>
+
+
+<insert id="insertWish">
+  insert into wish (wish_idx, person_idx, posting_idx)
+  values (wish_seq.nextval, (select person_idx from person where user_idx = #{userIdx}), #{postingIdx})
+</insert>
+
+
+<delete id="deleteWish">
+  delete from wish
+  where person_idx = (select person_idx from person where user_idx = #{userIdx})
+  and posting_idx = #{postingIdx}
+</delete>
+
+<select id="checkEditorPick">
+select count(editor_scrap_idx)
+from editor_scrap
+where posting_idx=#{postingIdx} and user_idx=#{userIdx}
+</select>
+
+<insert id="addEditorPick">
+  insert into editor_scrap (editor_scrap_idx, user_idx, posting_idx)
+  values (editor_scrap_seq.nextval, #{userIdx}, #{postingIdx})
+</insert>
+
+<delete id="deleteEditorPick">
+  delete from editor_scrap
+  where user_idx = #{userIdx} and posting_idx = #{postingIdx}
+</delete>
+
 </mapper>

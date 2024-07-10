@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.UsersMapper">
+<select id="getLevel">
+	select pl.name 
+	from person p
+	join person_level pl on p.level_idx=pl.level_idx
+	where p.user_idx=#{userIdx}
+</select>
+
+<select id="findById" parameterType="string" resultType="com.mf.dto.UsersDto">
+	SELECT * FROM USERS WHERE ID = #{id} and state=1
+</select>
+
+<select id="getUserById">
+SELECT * FROM USERS WHERE ID = #{id}
+</select>
+<select id="getUserByIdAndState">
+SELECT * FROM USERS WHERE ID = #{id} and state!=1
+</select>
+
+<insert id="OAuthJoin">
+INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
+VALUES (USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_PERSON')
+</insert>
+<insert id="OAuthPersonJoin">
+INSERT INTO PERSON(
+USER_IDX,
+PERSON_IDX,
+NAME,
+NICK_NAME,
+EMAIL,
+SOCIAL,
+SOCIAL_ROOT,
+LEVEL_IDX
+)
+VALUES(
+USER_SEQ.CURRVAL,
+PERSON_SEQ.NEXTVAL,
+#{name},
+#{nickName},
+#{email},
+#{social},
+#{socialRoot},
+'1'
+)
+</insert>
+
+<select id="getEmail">
+SELECT email
+FROM person
+WHERE email = #{email}
+UNION
+SELECT email
+FROM store
+WHERE email = #{email}
+</select>
+
+<select id="getId">
+SELECT ID FROM USERS WHERE ID = #{id}
+</select>
+<select id="getNickName">
+SELECT NICK_NAME FROM PERSON WHERE nick_name = #{nickName}
+</select>
+<select id="getStoreName">
+SELECT STORE_NAME FROM STORE WHERE STORE_NAME = #{storeName}
+</select>
+
+<insert id="joinProcess">
+	INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
+	VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_PERSON')
+</insert>
+
+<insert id="joinDetailProcess">
+INSERT INTO PERSON(
+USER_IDX,
+PERSON_IDX,
+NAME,
+NICK_NAME,
+EMAIL,
+PHONE,
+POST_CODE,
+ADDRESS,
+DETAIL_ADDRESS,
+SOCIAL,
+LEVEL_IDX
+)
+VALUES(
+USER_SEQ.CURRVAL,
+PERSON_SEQ.NEXTVAL,
+#{name},
+#{nickName},
+#{email},
+#{phone},
+#{postCode},
+#{address},
+#{detailAddress},
+'NO',
+1
+)
+</insert>
+<insert id="OAuthSpecJoin">
+INSERT INTO PERSON_SPEC(
+PERSON_SPEC_IDX,
+gender,
+PERSON_IDX
+)
+VALUES(
+PERSON_SPEC_SEQ.NEXTVAL,
+'1',
+PERSON_SEQ.CURRVAL
+)
+</insert>
+
+<insert id="storeJoinProcess">
+	INSERT INTO USERS(USER_IDX,ID,PW,STATE,ROLE)
+	VALUES(USER_SEQ.NEXTVAL,#{id},#{pw},1,'ROLE_STORE')
+</insert>
+
+<insert id="storeJoinDetailProcess">
+INSERT INTO STORE(
+STORE_IDX,
+STORE_NAME,
+MANAGER_NAME,
+BUSINESS_NUMBER,
+EMAIL,
+PHONE,
+POST_CODE,
+ADDRESS,
+DETAIL_ADDRESS,
+USER_IDX
+)
+VALUES(
+STORE_SEQ.NEXTVAL,
+#{storeName},
+#{managerName},
+#{businessNumber},
+#{email},
+#{phone},
+#{postCode},
+#{address},
+#{detailAddress},
+USER_SEQ.CURRVAL
+)
+</insert>
+
+<insert id="specProcess">
+INSERT INTO PERSON_SPEC(
+PERSON_SPEC_IDX,
+GENDER,
+HEIGHT,
+WEIGHT,
+FOOT,
+TOP,
+BOTTOM,
+PERSON_IDX
+)
+VALUES(
+PERSON_SPEC_SEQ.NEXTVAL,
+#{gender},
+#{height},
+#{weight},
+#{foot},
+#{top},
+#{bottom},
+PERSON_SEQ.CURRVAL
+)
+</insert>
+
+<select id="getIdByEmail">
+select id
+from users u
+join person p on u.user_idx = p.user_idx
+where p.email= #{email}
+</select>
+
+<select id="getIdByPhone">
+select id
+from users u
+join person p on u.user_idx = p.user_idx
+where p.phone=#{phone}
+</select>
+
+</mapper>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.PostingMapper">
+<select id="getPostingQuestion">
+	select pq.POSTING_QUESTION_IDX, pq.TITLE, pq.CONTENT, pq.CREATE_DATE, pq.STATE, p.nick_name
+	from posting_question pq
+	join person p on p.person_idx = pq.person_idx
+	where posting_idx=#{postingIdx} 
+</select>
+
+<insert id="insertPosting" parameterType="com.mf.dto.PostingDto">
+    INSERT INTO posting (posting_idx, title, content, update_date, state, store_idx)
+    VALUES (posting_seq.NEXTVAL, #{title}, #{content}, SYSDATE, #{state}, #{storeIdx})
+</insert>
+
+<insert id="insertPostingProduct" parameterType="com.mf.dto.PostingProductDto">
+    INSERT INTO posting_product (posting_product_idx, posting_idx, product_info_idx)
+    VALUES (posting_product_seq.NEXTVAL, posting_seq.CURRVAL, #{productInfoIdx})
+</insert>
+
+<insert id="insertPostingFile" parameterType="com.mf.dto.PostingFileDto">
+    INSERT INTO posting_file (posting_file_idx, original_name, file_path, file_size, posting_idx)
+    VALUES (posting_file_seq.NEXTVAL, #{originalName}, #{filePath}, #{fileSize}, posting_seq.CURRVAL)
+</insert>
+
+<select id="getAllProductDetailsWithInventory" resultType="java.util.HashMap">
+       SELECT 
+        distinct p.product_idx AS product_idx,
+        p.name AS name,
+        p.price AS price,
+        p.manufacture_name AS manufacture_name,
+        c.kor_name AS category,
+        sc.kor_name AS sub_category
+    FROM product p
+    JOIN store s on p.store_idx = s.store_idx
+    JOIN product_info pi ON p.product_idx = pi.product_idx
+    LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
+    JOIN sub_category sc ON p.sub_category_idx = sc.sub_category_idx
+    JOIN category c ON sc.category_idx = c.category_idx
+    LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+    LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+    LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+    where s.user_idx=#{userIdx}
+</select>
+
+<select id="getPostingInfo">
+WITH ranked_files AS (
+    SELECT 
+        p.posting_idx,
+        p.title,
+        p.update_date,
+        prof.file_path as product_file,
+        pro.name AS product_name,
+        pro.price as price,
+        pr.product_info_idx,
+        ROW_NUMBER() OVER (PARTITION BY p.posting_idx ORDER BY prof.file_path) as rn
+    FROM posting p
+    JOIN posting_product pp ON p.posting_idx = pp.posting_idx
+    JOIN product_info pr ON pp.product_info_idx = pr.product_info_idx
+    JOIN product_file prof ON pr.product_info_idx = prof.product_info_idx
+    JOIN product pro ON pro.product_idx = pr.product_idx
+    JOIN product_color pc ON pr.product_color_idx = pc.product_color_idx
+    JOIN product_size ps ON pr.product_size_idx = ps.product_size_idx
+    WHERE p.posting_idx = #{postingIdx}
+)
+, distinct_postings AS (
+    SELECT DISTINCT
+        posting_idx,
+        title,
+        update_date,
+        product_file,
+        product_name,
+        price
+    FROM ranked_files
+    WHERE rn = 1
+)
+SELECT 
+    dp.posting_idx as posting_idx,
+    dp.title as title,
+    p.content as content,
+    dp.update_date as update_date,
+    ppf.file_path as posting_file,
+    dp.product_file as product_file,
+    dp.product_name AS product_name,
+    dp.price as price
+FROM distinct_postings dp
+JOIN posting p ON dp.posting_idx = p.posting_idx
+LEFT JOIN posting_file ppf ON p.posting_idx = ppf.posting_idx
+WHERE p.posting_idx = #{postingIdx}
+</select>
+
+<select id="getPostingDetail" resultType="java.util.HashMap">
+    SELECT 
+        pp.product_info_idx as product_info_idx,
+        pp.posting_product_idx as posting_product_idx,
+        pc.color as color,
+        ps.sizes as sizes
+    FROM posting p
+    LEFT JOIN posting_file pf ON p.posting_idx = pf.posting_idx
+    JOIN posting_product pp ON p.posting_idx = pp.posting_idx
+    JOIN product_info pr ON pp.product_info_idx = pr.product_info_idx
+    JOIN product pro on pro.product_idx = pr.product_idx
+    JOIN product_color pc ON pr.product_color_idx = pc.product_color_idx
+    JOIN product_size ps ON pr.product_size_idx = ps.product_size_idx
+    WHERE p.posting_idx = #{postingIdx}
+</select>
+
+<insert id="addPostingBuy">
+    INSERT INTO cart (CART_IDX, STATE, QUANTITY, POSTING_PRODUCT_IDX, PERSON_IDX, PRODUCT_INFO_IDX)
+    VALUES (
+        cart_seq.nextval,
+        '장바구니',
+        1,
+        #{postingProductIdx},
+        (SELECT p.person_idx FROM person p JOIN users u ON u.user_idx = p.user_idx WHERE u.user_idx = #{userIdx}),
+        #{productInfoIdx}
+    )
+</insert>
+<select id="getAllPostingDetails" parameterType="long" resultType="java.util.HashMap">
+    SELECT 
+        p.posting_idx AS posting_idx,
+        p.title AS title,
+        TO_CHAR(p.update_date, 'YYYY.MM.DD') AS update_date,
+        p.state AS state,
+        p.store_idx AS store_idx,
+        pd.price AS price,
+        sc.kor_name AS sub_category,
+        c.kor_name AS category,
+        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.product_file_idx) AS file_paths,
+        LISTAGG(pc.color || ' ' || ps.sizes || ' (' || pq.quantity || '개)', ', ') WITHIN GROUP (ORDER BY pp.posting_product_idx) AS inventory
+    FROM posting p
+    LEFT JOIN posting_product pp ON p.posting_idx = pp.posting_idx
+    LEFT JOIN product_info pi ON pp.product_info_idx = pi.product_info_idx
+    LEFT JOIN product_file pf ON pi.product_info_idx = pf.product_info_idx
+    LEFT JOIN product pd ON pi.product_idx = pd.product_idx
+    LEFT JOIN sub_category sc ON pd.sub_category_idx = sc.sub_category_idx
+    LEFT JOIN category c ON sc.category_idx = c.category_idx
+    LEFT JOIN product_color pc ON pi.product_color_idx = pc.product_color_idx
+    LEFT JOIN product_size ps ON pi.product_size_idx = ps.product_size_idx
+    LEFT JOIN product_quantity pq ON pi.product_info_idx = pq.product_info_idx
+    WHERE p.store_idx = #{storeIdx} AND p.state != 2
+    GROUP BY p.posting_idx, p.title, p.update_date, p.state, p.store_idx, pd.price, sc.kor_name, c.kor_name
+</select>
+
+
+<select id="getOnHoldPostingDetails" parameterType="long" resultType="java.util.HashMap">
+    SELECT 
+        p.posting_idx AS posting_idx,
+        p.title AS title,
+        p.update_date AS update_date,
+        p.state AS state,
+        p.store_idx AS store_idx,
+        LISTAGG(pf.file_path, ', ') WITHIN GROUP (ORDER BY pf.posting_file_idx) AS file_paths
+    FROM posting p
+    LEFT JOIN posting_file pf ON p.posting_idx = pf.posting_idx
+    WHERE p.store_idx = #{storeIdx} AND p.state = 0
+    GROUP BY p.posting_idx, p.title, p.update_date, p.state, p.store_idx
+</select>
+
+<update id="updatePostingState" parameterType="map">
+    UPDATE posting
+    SET state = #{state}
+    WHERE posting_idx = #{postingIdx}
+</update>
+
+
+</mapper>

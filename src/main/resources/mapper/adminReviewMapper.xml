@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.AdminReviewMapper">
+    <select id="getAllAdminReviews" parameterType="com.mf.dto.AdminReviewDto">
+        SELECT POSTING_REVIEW_IDX,
+               TITLE,
+               CONTENT,
+               RATING,
+               CREATE_DATE
+        FROM   POSTING_REVIEW
+        ORDER BY POSTING_REVIEW_IDX ASC
+               
+    </select>
+    
+    <select id="getReviewsStore">
+	SELECT 
+	    ar.posting_review_idx AS postingReviewIdx,
+	    ar.title,
+	    ar.content,
+	    ar.rating,
+	    ar.create_date AS createDate,
+	    ar.height,
+	    ar.weight,
+	    ar.sizes,
+	    ar.foot,
+	    ar.color_satis AS colorSatis,
+	    ar.sizes_satis AS sizesSatis,
+	    ar.posting_idx AS postingIdx,
+	    ar.person_idx AS personIdx,
+	    prf.file_path AS filePath,
+	    prf.original_name AS originalName,
+	    prf.file_size AS fileSize,
+	    prf.posting_review_file_idx AS postingReviewFileIdx,
+	    COUNT(rl.review_like_idx) AS reviewLikeCount
+	FROM 
+	    posting_review ar
+	LEFT JOIN 
+	    posting_review_file prf ON ar.posting_review_idx = prf.posting_review_idx
+	LEFT JOIN 
+	    review_likes rl ON rl.posting_review_idx = ar.posting_review_idx
+	WHERE posting_idx=#{postingIdx}
+	GROUP BY 
+	    ar.posting_review_idx,
+	    ar.title,
+	    ar.content,
+	    ar.rating,
+	    ar.create_date,
+	    ar.height,
+	    ar.weight,
+	    ar.sizes,
+	    ar.foot,
+	    ar.color_satis,
+	    ar.sizes_satis,
+	    ar.posting_idx,
+	    ar.person_idx,
+	    prf.file_path,
+	    prf.original_name,
+	    prf.file_size,
+	    prf.posting_review_file_idx
+    </select>
+    
+    <select id="searchReviewsById" resultType="com.mf.dto.AdminReviewDto">
+        SELECT  POSTING_REVIEW_IDX,
+    title,
+    content,
+    rating,
+    create_date
+        FROM POSTING_REVIEW       
+        <where>
+            <if test="searchId != null and searchId != ''">
+                title LIKE '%' || #{searchId, jdbcType=VARCHAR} || '%'
+            </if>
+        </where>
+    </select>
+  <insert id="addReview" parameterType="com.mf.dto.AdminReviewDto">
+    INSERT INTO posting_review  (
+        posting_review_idx,
+        title,
+        content,
+        rating,
+        create_date,
+        person_idx,
+        posting_idx,
+        height,
+        weight,
+        sizes,
+        foot,
+        color_satis,
+        sizes_satis )
+    VALUES (        
+        posting_review_seq.NEXTVAL,
+        #{title,jdbcType=VARCHAR},
+        #{content,jdbcType=VARCHAR},
+        #{rating,jdbcType=INTEGER},
+        default,
+        #{personIdx,jdbcType=BIGINT},
+        #{postingIdx,jdbcType=BIGINT},
+        #{height,jdbcType=INTEGER},
+        #{weight,jdbcType=INTEGER},
+        #{sizes,jdbcType=VARCHAR},
+        #{foot,jdbcType=VARCHAR},
+        #{colorSatis,jdbcType=INTEGER},
+        #{sizesSatis,jdbcType=INTEGER}
+    )
+</insert>
+  <insert id="addReviewFile">
+    INSERT INTO posting_review_file(
+        posting_review_file_idx,
+        file_path,
+        original_name,
+        file_size,
+        posting_review_idx
+        )
+    VALUES(
+        posting_review_file_seq.NEXTVAL,
+        #{filePath,jdbcType=VARCHAR},
+        #{originalName,jdbcType=VARCHAR},
+        #{fileSize,jdbcType=INTEGER},
+        posting_review_seq.CURRVAL
+    )
+</insert>
+
+<select id="findAll" resultType="com.mf.dto.AdminReviewDto">
+	SELECT 
+	    ar.posting_review_idx AS postingReviewIdx,
+	    ar.title,
+	    ar.content,
+	    ar.rating,
+	    ar.create_date AS createDate,
+	    ar.height,
+	    ar.weight,
+	    ar.sizes,
+	    ar.foot,
+	    ar.color_satis AS colorSatis,
+	    ar.sizes_satis AS sizesSatis,
+	    ar.posting_idx AS postingIdx,
+	    ar.person_idx AS personIdx,
+	    prf.file_path AS filePath,
+	    prf.original_name AS originalName,
+	    prf.file_size AS fileSize,
+	    prf.posting_review_file_idx AS postingReviewFileIdx,
+	    COUNT(rl.review_like_idx) AS reviewLikeCount
+	FROM 
+	    posting_review ar
+	LEFT JOIN 
+	    posting_review_file prf ON ar.posting_review_idx = prf.posting_review_idx
+	LEFT JOIN 
+	    review_likes rl ON rl.posting_review_idx = ar.posting_review_idx
+	GROUP BY 
+	    ar.posting_review_idx,
+	    ar.title,
+	    ar.content,
+	    ar.rating,
+	    ar.create_date,
+	    ar.height,
+	    ar.weight,
+	    ar.sizes,
+	    ar.foot,
+	    ar.color_satis,
+	    ar.sizes_satis,
+	    ar.posting_idx,
+	    ar.person_idx,
+	    prf.file_path,
+	    prf.original_name,
+	    prf.file_size,
+	    prf.posting_review_file_idx
+</select>
+
+<select id="getPersonIdxByUserIdx">
+   select person_idx
+   from person
+   where user_idx=#{userIdx}
+</select>
+
+<select id="checkLikes">
+select count(REVIEW_LIKE_IDX)
+from review_likes rl
+join person p on p.person_idx = rl.person_idx
+where rl.posting_review_idx=#{postingReviewIdx} and p.user_idx=#{userIdx}
+</select>
+<insert id="addLikes">
+  insert into review_likes (review_like_idx, person_idx, posting_review_idx)
+  select review_like_seq.nextval, person_idx, #{postingReviewIdx}
+  from person
+  where user_idx = #{userIdx}
+  and person_idx is not null
+</insert>
+<delete id="deleteLikes">
+  delete from review_likes
+  where person_idx = (select person_idx from person where user_idx = #{userIdx})
+  and posting_review_idx = #{postingReviewIdx} 
+</delete>
+<select id="getReviewLikeCount">
+select count(review_like_idx)
+from review_likes
+where posting_review_idx=#{postingReviewIdx}
+</select>
+ 
+</mapper>

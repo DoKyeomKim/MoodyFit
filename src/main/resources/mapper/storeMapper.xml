@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mf.mapper.StoreMapper">
+    <select id="getAllStores" parameterType="com.mf.dto.StoreDto">
+   SELECT 
+    s.STORE_IDX,
+    s.STORE_NAME,
+    s.MANAGER_NAME,
+    s.BUSINESS_NUMBER,
+    s.EMAIL,
+    s.PHONE,
+    s.ADDRESS,
+    s.DETAIL_ADDRESS,
+    s.user_idx,
+    u.state,
+    u.id
+FROM 
+    store s
+JOIN 
+    users u ON s.user_idx = u.USER_IDX
+    
+
+               
+    </select>
+     <!-- 회원 드롭 -->
+      <update id="dropUser">
+      UPDATE users
+      SET state = 3
+      WHERE user_idx = #{userIdx}
+   </update>
+   
+       <select id="searchStoresById" resultType="com.mf.dto.StoreDto">
+        SELECT s.store_idx, s.store_name, s.manager_name, s.business_number, s.phone, s.email, s.address , s.detail_address, u.state, u.user_idx, u.id
+        FROM store s
+        LEFT JOIN users u ON s.user_idx = u.user_idx
+        <where>
+            <if test="searchId != null and searchId != ''">
+                u.id LIKE '%' || #{searchId, jdbcType=VARCHAR} || '%'
+            </if>
+        </where>
+    </select>
+</mapper>
