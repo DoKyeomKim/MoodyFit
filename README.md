@@ -1,3 +1,4 @@
+<div style="text-align:center;">
 ## MoodyFit 프로젝트
 ![KakaoTalk_20240709_094541898](https://github.com/DoKyeomKim/MoodyFit/assets/164134917/9e245c1f-9379-4aee-afe2-a4e2a99cc399)
 
@@ -29,3 +30,7 @@
 ![슬라이드12](https://github.com/DoKyeomKim/MoodyFit/assets/164134917/d71ab858-ba90-46b9-9c8e-667109facb9b)
 
 ## 관리자 페이지
+
+
+
+</div>
