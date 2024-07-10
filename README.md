@@ -1,10 +1,7 @@
 
 ## MoodyFit 프로젝트
-<div style="text-align:center;">
-  
 ![KakaoTalk_20240709_094541898](https://github.com/DoKyeomKim/MoodyFit/assets/164134917/9e245c1f-9379-4aee-afe2-a4e2a99cc399)
 
-</div>
 
 ## 개발환경
 ![그림1](https://github.com/DoKyeomKim/MoodyFit/assets/164134917/7decaa88-d1db-42b1-8cf9-ecc8dc4d044b)
